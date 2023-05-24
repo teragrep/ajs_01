@@ -45,10 +45,17 @@
 |Graphs
 |
 
-|datatables
-|
-|Raw data displays
-|
+.7+|datatables
+|datatables.net-bs5
+.7+|Raw data displays
+.7+|
+
+|datatables.net-buttons
+|datatables.net-buttons-bs5
+|datatables.net-responsive-bs-5
+|datatables.net-select
+|datatables.net-select-dt
+|datatables.net-staterestore-bs5
 
 |jquery
 |
@@ -57,12 +64,12 @@
 
 |jsdiff
 |
-|Technical functions
+|
 |
 
 |lodash
 |
-|
+|Technical functions
 |
 
 |ng-sortable
