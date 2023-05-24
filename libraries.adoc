@@ -1,0 +1,65 @@
+= Javascript Libraries
+
+|===
+|Lib name |Extensions |Purpose |Notes
+
+|Ace
+|
+|Code editor
+|
+
+|AngularJS
+|
+|Javascript framework
+|
+
+|Bootstrap
+|
+|CSS framework
+|
+
+|cron-parser
+|
+|Parses, validates and debugs cron expressions
+|
+
+|d3
+|
+|Graphs
+|
+
+|datatables
+|
+|Raw data displays
+|
+
+|jquery
+|
+|Event handling
+|
+
+|jsdiff
+|
+|
+|
+
+|lodash
+|
+|
+|
+
+|ng-sortable
+|
+|Drag and drop
+|
+
+|nvd3
+|
+|Re-usable charts and chart components for d3
+|
+
+|select2
+|
+|Permissions select
+|
+|===
