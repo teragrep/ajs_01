@@ -1,5 +1,6 @@
 = Javascript Libraries
 
+[cols=".<,.<,.<,.<"]
 |===
 |Lib name |Extensions |Purpose |Notes
 
@@ -8,10 +9,26 @@
 |Code editor
 |
 
-|AngularJS
-|
-|Javascript framework
-|
+.16+|AngularJS
+|angular-animate
+.16+|Javascript framework
+.16+|
+
+|angular-bootstrap
+|angular-cookies
+|angular-dragdrop
+|angular-filter
+|angular-mocks
+|angular-resource
+|angular-route
+|angular-sanitize
+|angular-touch
+|angular-ui-ace
+|angular-ui-grid
+|angular-viewport-watch
+|angular-websocket
+|angular2-template-loader
+|angularjs-template-loader
 
 |Bootstrap
 |
@@ -40,7 +57,7 @@
 
 |jsdiff
 |
-|
+|Technical functions
 |
 
 |lodash
