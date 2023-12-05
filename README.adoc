@@ -1,0 +1,14 @@
+# Teragrep UI
+
+This repository contains the user interface for Teragrep. 
+
+https://docs.teragrep.com/[Teragrep Documentation] 
+
+## Setting Up
+
+TBA
+
+## Custom Theme
+
+You can customize the color scheme of Teregrep to match your own color palette or brand identity. Read more https://docs.teragrep.com/doc_01/1.0.0/administrator%20guide/custom-theme.html[here].
+
