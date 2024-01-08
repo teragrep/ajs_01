@@ -2,13 +2,54 @@
 
 This repository contains the user interface for Teragrep. 
 
-https://docs.teragrep.com/[Teragrep Documentation] 
+## Features
 
-## Setting Up
+TBA
+
+## Documentation
+
+See the official documentation on https://docs.teragrep.com[docs.teragrep.com].
+
+## How to Set-Up the Development Environment
+
+### Requirements
+
+You need at least following components with ajs_01: 
+
+|===
+|Component |Description
+
+|https://github.com/teragrep/pth_07[pth_07]
+|Contains Teragrep Data Processing Language (DPL)
+
+|https://github.com/teragrep/zep_01[zep_01]
+|Contains Teragrep back-end
+|===
+
+### Installation
 
 TBA
 
 ## Custom Theme
 
 You can customize the color scheme of Teregrep to match your own color palette or brand identity. Read more https://docs.teragrep.com/doc_01/1.0.0/administrator%20guide/custom-theme.html[here].
+
+## Contributing
+
+// Change the repository name in the issues link to match with your project's name
+
+You can involve yourself with our project by https://github.com/teragrep/repo-template/issues/new/choose[opening an issue] or submitting a pull request. 
+
+Contribution requirements:
+
+. *All changes must be accompanied by a new or changed test.* If you think testing is not required in your pull request, include a sufficient explanation as why you think so.
+. Security checks must pass
+. Pull requests must align with the principles and http://www.extremeprogramming.org/values.html[values] of extreme programming.
+. Pull requests must follow the principles of Object Thinking and Elegant Objects (EO).
+
+Read more in our https://github.com/teragrep/teragrep/blob/main/contributing.adoc[Contributing Guideline].
+
+### Contributor License Agreement
+
+Contributors must sign https://github.com/teragrep/teragrep/blob/main/cla.adoc[Teragrep Contributor License Agreement] before a pull request is accepted to organization's repositories. 
 
