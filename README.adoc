@@ -1,18 +1,18 @@
-# Teragrep UI
+= Teragrep UI
 
 This repository contains the user interface for Teragrep. 
 
-## Features
+== Features
 
 TBA
 
-## Documentation
+== Documentation
 
 See the official documentation on https://docs.teragrep.com[docs.teragrep.com].
 
-## How to Set-Up the Development Environment
+== How to Set-Up 
 
-### Requirements
+=== Requirements
 
 You need at least following components with ajs_01: 
 
@@ -26,15 +26,15 @@ You need at least following components with ajs_01:
 |Contains Teragrep back-end
 |===
 
-### Installation
+=== Installation
 
 TBA
 
-## Custom Theme
+== Custom Theme
 
 You can customize the color scheme of Teregrep to match your own color palette or brand identity. Read more https://docs.teragrep.com/doc_01/1.0.0/administrator%20guide/custom-theme.html[here].
 
-## Contributing
+== Contributing
 
 // Change the repository name in the issues link to match with your project's name
 
