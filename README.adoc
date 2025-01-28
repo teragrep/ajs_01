@@ -2,11 +2,14 @@ image::https://avatars.githubusercontent.com/u/71876378?s=200&v=4[Teragrep Logo]
 
 = User Interface for Teragrep
 
-This project contains the user interface for Teragrep. You can use it with your own back-end service or with https://github.com/teragrep/zep_01[zep_01].
+This project contains the web-based user interface for Teragrep. It's used with https://github.com/teragrep/zep_01[zep_01] which is the server-side for Teragrep, but you can use it with your own back-end service as well. 
+
+Teragrep is a server-based software with a web interface. It has data collection features comparable to the leading central log management products, and its analytics features are powered by Apache Spark.
 
 == Features
 
 * Notebook based interface
+* Querying
 * Result data visualization
 * Collaborative editing
 * Versioning in notebooks
