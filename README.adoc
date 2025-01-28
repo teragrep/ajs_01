@@ -1,10 +1,18 @@
-= Teragrep UI
+image::https://avatars.githubusercontent.com/u/71876378?s=200&v=4[Teragrep Logo]
 
-This repository contains the user interface for Teragrep. 
+= User Interface for Teragrep
+
+This project contains the user interface for Teragrep. You can use it with your own back-end service or with https://github.com/teragrep/zep_01[zep_01].
 
 == Features
 
-TBA
+* Notebook based interface
+* Result data visualization
+* Collaborative editing
+* Versioning in notebooks
+* Notebook run scheduler
+* Different notebook modes: Default, Simple and Report
+* Light and dark modes
 
 == Documentation
 
@@ -14,17 +22,7 @@ See the official documentation on https://docs.teragrep.com[docs.teragrep.com].
 
 === Requirements
 
-You need at least following components with ajs_01: 
-
-|===
-|Component |Description
-
-|https://github.com/teragrep/pth_07[pth_07]
-|Contains Teragrep Data Processing Language (DPL)
-
-|https://github.com/teragrep/zep_01[zep_01]
-|Contains Teragrep back-end
-|===
+TBA
 
 === Installation
 
