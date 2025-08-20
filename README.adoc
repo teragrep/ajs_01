@@ -33,7 +33,7 @@ TBA
 
 == Custom Theme
 
-You can customize the color scheme of Teregrep to match your own color palette or brand identity. Read more https://docs.teragrep.com/teragrep-ui/1.0.0/administrator%20guide/custom-theme.html[here].
+You can customize the color scheme of Teragrep to match your own color palette or brand identity. Read more https://docs.teragrep.com/teragrep-ui/1.0.0/administrator%20guide/custom-theme.html[here].
 
 == Contributing
 
