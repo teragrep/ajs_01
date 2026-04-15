@@ -167,7 +167,7 @@ var config = {
       inject: 'body'
     }),
     new MiniCssExtractPlugin({
-      filename: '/static/[name].[contenthash].css'
+      filename: './static/[name].[contenthash].css'
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
