@@ -90,13 +90,13 @@
   padding: 10px 15px;
 }
 
-pre {
+.revisions-comparator pre {
   background: #F7FAFC;
   border: 2px solid var(--grey-400);
   border-radius: 5px;
 }
 
-.dark-mode pre {
+.dark-mode .revisions-comparator pre {
   background: var(--dm-grey-800);
   border: 2px solid var(--dm-grey-500);
 }
