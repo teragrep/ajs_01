@@ -131,7 +131,7 @@ function NotebookCtrl($scope,
   $scope.showRevisionsComparator = false;
   $scope.collaborativeMode = false;
   $scope.collaborativeModeUsers = [];
-  $scope.looknfeelOption = ['default', 'lite', 'simple', 'report'];
+  $scope.looknfeelOption = ['default', 'report'];
   $scope.selectedInterpreterForDefaulting = null;
   $scope.interpreterBindingsUI = {clone: [], body: []};
   $scope.checkpointError = '';
@@ -1367,8 +1367,6 @@ function NotebookCtrl($scope,
   *
   * Hard-coded class names:
   *   default-mode
-  *   lite-mode
-  *   simple-mode
   *   report-mode */
   $scope.setMode = function(mode: string, looknfeel:string) {
     setViewOnly(looknfeel);
