@@ -79,7 +79,6 @@
 /* Nunito Sans */
 
 @font-face {
-  font-family: 'Hind';
   font-family: 'Nunito Sans';
   font-style: normal;
   font-weight: 200;
@@ -189,30 +188,4 @@
   font-style: italic;
   font-weight: 900;
   src: url(./Nunito-Sans/NunitoSans_10pt-BlackItalic.ttf);
-}
-
-/* Hind */
-
-@font-face {
-  font-family: 'Hind';
-  font-weight: 400;
-  src: url(./Hind/Hind-Regular.woff);
-}
-
-@font-face {
-  font-family: 'Hind';
-  font-weight: 500;
-  src: url(./Hind/Hind-Medium.woff);
-}
-
-@font-face {
-  font-family: 'Hind';
-  font-weight: 600;
-  src: url(./Hind/Hind-SemiBold.woff);
-}
-
-@font-face {
-  font-family: 'Hind';
-  font-weight: 700;
-  src: url(./Hind/Hind-Bold.woff);
 }
