@@ -43,7 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-/* home */
+
+/* loading animation */
+
+.loader {
+  animation: spin 1s linear infinite;
+}
+
+.dark-mode .loader {
+  border: 4px solid var(--dm-grey-600);
+  border-top: 4px solid var(--primary-400);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* front page */
 
 .home-some {
   .fas, .fab {
