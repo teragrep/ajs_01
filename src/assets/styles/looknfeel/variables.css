@@ -43,9 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-/* Primary Brand Color */
 
 :root {
+  /** Colors **/
+  /* Primary */
   --primary-50: #EEF2FF;
   --primary-100: #DBE6FF;
   --primary-200: #C3D5FE;
@@ -56,11 +57,7 @@
   --primary-700: #3F31A6;
   --primary-800: #332981;
   --primary-900: #1E1B4B;
-}
-
-/* Secondary Brand Color */
-
-:root {
+  /* Secondary */
   --secondary-50: #FAF5FF;
   --secondary-100: #F3E8FF;
   --secondary-200: #E9D8FD;
@@ -71,11 +68,7 @@
   --secondary-700: #6120C5;
   --secondary-800: #4C1D95;
   --secondary-900: #2E1065;
-}
-
-/* Tertiary Brand Color */
-
-:root {
+  /* Tertiary */
   --tertiary-50: #F0FDFA;
   --tertiary-100: #CCFBF1;
   --tertiary-200: #99F6E4;
@@ -86,39 +79,24 @@
   --tertiary-700: #0F766E;
   --tertiary-800: #115E59;
   --tertiary-900: #134E4A;
-}
-
-/* Danger */
-
-:root {
+  /* Danger */
   --danger-100: #FFF5F5;
   --danger-200: #FEE6E6;
   --danger-300: #FED7D7;
   --danger-400: #FEB2B2;
   --danger-500: #FC8181;
   --danger-600: #F56565;
-  --danger-700: #D73C3C;
-  --danger-800: #9B2C2C;
-  --danger-900: #692626;
-}
-
-/* Warning */
-
-:root {
+  --danger-700: #9B2C2C;
+  --danger-800: #742A2A;
+  /* Warning */
   --warning-100: #FFFFF0;
   --warning-200: #FEFCBF;
   --warning-300: #FDE68A;
   --warning-400: #ECC94B;
-  --warning-500: #ECAE4B;
-  --warning-600: #ED8936;
-  --warning-700: #DD6B20;
-  --warning-800: #A55018;
-  --warning-900: #7B341E;
-}
-
-/* Greys */
-
-:root {
+  --warning-500: #ED8936;
+  --warning-600: #DD6B20;
+  --warning-700: #7B341E;
+  /* Greys */
   --grey-000: #FFFFFF;
   --grey-100: #F7FAFC;
   --grey-200: #EDF2F7;
@@ -138,4 +116,6 @@
   --dm-grey-700: #2D385E;
   --dm-grey-800: #212A4B;
   --dm-grey-900: #161C33;
+  /** Typography **/
+  --font-body-text: 'Nunito Sans', sans-serif;
 }

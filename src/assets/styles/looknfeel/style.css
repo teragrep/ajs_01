@@ -19,7 +19,7 @@
 body {
   background: var(--grey-200);
   color: var(--grey-800);
-  font: 400 16px 'Hind', sans-serif;
+  font: 400 16px var(--font-body-text);
 }
 body.dark-mode {
   color: var(--dm-grey-200);
@@ -2420,7 +2420,7 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
 }
 .navbar-inverse .navbar-nav .nav-link {
   color: var(--primary-100);
-  font: 16px 'Hind', sans-serif;
+  font: 16px var(--font-body-text);
 }
 .navbar-inverse .navbar-nav .nav-link:hover {
   color: var(--primary-200);
@@ -3514,7 +3514,7 @@ div.dt-button-collection {
 .paragraph .control {
   background: var(--grey-100);
   color: var(--dm-grey-500);
-  font-size: 12px;
+  font: 14px var(--font-body-text);
   padding: 10px 40px;
   margin: 0 -40px 20px;
   border-radius: 20px 20px 0 0;
@@ -4725,8 +4725,7 @@ div > :first-child {
 }
 /* Markdown output */
 .markdown-body {
-  font-size: 16px !important;
-  font-family: 'Hind', sans-serif !important;
+  font: 16px var(--font-body-text) !important;
   color: var(--grey-800) !important;
 }
 .markdown-body h1,
@@ -4770,7 +4769,7 @@ div > :first-child {
   margin: 10px 0 !important;
   padding: 10px 15px !important;
   border-left: 5px solid var(--secondary-300) !important;
-  font-family: 'Hind', sans-serif;
+  font-family: var(--font-body-text);
   font-style: italic;
   font-size: 16px !important;
   background: white;
