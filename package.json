@@ -118,6 +118,7 @@
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-webpack": "^5.0.0",
     "less": "^4.2.0",
+    "less-loader": "12.3.2",
     "mini-css-extract-plugin": "2.4.5",
     "rimraf": "^2.5.4",
     "style-loader": "^0.13.1",

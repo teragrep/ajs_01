@@ -6473,6 +6473,11 @@ launch-editor@^2.6.1:
     picocolors "^1.1.1"
     shell-quote "^1.8.3"
 
+less-loader@12.3.2:
+  version "12.3.2"
+  resolved "https://scrapyard.xnet.fi/repository/public-npm/less-loader/-/less-loader-12.3.2.tgz#88dac1736b4f2e3f76db9b1617c1398ae91cd4bb"
+  integrity sha512-uLV5c702ff2jBvO7qewpkLRzkh/I9QW07ur2NKkv8TVTrtX2lrKjEbEU/LLXAn7cgpCIBbkfyUm4qYXCQs5/+w==
+
 less@^4.2.0:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/less/-/less-4.4.2.tgz#fa4291fdb0334de91163622cc038f4bd3eb6b8d7"
