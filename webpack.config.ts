@@ -196,6 +196,15 @@ var config = {
         use: 'imports-loader?this=>window,define=>false,exports=>false'
       },
       {
+        test: /\.less$/i,
+        use: [
+          // compiles Less to CSS
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ],
+      },
+      {
         test: /\.css$/i,
         use: [
           MiniCssExtractPlugin.loader,
