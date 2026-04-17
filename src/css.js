@@ -60,5 +60,19 @@ import './fonts/custom-font/custom-font.css';
 import './fonts/google-fonts.css';
 
 import './assets/styles/looknfeel/colors.css';
-import './assets/styles/looknfeel/style.css';
 import './assets/styles/printMode.css';
+
+import './assets/styles/looknfeel/buttons.less';
+import './assets/styles/looknfeel/collections.less';
+import './assets/styles/looknfeel/display-table.less';
+import './assets/styles/looknfeel/forms.less';
+import './assets/styles/looknfeel/graph-colors.less';
+import './assets/styles/looknfeel/home.less';
+import './assets/styles/looknfeel/messages.less';
+import './assets/styles/looknfeel/navbar.less';
+import './assets/styles/looknfeel/notebook.less';
+import './assets/styles/looknfeel/paragraph.less';
+import './assets/styles/looknfeel/result.less';
+import './assets/styles/looknfeel/style.less';
+import './assets/styles/looknfeel/tables.less';
+import './assets/styles/looknfeel/typography.less';
