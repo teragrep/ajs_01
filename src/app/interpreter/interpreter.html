@@ -208,7 +208,7 @@ limitations under the License.
           <div class="col-auto">
               <span ng-if="getInterpreterRunningOption(setting.id) === 'Per User' && ticket.principal !== 'anonymous'">
                 <span ng-if="getPerNoteOption(setting.id) === 'shared'">
-                  <button type="button" class="btn btn-success btn-sm"
+                  <button type="button" class="btn btn-primary btn-sm"
                           ng-click="setPerNoteOption(setting.id, 'scoped')"
                           ng-disabled="visibleSetting !==sectionIndex"
                           data-bs-toggle="dropdown">
