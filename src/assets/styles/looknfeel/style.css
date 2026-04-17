@@ -2686,6 +2686,7 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
 .note-action .btn-collapse {
   background: var(--grey-000);
   border-radius: 0 0 10px 10px;
+  box-shadow: 0 5px 5px -2px var(--grey-400);
 }
 .note-action .btn-collapse:after {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' fill='%237F9CF5'%3e%3cpath d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z'/%3e%3c/svg%3e");
@@ -2707,11 +2708,13 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
   border-color: var(--grey-000);
 }
 .note-action .btn-collapse:focus {
-  box-shadow: none;
+  box-shadow: 0 5px 5px -2px var(--grey-400);
 }
 .note-action .note-action-container {
   background: white;
   max-height: 50px;
+  box-shadow: 0 1px 5px var(--grey-400);
+  border-bottom: 1px solid var(--grey-300);
 }
 @media only screen and (max-width: 1200px) {
   .note-action .note-action-container {
@@ -2752,15 +2755,21 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
 }
 .dark-mode .note-action .btn-collapse {
   background: var(--dm-grey-700);
+  box-shadow: 0 5px 5px -2px var(--dm-grey-900);
 }
 .dark-mode .note-action .btn-collapse:after {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' fill='%2370EDD9'%3e%3cpath d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z'/%3e%3c/svg%3e");
+}
+.dark-mode .note-action .btn-collapse:focus {
+  box-shadow: 0 5px 5px -2px var(--dm-grey-900);
 }
 .dark-mode .note-action .btn-collapse:not(.collapsed):after {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' fill='%23B8C5F7'%3e%3cpath d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z'/%3e%3c/svg%3e");
 }
 .dark-mode .note-action .note-action-container {
   background: var(--dm-grey-700);
+  box-shadow: 0 1px 5px var(--dm-grey-900);
+  border-bottom: 1px solid var(--dm-grey-700);
 }
 .dark-mode .note-action .fas,
 .dark-mode .note-action .far {
@@ -2908,6 +2917,7 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
 }
 /* Add New Paragraph */
 .new-paragraph {
+  padding: 15px 30px 5px;
   cursor: pointer;
   color: var(--grey-600);
   text-transform: uppercase;
@@ -2966,59 +2976,36 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
   opacity: 0.6 !important;
   pointer-events: none;
 }
-/* Notebook views */
-.default-mode .btn-collapse {
-  box-shadow: 0 5px 5px -2px var(--grey-400);
-}
-.default-mode .btn-collapse:focus {
-  box-shadow: 0 5px 5px -2px var(--grey-400);
-}
-.default-mode .note-action-container {
-  box-shadow: 0 1px 5px var(--grey-400);
-  border-bottom: 1px solid var(--grey-300);
-}
-.default-mode .new-paragraph {
-  padding: 15px 30px 5px;
-}
-.default-mode .paragraph-box {
+.paragraph-box {
   border: none;
   box-shadow: 2px 4px 10px var(--grey-400), 0 1px 5px var(--grey-500);
 }
-.default-mode .paragraph-output {
+.dark-mode .paragraph-box {
+  box-shadow: 2px 4px 10px var(--dm-grey-900), 0 1px 5px var(--dm-grey-900);
+}
+.paragraph-output {
   margin: 20px 0;
 }
-.default-mode .editor,
-.default-mode .executionTime,
-.default-mode .nv-controlsWrap {
+.editor,
+.executionTime,
+.nv-controlsWrap {
   display: block;
 }
-.default-mode .paragraph-col .focused {
+.paragraph-col .focused {
   box-shadow: 0 2px 7px var(--grey-400);
   border-color: white;
 }
-.default-mode .ng-toast.ng-toast--top {
-  top: 100px;
-}
-.default-mode .graphContainer {
-  padding-top: 20px;
-}
-.dark-mode.default-mode .btn-collapse {
-  box-shadow: 0 5px 5px -2px var(--dm-grey-900);
-}
-.dark-mode.default-mode .btn-collapse:focus {
-  box-shadow: 0 5px 5px -2px var(--dm-grey-900);
-}
-.dark-mode.default-mode .note-action-container {
-  box-shadow: 0 1px 5px var(--dm-grey-900);
-  border-bottom: 1px solid var(--dm-grey-700);
-}
-.dark-mode.default-mode .paragraph-col .focused {
+.dark-mode .paragraph-col .focused {
   box-shadow: 0 2px 7px var(--dm-grey-900);
   border-color: var(--dm-grey-700);
 }
-.dark-mode.default-mode .paragraph-box {
-  box-shadow: 2px 4px 10px var(--dm-grey-900), 0 1px 5px var(--dm-grey-900);
+.ng-toast.ng-toast--top {
+  top: 100px;
 }
+.graphContainer {
+  padding-top: 20px;
+}
+/* Report mode */
 .report-mode #notebookPage {
   background: var(--grey-100);
   min-height: calc(100vh - 106px);
