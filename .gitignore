@@ -2,3 +2,5 @@
 /.idea
 /target
 /dist
+/devServer/temp/*
+/test-output
