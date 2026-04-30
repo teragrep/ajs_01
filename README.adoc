@@ -1,10 +1,20 @@
-= Teragrep UI
+= Browser User Interface for Teragrep
 
-This repository contains the user interface for Teragrep. 
+This project contains the web-based user interface for Teragrep. It’s used with https://github.com/teragrep/zep_01[zep_01] which is the server-side for Teragrep, but you can use it with your own back-end service as well.
+
+Teragrep is a server-based software with a web interface. It has data collection features comparable to the leading central log management products, and its analytics features are powered by Apache Spark.
 
 == Features
 
-TBA
+* Notebook based interface
+* Querying
+* Result data visualization
+* Collaborative editing
+* Versioning in notebooks
+* Notebook run scheduler
+* Report view
+* Light and dark modes
+* Sessions, login, logout
 
 == Documentation
 
@@ -14,21 +24,51 @@ See the official documentation on https://docs.teragrep.com[docs.teragrep.com].
 
 === Requirements
 
-You need at least following components with ajs_01: 
+For installation, you need at least https://github.com/teragrep/zep_01[zep_01] to run the back-end. 
 
-|===
-|Component |Description
+For the local developing, you need the following:
 
-|https://github.com/teragrep/pth_07[pth_07]
-|Contains Teragrep Data Processing Language (DPL)
+* https://nodejs.org/en[Node.js]
+* https://docs.npmjs.com/[npm]
 
-|https://github.com/teragrep/zep_01[zep_01]
-|Contains Teragrep back-end
-|===
+Optionally, you can use https://github.com/teragrep/adp_01[adp_01] to fully replicate the back-end locally. The commands descriped in the local development guide are for using the fake-server which is included in ajs_01.
 
 === Installation
 
-TBA
+1. Add https://teragrep.github.io/pkg_01/[pkg_01] repository
+2. Run
++
+```
+dnf install com.teragrep-ajs_01
+```
+
+=== Local development
+
+Build commands are described in package.json.
+
+1. Install yarn and required dependencies
++
+```
+$ npm install -g yarn
+$ yarn install
+```
+2. Run the front-end application
++
+```
+$ yarn run dev
+```
++
+or run the development server
++
+```
+$ yarn run fakeserver
+```
++
+or run both instances parallel
++
+```
+$ yarn run both
+```
 
 == Custom Theme
 
