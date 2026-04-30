@@ -2419,7 +2419,7 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
   .navbar-inverse .navbar-brand img {
     width: 32px;
     object-fit: cover;
-    object-position: center center;
+    object-position: left center;
   }
 }
 .navbar-inverse .navbar-toggler {
