@@ -53,57 +53,58 @@ limitations under the License.
     </ul>
   </div>
 
-  <!-- Run / Cancel button -->
+  <!-- Paragraph controls -->
   <div class="flex-fill d-flex align-items-center"
        ng-if="!revisionView">
     <div class="responsive-col d-flex align-items-center">
-      <i class="me-3 {{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"
-         role="button"
-         title="{{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+E)"
-         ng-click="toggleEditor(paragraph)">
-      </i>
-      <i class="me-3 {{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"
-         role="button"
-         title="{{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+O)"
-         ng-click="toggleOutput(paragraph)">
-      </i>
-      <i class="fas fa-copy me-3"
-         role="button"
-         title="Clone paragraph (Ctrl+Shift+C)"
-         ng-click="copyParagraph(getEditorValue())"
-         ng-class="{'item-disable' : isNoteRunning}">
-      </i>
-      <i class="fas fa-eraser me-3"
-         role="button"
-         title="Clear output"
-         ng-click="clearParagraphOutput(paragraph)"
-         ng-class="{'item-disable' : isNoteRunning}">
-      </i>
-      <i class="fas fa-font me-3"
-         role="button"
-         ng-click="hideTitle(paragraph)"
-         ng-show="paragraph.config.title"
-         title="Hide title">
-      </i>
-      <i class="fas fa-font me-3"
-         role="button"
-         ng-click="showTitle(paragraph)"
-         ng-show="!paragraph.config.title"
-         title="Show title">
-      </i>
-      <i class="fas fa-list-ol"
-         role="button"
-         ng-click="hideLineNumbers(paragraph)"
-         ng-show="paragraph.config.lineNumbers"
-         title="Hide line numbers (Ctrl+Alt+M)">
-      </i>
-      <i class="fas fa-list-ol"
-         role="button"
-         ng-click="showLineNumbers(paragraph)"
-         ng-show="!paragraph.config.lineNumbers"
-         title="Show line numbers (Ctrl+Alt+M)">
-      </i>
+      <button class="btn btn-link btn-sm ps-0"
+              ng-click="toggleEditor(paragraph)">
+        <i class="{{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"
+           title="{{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+E)"></i>
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-click="toggleOutput(paragraph)">
+        <i class="{{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"
+           title="{{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+O)"></i>
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-click="copyParagraph(getEditorValue())"
+              ng-disabled="isNoteRunning()">
+        <i class="fas fa-copy"
+           title="Clone paragraph (Ctrl+Shift+C)"></i>
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-click="clearParagraphOutput(paragraph)"
+              ng-disabled="isNoteRunning()">
+        <i class="fas fa-eraser"
+           title="Clear output"></i>
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-click="hideTitle(paragraph)"
+              ng-show="paragraph.config.title">
+        <i class="fas fa-font"
+           title="Hide title"></i>
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-click="showTitle(paragraph)"
+              ng-show="!paragraph.config.title">
+        <i class="fas fa-font"
+           title="Show title"></i>
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-click="hideLineNumbers(paragraph)"
+              ng-show="paragraph.config.lineNumbers">
+        <i class="fas fa-list-ol"
+           title="Hide line numbers (Ctrl+Alt+M)"></i>
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-click="showLineNumbers(paragraph)"
+              ng-show="!paragraph.config.lineNumbers">
+        <i class="fas fa-list-ol"
+           title="Show line numbers (Ctrl+Alt+M)"></i>
+      </button>
     </div>
+    <!-- responsive drop-down menu for smaller screens -->
     <div class="responsive-col-dropdown dropdown">
       <i class="fas fa-bars"
          type="button"
