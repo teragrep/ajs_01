@@ -249,7 +249,7 @@ body.dark-mode {
 }
 .dark-mode .btn-primary .fas,
 .dark-mode .btn-primary .far {
-  color: var(--tertiary-600);
+  color: var(--tertiary-500);
 }
 .dark-mode .btn-primary:hover,
 .dark-mode .btn-primary:active,
@@ -262,15 +262,15 @@ body.dark-mode {
 }
 .dark-mode .btn-primary:disabled,
 .dark-mode .btn-primary.disabled {
-  background: var(--tertiary-200);
-  border-color: var(--tertiary-200);
-  color: var(--tertiary-600);
+  background: var(--tertiary-600);
+  border-color: var(--tertiary-600);
+  color: var(--tertiary-800);
 }
 .dark-mode .btn-primary:disabled .fas,
 .dark-mode .btn-primary.disabled .fas,
 .dark-mode .btn-primary:disabled .far,
 .dark-mode .btn-primary.disabled .far {
-  color: var(--tertiary-400) !important;
+  color: var(--tertiary-700) !important;
 }
 .btn-secondary {
   background: var(--grey-300);
@@ -323,15 +323,15 @@ body.dark-mode {
 }
 .dark-mode .btn-secondary:disabled,
 .dark-mode .btn-secondary.disabled {
-  background: var(--dm-grey-600);
-  border-color: var(--dm-grey-600);
-  color: var(--dm-grey-300);
+  background: var(--dm-grey-700);
+  border-color: var(--dm-grey-700);
+  color: var(--dm-grey-400);
 }
 .dark-mode .btn-secondary:disabled .fas,
 .dark-mode .btn-secondary.disabled .fas,
 .dark-mode .btn-secondary:disabled .far,
 .dark-mode .btn-secondary.disabled .far {
-  color: var(--dm-grey-400) !important;
+  color: var(--dm-grey-500) !important;
 }
 .btn-outline-secondary {
   background: var(--grey-000);
@@ -409,8 +409,8 @@ body.dark-mode {
 .btn-light.active,
 .btn-light:focus,
 .btn-light.show {
-  background: var(--grey-300);
-  border-color: var(--grey-300);
+  background: var(--grey-200);
+  border-color: var(--grey-200);
   transition: all 0.1s;
 }
 .btn-light:disabled,
@@ -423,7 +423,7 @@ body.dark-mode {
 .btn-light.disabled .fas,
 .btn-light:disabled .far,
 .btn-light.disabled .far {
-  color: var(--grey-400);
+  color: var(--grey-500);
 }
 .dark-mode .btn-light {
   background: var(--dm-grey-800);
@@ -432,144 +432,51 @@ body.dark-mode {
 }
 .dark-mode .btn-light .fas,
 .dark-mode .btn-light .far {
-  color: var(--dm-grey-400);
+  color: var(--dm-grey-300);
 }
 .dark-mode .btn-light:hover,
 .dark-mode .btn-light:active,
 .dark-mode .btn-light.active,
 .dark-mode .btn-light:focus,
 .dark-mode .btn-light.show {
-  background: var(--dm-grey-900);
-  border-color: var(--dm-grey-900);
+  background: var(--dm-grey-700);
+  border-color: var(--dm-grey-700);
 }
 .dark-mode .btn-light:disabled,
 .dark-mode .btn-light.disabled {
-  background: var(--dm-grey-700);
-  border-color: var(--dm-grey-700);
+  background: var(--dm-grey-900);
+  border-color: var(--dm-grey-900);
   color: var(--dm-grey-400);
 }
 .dark-mode .btn-light:disabled .fas,
 .dark-mode .btn-light.disabled .fas,
 .dark-mode .btn-light:disabled .far,
 .dark-mode .btn-light.disabled .far {
-  color: var(--dm-grey-500);
-}
-.btn-subtle {
-  font-size: 12px;
-  padding: 5px 10px !important;
-  background: var(--grey-000) !important;
-  border-color: var(--grey-400) !important;
-  color: var(--grey-700);
-  transition: all 0.1s;
-}
-.btn-subtle:hover,
-.btn-subtle:active,
-.btn-subtle.active,
-.btn-subtle:focus,
-.btn-subtle.show {
-  color: var(--grey-900);
-  background: var(--grey-400) !important;
-}
-.btn-subtle:disabled,
-.btn-subtle.disabled {
-  border-color: var(--grey-300) !important;
-  color: var(--grey-500);
-  opacity: 1 !important;
-}
-.dark-mode .btn-subtle {
-  background: var(--dm-grey-700) !important;
-  border-color: var(--dm-grey-500) !important;
-  color: var(--dm-grey-200);
-}
-.dark-mode .btn-subtle:hover,
-.dark-mode .btn-subtle:active,
-.dark-mode .btn-subtle.active,
-.dark-mode .btn-subtle:focus,
-.dark-mode .btn-subtle.show {
-  color: var(--dm-grey-100);
-  background: var(--dm-grey-500) !important;
-}
-.dark-mode .btn-subtle:disabled,
-.dark-mode .btn-subtle.disabled {
-  border-color: var(--dm-grey-600) !important;
-  color: var(--dm-grey-400);
-}
-.btn-success {
-  background: var(--tertiary-100);
-  border-color: var(--tertiary-300);
-  color: var(--tertiary-700);
-  transition: all 0.1s;
-}
-.btn-success .fas,
-.btn-success .far {
-  color: var(--tertiary-500);
-}
-.btn-success:hover,
-.btn-success:focus,
-.btn-success:active,
-.btn-success.active {
-  background: var(--tertiary-200);
-  border-color: var(--tertiary-300);
-  color: var(--tertiary-700);
-}
-.btn-success:disabled,
-.btn-success.disabled {
-  background: var(--tertiary-100);
-  border-color: var(--tertiary-200);
-  color: var(--tertiary-400);
-}
-.btn-success:disabled .fas,
-.btn-success.disabled .fas,
-.btn-success:disabled .far,
-.btn-success.disabled .far {
-  color: var(--tertiary-300);
-}
-.dark-mode .btn-success {
-  background: var(--tertiary-400);
-  border-color: var(--tertiary-400);
-  color: var(--tertiary-900);
-}
-.dark-mode .btn-success .fas,
-.dark-mode .btn-success .far {
-  color: var(--tertiary-600);
-}
-.dark-mode .btn-success:hover,
-.dark-mode .btn-success:focus,
-.dark-mode .btn-success:active,
-.dark-mode .btn-success.active,
-.dark-mode .btn-success.show {
-  background: var(--tertiary-300);
-  border-color: var(--tertiary-300);
-}
-.dark-mode .btn-success:disabled,
-.dark-mode .btn-success.disabled {
-  background: var(--tertiary-500);
-  border-color: var(--tertiary-500);
-  color: var(--tertiary-800);
+  color: var(--dm-grey-600);
 }
 .btn-danger {
-  background: var(--danger-100);
-  border-color: var(--danger-400);
-  color: var(--danger-700);
+  background: var(--danger-300);
+  border-color: var(--danger-300);
+  color: var(--danger-900);
   transition: all 0.1s;
 }
 .btn-danger .fas,
 .btn-danger .far {
-  color: var(--danger-600);
+  color: var(--danger-700);
 }
 .btn-danger:hover,
 .btn-danger:focus,
 .btn-danger:active,
 .btn-danger.active,
 .btn-danger.show {
-  background: var(--danger-200);
+  background: var(--danger-400);
   border-color: var(--danger-400);
-  color: var(--danger-700);
+  color: var(--danger-900);
 }
 .btn-danger:disabled,
 .btn-danger.disabled {
   background: var(--danger-100);
-  border-color: var(--danger-300);
+  border-color: var(--danger-100);
   color: var(--danger-500);
 }
 .btn-danger:disabled .fas,
@@ -579,57 +486,57 @@ body.dark-mode {
   color: var(--danger-400);
 }
 .dark-mode .btn-danger {
-  background: var(--danger-400);
-  border-color: var(--danger-400);
-  color: var(--danger-800);
+  background: var(--danger-700);
+  border-color: var(--danger-700);
+  color: var(--danger-100);
 }
 .dark-mode .btn-danger .fas,
 .dark-mode .btn-danger .far {
-  color: var(--danger-700);
+  color: var(--danger-400);
 }
 .dark-mode .btn-danger:hover,
 .dark-mode .btn-danger:focus,
 .dark-mode .btn-danger:active,
 .dark-mode .btn-danger.active,
 .dark-mode .btn-danger.show {
-  background: var(--danger-300);
-  border-color: var(--danger-300);
+  background: var(--danger-600);
+  border-color: var(--danger-600);
 }
 .dark-mode .btn-danger:disabled,
 .dark-mode .btn-danger.disabled {
-  background: var(--danger-500);
-  border-color: var(--danger-500);
-  color: var(--danger-700);
+  background: var(--danger-900);
+  border-color: var(--danger-900);
+  color: var(--danger-600);
 }
 .dark-mode .btn-danger:disabled .fas,
 .dark-mode .btn-danger.disabled .fas,
 .dark-mode .btn-danger:disabled .far,
 .dark-mode .btn-danger.disabled .far {
-  color: var(--danger-600);
+  color: var(--danger-700);
 }
 .btn-info {
-  background: var(--secondary-100);
-  color: var(--secondary-700);
-  border-color: var(--secondary-300);
+  background: var(--secondary-200);
+  color: var(--secondary-900);
+  border-color: var(--secondary-200);
   transition: all 0.1s;
 }
 .btn-info .fas,
 .btn-info .far {
-  color: var(--secondary-400);
+  color: var(--secondary-500);
 }
 .btn-info:hover,
 .btn-info:active,
 .btn-info.active,
 .btn-info:focus,
 .btn-info.show {
-  background: var(--secondary-200);
+  background: var(--secondary-300);
   border-color: var(--secondary-300);
-  color: var(--secondary-700);
+  color: var(--secondary-900);
 }
 .btn-info:disabled,
 .btn-info.disabled {
   background: var(--secondary-100);
-  border-color: var(--secondary-200);
+  border-color: var(--secondary-100);
   color: var(--secondary-400);
 }
 .btn-info:disabled .fas,
@@ -639,33 +546,33 @@ body.dark-mode {
   color: var(--secondary-300);
 }
 .dark-mode .btn-info {
-  background: var(--secondary-300);
-  border-color: var(--secondary-300);
-  color: var(--secondary-800);
+  background: var(--secondary-700);
+  border-color: var(--secondary-700);
+  color: var(--secondary-100);
 }
 .dark-mode .btn-info .fas,
 .dark-mode .btn-info .far {
-  color: var(--secondary-600);
+  color: var(--secondary-300);
 }
 .dark-mode .btn-info:hover,
 .dark-mode .btn-info:active,
 .dark-mode .btn-info.active,
 .dark-mode .btn-info:focus,
 .dark-mode .btn-info.show {
-  background: var(--secondary-200);
-  border-color: var(--secondary-200);
+  background: var(--secondary-500);
+  border-color: var(--secondary-500);
 }
 .dark-mode .btn-info:disabled,
 .dark-mode .btn-info.disabled {
-  background: var(--secondary-300);
-  border-color: var(--secondary-300);
-  color: var(--secondary-600);
+  background: var(--secondary-900);
+  border-color: var(--secondary-900);
+  color: var(--secondary-400);
 }
 .dark-mode .btn-info:disabled .fas,
 .dark-mode .btn-info.disabled .fas,
 .dark-mode .btn-info:disabled .far,
 .dark-mode .btn-info.disabled .far {
-  color: var(--secondary-500);
+  color: var(--secondary-600);
 }
 .btn-link,
 .btn-link:hover {
