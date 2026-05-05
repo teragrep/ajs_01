@@ -69,13 +69,13 @@ limitations under the License.
       </button>
       <button class="btn btn-link btn-sm"
               ng-click="copyParagraph(getEditorValue())"
-              ng-disabled="isNoteRunning()">
+              ng-class="{'disabled':isNoteRunning()}">
         <i class="fas fa-copy"
            title="Clone paragraph (Ctrl+Shift+C)"></i>
       </button>
       <button class="btn btn-link btn-sm"
               ng-click="clearParagraphOutput(paragraph)"
-              ng-disabled="isNoteRunning()">
+              ng-class="{'disabled':isNoteRunning()}">
         <i class="fas fa-eraser"
            title="Clear output"></i>
       </button>
@@ -132,9 +132,9 @@ limitations under the License.
         <li>
           <a class="dropdown-item"
              ng-click="copyParagraph(getEditorValue())"
+             ng-class="{'disabled':isNoteRunning()}"
              title="Clone paragraph (Ctrl+Shift+C)">
-            <i class="fas fa-copy drop-icon"
-               ng-class="{'item-disable' : isNoteRunning}">
+            <i class="fas fa-copy drop-icon">
             </i>
             Clone paragraph
           </a>
@@ -142,9 +142,9 @@ limitations under the License.
         <li>
           <a class="dropdown-item"
              ng-click="clearParagraphOutput(paragraph)"
+             ng-class="{'disabled':isNoteRunning()}"
              title="Clear output">
-            <i class="fas fa-eraser drop-icon"
-               ng-class="{'item-disable' : isNoteRunning}"></i>
+            <i class="fas fa-eraser drop-icon"></i>
             Clear output
           </a>
         </li>
@@ -194,7 +194,7 @@ limitations under the License.
       <button class="btn btn-link btn-sm"
               ng-click="cancelParagraph(paragraph)"
               ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'"
-              ng-class="{'item-disable' : isNoteRunning}">
+              ng-class="{'disabled':isNoteRunning()}">
         <i class="fas fa-pause"
            title="Cancel (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+C)">
         </i>
@@ -202,7 +202,7 @@ limitations under the License.
       <button class="btn btn-link btn-sm"
               ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING' && paragraph.config.enabled"
               ng-click="runParagraphFromButton(getEditorValue())"
-              ng-class="{'item-disable' : isNoteRunning}">
+              ng-class="{'disabled':isNoteRunning()}">
         <i class="fas fa-play"
            role="button"
            title="Run this paragraph (Shift+Enter)">
@@ -1010,9 +1010,10 @@ limitations under the License.
                       ng-options="s for s in fontSizeOption"></select>
             </span>
           </li>
-          <li class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}">
-            <a class="dropdown-item" ng-click="toggleEnableDisable(paragraph)">
+          <li class="d-flex align-items-center">
+            <a class="dropdown-item"
+               ng-click="toggleEnableDisable(paragraph)"
+               ng-class="{'disabled':isNoteRunning()}">
               <span class="drop-icon">
                 <i class="fas fa-play"></i>
               </span>
@@ -1024,9 +1025,10 @@ limitations under the License.
             <hr class="dropdown-divider">
           </li>
           <li ng-hide="$index <= 1"
-              class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}">
-            <a class="dropdown-item" ng-click="moveTop(paragraph)">
+              class="d-flex align-items-center">
+            <a class="dropdown-item"
+               ng-class="{'disabled':isNoteRunning()}"
+               ng-click="moveTop(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-double-up"></i>
               </span>
@@ -1034,18 +1036,20 @@ limitations under the License.
             </a>
           </li>
           <li ng-hide="$index <= 1"
-              class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}">
-            <a class="dropdown-item" ng-click="moveUp(paragraph)">
+              class="d-flex align-items-center">
+            <a class="dropdown-item"
+               ng-class="{'disabled':isNoteRunning()}"
+               ng-click="moveUp(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-up"></i>
               </span>
               Move up
             </a>
           </li>
-          <li ng-hide="$last" class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}">
-            <a class="dropdown-item" ng-click="moveDown(paragraph)">
+          <li ng-hide="$last" class="d-flex align-items-center">
+            <a class="dropdown-item"
+               ng-class="{'disabled':isNoteRunning()}"
+               ng-click="moveDown(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-down"></i>
               </span>
@@ -1055,9 +1059,10 @@ limitations under the License.
               </span>
             </a>
           </li>
-          <li ng-hide="$last" class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}">
-            <a class="dropdown-item" ng-click="moveBottom(paragraph)">
+          <li ng-hide="$last" class="d-flex align-items-center">
+            <a class="dropdown-item"
+               ng-class="{'disabled':isNoteRunning()}"
+               ng-click="moveBottom(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-double-down"></i>
               </span>
@@ -1065,9 +1070,10 @@ limitations under the License.
             </a>
           </li>
           <li ng-hide="$index <= 1"
-              class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}">
-            <a class="dropdown-item" ng-click="runAllToThis(paragraph)">
+              class="d-flex align-items-center">
+            <a class="dropdown-item"
+               ng-class="{'disabled':isNoteRunning()}"
+               ng-click="runAllToThis(paragraph)">
               <span class="drop-icon rotate-transform">
                 <i class="fas fa-share"></i>
               </span>
@@ -1075,9 +1081,10 @@ limitations under the License.
             </a>
           </li>
           <li ng-hide="$last"
-              class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}">
-            <a class="dropdown-item" ng-click="runAllFromThis(paragraph)">
+              class="d-flex align-items-center">
+            <a class="dropdown-item"
+               ng-class="{'disabled':isNoteRunning()}"
+               ng-click="runAllFromThis(paragraph)">
               <span class="drop-icon rotate-transform">
                 <i class="fas fa-reply"></i>
               </span>
@@ -1100,9 +1107,9 @@ limitations under the License.
             <hr class="dropdown-divider">
           </li>
           <li class="d-flex align-items-center"
-              ng-class="{'disable' : isNoteRunning}"
               ng-if="note.paragraphs.length > 1">
             <a class="dropdown-item"
+               ng-class="{'disabled':isNoteRunning()}"
                ng-click="removeParagraph(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-times"></i>
