@@ -585,6 +585,10 @@ body.dark-mode {
 .btn-link:hover .far {
   color: var(--primary-600);
 }
+.btn-link .fas.fa-pause,
+.btn-link:hover .fas.fa-pause {
+  color: var(--danger-700);
+}
 .btn-link:disabled,
 .btn-link:hover:disabled,
 .btn-link.disabled,
@@ -610,6 +614,10 @@ body.dark-mode {
 .dark-mode .btn-link .far,
 .dark-mode .btn-link:hover .far {
   color: var(--tertiary-400);
+}
+.dark-mode .btn-link .fas.fa-pause,
+.dark-mode .btn-link:hover .fas.fa-pause {
+  color: var(--danger-400);
 }
 .dark-mode .btn-link:disabled,
 .dark-mode .btn-link:hover:disabled,
@@ -3496,9 +3504,6 @@ div.dt-button-collection {
     margin: 0 -20px 20px;
   }
 }
-.paragraph .control .fas.fa-pause {
-  color: var(--danger-500);
-}
 .paragraph .control .dropdown-menu .drop-icon {
   width: 20px;
   display: inline-block;
@@ -3536,9 +3541,6 @@ div.dt-button-collection {
 .dark-mode .paragraph .control {
   background: var(--dm-grey-600);
   color: var(--grey-300);
-}
-.dark-mode .paragraph .control .fas.fa-pause {
-  color: var(--danger-400);
 }
 .dark-mode .paragraph .control li {
   color: var(--dm-grey-100);
