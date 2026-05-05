@@ -323,8 +323,8 @@ body.dark-mode {
 }
 .dark-mode .btn-secondary:disabled,
 .dark-mode .btn-secondary.disabled {
-  background: var(--dm-grey-700);
-  border-color: var(--dm-grey-700);
+  background: var(--dm-grey-600);
+  border-color: var(--dm-grey-600);
   color: var(--dm-grey-400);
 }
 .dark-mode .btn-secondary:disabled .fas,
@@ -577,22 +577,55 @@ body.dark-mode {
 .btn-link,
 .btn-link:hover {
   text-decoration: none;
-  color: var(--primary-700);
+  color: var(--primary-800);
+}
+.btn-link .fas,
+.btn-link:hover .fas,
+.btn-link .far,
+.btn-link:hover .far {
+  color: var(--primary-600);
+}
+.btn-link:disabled,
+.btn-link:hover:disabled,
+.btn-link.disabled,
+.btn-link:hover.disabled {
+  color: var(--primary-400);
+}
+.btn-link:disabled .fas,
+.btn-link:hover:disabled .fas,
+.btn-link.disabled .fas,
+.btn-link:hover.disabled .fas,
+.btn-link:disabled .far,
+.btn-link:hover:disabled .far,
+.btn-link.disabled .far,
+.btn-link:hover.disabled .far {
+  color: var(--primary-300);
 }
 .dark-mode .btn-link,
 .dark-mode .btn-link:hover {
-  color: var(--tertiary-300);
+  color: var(--tertiary-200);
 }
-.setting-btn {
-  cursor: pointer;
+.dark-mode .btn-link .fas,
+.dark-mode .btn-link:hover .fas,
+.dark-mode .btn-link .far,
+.dark-mode .btn-link:hover .far {
+  color: var(--tertiary-400);
 }
-.setting-btn .fas,
-.setting-btn .far {
-  color: var(--primary-600);
+.dark-mode .btn-link:disabled,
+.dark-mode .btn-link:hover:disabled,
+.dark-mode .btn-link.disabled,
+.dark-mode .btn-link:hover.disabled {
+  color: var(--tertiary-500);
 }
-.dark-mode .setting-btn .fas,
-.dark-mode .setting-btn .far {
-  color: var(--tertiary-300);
+.dark-mode .btn-link:disabled .fas,
+.dark-mode .btn-link:hover:disabled .fas,
+.dark-mode .btn-link.disabled .fas,
+.dark-mode .btn-link:hover.disabled .fas,
+.dark-mode .btn-link:disabled .far,
+.dark-mode .btn-link:hover:disabled .far,
+.dark-mode .btn-link.disabled .far,
+.dark-mode .btn-link:hover.disabled .far {
+  color: var(--tertiary-600);
 }
 /*
  * Teragrep User Interface (ajs_01)
@@ -2647,18 +2680,9 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
 .note-action.headroom--unpinned {
   top: -100px;
 }
-.note-action .fas,
-.note-action .far {
-  color: var(--primary-600) !important;
-  margin-right: 0 !important;
-}
 .note-action .btn-danger .fas,
 .note-action .btn-danger .far {
   color: var(--danger-600) !important;
-}
-.note-action .btn:disabled .fas,
-.note-action .btn:disabled .far {
-  color: var(--primary-400) !important;
 }
 .dark-mode .note-action .btn-collapse {
   background: var(--dm-grey-700);
@@ -2678,17 +2702,9 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
   box-shadow: 0 1px 5px var(--dm-grey-900);
   border-bottom: 1px solid var(--dm-grey-700);
 }
-.dark-mode .note-action .fas,
-.dark-mode .note-action .far {
-  color: var(--tertiary-300) !important;
-}
 .dark-mode .note-action .btn-danger .fas,
 .dark-mode .note-action .btn-danger .far {
   color: var(--danger-600) !important;
-}
-.dark-mode .note-action .btn:disabled .fas,
-.dark-mode .note-action .btn:disabled .far {
-  color: var(--tertiary-600) !important;
 }
 .action-bar_title {
   float: left;
@@ -3480,10 +3496,6 @@ div.dt-button-collection {
     margin: 0 -20px 20px;
   }
 }
-.paragraph .control .fas,
-.paragraph .control .far {
-  color: var(--primary-600);
-}
 .paragraph .control .fas.fa-pause {
   color: var(--danger-500);
 }
@@ -3524,10 +3536,6 @@ div.dt-button-collection {
 .dark-mode .paragraph .control {
   background: var(--dm-grey-600);
   color: var(--grey-300);
-}
-.dark-mode .paragraph .control .fas,
-.dark-mode .paragraph .control .far {
-  color: var(--tertiary-300);
 }
 .dark-mode .paragraph .control .fas.fa-pause {
   color: var(--danger-400);

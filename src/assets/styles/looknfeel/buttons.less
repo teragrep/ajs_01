@@ -172,8 +172,8 @@
   }
   &:disabled,
   &.disabled {
-    background: var(--dm-grey-700);
-    border-color: var(--dm-grey-700);
+    background: var(--dm-grey-600);
+    border-color: var(--dm-grey-600);
     color: var(--dm-grey-400);
     .fas,
     .far {
@@ -415,23 +415,34 @@
 .btn-link,
 .btn-link:hover {
   text-decoration: none;
-  color: var(--primary-700);
-}
-
-.dark-mode .btn-link,
-.dark-mode .btn-link:hover {
-  color: var(--tertiary-300);
-}
-
-.setting-btn {
-  cursor: pointer;
+  color: var(--primary-800);
   .fas,
   .far {
     color: var(--primary-600);
   }
+  &:disabled,
+  &.disabled {
+    color: var(--primary-400);
+    .fas,
+    .far {
+      color: var(--primary-300);
+    }
+  }
 }
 
-.dark-mode .setting-btn .fas,
-.dark-mode .setting-btn .far {
-  color: var(--tertiary-300);
+.dark-mode .btn-link,
+.dark-mode .btn-link:hover {
+  color: var(--tertiary-200);
+  .fas,
+  .far {
+    color: var(--tertiary-400);
+  }
+  &:disabled,
+  &.disabled {
+    color: var(--tertiary-500);
+    .fas,
+    .far {
+      color: var(--tertiary-600);
+    }
+  }
 }
