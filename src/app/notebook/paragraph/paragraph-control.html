@@ -106,16 +106,18 @@ limitations under the License.
     </div>
     <!-- responsive drop-down menu for smaller screens -->
     <div class="responsive-col-dropdown dropdown">
-      <i class="fas fa-bars"
-         type="button"
-         data-bs-toggle="dropdown"
-         aria-expanded="false"></i>
+      <button class="btn btn-link btn-sm ps-0"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
       <ul class="dropdown-menu">
         <li>
           <a class="dropdown-item"
              ng-click="toggleEditor(paragraph)"
              title="{{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+E)">
-            <i class="me-2 {{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"></i>
+            <i class="drop-icon {{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"></i>
             {{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor
           </a>
         </li>
@@ -123,7 +125,7 @@ limitations under the License.
           <a class="dropdown-item"
              ng-click="toggleOutput(paragraph)"
              title="{{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+O)">
-            <i class="me-2 {{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"></i>
+            <i class="drop-icon {{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"></i>
             {{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output
           </a>
         </li>
@@ -131,7 +133,7 @@ limitations under the License.
           <a class="dropdown-item"
              ng-click="copyParagraph(getEditorValue())"
              title="Clone paragraph (Ctrl+Shift+C)">
-            <i class="fas fa-copy me-2"
+            <i class="fas fa-copy drop-icon"
                ng-class="{'item-disable' : isNoteRunning}">
             </i>
             Clone paragraph
@@ -141,7 +143,7 @@ limitations under the License.
           <a class="dropdown-item"
              ng-click="clearParagraphOutput(paragraph)"
              title="Clear output">
-            <i class="fas fa-eraser me-2"
+            <i class="fas fa-eraser drop-icon"
                ng-class="{'item-disable' : isNoteRunning}"></i>
             Clear output
           </a>
@@ -150,7 +152,7 @@ limitations under the License.
           <a class="dropdown-item"
              ng-click="hideTitle(paragraph)"
              title="Hide title">
-            <i class="fas fa-font me-2"></i>
+            <i class="fas fa-font drop-icon"></i>
             Hide title
           </a>
         </li>
@@ -158,7 +160,7 @@ limitations under the License.
           <a class="dropdown-item"
              ng-click="showTitle(paragraph)"
              title="Show title">
-            <i class="fas fa-font me-2"></i>
+            <i class="fas fa-font drop-icon"></i>
             Show title
           </a>
         </li>
@@ -166,7 +168,7 @@ limitations under the License.
           <a class="dropdown-item"
              ng-click="hideLineNumbers(paragraph)"
              title="Hide line numbers (Ctrl+Alt+M)">
-            <i class="fas fa-list-ol me-2"></i>
+            <i class="fas fa-list-ol drop-icon"></i>
             Hide line numbers
           </a>
         </li>
@@ -174,7 +176,7 @@ limitations under the License.
           <a class="dropdown-item"
              ng-click="showLineNumbers(paragraph)"
              title="Show line numbers (Ctrl+Alt+M)">
-            <i class="fas fa-list-ol me-2"></i>
+            <i class="fas fa-list-ol drop-icon"></i>
             Show line numbers
           </a>
         </li>
@@ -189,24 +191,23 @@ limitations under the License.
             ng-if="paragraph.status === 'RUNNING'">
         {{getProgress()}}%
       </span>
-      <div class="me-2"
-           ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'">
+      <button class="btn btn-link btn-sm"
+              ng-click="cancelParagraph(paragraph)"
+              ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'"
+              ng-class="{'item-disable' : isNoteRunning}">
         <i class="fas fa-pause"
-           role="button"
-           title="Cancel (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+C)"
-           ng-click="cancelParagraph(paragraph)"
-           ng-class="{'item-disable' : isNoteRunning}">
+           title="Cancel (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+C)">
         </i>
-      </div>
-      <div class="me-2"
-           ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING' && paragraph.config.enabled">
+      </button>
+      <button class="btn btn-link btn-sm"
+              ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING' && paragraph.config.enabled"
+              ng-click="runParagraphFromButton(getEditorValue())"
+              ng-class="{'item-disable' : isNoteRunning}">
         <i class="fas fa-play"
            role="button"
-           title="Run this paragraph (Shift+Enter)"
-           ng-click="runParagraphFromButton(getEditorValue())"
-           ng-class="{'item-disable' : isNoteRunning}">
+           title="Run this paragraph (Shift+Enter)">
         </i>
-      </div>
+      </button>
       <!--<div class="dropdown me-2">
         <i class="fas fa-clock"
            role="button"
@@ -963,13 +964,15 @@ limitations under the License.
         </div>
       </div>-->
       <div class="dropdown">
-        <i class="fas fa-gear"
-           role="button"
-           data-bs-toggle="dropdown"
-           type="button"
-           aria-haspopup="true"
-           aria-expanded="false">
-        </i>
+        <button class="btn btn-link btn-sm pe-0"
+                role="button"
+                data-bs-toggle="dropdown"
+                type="button"
+                aria-haspopup="true"
+                aria-expanded="false">
+          <i class="fas fa-gear">
+          </i>
+        </button>
         <ul class="dropdown-menu dropdown-menu-end paragraph-dropdown">
           <li ng-controller="clipboardCtrl"
               ng-click="$event.stopPropagation()">

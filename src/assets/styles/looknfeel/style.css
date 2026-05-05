@@ -3602,7 +3602,7 @@ div.dt-button-collection {
     display: block !important;
   }
 }
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 500px) {
   .responsive-col {
     display: none !important;
   }
@@ -3615,7 +3615,7 @@ div.dt-button-collection {
     display: none !important;
   }
 }
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 500px) {
   .responsive-col-dropdown {
     display: block !important;
   }
