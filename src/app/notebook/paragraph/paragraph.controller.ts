@@ -158,6 +158,19 @@ function ParagraphCtrl($scope,
     initializeDefault($scope.paragraph.config);
   };
 
+  $scope.isParagraphRunning = function () {
+    const status = $scope.status;
+    if (!status) {
+      return false;
+    }
+    let className = '';
+
+    if( status === ParagraphStatus.PENDING || status === ParagraphStatus.RUNNING){
+      className = 'disabled';
+    }
+    return className;
+  };
+
   $scope.$on('noteRunningStatus', function(event, status) {
     $scope.isNoteRunning = status;
     if($scope.editor){
