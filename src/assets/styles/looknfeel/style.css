@@ -3822,6 +3822,12 @@ div.dt-button-collection {
   background-color: var(--grey-100);
   transition: all 0.2s;
 }
+.dropdown-menu .dropdown-item.disabled {
+  color: var(--grey-600);
+}
+.dropdown-menu .dropdown-item.disabled .fas {
+  color: var(--primary-400);
+}
 .dropdown-menu .divider {
   width: 100%;
   padding: 0 !important;
@@ -3856,6 +3862,12 @@ div.dt-button-collection {
 .dark-mode .dropdown-menu .dropdown-item:focus {
   background: var(--dm-grey-600);
   transition: all 0.2s;
+}
+.dark-mode .dropdown-menu .dropdown-item.disabled {
+  color: var(--dm-grey-400);
+}
+.dark-mode .dropdown-menu .dropdown-item.disabled .fas {
+  color: var(--tertiary-600);
 }
 .dark-mode .dropdown-menu .divider > .dropdown-divider {
   border-top: 1px solid var(--dm-grey-500);

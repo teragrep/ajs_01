@@ -369,6 +369,10 @@
       background-color: var(--grey-100);
       transition: all 0.2s;
     }
+    &.disabled {
+      color: var(--grey-600);
+      .fas { color: var(--primary-400); }
+    }
   }
   .divider {
     width: 100%;
@@ -403,6 +407,10 @@
     &:hover, &:focus {
       background: var(--dm-grey-600);
       transition: all 0.2s;
+    }
+    &.disabled {
+      color: var(--dm-grey-400);
+      .fas { color: var(--tertiary-600); }
     }
   }
   .divider > .dropdown-divider {
