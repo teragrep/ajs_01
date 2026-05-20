@@ -159,7 +159,7 @@ function ParagraphCtrl($scope,
   };
 
   $scope.isParagraphRunning = function () {
-    const status = $scope.status;
+    const status = $scope.paragraph.status;
     if (!status) {
       return false;
     }
