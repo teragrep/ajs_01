@@ -193,8 +193,7 @@ limitations under the License.
       </span>
       <button class="btn btn-link btn-sm"
               ng-click="cancelParagraph(paragraph)"
-              ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'"
-              ng-class="{'disabled':isParagraphRunning()}">
+              ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'">
         <i class="fas fa-pause"
            title="Cancel (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+C)">
         </i>
