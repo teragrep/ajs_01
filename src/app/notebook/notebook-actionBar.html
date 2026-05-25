@@ -228,7 +228,7 @@ has been fixed.
              ng-hide="viewOnly">
           <button class="btn btn-secondary dropdown-toggle"
                   data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
+                  data-bs-auto-close="true"
                   ng-click="focusOn('customExpression')"
                   ng-class="{ 'btn-info' : note.config.cron && !cronSEWarning, 'btn-danger' : cronSEWarning, 'btn-secondary' : !note.config.cron}"
                   title="Run the notebook with scheduler"
@@ -276,7 +276,6 @@ has been fixed.
                         ng-repeat="cr in cronOption"
                         type="button"
                         ng-click="setCronScheduler(cr.value); cronParse()"
-                        dropdown-input
                         ng-class="{ 'active' : cr.value == note.config.cron}">
                   {{cr.name}}
                 </button>
