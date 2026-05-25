@@ -3508,7 +3508,7 @@ div.dt-button-collection {
   width: 20px;
   display: inline-block;
   text-align: center;
-  color: var(--primary-700);
+  color: var(--grey-600);
   margin-right: 5px;
 }
 .paragraph .control .rotate-transform {
@@ -3546,7 +3546,7 @@ div.dt-button-collection {
   color: var(--dm-grey-100);
 }
 .dark-mode .paragraph .control .dropdown-menu .drop-icon {
-  color: var(--tertiary-300);
+  color: var(--dm-grey-300);
 }
 .dark-mode .paragraph .title div {
   color: var(--tertiary-300);
@@ -3826,7 +3826,7 @@ div.dt-button-collection {
   color: var(--grey-600);
 }
 .dropdown-menu .dropdown-item.disabled .fas {
-  color: var(--primary-400);
+  color: var(--grey-400);
 }
 .dropdown-menu .divider {
   width: 100%;
@@ -3846,7 +3846,7 @@ div.dt-button-collection {
   float: left;
 }
 .dropdown-menu .shortcut-keys {
-  color: var(--grey-600);
+  color: var(--tertiary-700);
   font-size: 12px;
 }
 .dark-mode .dropdown-menu {
@@ -3867,13 +3867,13 @@ div.dt-button-collection {
   color: var(--dm-grey-400);
 }
 .dark-mode .dropdown-menu .dropdown-item.disabled .fas {
-  color: var(--tertiary-600);
+  color: var(--dm-gey-600);
 }
 .dark-mode .dropdown-menu .divider > .dropdown-divider {
   border-top: 1px solid var(--dm-grey-500);
 }
 .dark-mode .dropdown-menu .shortcut-keys {
-  color: var(--grey-400);
+  color: var(--tertiary-200);
 }
 .paragraph-dropdown li {
   width: 100%;
