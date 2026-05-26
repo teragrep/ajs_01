@@ -159,16 +159,15 @@ function ParagraphCtrl($scope,
   };
 
   $scope.isParagraphRunning = function () {
-    const status = $scope.paragraph.status;
-    if (!status) {
-      return false;
+    let isParagraphRunning:boolean;
+    const status =$scope.paragraph.status;
+    if (status === undefined) {
+      isParagraphRunning = false;
     }
-    let className = '';
-
-    if( status === ParagraphStatus.PENDING || status === ParagraphStatus.RUNNING){
-      className = 'disabled';
+    else{
+      isParagraphRunning = status === ParagraphStatus.PENDING || status === ParagraphStatus.RUNNING;
     }
-    return className;
+    return isParagraphRunning;
   };
 
   $scope.$on('noteRunningStatus', function(event, status) {
