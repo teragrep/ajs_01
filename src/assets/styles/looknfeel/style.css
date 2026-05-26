@@ -3867,7 +3867,7 @@ div.dt-button-collection {
   color: var(--dm-grey-400);
 }
 .dark-mode .dropdown-menu .dropdown-item.disabled .fas {
-  color: var(--dm-gey-600);
+  color: var(--dm-grey-600);
 }
 .dark-mode .dropdown-menu .divider > .dropdown-divider {
   border-top: 1px solid var(--dm-grey-500);
