@@ -108,9 +108,9 @@
       <h3 class="revisions-comparator-paragraph-title mt-0">
         <span ng-if="p.paragraph.title">{{p.paragraph.title}}</span>
         <span ng-hide="p.paragraph.title">Untitled</span>
-        <span ng-if="p.type === 'added'" class="revisions-comparator-status badge rounded-pill bg-secondary">added</span>
-        <span ng-if="p.type === 'deleted'" class="revisions-comparator-status badge rounded-pill bg-secondary">deleted</span>
-        <span ng-if="p.type === 'compared' && !(p.identical)" class="revisions-comparator-status badge rounded-pill bg-secondary">
+        <span ng-if="p.type === 'added'" class="revisions-comparator-status badge badge-success rounded-pill">added</span>
+        <span ng-if="p.type === 'deleted'" class="revisions-comparator-status badge badge-important rounded-pill">deleted</span>
+        <span ng-if="p.type === 'compared' && !(p.identical)" class="revisions-comparator-status badge badge-info rounded-pill">
           there are differences
         </span>
       </h3>

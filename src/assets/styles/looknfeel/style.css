@@ -2303,6 +2303,31 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
   background-color: var(--dm-grey-700);
   border-bottom: 1px solid var(--dm-grey-700);
 }
+/* badges */
+.badge-info {
+  color: var(--secondary-800);
+  background-color: var(--secondary-300);
+}
+.dark-mode .badge-info {
+  color: var(--secondary-100);
+  background-color: var(--secondary-700);
+}
+.badge-success {
+  color: var(--tertiary-900);
+  background-color: var(--tertiary-400);
+}
+.dark-mode .badge-success {
+  color: var(--tertiary-50);
+  background-color: var(--tertiary-700);
+}
+.badge-important {
+  color: var(--danger-800);
+  background-color: var(--danger-400);
+}
+.dark-mode .badge-important {
+  color: var(--danger-100);
+  background-color: var(--danger-600);
+}
 /*
  * Teragrep User Interface (ajs_01)
  * Copyright (C) 2019-2026 Suomen Kanuuna Oy
