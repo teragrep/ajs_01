@@ -158,7 +158,7 @@ function ParagraphCtrl($scope,
     initializeDefault($scope.paragraph.config);
   };
 
-  $scope.isParagraphRunning = function () {
+  $scope.isParagraphRunning = function ():boolean {
     let isParagraphRunning:boolean;
     const status =$scope.paragraph.status;
     if (status === undefined) {
