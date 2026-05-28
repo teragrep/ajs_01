@@ -63,12 +63,11 @@ export class ParagraphImpl implements Paragraph{
     this._outputContainer = new OutputContainerImpl(this, angularObjectCollection);
 
     if(this._paragraph.propertyExists('output')){
-      const output = this._paragraph.getProperty<object>('output', 'object');
-      if(output['data'] === undefined || output['type'] === undefined){
-        console.error(`Output data not processed, format invalid: ${JSON.stringify(output)}`);
+      const paragraphOutput = this._paragraph.getProperty<object>('output', 'object');
+      if(paragraphOutput['data'] === undefined || paragraphOutput['type'] === undefined){
+        console.error(`Output data not processed, format invalid: ${JSON.stringify(paragraphOutput)}`);
       }
       else{
-        const paragraphOutput:object = this._paragraph.getProperty('output', 'object');
         const paragraphOutputMessage = {
           op:'PARAGRAPH_OUTPUT',
           data: {
