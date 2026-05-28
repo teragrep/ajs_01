@@ -51,7 +51,7 @@ import {PushValueImpl} from '../pushValue/pushValueImpl';
 import {Paragraph} from '../paragraph/paragraph';
 import {PushValue} from '../pushValue/pushValue';
 
-describe('Notebook', () => {
+describe('Notebook unit test', () => {
   const notebookId = 'noteId';
   const notebookParagraphs = [
     {id:'paragraph1'}
@@ -74,14 +74,19 @@ describe('Notebook', () => {
       expect(notebook).toBeInstanceOf(NotebookImpl);
     });
 
-    it('Should have ParagraphCollection', () =>{
-      notebook = new NotebookImpl(channel, notebookData);
-      expect(notebook.paragraphCollection()).toBeDefined();
-    });
-
     it('Should have id', () => {
       notebook = new NotebookImpl(channel, notebookData);
       expect(notebook.id()).toEqual(notebookId);
+    });
+
+    it('Should have concrete ParagraphCollection', () =>{
+      notebook = new NotebookImpl(channel, notebookData);
+      expect(notebook.paragraphCollection().isStub()).toBe(false);
+    });
+
+    it('Should have ParagraphCollectionStub', () =>{
+      notebook = new NotebookImpl(channel, {id:notebookId});
+      expect(notebook.paragraphCollection().isStub()).toBe(true);
     });
   });
 
