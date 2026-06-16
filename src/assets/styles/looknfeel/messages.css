@@ -125,10 +125,6 @@
   width: 100px;
 }
 
-.dark-mode .logo {
-  filter: brightness(100);
-}
-
 /* toasts */
 
 .toast {
