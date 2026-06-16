@@ -281,8 +281,14 @@ limitations under the License.
       <div class="modal-body">
         <div class="row">
           <div class="hidden-xs col-sm-4 d-flex align-items-center justify-content-center">
-            <img src="../../../../assets/images/avatar.png"
+            <img src="../../../../assets/images/teragrep-mark.svg"
                  class="logo"
+                 ng-if="!isDarkMode"
+                 alt="Teragrep"
+                 title="Teragrep" />
+            <img src="../../../../assets/images/teragrep-mark-white-color.svg"
+                 class="logo"
+                 ng-if="isDarkMode"
                  alt="Teragrep"
                  title="Teragrep" />
           </div>
