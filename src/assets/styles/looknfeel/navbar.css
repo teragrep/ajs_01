@@ -54,12 +54,16 @@
       border-top: 1px solid var(--primary-600);
     }
   }
-  .navbar-brand img {
-    height: 30px;
-    @media only screen and (max-width: 300px) {
-      width: 32px;
-      object-fit: cover;
-      object-position: left center;
+  .navbar-brand {
+    margin-right: 1.5rem;
+    img {
+      height: 30px;
+      /* show only the logo mark in small screens */
+      @media only screen and (max-width: 460px) {
+        width: 31px;
+        object-fit: cover;
+        object-position: left center;
+      }
     }
   }
   .navbar-toggler {
