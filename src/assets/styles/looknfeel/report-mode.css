@@ -45,22 +45,14 @@
  */
 
 .report-mode {
-  #notebookPage {
-    background: var(--grey-100);
-    min-height: calc(100vh - 106px);
-  }
-  .paragraph-box {
-    border: 0;
-    border-radius: 0;
-    min-height: 0;
-    background: #F7FAFC;
-  }
-  .paragraph-box:hover {
-    border: 0;
-  }
   .paragraph-box {
     padding: 0 !important;
     margin: 0 0 30px !important;
+    border: 0;
+    border-radius: 0;
+    min-height: 0;
+    background: var(--grey-100);
+    &:hover { border: 0; }
   }
   .graphContainer {
     margin-bottom: 0 !important;
@@ -68,21 +60,26 @@
   .paragraph {
     min-height: 32px;
     padding: 0 0 10px;
-    .control {
-      display: none !important;
-    }
+    .control { display: none !important; }
   }
   .collapse-button {
-    margin-top: -3px;
+    display: none;
+    transition: all 1s ease-in;
   }
-  .btn-collapse {
-    border-left: 2px solid var(--grey-200);
-    border-bottom: 2px solid var(--grey-200);
-    border-right: 2px solid var(--grey-200);
+  .note-action {
+    position: relative;
+    top: 0;
+    padding: 64px 0 32px;
+    transition: all 1s ease-in;
   }
   .note-action-container {
-    border-bottom: 2px solid var(--grey-200);
-    .label-btn > .btn, .label-btn > .btn-group > .btn, .label-btn > .btn-group > .dropdown > .btn {
+    background-color: transparent;
+    border-bottom: 0;
+    box-shadow: none;
+    transition: all 1s ease-in;
+    .label-btn > .btn,
+    .label-btn > .btn-group > .btn,
+    .label-btn > .btn-group > .dropdown > .btn {
       display: none;
     }
     .label-btn > .btn.rm-show,
@@ -91,45 +88,39 @@
       display: inline-block;
     }
   }
+  .form-control_title {
+    font-size: 32px;
+    text-transform: none;
+  }
+  .notebook-mt {
+    padding-top: 0;
+    transition: all 0.5s;
+  }
   .permissions {
     box-shadow: none;
     border-left: 2px solid var(--grey-200);
   }
-  .executionTime, .nv-controlsWrap, .lastEmptyParagraph {
+  .executionTime,
+  .nv-controlsWrap,
+  .lastEmptyParagraph {
     display: none;
   }
   .notebookContent {
     margin-left: -20px;
     margin-right: -15px;
   }
-  .new-paragraph {
-    display: none;
-  }
-  .editor {
-    display: none;
-  }
-  .dpl-time {
-    display: none;
-  }
-  .paragraph-footer {
-    display: none;
-  }
-  .timeset-info {
-    display: none;
-  }
+  .new-paragraph { display: none; }
+  .editor { display: none; }
+  .dpl-time { display: none; }
+  .paragraph-footer { display: none; }
+  .timeset-info { display: none; }
 }
 
 .dark-mode.report-mode {
-  #notebookPage {
-    background: var(--dm-grey-800);
-  }
-  .btn-collapse {
-    border-left: 2px solid var(--dm-grey-500);
-    border-bottom: 2px solid var(--dm-grey-500);
-    border-right: 2px solid var(--dm-grey-500);
-  }
+  .btn-collapse { display: none; }
   .note-action-container {
-    border-bottom: 2px solid var(--dm-grey-500);
+    border-bottom: 0;
+    background-color: transparent;
   }
   .permissions {
     border-left: 2px solid var(--dm-grey-500);
