@@ -72,7 +72,6 @@
   left: 0;
   width: 100%;
   z-index: 200;
-  transition: all 1s ease-in;
   .navbar-toggler {
     padding: 0;
     border: 0;
@@ -113,7 +112,7 @@
     height: var(--note-action-height);
     box-shadow: 0 1px 5px var(--grey-400);
     border-bottom: 1px solid var(--grey-300);
-    transition: all 1s ease-in;
+    transition: all 0.5s ease-in;
     @media only screen and (max-width: 1200px) {
       max-height: none;
     }
