@@ -77,13 +77,12 @@
     position: relative;
     top: 0;
     padding: 64px 0 32px;
-    transition: all 1s ease-in;
   }
   .note-action-container {
     background-color: transparent;
     border-bottom: 0;
     box-shadow: none;
-    transition: all 1s ease-in;
+    transition: none;
     .label-btn > .btn,
     .label-btn > .btn-group > .btn,
     .label-btn > .btn-group > .dropdown > .btn {
@@ -105,8 +104,11 @@
     transition: all 0.5s;
   }
   .permissions {
+    top: 60px;
+    height: calc(100% - 60px);
     box-shadow: none;
     border-left: 2px solid var(--grey-200);
+    z-index: 200; /* goes on top of everything except note-action */
   }
   .executionTime,
   .nv-controlsWrap,
@@ -125,15 +127,22 @@
 }
 
 .dark-mode.report-mode {
-  .btn-collapse { display: none; }
   .note-action-container {
     border-bottom: 0;
     background-color: transparent;
+    box-shadow: none;
+  }
+  .paragraph .paragraph-title .paragraph-title-inactive {
+    color: var(--grey-000);
+  }
+  .form-control_title {
+    color: var(--grey-000);
   }
   .permissions {
     border-left: 2px solid var(--dm-grey-500);
   }
   .paragraph-box {
-    background: var(--dm-grey-800);
+    background: var(--dm-grey-700);
+    box-shadow: none;
   }
 }
