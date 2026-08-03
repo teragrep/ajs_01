@@ -45,6 +45,6 @@
  */
 import {ParagraphOutputMessage} from '../../message/paragraphOutputMessage/paragraphOutputMessage';
 
-export interface ParagraphDataAsOutputMessage {
+export interface ParagraphOutputMessageFactory {
   paragraphOutputMessage(): ParagraphOutputMessage;
 }

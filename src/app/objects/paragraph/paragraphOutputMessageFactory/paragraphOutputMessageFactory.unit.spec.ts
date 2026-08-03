@@ -44,17 +44,17 @@
  * a licensee so wish it.
  */
 
-import {ParagraphDataAsOutputMessage} from './paragraphDataAsOutputMessage';
-import {ParagraphDataAsOutputMessageImpl} from './paragraphDataAsOutputMessageImpl';
+import {ParagraphOutputMessageFactory} from './paragraphOutputMessageFactory';
+import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactoryImpl';
 
-describe('ParagraphDataAsOutputMessage unit test', () => {
+describe('ParagraphOutputMessageFactory unit test', () => {
   let paragraphData:{
     output: {
       data:object,
       type:string,
     };
   };
-  let paragraphDataAsOutputMessage: ParagraphDataAsOutputMessage;
+  let paragraphDataAsOutputMessage: ParagraphOutputMessageFactory;
   beforeEach(() => {
     paragraphData = {
       output:{
@@ -62,7 +62,7 @@ describe('ParagraphDataAsOutputMessage unit test', () => {
         type:'',
       }
     };
-    paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
+    paragraphDataAsOutputMessage = new ParagraphOutputMessageFactoryImpl(paragraphData);
   });
 
   describe('Birth', () => {
@@ -78,19 +78,19 @@ describe('ParagraphDataAsOutputMessage unit test', () => {
 
     it('Should return stub if data property is missing', () => {
       delete paragraphData.output.data;
-      paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
+      paragraphDataAsOutputMessage = new ParagraphOutputMessageFactoryImpl(paragraphData);
       expect(paragraphDataAsOutputMessage.paragraphOutputMessage().isStub()).toBe(true);
     });
 
     it('Should return stub if type property is missing', () => {
       delete paragraphData.output.type;
-      paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
+      paragraphDataAsOutputMessage = new ParagraphOutputMessageFactoryImpl(paragraphData);
       expect(paragraphDataAsOutputMessage.paragraphOutputMessage().isStub()).toBe(true);
     });
 
     it('Should return stub if output property is missing', () => {
       delete paragraphData.output;
-      paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
+      paragraphDataAsOutputMessage = new ParagraphOutputMessageFactoryImpl(paragraphData);
       expect(paragraphDataAsOutputMessage.paragraphOutputMessage().isStub()).toBe(true);
     });
   });

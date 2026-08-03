@@ -53,7 +53,6 @@ import {computed, Signal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {ComponentView} from '../rendering/componentView/componentView';
-import {ParagraphDataAsOutputMessageImpl} from './paragraphDataAsOutputMessage/paragraphDataAsOutputMessageImpl';
 import {ResponseRegister} from '../register/responseRegister/responseRegister';
 import {
   ResponseRegisterWithPropertyFilter
@@ -67,6 +66,7 @@ import {RequestRegisterImpl} from '../register/requestRegister/requestRegisterIm
 import {
   RequestRegisterWithPropertyDecorator
 } from '../register/requestRegister/requestRegisterWithPropertyDecorator/requestRegisterWithPropertyDecorator';
+import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;
@@ -81,7 +81,7 @@ export class ParagraphImpl implements Paragraph {
     this._paragraph = new SafeJsonImpl(paragraph);
     this._outputContainer = new OutputContainerImpl(this, this.id());
 
-    const paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraph);
+    const paragraphDataAsOutputMessage = new ParagraphOutputMessageFactoryImpl(paragraph);
     const paragraphOutputMessage = paragraphDataAsOutputMessage.paragraphOutputMessage();
     if(!paragraphOutputMessage.isStub()){
       const paragraphOutputMessageData = {

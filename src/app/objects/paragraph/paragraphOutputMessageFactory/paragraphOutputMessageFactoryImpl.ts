@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphDataAsOutputMessage} from './paragraphDataAsOutputMessage';
+import {ParagraphOutputMessageFactory} from './paragraphOutputMessageFactory';
 import {ParagraphOutputMessage} from '../../message/paragraphOutputMessage/paragraphOutputMessage';
 import {SafeJson} from '../../safeJson/safeJson';
 import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
@@ -51,7 +51,7 @@ import {ParagraphOutputMessageStub} from '../../message/paragraphOutputMessage/p
 import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {MessageImpl} from '../../message/messageImpl';
 
-export class ParagraphDataAsOutputMessageImpl implements ParagraphDataAsOutputMessage {
+export class ParagraphOutputMessageFactoryImpl implements ParagraphOutputMessageFactory {
   private readonly _paragraph: SafeJson;
 
   constructor(paragraph:object) {
