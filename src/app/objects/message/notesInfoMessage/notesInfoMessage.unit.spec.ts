@@ -48,6 +48,7 @@ import {MessageImpl} from '../messageImpl';
 import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
 import {NotesInfoMessage} from './notesInfoMessage';
 import {NotesInfoMessageImpl} from './notesInfoMessageImpl';
+import {NotebookIndexImpl} from '../../notebookCollection/notebookIndex/notebookIndexImpl';
 
 describe('NotesInfoMessage unit test', () => {
   const messageData ={
@@ -78,9 +79,11 @@ describe('NotesInfoMessage unit test', () => {
     });
 
     it('Should have notebookIndices', () => {
-      expect(notesInfoMessage.notebookIndices().size).toEqual(2);
-      expect(notesInfoMessage.notebookIndices().get('notebook1')).toBeDefined();
-      expect(notesInfoMessage.notebookIndices().get('notebook2')).toBeDefined();
+      const expectedNotebookIndices = new Map([
+        ['notebook1', new NotebookIndexImpl({id:'notebook1'})],
+        ['notebook2', new NotebookIndexImpl({id:'notebook2'})]
+      ]);
+      expect(notesInfoMessage.notebookIndices()).toEqual(expectedNotebookIndices);
     });
   });
 
