@@ -46,4 +46,4 @@
 import {Channel} from '../../channel/channel';
 import {Printable} from '../../rendering/printable/printable';
 
-export interface OutputFormatsWithValidatedOutputSwitch extends  Channel, Printable {}
+export interface OutputFormats extends  Channel, Printable {}

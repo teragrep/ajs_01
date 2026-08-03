@@ -44,17 +44,17 @@
  * a licensee so wish it.
  */
 import {Channel} from '../../channel/channel';
-import {OutputFormatsWithValidatedOutputSwitch} from './outputFormatsWithValidatedOutputSwitch';
+import {OutputFormats} from './outputFormats';
 import {FakeChannel} from '../../channel/fakeChannel';
-import {OutputFormatsWithValidatedOutputSwitchImpl} from './outputFormatsWithValidatedOutputSwitchImpl';
+import {OutputFormatsImpl} from './outputFormatsImpl';
 import {Signal} from '@angular/core';
 
-describe('OutputFormatsWithValidatedOutputSwitch unit test', () => {
+describe('OutputFormats unit test', () => {
   let channel:Channel;
-  let outputFormatsWithValidatedOutputSwitch:OutputFormatsWithValidatedOutputSwitch;
+  let outputFormatsWithValidatedOutputSwitch:OutputFormats;
   beforeEach(() => {
     channel = new FakeChannel();
-    outputFormatsWithValidatedOutputSwitch = new OutputFormatsWithValidatedOutputSwitchImpl(channel);
+    outputFormatsWithValidatedOutputSwitch = new OutputFormatsImpl(channel);
   });
 
   describe('Birth', () => {

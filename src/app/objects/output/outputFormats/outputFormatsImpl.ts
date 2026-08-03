@@ -62,9 +62,9 @@ import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/p
 import {ParagraphOutputRequestStub} from './paragraphOutputRequest/paragraphOutputRequestStub';
 import {ComponentViewStub} from '../../rendering/componentView/componentViewStub';
 import {ComponentView} from '../../rendering/componentView/componentView';
-import {OutputFormatsWithValidatedOutputSwitch} from './outputFormatsWithValidatedOutputSwitch';
+import {OutputFormats} from './outputFormats';
 
-export class OutputFormatsWithValidatedOutputSwitchImpl implements OutputFormatsWithValidatedOutputSwitch {
+export class OutputFormatsImpl implements OutputFormats {
   private readonly _channel: Channel;
   private readonly _outputFormats: OutputFormat[];
   private readonly _outputSwitcher:OutputSwitcher;
