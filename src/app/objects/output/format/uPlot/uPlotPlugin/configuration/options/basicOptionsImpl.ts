@@ -51,19 +51,21 @@ import {LineSeries} from '../series/lineSeries';
 import {AreaSeries} from '../series/areaSeries';
 import {ScatterSeries} from '../series/scatterSeries';
 import {BarSeries} from '../series/barSeries';
+import {BasicOptions} from './basicOptions';
 
-export class BasicOptionsImpl {
-  private readonly _outputOptions: {
-    labels: string[];
-    series: string[];
-    xAxisLabel: string;
-    graphType: string
-  };
+export class BasicOptionsImpl implements BasicOptions {
+  private readonly _labels: string[];
+  private readonly _series: string[];
+  private readonly _xAxisLabel: string;
+  private readonly _graphType: string;
   private readonly _supportedSeries: GraphSeries[];
   private readonly _seriesColor: SeriesColor;
 
-  constructor(resultOptions: {labels: string[];series: string[];xAxisLabel: string;graphType: string}) {
-    this._outputOptions = resultOptions;
+  constructor(labels: string[], series: string[], xAxisLabel: string, graphType: string) {
+    this._labels = labels;
+    this._series = series;
+    this._xAxisLabel = xAxisLabel;
+    this._graphType = graphType;
     this._seriesColor = new SeriesColorImpl();
     this._supportedSeries  = [
       new LineSeries(),
@@ -99,11 +101,11 @@ export class BasicOptionsImpl {
   }
 
   private series(): uPlot.Series[]{
-    const xAxisLabel = this._outputOptions.xAxisLabel;
-    const dataLabels = this._outputOptions.labels;
-    const seriesNames = this._outputOptions.series;
-    const seriesCount = this._outputOptions.series.length;
-    const graphType = this._outputOptions.graphType;
+    const xAxisLabel = this._xAxisLabel;
+    const dataLabels = this._labels;
+    const seriesNames = this._series;
+    const seriesCount = this._series.length;
+    const graphType = this._graphType;
 
     const series: uPlot.Series[] = [
       {
@@ -128,7 +130,7 @@ export class BasicOptionsImpl {
   }
 
   private axes(): uPlot.Axis[] {
-    const xAxisLabel = this._outputOptions.labels;
+    const xAxisLabel = this._labels;
     return [
       {
         rotate:45,

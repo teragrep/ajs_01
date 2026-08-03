@@ -44,8 +44,8 @@
  * a licensee so wish it.
  */
 import uPlot from 'uplot';
+import {UPlotOptions} from './uPlotOptions';
 
-export interface BasicOptions {
-  options(): uPlot.Options;
+export interface BasicOptions extends UPlotOptions {
   rangeWithPadding(gap: number): uPlot.Scale.Range;
 }

@@ -45,6 +45,6 @@
  */
 import uPlot from 'uplot';
 
-export interface BarChartOptions {
+export interface UPlotOptions {
   options(): uPlot.Options;
 }
