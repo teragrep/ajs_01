@@ -66,7 +66,7 @@ export class TypedMessage implements Message {
 
   private validateType():void{
     if(this._type !== this._message.operation()){
-      throw new RangeError(`Message type is not "${this._type}".`);
+      throw new RangeError(`Expected type to be "${this._type}". Received type: "${this._message.operation()}".`);
     }
   }
 }
