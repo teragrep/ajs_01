@@ -49,14 +49,11 @@ import {computed, Signal} from '@angular/core';
 import {RenderNode} from '../../rendering/renderNode/renderNode';
 import {ComponentView} from '../../rendering/componentView/componentView';
 import {ComponentViewStub} from '../../rendering/componentView/componentViewStub';
-import {
-  OutputFormatsImpl
-} from '../outputFormatsWithValidatedOutputSwitch/outputFormatsImpl';
-import {
-  OutputFormats
-} from '../outputFormatsWithValidatedOutputSwitch/outputFormats';
+
 import {InterpreterErrorListener} from '../../interpreterErrorListener/interpreterErrorListener';
 import {InterpreterErrorListenerImpl} from '../../interpreterErrorListener/interpreterErrorListenerImpl';
+import {OutputFormats} from '../outputFormats/outputFormats';
+import {OutputFormatsImpl} from '../outputFormats/outputFormatsImpl';
 
 export class OutputContainerImpl implements OutputContainer{
   private readonly _channel:Channel;

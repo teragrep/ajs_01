@@ -51,19 +51,19 @@ import {Signal} from '@angular/core';
 
 describe('OutputFormats unit test', () => {
   let channel:Channel;
-  let outputFormatsWithValidatedOutputSwitch:OutputFormats;
+  let outputFormats:OutputFormats;
   beforeEach(() => {
     channel = new FakeChannel();
-    outputFormatsWithValidatedOutputSwitch = new OutputFormatsImpl(channel);
+    outputFormats = new OutputFormatsImpl(channel);
   });
 
   describe('Birth', () => {
     it('Should be initialized', () => {
-      expect(outputFormatsWithValidatedOutputSwitch).toBeDefined();
+      expect(outputFormats).toBeDefined();
     });
 
     it('Should print', () => {
-      const printed = outputFormatsWithValidatedOutputSwitch.print()();
+      const printed = outputFormats.print()();
       expect(printed.componentView.isStub()).toBe(true);
       expect(printed.children()).toHaveLength(6);
     });
@@ -76,7 +76,7 @@ describe('OutputFormats unit test', () => {
         op:'',
         data:{}
       };
-      outputFormatsWithValidatedOutputSwitch.request(request);
+      outputFormats.request(request);
       expect(spy).toHaveBeenCalledExactlyOnceWith(request);
     });
   });
@@ -101,15 +101,15 @@ describe('OutputFormats unit test', () => {
           }
         }
       };
-      outputFormatsWithValidatedOutputSwitch.request(paragraphOutputRequest);
-      const outputSwitcher = outputFormatsWithValidatedOutputSwitch.print()().children().find(child => !child.componentView.isStub() && child.componentView.inputs()()['switchIsPending']);
+      outputFormats.request(paragraphOutputRequest);
+      const outputSwitcher = outputFormats.print()().children().find(child => !child.componentView.isStub() && child.componentView.inputs()()['switchIsPending']);
       outputSwitcherInputs = outputSwitcher.componentView.inputs();
       expect(outputSwitcherInputs()['switchIsPending']).toBe(true);
     });
 
     it('Should send paragraph output request if response type does not match requested type', () => {
       const spy = vi.spyOn(channel, 'request');
-      outputFormatsWithValidatedOutputSwitch.response(paragraphOutputResponse);
+      outputFormats.response(paragraphOutputResponse);
       expect(outputSwitcherInputs()['switchIsPending']).toBe(true);
       expect(spy).toHaveBeenCalledExactlyOnceWith(paragraphOutputRequest);
     });
@@ -117,7 +117,7 @@ describe('OutputFormats unit test', () => {
     it('Should perform switch if response type matches requested type', () => {
       const spy = vi.spyOn(channel, 'request');
       paragraphOutputResponse.data.output.type = switchedType;
-      outputFormatsWithValidatedOutputSwitch.response(paragraphOutputResponse);
+      outputFormats.response(paragraphOutputResponse);
       expect(outputSwitcherInputs()['switchIsPending']).toBe(false);
       expect(spy).toHaveBeenCalledTimes(0);
     });
