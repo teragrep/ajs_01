@@ -45,7 +45,12 @@
  */
 import {AfterViewInit, Component, ElementRef, input, OnChanges, ViewChild} from '@angular/core';
 import uPlot from 'uplot';
-import {UPlotPluginImpl} from '../../../../../objects/output/format/uPlot/uPlotPlugin/uPlotPluginImpl';
+import {BasicOptions} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/basicOptions';
+import {GraphType} from '../../../../../objects/output/format/uPlot/graphType';
+import {BarChartOptionsImpl} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/barChartOptionsImpl';
+import {ResizeListener} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/resizeListener/resizeListener';
+import {ResizeListenerImpl} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/resizeListener/resizeListenerImpl';
+import {UPlotOptions} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/uPlotOptions';
 
 @Component({
   selector: 'uPlotOutputView',
@@ -54,12 +59,8 @@ import {UPlotPluginImpl} from '../../../../../objects/output/format/uPlot/uPlotP
   `
 })
 export class UPlotOutputView implements AfterViewInit, OnChanges {
-  uPlotOptions = input.required<{
-    graphType:string;
-    labels:string[];
-    series:string[];
-    xAxisLabel:string;
-  }>();
+  graphType = input.required<string>();
+  basicOptions = input.required<BasicOptions>();
   uPlotData = input.required<uPlot.AlignedData>();
   @ViewChild('anchor') anchor: ElementRef;
 
@@ -68,12 +69,24 @@ export class UPlotOutputView implements AfterViewInit, OnChanges {
       return;
     }
     this.anchor.nativeElement.replaceChildren();
-    const plugin = new UPlotPluginImpl(this.uPlotData(), this.uPlotOptions());
-    plugin.initializedUPlot(this.anchor.nativeElement);
+    this.initializeGraph();
   }
 
   ngAfterViewInit() {
-    const plugin = new UPlotPluginImpl(this.uPlotData(), this.uPlotOptions());
-    plugin.initializedUPlot(this.anchor.nativeElement);
+    this.initializeGraph();
+  }
+
+  private initializeGraph(): void {
+    let uPlotOptions:UPlotOptions;
+    if(this.graphType() === GraphType.bar){
+      uPlotOptions = new BarChartOptionsImpl(this.basicOptions());
+    }
+    else{
+      uPlotOptions = this.basicOptions();
+    }
+    const graph = new uPlot(uPlotOptions.options(), this.uPlotData(), this.anchor.nativeElement);
+    const resizeListener:ResizeListener = new ResizeListenerImpl();
+    resizeListener.registerToWindow(graph);
+    resizeListener.registerToElement(graph, this.anchor.nativeElement);
   }
 }

@@ -59,6 +59,7 @@ import {UPlotOutputView} from '../../../../ui/angular2+/output/outputViews/uPlot
 import {Printable} from '../../../rendering/printable/printable';
 import {UPlotFormat} from './uPlotFormat';
 import uPlot from 'uplot';
+import {BasicOptionsImpl} from './uPlotPlugin/configuration/options/basicOptionsImpl';
 
 export class UPlotFormatImpl implements UPlotFormat {
   private readonly _channel: Channel;
@@ -91,8 +92,13 @@ export class UPlotFormatImpl implements UPlotFormat {
       }
       else{
         const uPlotData:uPlot.AlignedData = paragraphOutputMessage.outputData('object');
-        const uPlotOptions = paragraphOutputMessage.options().value();
-        this._componentView.set(new ComponentViewImpl(UPlotOutputView, signal({uPlotOptions: uPlotOptions, uPlotData: uPlotData})));
+        const safeOutputOptions = new SafeJsonImpl(paragraphOutputMessage.options().value());
+        const labels = safeOutputOptions.getProperty<string[]>('labels', 'object');
+        const series = safeOutputOptions.getProperty<string[]>('series', 'object');
+        const xAxisLabel = safeOutputOptions.getProperty<string>('xAxisLabel', 'string');
+        const graphType = safeOutputOptions.getProperty<string>('graphType', 'string');
+        const basicOptions = new BasicOptionsImpl(labels, series, xAxisLabel, graphType);
+        this._componentView.set(new ComponentViewImpl(UPlotOutputView, signal({graphType: graphType, basicOptions: basicOptions, uPlotData: uPlotData})));
       }
     }
   }
