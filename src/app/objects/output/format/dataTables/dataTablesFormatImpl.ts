@@ -92,16 +92,17 @@ export class DataTablesFormatImpl implements DataTablesFormat {
       if(paragraphOutputMessage.type() !== OutputType.dataTables){
         this._componentView.set(this._componentViewStub);
         this._plugin.set(this._pluginStub);
-        return;
-      }
-      const dataTablesData:object = paragraphOutputMessage.outputData('object');
-      if(!this._plugin().isStub()){
-        this._plugin().response(dataTablesData);
       }
       else{
-        const dataTablesOptions = paragraphOutputMessage.options();
-        this._plugin.set(new DataTablesPluginImpl(this, dataTablesData, dataTablesOptions.value()));
-        this._componentView.set(new ComponentViewImpl(DataTablesOutputView, signal({dataTablesPlugin: this._plugin()})));
+        const dataTablesData:object = paragraphOutputMessage.outputData('object');
+        if(!this._plugin().isStub()){
+          this._plugin().response(dataTablesData);
+        }
+        else{
+          const dataTablesOptions = paragraphOutputMessage.options();
+          this._plugin.set(new DataTablesPluginImpl(this, dataTablesData, dataTablesOptions.value()));
+          this._componentView.set(new ComponentViewImpl(DataTablesOutputView, signal({dataTablesPlugin: this._plugin()})));
+        }
       }
     }
   }

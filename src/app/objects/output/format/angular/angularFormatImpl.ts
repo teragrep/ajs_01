@@ -81,10 +81,11 @@ export class AngularFormatImpl implements AngularFormat {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.angular){
         this._componentView.set(this._componentViewStub);
-        return;
       }
-      const template:string = paragraphOutputMessage.outputData('string');
-      this._componentView.set(new ComponentViewImpl(AngularOutputView, signal({template:template, angularObjects: this._angularObjectCollection.angularObjects(), requestable:this})));
+      else{
+        const template:string = paragraphOutputMessage.outputData('string');
+        this._componentView.set(new ComponentViewImpl(AngularOutputView, signal({template:template, angularObjects: this._angularObjectCollection.angularObjects(), requestable:this})));
+      }
     }
   }
 

@@ -88,11 +88,12 @@ export class UPlotFormatImpl implements UPlotFormat {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.uPlot){
         this._componentView.set(this._componentViewStub);
-        return;
       }
-      const uPlotData:uPlot.AlignedData = paragraphOutputMessage.outputData('object');
-      const uPlotOptions = paragraphOutputMessage.options().value();
-      this._componentView.set(new ComponentViewImpl(UPlotOutputView, signal({uPlotOptions: uPlotOptions, uPlotData: uPlotData})));
+      else{
+        const uPlotData:uPlot.AlignedData = paragraphOutputMessage.outputData('object');
+        const uPlotOptions = paragraphOutputMessage.options().value();
+        this._componentView.set(new ComponentViewImpl(UPlotOutputView, signal({uPlotOptions: uPlotOptions, uPlotData: uPlotData})));
+      }
     }
   }
 
