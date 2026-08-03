@@ -79,20 +79,24 @@ export class ParagraphImpl implements Paragraph {
   constructor(channel: Channel, paragraph: object) {
     this._channel = channel;
     this._paragraph = new SafeJsonImpl(paragraph);
-    this._outputContainer = new OutputContainerImpl(this, this.id());
+    this._outputContainer = this.initializedOutputContainer(paragraph);
+    this._componentView = new ComponentViewStub();
+    this._responseRegister = new ResponseRegisterWithPropertyFilter(new ResponseRegisterWithDefaultResponseList(new ResponseRegisterImpl(), [this._outputContainer]), {name:'paragraphId', type:'string'}, this.id());
+    this._requestRegister = new RequestRegisterWithPropertyDecorator(new RequestRegisterImpl(this._channel), {name:'paragraphId', value: this.id()});
+  }
 
-    const paragraphDataAsOutputMessage = new ParagraphOutputMessageFactoryImpl(paragraph);
-    const paragraphOutputMessage = paragraphDataAsOutputMessage.paragraphOutputMessage();
+  private initializedOutputContainer(paragraph: object): OutputContainer {
+    const outputContainer = new OutputContainerImpl(this, this.id());
+    const paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraph);
+    const paragraphOutputMessage = paragraphOutputMessageFactory.paragraphOutputMessage();
     if(!paragraphOutputMessage.isStub()){
       const paragraphOutputMessageData = {
         op:paragraphOutputMessage.operation(),
         data:paragraphOutputMessage.data(),
       };
-      this._outputContainer.response(paragraphOutputMessageData);
+      outputContainer.response(paragraphOutputMessageData);
     }
-    this._componentView = new ComponentViewStub();
-    this._responseRegister = new ResponseRegisterWithPropertyFilter(new ResponseRegisterWithDefaultResponseList(new ResponseRegisterImpl(), [this._outputContainer]), {name:'paragraphId', type:'string'}, this.id());
-    this._requestRegister = new RequestRegisterWithPropertyDecorator(new RequestRegisterImpl(this._channel), {name:'paragraphId', value: this.id()});
+    return outputContainer;
   }
 
   print(): Signal<RenderNode> {
