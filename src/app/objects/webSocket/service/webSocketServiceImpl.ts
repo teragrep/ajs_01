@@ -62,9 +62,7 @@ export class WebSocketServiceImpl implements WebSocketService {
 
   constructor() {
     this._clientId = Math.random().toString(36).substring(2, 7);
-    this._sendCallBack = (data:object) => {
-      this._messageStack.push(data);
-    };
+    this._sendCallBack = this.messageStackCallback();
     this._webSocketConnection = new WebSocket(this.url);
     this._webSocketConnection.addEventListener('open', () => {
       console.info('Websocket created');
@@ -83,7 +81,15 @@ export class WebSocketServiceImpl implements WebSocketService {
     });
     this._webSocketConnection.addEventListener('close', (event:CloseEvent) => {
       console.info('Connection closed: ', event.code, event.reason);
+      this._messageStack.splice(0, this._messageStack.length);
+      this._sendCallBack = this.messageStackCallback();
     });
+  }
+
+  private messageStackCallback() {
+    return (data:object) => {
+      this._messageStack.push(data);
+    };
   }
 
   connection(): WebSocket {
