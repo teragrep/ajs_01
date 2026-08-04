@@ -83,12 +83,12 @@ describe('SafeJson', () => {
       expect(safeJson.getProperty<string>('stringProperty', 'string')).toEqual(json.stringProperty);
       expect(safeJson.getProperty<number>('numberProperty', 'number')).toEqual(json.numberProperty);
       expect(safeJson.getProperty<object>('objectProperty', 'object')).toEqual(json.objectProperty);
-      expect(safeJson.getProperty<string>('booleanProperty', 'boolean')).toEqual(json.booleanProperty);
+      expect(safeJson.getProperty<boolean>('booleanProperty', 'string')).toEqual(json.booleanProperty);
     });
 
     it('Should throw if assumed type is wrong', () => {
       safeJson = new SafeJsonImpl(json);
-      expect(() => safeJson.getProperty<string>('stringProperty', 'object')).toThrow();
+      expect(() => safeJson.getProperty<object>('stringProperty', 'object')).toThrow();
     });
 
     it('Should throw if property does not exist', () => {
