@@ -44,26 +44,26 @@
  * a licensee so wish it.
  */
 import {Channel} from '../../channel/channel';
-import {OutputFormatsWithValidatedOutputSwitch} from './outputFormatsWithValidatedOutputSwitch';
+import {OutputFormats} from './outputFormats';
 import {FakeChannel} from '../../channel/fakeChannel';
-import {OutputFormatsWithValidatedOutputSwitchImpl} from './outputFormatsWithValidatedOutputSwitchImpl';
+import {OutputFormatsImpl} from './outputFormatsImpl';
 import {Signal} from '@angular/core';
 
-describe('OutputFormatsWithValidatedOutputSwitch unit test', () => {
+describe('OutputFormats unit test', () => {
   let channel:Channel;
-  let outputFormatsWithValidatedOutputSwitch:OutputFormatsWithValidatedOutputSwitch;
+  let outputFormats:OutputFormats;
   beforeEach(() => {
     channel = new FakeChannel();
-    outputFormatsWithValidatedOutputSwitch = new OutputFormatsWithValidatedOutputSwitchImpl(channel);
+    outputFormats = new OutputFormatsImpl(channel);
   });
 
   describe('Birth', () => {
     it('Should be initialized', () => {
-      expect(outputFormatsWithValidatedOutputSwitch).toBeDefined();
+      expect(outputFormats).toBeDefined();
     });
 
     it('Should print', () => {
-      const printed = outputFormatsWithValidatedOutputSwitch.print()();
+      const printed = outputFormats.print()();
       expect(printed.componentView.isStub()).toBe(true);
       expect(printed.children()).toHaveLength(6);
     });
@@ -76,7 +76,7 @@ describe('OutputFormatsWithValidatedOutputSwitch unit test', () => {
         op:'',
         data:{}
       };
-      outputFormatsWithValidatedOutputSwitch.request(request);
+      outputFormats.request(request);
       expect(spy).toHaveBeenCalledExactlyOnceWith(request);
     });
   });
@@ -101,15 +101,15 @@ describe('OutputFormatsWithValidatedOutputSwitch unit test', () => {
           }
         }
       };
-      outputFormatsWithValidatedOutputSwitch.request(paragraphOutputRequest);
-      const outputSwitcher = outputFormatsWithValidatedOutputSwitch.print()().children().find(child => !child.componentView.isStub() && child.componentView.inputs()()['switchIsPending']);
+      outputFormats.request(paragraphOutputRequest);
+      const outputSwitcher = outputFormats.print()().children().find(child => !child.componentView.isStub() && child.componentView.inputs()()['switchIsPending']);
       outputSwitcherInputs = outputSwitcher.componentView.inputs();
       expect(outputSwitcherInputs()['switchIsPending']).toBe(true);
     });
 
     it('Should send paragraph output request if response type does not match requested type', () => {
       const spy = vi.spyOn(channel, 'request');
-      outputFormatsWithValidatedOutputSwitch.response(paragraphOutputResponse);
+      outputFormats.response(paragraphOutputResponse);
       expect(outputSwitcherInputs()['switchIsPending']).toBe(true);
       expect(spy).toHaveBeenCalledExactlyOnceWith(paragraphOutputRequest);
     });
@@ -117,7 +117,7 @@ describe('OutputFormatsWithValidatedOutputSwitch unit test', () => {
     it('Should perform switch if response type matches requested type', () => {
       const spy = vi.spyOn(channel, 'request');
       paragraphOutputResponse.data.output.type = switchedType;
-      outputFormatsWithValidatedOutputSwitch.response(paragraphOutputResponse);
+      outputFormats.response(paragraphOutputResponse);
       expect(outputSwitcherInputs()['switchIsPending']).toBe(false);
       expect(spy).toHaveBeenCalledTimes(0);
     });

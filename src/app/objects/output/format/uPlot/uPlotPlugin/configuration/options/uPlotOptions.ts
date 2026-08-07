@@ -44,6 +44,7 @@
  * a licensee so wish it.
  */
 import uPlot from 'uplot';
-export interface UPlotPlugin {
-  initializedUPlot(htmlElement:HTMLElement): uPlot;
+
+export interface UPlotOptions {
+  options(): uPlot.Options;
 }

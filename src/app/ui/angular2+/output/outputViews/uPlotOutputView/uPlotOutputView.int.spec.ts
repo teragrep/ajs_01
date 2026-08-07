@@ -46,20 +46,18 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {UPlotOutputView} from './uPlotOutputView';
 import {By} from '@angular/platform-browser';
+import {
+  BasicOptionsImpl
+} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/basicOptionsImpl';
 
 describe('UPlotOutputView integration test', () => {
   let fixture: ComponentFixture<UPlotOutputView>;
-  const uPlotOptions = {
-    graphType:'',
-    labels:[],
-    series:[],
-    xAxisLabel:'',
-  };
+  const basicOptions = new BasicOptionsImpl([], [], '', '');
   const uPlotData = [[1,2],[1,2]];
-
   beforeEach(async () => {
     fixture = TestBed.createComponent(UPlotOutputView);
-    fixture.componentRef.setInput('uPlotOptions', uPlotOptions);
+    fixture.componentRef.setInput('basicOptions', basicOptions);
+    fixture.componentRef.setInput('graphType', '');
     fixture.componentRef.setInput('uPlotData', uPlotData);
     await fixture.whenStable();
   });

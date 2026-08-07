@@ -52,4 +52,8 @@ export interface ParagraphOutputMessage extends Message, Stubable {
   type(): string;
   outputData<T>(type:string): T;
   options():StubableObject;
+  print(): {
+    op:string,
+    data:object
+  };
 }

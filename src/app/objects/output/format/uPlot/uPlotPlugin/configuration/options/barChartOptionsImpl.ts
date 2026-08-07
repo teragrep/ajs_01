@@ -43,11 +43,11 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {BarChartOptions} from './barChartOptions';
 import {BasicOptions} from './basicOptions';
 import uPlot from 'uplot';
+import {UPlotOptions} from './uPlotOptions';
 
-export class BarChartOptionsImpl implements BarChartOptions {
+export class BarChartOptionsImpl implements UPlotOptions {
   private readonly _basicOptions: BasicOptions;
 
   constructor(basicOptions: BasicOptions) {

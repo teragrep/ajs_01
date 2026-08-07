@@ -58,6 +58,12 @@ export class ParagraphOutputMessageImpl implements ParagraphOutputMessage {
   constructor(message: Message) {
     this._message = new TypedMessage('PARAGRAPH_OUTPUT', message);
   }
+  print():{op:string,data:object}{
+    return {
+      op:this.operation(),
+      data:this.data(),
+    };
+  }
 
   isAggregated(): boolean {
     const output = this.output();

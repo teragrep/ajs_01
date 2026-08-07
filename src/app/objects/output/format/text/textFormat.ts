@@ -70,11 +70,12 @@ export class TextFormat implements OutputFormat {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.text) {
         this._componentView.set(this._componentViewStub);
-        return;
       }
-      const textOutput:string = paragraphOutputMessage.outputData('string');
-      const componentView = new ComponentViewImpl(TextOutputView, signal({textOutput: textOutput}));
-      this._componentView.set(componentView);
+      else{
+        const textOutput:string = paragraphOutputMessage.outputData('string');
+        const componentView = new ComponentViewImpl(TextOutputView, signal({textOutput: textOutput}));
+        this._componentView.set(componentView);
+      }
     }
   }
 

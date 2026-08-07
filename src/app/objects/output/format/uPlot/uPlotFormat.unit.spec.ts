@@ -92,7 +92,12 @@ describe('uPlotFormat unit test', () => {
           output:{
             type:OutputType.uPlot,
             data:{},
-            options:{}
+            options:{
+              labels:[],
+              series:[],
+              xAxisLabel:'',
+              graphType:''
+            }
           }
         }
       };
@@ -102,7 +107,8 @@ describe('uPlotFormat unit test', () => {
     it('Should have componentView', () => {
       const componentView = uPlotFormat.print()().componentView;
       expect(componentView.isStub()).toBe(false);
-      expect(componentView.inputs()()['uPlotOptions']).toBeDefined();
+      expect(componentView.inputs()()['basicOptions']).toBeDefined();
+      expect(componentView.inputs()()['graphType']).toBeDefined();
       expect(componentView.inputs()()['uPlotData']).toBeDefined();
     });
 

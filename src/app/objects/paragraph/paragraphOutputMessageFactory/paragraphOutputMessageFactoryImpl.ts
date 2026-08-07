@@ -43,45 +43,43 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import uPlot from 'uplot';
-import {ResizeListener} from './configuration/resizeListener/resizeListener';
-import {ResizeListenerImpl} from './configuration/resizeListener/resizeListenerImpl';
-import {GraphType} from '../graphType';
-import {BarChartOptionsImpl} from './configuration/options/barChartOptionsImpl';
-import {BasicOptionsImpl} from './configuration/options/basicOptionsImpl';
-import {SafeJsonImpl} from '../../../../safeJson/safeJsonImpl';
-import {UPlotPlugin} from './uPlotPlugin';
+import {ParagraphOutputMessageFactory} from './paragraphOutputMessageFactory';
+import {ParagraphOutputMessage} from '../../message/paragraphOutputMessage/paragraphOutputMessage';
+import {SafeJson} from '../../safeJson/safeJson';
+import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {ParagraphOutputMessageStub} from '../../message/paragraphOutputMessage/paragraphOutputMessageStub';
+import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
+import {MessageImpl} from '../../message/messageImpl';
 
-export class UPlotPluginImpl implements UPlotPlugin {
-  private readonly _outputData: uPlot.AlignedData;
-  private readonly _outputOptions:object;
+export class ParagraphOutputMessageFactoryImpl implements ParagraphOutputMessageFactory {
+  private readonly _paragraph: SafeJson;
 
-  constructor(outputData: uPlot.AlignedData, outputOptions:object) {
-    this._outputData = outputData;
-    this._outputOptions = outputOptions;
+  constructor(paragraph:object) {
+    this._paragraph = new SafeJsonImpl(paragraph);
   }
 
-  initializedUPlot(htmlElement:HTMLElement):uPlot {
-    const safeOutputOptions = new SafeJsonImpl(this._outputOptions);
-    const uPlotOutputOptions = {
-      labels:safeOutputOptions.getProperty<string[]>('labels', 'object'),
-      series:safeOutputOptions.getProperty<string[]>('series', 'object'),
-      xAxisLabel:safeOutputOptions.getProperty<string>('xAxisLabel', 'string'),
-      graphType: safeOutputOptions.getProperty<string>('graphType', 'string'),
-    };
-    let uPlotOptions:uPlot.Options;
-    const basicOptions = new BasicOptionsImpl(uPlotOutputOptions);
-    if(uPlotOutputOptions.graphType === GraphType.bar){
-      const barChartOptions = new BarChartOptionsImpl(basicOptions);
-      uPlotOptions = barChartOptions.options();
+  paragraphOutputMessage(): ParagraphOutputMessage {
+    let paragraphOutputMessage:ParagraphOutputMessage;
+    if (this._paragraph.propertyExists('output')) {
+      const paragraphOutput = this._paragraph.getProperty<object>('output', 'object');
+      if (paragraphOutput['data'] === undefined || paragraphOutput['type'] === undefined) {
+        console.error(`Output data not processed, format invalid: ${JSON.stringify(paragraphOutput)}`);
+        paragraphOutputMessage = new ParagraphOutputMessageStub();
+      } else {
+        const paragraphOutputMessageData = {
+          op: 'PARAGRAPH_OUTPUT',
+          data: {
+            noteId: '',
+            paragraphId: '',
+            output: paragraphOutput,
+          }
+        };
+        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputMessageData)));
+      }
     }
-    else{
-      uPlotOptions = basicOptions.options();
+    else {
+      paragraphOutputMessage = new ParagraphOutputMessageStub();
     }
-    const size:ResizeListener = new ResizeListenerImpl();
-    const graph = new uPlot(uPlotOptions, this._outputData, htmlElement);
-    size.registerToWindow(graph);
-    size.registerToElement(graph, htmlElement);
-    return graph;
+    return paragraphOutputMessage;
   }
 }

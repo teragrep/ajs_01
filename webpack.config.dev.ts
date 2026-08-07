@@ -63,7 +63,7 @@ const config = {
     vendor: [
       'angular',
       'jquery',
-      'jquery-ui/jquery-ui', // TODO update
+      'jquery-ui/jquery-ui',
       'ace-builds/src-noconflict/ace',
       'ace-builds/src-noconflict/ext-language_tools',
 
@@ -86,9 +86,9 @@ const config = {
       'angular-route/angular-route',
       'angular-sanitize/angular-sanitize',
       'angular-touch/angular-touch',
-      'angular-ui-ace/ui-ace', // TODO investigate alternatives
+      'angular-ui-ace/ui-ace',
       'd3/d3',
-      // TODO replace removed elastic input with CSS
+
       'datatables.net-bs5',
       'datatables.net-buttons-bs5',
       'datatables.net-buttons/js/buttons.colVis.mjs',
@@ -100,10 +100,10 @@ const config = {
 
 
       'jsdiff/diff',
-      'lodash/lodash', // TODO update
+      'lodash/lodash',
       'ng-sortable/dist/ng-sortable',
       'nvd3/build/nv.d3',
-      'select2/dist/js/select2', // TODO investigate alternatives
+      'select2/dist/js/select2',
 
       'cron-parser',
     ],

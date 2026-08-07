@@ -43,35 +43,55 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import uPlot from 'uplot';
-import {GraphType} from '../graphType';
-import {UPlotPluginImpl} from './uPlotPluginImpl';
 
-describe('uPlotOutput', () => {
-  const data:uPlot.AlignedData = [
-    [1,2,3],
-    [1,2,3]
-  ];
-  const options = {
-    labels: ['moment1', 'moment2', 'moment3'],
-    series: ['series1'],
-    xAxisLabel: 'value',
-    graphType: GraphType.line
+import {ParagraphOutputMessageFactory} from './paragraphOutputMessageFactory';
+import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactoryImpl';
+
+describe('ParagraphOutputMessageFactory unit test', () => {
+  let paragraphData:{
+    output: {
+      data:object,
+      type:string,
+    };
   };
-  let microPlotPlugin: UPlotPluginImpl;
+  let paragraphOutputMessageFactory: ParagraphOutputMessageFactory;
   beforeEach(() => {
-    microPlotPlugin = new UPlotPluginImpl(data, options);
+    paragraphData = {
+      output:{
+        data:{},
+        type:'',
+      }
+    };
+    paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraphData);
   });
 
-  describe('Birth', () =>{
+  describe('Birth', () => {
     it('Should be initialized', () => {
-      expect(microPlotPlugin).toBeInstanceOf(UPlotPluginImpl);
+      expect(paragraphOutputMessageFactory).toBeDefined();
     });
   });
 
-  describe('Initialized uPlot', () => {
-    it('Should return', () => {
-      expect(microPlotPlugin.initializedUPlot(document.createElement('div'))).toBeDefined();
+  describe('Data validation', () => {
+    it('Should have paragraphOutputMessage', () => {
+      expect(paragraphOutputMessageFactory.paragraphOutputMessage().isStub()).toBe(false);
+    });
+
+    it('Should return stub if data property is missing', () => {
+      delete paragraphData.output.data;
+      paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraphData);
+      expect(paragraphOutputMessageFactory.paragraphOutputMessage().isStub()).toBe(true);
+    });
+
+    it('Should return stub if type property is missing', () => {
+      delete paragraphData.output.type;
+      paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraphData);
+      expect(paragraphOutputMessageFactory.paragraphOutputMessage().isStub()).toBe(true);
+    });
+
+    it('Should return stub if output property is missing', () => {
+      delete paragraphData.output;
+      paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraphData);
+      expect(paragraphOutputMessageFactory.paragraphOutputMessage().isStub()).toBe(true);
     });
   });
 });

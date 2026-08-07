@@ -70,11 +70,12 @@ export class HTMLFormat implements OutputFormat{
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.html) {
         this._componentView.set(this._componentViewStub);
-        return;
       }
-      const htmlTemplate:string = paragraphOutputMessage.outputData('string');
-      const componentView = new ComponentViewImpl(HtmlOutputView, signal({htmlTemplate: htmlTemplate}));
-      this._componentView.set(componentView);
+      else{
+        const htmlTemplate:string = paragraphOutputMessage.outputData('string');
+        const componentView = new ComponentViewImpl(HtmlOutputView, signal({htmlTemplate: htmlTemplate}));
+        this._componentView.set(componentView);
+      }
     }
   }
 

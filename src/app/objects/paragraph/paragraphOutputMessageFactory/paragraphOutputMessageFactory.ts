@@ -43,55 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import {ParagraphOutputMessage} from '../../message/paragraphOutputMessage/paragraphOutputMessage';
 
-import {ParagraphDataAsOutputMessage} from './paragraphDataAsOutputMessage';
-import {ParagraphDataAsOutputMessageImpl} from './paragraphDataAsOutputMessageImpl';
-
-describe('ParagraphDataAsOutputMessage unit test', () => {
-  let paragraphData:{
-    output: {
-      data:object,
-      type:string,
-    };
-  };
-  let paragraphDataAsOutputMessage: ParagraphDataAsOutputMessage;
-  beforeEach(() => {
-    paragraphData = {
-      output:{
-        data:{},
-        type:'',
-      }
-    };
-    paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
-  });
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(paragraphDataAsOutputMessage).toBeDefined();
-    });
-  });
-
-  describe('Data validation', () => {
-    it('Should have paragraphOutputMessage', () => {
-      expect(paragraphDataAsOutputMessage.paragraphOutputMessage().isStub()).toBe(false);
-    });
-
-    it('Should return stub if data property is missing', () => {
-      delete paragraphData.output.data;
-      paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
-      expect(paragraphDataAsOutputMessage.paragraphOutputMessage().isStub()).toBe(true);
-    });
-
-    it('Should return stub if type property is missing', () => {
-      delete paragraphData.output.type;
-      paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
-      expect(paragraphDataAsOutputMessage.paragraphOutputMessage().isStub()).toBe(true);
-    });
-
-    it('Should return stub if output property is missing', () => {
-      delete paragraphData.output;
-      paragraphDataAsOutputMessage = new ParagraphDataAsOutputMessageImpl(paragraphData);
-      expect(paragraphDataAsOutputMessage.paragraphOutputMessage().isStub()).toBe(true);
-    });
-  });
-});
+export interface ParagraphOutputMessageFactory {
+  paragraphOutputMessage(): ParagraphOutputMessage;
+}

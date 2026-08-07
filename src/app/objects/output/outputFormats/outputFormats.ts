@@ -43,8 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import uPlot from 'uplot';
+import {Channel} from '../../channel/channel';
+import {Printable} from '../../rendering/printable/printable';
 
-export interface BarChartOptions {
-  options(): uPlot.Options;
-}
+export interface OutputFormats extends  Channel, Printable {}
