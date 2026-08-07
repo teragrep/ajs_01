@@ -50,6 +50,9 @@ export class ParagraphOutputMessageStub implements ParagraphOutputMessage {
   isStub(): boolean {
     return true;
   }
+  print(): { op: string; data: object; } {
+    throw new Error('ParagraphOutputMessageStub: Method not implemented.');
+  }
   isAggregated(): boolean {
     throw new Error('ParagraphOutputMessageStub: Method not implemented.');
   }

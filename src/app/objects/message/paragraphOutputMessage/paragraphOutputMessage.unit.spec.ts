@@ -101,6 +101,10 @@ describe('ParagraphOutputMessage unit test', () => {
       expect(paragraphOutputMessage.outputData<object>('object')).toEqual(paragraphOutputMessageData.data.output.data);
     });
 
+    it('Should print', () => {
+      expect(paragraphOutputMessage.print()).toEqual(paragraphOutputMessageData);
+    });
+
     describe('isAggregated', () => {
       it('Should be true', () => {
         expect(paragraphOutputMessage.isAggregated()).toEqual(true);
