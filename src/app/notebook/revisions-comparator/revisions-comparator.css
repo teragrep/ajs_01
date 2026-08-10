@@ -103,11 +103,15 @@
 
 .empty-paragraph-message {
   font-size: 28px;
-  color: var(--dm-grey-500);
+  color: var(--grey-600);
   margin: 0 auto;
   text-align: center;
   display: table-cell;
   vertical-align: middle;
+}
+
+.dark-mode .empty-paragraph-message {
+  color: var(--dm-grey-400);
 }
 
 .revisions-comparator-bar .btn-group {
@@ -130,11 +134,17 @@
 .revisions-comparator-code-panel.empty-code-panel {
   text-align: center;
   font-size: 28px;
-  color: var(--dm-grey-500);
+  color: var(--grey-600);
   height: 317px;
-  background: #F7FAFC;
+  background: var(--grey-100);
   border: 2px solid var(--grey-400);
   border-radius: 5px;
+}
+
+.dark-mode .revisions-comparator-code-panel.empty-code-panel {
+  color: var(--dm-grey-400);
+  border-color: var(--dm-grey-500);
+  background-color: var(--dm-grey-600);
 }
 
 .revisions-comparator-bar {
