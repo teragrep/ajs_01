@@ -88,9 +88,8 @@ limitations under the License.
       </ul>
       <div class="d-flex flex-column flex-lg-row align-items-lg-center ms-auto">
         <ul class="navbar-nav">
-          <li ng-if="ticket"
-              class="nav-item dropdown me-3">
-            <button class="nav-link btn btn-link dropdown-toggle"
+          <li class="nav-item dropdown">
+            <button class="btn btn-link dropdown-toggle"
                     type="button"
                     data-bs-toggle="dropdown">
               <i class="fa-solid fa-circle-info"></i>
@@ -152,23 +151,23 @@ limitations under the License.
             </ul>
           </li>
           <li ng-if="ticket" class="nav-item dropdown">
-            <i ng-if="navbar.connected"
-               class="fas fa-circle server-connected"
-               data-bs-toggle="tooltip"
-               data-bs-placement="bottom"
-               title="WebSocket Connected">
-            </i>
-            <i ng-if="!navbar.connected"
-               class="fas fa-circle server-disconnected"
-               data-bs-toggle="tooltip"
-               data-bs-placement="bottom"
-               title="WebSocket Disconnected">
-            </i>
-            <button class="nav-link btn btn-link dropdown-toggle"
+            <button class="btn btn-link dropdown-toggle"
                     type="button"
                     data-bs-toggle="dropdown"
                     id="dropdownUserBtn"
                     aria-expanded="false">
+              <i ng-if="navbar.connected"
+                 class="fas fa-circle server-connected me-2"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="bottom"
+                 title="WebSocket Connected">
+              </i>
+              <i ng-if="!navbar.connected"
+                 class="fas fa-circle server-disconnected me-2"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="bottom"
+                 title="WebSocket Disconnected">
+              </i>
               <span class="username">
                 {{ticket.screenUsername}}
               </span>
@@ -234,7 +233,8 @@ limitations under the License.
               </li>
             </ul>
           </li>
-          <li class="nav-item" ng-if="!ticket">
+          <li class="nav-item ms-2"
+              ng-if="!ticket">
             <button class="btn btn-secondary"
                     ng-click="navbar.showLoginWindow()">
               Login

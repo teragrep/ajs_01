@@ -2422,18 +2422,26 @@ div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
 .navbar-inverse .nav-link.navbar-menu-create:hover .fas {
   color: var(--primary-200);
 }
-.navbar-inverse .navbar-nav .nav-link {
+.navbar-inverse .navbar-nav .nav-link,
+.navbar-inverse .navbar-nav .btn-link {
   color: var(--primary-100);
-  font: 16px 'Hind', sans-serif;
+  font: 500 16px 'Roboto', sans-serif;
 }
-.navbar-inverse .navbar-nav .nav-link:hover {
+.navbar-inverse .navbar-nav .nav-link:hover,
+.navbar-inverse .navbar-nav .btn-link:hover {
   color: var(--primary-200);
 }
-.navbar-inverse .server-connected {
+.navbar-inverse .server-connected,
+.navbar-inverse .server-connected:hover,
+.navbar-inverse .btn-link:hover .fas.server-connected,
+.navbar-inverse .btn-link:hover .far.server-connected {
   color: var(--tertiary-400);
   font-size: 12px;
 }
-.navbar-inverse .server-disconnected {
+.navbar-inverse .server-disconnected,
+.navbar-inverse .server-disconnected:hover,
+.navbar-inverse .btn-link:hover .fas.server-disconnected,
+.navbar-inverse .btn-link:hover .far.server-disconnected {
   color: var(--danger-400);
   font-size: 12px;
 }
