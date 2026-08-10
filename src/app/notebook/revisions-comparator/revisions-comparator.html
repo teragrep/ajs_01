@@ -57,17 +57,16 @@
       </button>
       <ul class="dropdown-menu"
           aria-labelledby="firstRevisionDropdown">
-        <li></li>
         <li ng-repeat="revision in $ctrl.noteRevisions | orderBy:'time':true"
             class="dropdown-item revision">
           <a class="py-1 d-block"
              role="button"
              ng-click="getNoteRevisionForReview(revision, 'first')">
             {{revision.message}}
+            <span class="revision-date">
+              {{formatRevisionDate(revision.time)}}
+            </span>
           </a>
-          <span class="revision-date">
-            {{formatRevisionDate(revision.time)}}
-          </span>
         </li>
       </ul>
     </div>
@@ -90,10 +89,10 @@
              role="button"
              ng-click="getNoteRevisionForReview(revision, 'second')">
             {{revision.message}}
+            <span class="revision-date">
+              {{formatRevisionDate(revision.time)}}
+            </span>
           </a>
-          <span class="revision-date">
-            {{formatRevisionDate(revision.time)}}
-          </span>
         </li>
       </ul>
     </div>
