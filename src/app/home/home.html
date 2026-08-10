@@ -56,37 +56,13 @@ limitations under the License.
         </div>
       </div>
       <!-- after signing in -->
-      <div ng-if="ticket" class="home-body-text col-12">
+      <div ng-if="ticket" class="home-body-text text-center col-12">
         <h1 class="mb-3" id="welcome">
           Welcome to Teragrep
         </h1>
-        <!-- Import and create notebooks -->
-        <div class="mb-5 d-grid gap-2 d-lg-block">
-          <button class="btn btn-import me-lg-2"
-                  ng-click="openImportModal()">
-            <i class="fas fa-upload me-2"></i>
-            Import a notebook
-          </button>
-          <button class="btn btn-create"
-                  ng-click="createNote()">
-            <i class="fas fa-book me-2"></i>
-            Create a new notebook
-          </button>
-        </div>
-        <h2 class="d-flex align-items-center">
-          Notebooks
-          <small class="notebook-reload ms-3">
-            <a ng-click="reloadNoteList();"
-               title="Reload notes from storage">
-              <i class="me-1"
-                 ng-class="isReloadingNotes ? 'fas fa-sync-alt fa-spin' : 'fas fa-sync-alt'"></i>
-              Refresh
-            </a>
-          </small>
-        </h2>
         <!-- Search notebooks by their name -->
         <div class="filter-names">
-          <form class="mb-3">
+          <form class="text-start mb-3">
             <span class="form-control-search">
               <i class="fas fa-magnifying-glass"></i>
             </span>
@@ -97,6 +73,25 @@ limitations under the License.
                    ng-model="$parent.query.q"
                    ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 } }" />
           </form>
+        </div>
+        <!-- Import and create notebooks -->
+        <div class="mb-5 d-grid gap-2 d-lg-block">
+          <button class="btn btn-lg btn-primary me-lg-2"
+                  ng-click="createNote()">
+            <i class="fa-solid fa-file-circle-plus me-2"></i>
+            New notebook
+          </button>
+          <button class="btn btn-lg btn-primary me-lg-2"
+                  ng-click="createNote()"
+                  disabled>
+            <i class="fa-solid fa-folder-plus me-2"></i>
+            New folder
+          </button>
+          <button class="btn btn-lg btn-secondary"
+                  ng-click="openImportModal()">
+            <i class="fas fa-upload me-2"></i>
+            Import
+          </button>
         </div>
         <!-- List of existing notebooks -->
         <div id="notebook-names">
