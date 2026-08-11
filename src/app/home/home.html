@@ -12,60 +12,65 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div id="homePage" class="container-fluid px-5">
-  <div ng-controller="HomeCtrl as home"
-       data-ng-init="initHome()"
-       class="box my-5">
-    <div class="row">
-      <!-- before signing in -->
-      <div ng-if="!ticket" class="col-lg-5">
-        <img src="../../assets/images/home.svg"
-             class="img-fluid"
-             alt="grep your data and create pivot charts" />
-      </div>
-      <div ng-if="!ticket" class="col align-self-center text-center text-lg-start">
-        <h1 class="mb-3">
-          Know Everything
-        </h1>
-        <p>
-          Teragrep is an analytics software for processing and visualizing data.
-        </p>
-        <p>
-          Start your journey with Teragrep by signing in.
-        </p>
-        <hr>
-        <div class="row home-some justify-content-center justify-content-lg-start">
-          <div class="col-auto">
-            <i class="fas fa-globe me-2"></i>
-            <a target="_blank" href="https://teragrep.com">
-              Website
-            </a>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-book me-2"></i>
-            <a target="_blank" href="https://docs.teragrep.com">
-              Documentation
-            </a>
-          </div>
-          <div class="col-auto">
-            <i class="fab fa-github me-2"></i>
-            <a target="_blank" href="https://github.com/teragrep/teragrep">
-              Github
-            </a>
-          </div>
+<div id="homePage"
+     class="container"
+     ng-controller="HomeCtrl as home"
+     data-ng-init="initHome()">
+  <!-- before signing in -->
+  <div class="row login align-items-center"
+       ng-if="!ticket">
+    <div class="col-lg-5">
+      <img src="../../assets/images/home.svg"
+           class="img-fluid"
+           alt="grep your data and create pivot charts" />
+    </div>
+    <div class="col text-center text-lg-start">
+      <h1 class="mb-3">
+        Know Everything
+      </h1>
+      <p>
+        Teragrep is an analytics software for processing and visualizing data.
+      </p>
+      <p>
+        Start your journey with Teragrep by signing in.
+      </p>
+      <hr>
+      <div class="row home-some justify-content-center justify-content-lg-start">
+        <div class="col-auto">
+          <i class="fas fa-globe me-2"></i>
+          <a target="_blank" href="https://teragrep.com">
+            Website
+          </a>
+        </div>
+        <div class="col-auto">
+          <i class="fas fa-book me-2"></i>
+          <a target="_blank" href="https://docs.teragrep.com">
+            Documentation
+          </a>
+        </div>
+        <div class="col-auto">
+          <i class="fab fa-github me-2"></i>
+          <a target="_blank" href="https://github.com/teragrep/teragrep">
+            Github
+          </a>
         </div>
       </div>
-      <!-- after signing in -->
-      <div ng-if="ticket" class="home-body-text text-center col-12">
+    </div>
+  </div>
+  <!-- after signing in -->
+  <div class="row"
+       ng-if="ticket">
+    <div class="home-body-text text-center col-12">
+      <div class="home-start">
         <h1 class="mb-3" id="welcome">
           Welcome to Teragrep
         </h1>
         <!-- Search notebooks by their name -->
         <div class="filter-names">
           <form class="text-start mb-3">
-            <span class="form-control-search">
-              <i class="fas fa-magnifying-glass"></i>
-            </span>
+          <span class="form-control-search">
+            <i class="fas fa-magnifying-glass"></i>
+          </span>
             <input type="text"
                    class="note-name-query form-control"
                    ng-click="$event.stopPropagation()"
@@ -93,30 +98,30 @@ limitations under the License.
             Import
           </button>
         </div>
-        <!-- List of existing notebooks -->
-        <div id="notebook-names">
-          <!-- TODO what the heck is this piece, remove if not used -->
-          <!--<ul>
-            <li ng-repeat="note in home.notes.list | filter:query.q track by $index">
-              <i class="icon-doc"></i>
-              <a href="#/notebook/{{note.id}}">
-                {{noteName(note)}}
-              </a>
-            </li>
-          </ul>-->
-          <ul class="list-unstyled" ng-if="!query.q || query.q === ''">
-            <li ng-repeat="node in home.notes.root.children"
-                ng-include src="'/app/home/notebook-template.html'"
-                ng-class="note_folder_renderer">
-            </li>
-          </ul>
-          <!-- Shows filter search results -->
-          <ul class="list-unstyled" ng-if="query.q">
-            <li ng-repeat="node in home.notes.flatList | filter:query.q | orderBy:home.arrayOrderingSrv.noteFlatListOrdering"
-                ng-include src="'/app/home/notebook-template.html'"
-                ng-class="note_folder_renderer"></li>
-          </ul>
-        </div>
+      </div>
+      <!-- List of existing notebooks -->
+      <div id="notebook-names" class="notebook-list">
+        <!-- TODO what the heck is this piece, remove if not used -->
+        <!--<ul>
+          <li ng-repeat="note in home.notes.list | filter:query.q track by $index">
+            <i class="icon-doc"></i>
+            <a href="#/notebook/{{note.id}}">
+              {{noteName(note)}}
+            </a>
+          </li>
+        </ul>-->
+        <ul class="list-unstyled" ng-if="!query.q || query.q === ''">
+          <li ng-repeat="node in home.notes.root.children"
+              ng-include src="'/app/home/notebook-template.html'"
+              ng-class="note_folder_renderer">
+          </li>
+        </ul>
+        <!-- Shows filter search results -->
+        <ul class="list-unstyled" ng-if="query.q">
+          <li ng-repeat="node in home.notes.flatList | filter:query.q | orderBy:home.arrayOrderingSrv.noteFlatListOrdering"
+              ng-include src="'/app/home/notebook-template.html'"
+              ng-class="note_folder_renderer"></li>
+        </ul>
       </div>
     </div>
   </div>
