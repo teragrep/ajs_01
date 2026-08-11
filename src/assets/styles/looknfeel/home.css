@@ -66,6 +66,16 @@
 
 /* front page */
 
+.login {
+  min-height: inherit;
+  padding-bottom: var(--navbar-height); /* gives the illusion that the content is vertically centered */
+}
+
+.home-start {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
 .home-some {
   .fas, .fab {
     color: var(--primary-400);
@@ -148,6 +158,10 @@
 }
 
 /* Home's notebook list */
+
+.notebook-list {
+  padding-bottom: 3rem;
+}
 
 .notebook-reload {
   font-size: 0.7em;

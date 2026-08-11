@@ -82,15 +82,18 @@
   --danger-400: #FEB2B2;
   --danger-500: #FC8181;
   --danger-600: #F56565;
-  --danger-700: #9B2C2C;
-  --danger-800: #742A2A;
+  --danger-700: #D73C3C;
+  --danger-800: #9B2C2C;
+  --danger-900: #692626;
   --warning-100: #FFFFF0;
   --warning-200: #FEFCBF;
   --warning-300: #FDE68A;
   --warning-400: #ECC94B;
-  --warning-500: #ED8936;
-  --warning-600: #DD6B20;
-  --warning-700: #7B341E;
+  --warning-500: #ECAE4B;
+  --warning-600: #ED8936;
+  --warning-700: #DD6B20;
+  --warning-800: #A55018;
+  --warning-900: #7B341E;
   --grey-000: #FFFFFF;
   --grey-100: #F7FAFC;
   --grey-200: #EDF2F7;
@@ -112,4 +115,7 @@
   --dm-grey-900: #161C33;
   /** Typography **/
   --font-body-text: 'Nunito Sans', sans-serif;
+  /* UI dimensions */
+  --navbar-height: 3.5rem;
+  --note-action-height: 3rem;
 }

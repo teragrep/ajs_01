@@ -48,6 +48,7 @@
   background: var(--primary-700);
   color: var(--primary-100);
   border-bottom: 1px solid var(--primary-800);
+  height: var(--navbar-height);
   .navbar-collapse {
     @media only screen and (max-width: 991px) {
       padding: 20px 0;

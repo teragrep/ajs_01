@@ -45,11 +45,11 @@
  */
 
 .notebook-mt {
-  margin-top: 105px !important;
-  padding-top: 26px;
+  margin-top: calc(var(--navbar-height) + var(--note-action-height) + 1.75rem) !important;
+  padding-top: 1.5rem;
   transition: all 0.5s;
   &.collapsed {
-    margin-top: 50px !important;
+    margin-top: calc(var(--navbar-height) + 1.5rem) !important;
     transition: all 0.5s;
   }
 }
@@ -64,10 +64,9 @@
 .note-action {
   margin: auto 0;
   position: fixed;
-  top: 56px;
+  top: var(--navbar-height);
   left: 0;
   width: 100%;
-  min-height: 54px;
   z-index: 200;
   .navbar-toggler {
     padding: 0;
@@ -107,7 +106,7 @@
   }
   .note-action-container {
     background: white;
-    max-height: 50px;
+    height: var(--note-action-height);
     box-shadow: 0 1px 5px var(--grey-400);
     border-bottom: 1px solid var(--grey-300);
     @media only screen and (max-width: 1200px) {
