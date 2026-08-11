@@ -88,31 +88,13 @@ limitations under the License.
       </ul>
       <div class="d-flex flex-column flex-lg-row align-items-lg-center ms-auto">
         <ul class="navbar-nav">
-          <li ng-if="ticket" class="nav-item dropdown">
-            <i ng-if="navbar.connected"
-               class="fas fa-circle server-connected align-middle"
-               data-bs-toggle="tooltip"
-               data-bs-placement="bottom"
-               title="WebSocket Connected">
-            </i>
-            <i ng-if="!navbar.connected"
-               class="fas fa-circle server-disconnected align-middle"
-               data-bs-toggle="tooltip"
-               data-bs-placement="bottom"
-               title="WebSocket Disconnected">
-            </i>
-            <button class="nav-link btn btn-link dropdown-toggle"
+          <li class="nav-item dropdown">
+            <button class="btn btn-link dropdown-toggle"
                     type="button"
-                    data-bs-toggle="dropdown"
-                    id="dropdownUserBtn"
-                    aria-expanded="false">
-              <span class="username">
-                {{ticket.screenUsername}}
-              </span>
+                    data-bs-toggle="dropdown">
+              <i class="fa-solid fa-circle-info"></i>
             </button>
-            <span ng-if="ticket"></span>
-            <ul class="dropdown-menu dropdown-menu-end"
-                aria-labelledby="dropdownUserBtn">
+            <ul class="dropdown-menu dropdown-menu-end">
               <li>
                 <a class="dropdown-item"
                    data-bs-toggle="modal"
@@ -120,10 +102,80 @@ limitations under the License.
                   About Teragrep
                 </a>
               </li>
+              <li class="divider">
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a href="https://docs.teragrep.com"
+                   target="_blank"
+                   class="dropdown-item">
+                  <span class="drop-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                  </span>
+                  Documentation
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/teragrep/teragrep/issues"
+                   target="_blank"
+                   class="dropdown-item">
+                  <span class="drop-icon">
+                    <i class="fa-regular fa-circle-dot"></i>
+                  </span>
+                  Issues
+                </a>
+              </li>
+              <li class="divider">
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a href="https://teragrep.com"
+                   target="_blank"
+                   class="dropdown-item">
+                  <span class="drop-icon">
+                    <i class="fa-solid fa-globe"></i>
+                  </span>
+                  Website
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/teragrep"
+                   target="_blank"
+                   class="dropdown-item">
+                  <span class="drop-icon">
+                    <i class="fa-brands fa-github"></i>
+                  </span>
+                  GitHub
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li ng-if="ticket" class="nav-item dropdown">
+            <button class="btn btn-link dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    id="dropdownUserBtn"
+                    aria-expanded="false">
+              <i ng-if="navbar.connected"
+                 class="fas fa-circle server-connected me-2"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="bottom"
+                 title="WebSocket Connected">
+              </i>
+              <i ng-if="!navbar.connected"
+                 class="fas fa-circle server-disconnected me-2"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="bottom"
+                 title="WebSocket Disconnected">
+              </i>
+              <span class="username">
+                {{ticket.screenUsername}}
+              </span>
+            </button>
+            <span ng-if="ticket"></span>
+            <ul class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="dropdownUserBtn">
               <div id="admin-tools">
-                <li class="divider">
-                  <hr class="dropdown-divider" />
-                </li>
                 <li>
                   <a class="dropdown-item" href="#/interpreter">
                     <span class="drop-icon">
@@ -181,7 +233,8 @@ limitations under the License.
               </li>
             </ul>
           </li>
-          <li class="nav-item" ng-if="!ticket">
+          <li class="nav-item ms-2"
+              ng-if="!ticket">
             <button class="btn btn-secondary"
                     ng-click="navbar.showLoginWindow()">
               Login

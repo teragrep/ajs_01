@@ -89,18 +89,25 @@
       }
     }
   }
-  .navbar-nav .nav-link {
+  .navbar-nav .nav-link,
+  .navbar-nav .btn-link {
     color: var(--primary-100);
-    font: 16px 'Hind', sans-serif;
+    font: 500 16px 'Roboto', sans-serif;
     &:hover {
       color: var(--primary-200);
     }
   }
-  .server-connected {
+  .server-connected,
+  .server-connected:hover,
+  .btn-link:hover .fas.server-connected,
+  .btn-link:hover .far.server-connected {
     color: var(--tertiary-400);
     font-size: 12px;
   }
-  .server-disconnected {
+  .server-disconnected,
+  .server-disconnected:hover,
+  .btn-link:hover .fas.server-disconnected,
+  .btn-link:hover .far.server-disconnected {
     color: var(--danger-400);
     font-size: 12px;
   }
