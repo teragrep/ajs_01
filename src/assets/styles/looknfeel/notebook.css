@@ -45,11 +45,10 @@
  */
 
 .notebook-mt {
-  margin-top: calc(var(--navbar-height) + var(--note-action-height) + 1.75rem) !important;
-  padding-top: 1.5rem;
+  padding-top: calc(var(--note-action-height) + 2.75rem);
   transition: all 0.5s;
   &.collapsed {
-    margin-top: calc(var(--navbar-height) + 1.5rem) !important;
+    padding-top: 2.75rem;
     transition: all 0.5s;
   }
 }
