@@ -59,6 +59,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import './fonts/custom-font/custom-font.css';
 import './fonts/google-fonts.css';
 
-import './assets/styles/looknfeel/colors.css';
+import './assets/styles/looknfeel/variables.css';
 import './assets/styles/looknfeel/style.css';
 import './assets/styles/printMode.css';
