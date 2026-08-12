@@ -101,14 +101,14 @@
   .server-connected:hover,
   .btn-link:hover .fas.server-connected,
   .btn-link:hover .far.server-connected {
-    color: var(--tertiary-400);
+    color: var(--tertiary-400) !important;
     font-size: 12px;
   }
   .server-disconnected,
   .server-disconnected:hover,
   .btn-link:hover .fas.server-disconnected,
   .btn-link:hover .far.server-disconnected {
-    color: var(--danger-400);
+    color: var(--danger-400) !important;
     font-size: 12px;
   }
   .btn-link {
