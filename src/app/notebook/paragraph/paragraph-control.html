@@ -12,1113 +12,1204 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div id="{{paragraph.id}}_control"
-     class="control d-flex align-items-center"
-     ng-show="!asIframe">
-  <div class="me-3"
-       ng-show="paragraph.runtimeInfos.jobUrl.values.length == 1">
-    <a href="{{paragraph.runtimeInfos.jobUrl.values[0].jobUrl}}"
-       target="_blank"
-       title="{{paragraph.runtimeInfos.jobUrl.tooltip}}">
-      <span class="fas fa-up-right-from-square me-2"></span>
-      <span class="responsive-col-job"><b>{{paragraph.runtimeInfos.jobUrl.label}}</b></span>
-    </a>
-  </div>
-  <div class="dropdown me-3"
-       ng-show="paragraph.runtimeInfos.jobUrl.values.length > 1">
-    <button class="btn btn-sm btn-link py-0 px-0"
-            title="{{paragraph.runtimeInfos.jobUrl.tooltip}}"
-            data-bs-toggle="dropdown"
-            type="button">
-      <i class="fas fa-tasks"></i>
-      <span class="responsive-col-job">{{paragraph.runtimeInfos.jobUrl.label}}</span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li class="dropdown-item"
-          ng-class="{'option-disabled': !noteOperationsAllowed()}"
-          ng-repeat="value in paragraph.runtimeInfos.jobUrl.values">
-        <a ng-if="value.jobLabel === undefined"
-           href="{{value['jobUrl']}}"
-           target="_blank">
-          <i class="fas fa-up-right-from-square jobs-icon me-2"></i>
-          Jobs #{{$index}}
-        </a>
-        <a ng-if="value.jobLabel !== undefined"
-           href="{{value['jobUrl']}}"
-           target="_blank">
-          <i class="fas fa-up-right-from-square jobs-icon me-2"></i>
-          {{value['jobLabel']}}
-        </a>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Paragraph controls -->
-  <div class="flex-fill d-flex align-items-center"
-       ng-if="!revisionView">
-    <div class="responsive-col d-flex align-items-center">
-      <button class="btn btn-link btn-sm ps-0"
-              ng-click="toggleEditor(paragraph)">
-        <i class="{{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"
-           title="{{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+E)"></i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-click="toggleOutput(paragraph)">
-        <i class="{{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"
-           title="{{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+O)"></i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-click="copyParagraph(getEditorValue())"
-              ng-class="{'disabled':isParagraphRunning()}">
-        <i class="fas fa-copy"
-           title="Clone paragraph (Ctrl+Shift+C)"></i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-click="clearParagraphOutput(paragraph)"
-              ng-class="{'disabled':isParagraphRunning()}">
-        <i class="fas fa-eraser"
-           title="Clear output"></i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-click="hideTitle(paragraph)"
-              ng-show="paragraph.config.title">
-        <i class="fas fa-font"
-           title="Hide title"></i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-click="showTitle(paragraph)"
-              ng-show="!paragraph.config.title">
-        <i class="fas fa-font"
-           title="Show title"></i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-click="hideLineNumbers(paragraph)"
-              ng-show="paragraph.config.lineNumbers">
-        <i class="fas fa-list-ol"
-           title="Hide line numbers (Ctrl+Alt+M)"></i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-click="showLineNumbers(paragraph)"
-              ng-show="!paragraph.config.lineNumbers">
-        <i class="fas fa-list-ol"
-           title="Show line numbers (Ctrl+Alt+M)"></i>
-      </button>
+<div id="{{paragraph.id}}_control">
+  <!-- default mode -->
+  <div class="control d-flex align-items-center"
+       ng-if="!revisionView && !viewOnly"
+       ng-show="!asIframe">
+    <div class="me-3"
+         ng-show="paragraph.runtimeInfos.jobUrl.values.length == 1">
+      <a href="{{paragraph.runtimeInfos.jobUrl.values[0].jobUrl}}"
+         target="_blank"
+         title="{{paragraph.runtimeInfos.jobUrl.tooltip}}">
+        <span class="fas fa-up-right-from-square me-2"></span>
+        <span class="responsive-col-job"><b>{{paragraph.runtimeInfos.jobUrl.label}}</b></span>
+      </a>
     </div>
-    <!-- responsive drop-down menu for smaller screens -->
-    <div class="responsive-col-dropdown dropdown">
-      <button class="btn btn-link btn-sm ps-0"
-              type="button"
+    <div class="dropdown me-3"
+         ng-show="paragraph.runtimeInfos.jobUrl.values.length > 1">
+      <button class="btn btn-sm btn-link py-0 px-0"
+              title="{{paragraph.runtimeInfos.jobUrl.tooltip}}"
               data-bs-toggle="dropdown"
-              aria-expanded="false">
-        <i class="fas fa-bars"></i>
+              type="button">
+        <i class="fas fa-tasks"></i>
+        <span class="responsive-col-job">{{paragraph.runtimeInfos.jobUrl.label}}</span>
       </button>
-      <ul class="dropdown-menu">
-        <li>
-          <a class="dropdown-item"
-             ng-click="toggleEditor(paragraph)"
-             title="{{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+E)">
-            <i class="drop-icon {{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"></i>
-            {{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor
+      <ul class="dropdown-menu" role="menu">
+        <li class="dropdown-item"
+            ng-class="{'option-disabled': !noteOperationsAllowed()}"
+            ng-repeat="value in paragraph.runtimeInfos.jobUrl.values">
+          <a ng-if="value.jobLabel === undefined"
+             href="{{value['jobUrl']}}"
+             target="_blank">
+            <i class="fas fa-up-right-from-square jobs-icon me-2"></i>
+            Jobs #{{$index}}
           </a>
-        </li>
-        <li>
-          <a class="dropdown-item"
-             ng-click="toggleOutput(paragraph)"
-             title="{{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+O)">
-            <i class="drop-icon {{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"></i>
-            {{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item"
-             ng-click="copyParagraph(getEditorValue())"
-             ng-class="{'disabled':isParagraphRunning()}"
-             title="Clone paragraph (Ctrl+Shift+C)">
-            <i class="fas fa-copy drop-icon">
-            </i>
-            Clone paragraph
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item disabled"
-             ng-click="clearParagraphOutput(paragraph)"
-             ng-class="{'disabled':isParagraphRunning()}"
-             title="Clear output">
-            <i class="fas fa-eraser drop-icon"></i>
-            Clear output
-          </a>
-        </li>
-        <li ng-show="paragraph.config.title">
-          <a class="dropdown-item"
-             ng-click="hideTitle(paragraph)"
-             title="Hide title">
-            <i class="fas fa-font drop-icon"></i>
-            Hide title
-          </a>
-        </li>
-        <li ng-show="!paragraph.config.title">
-          <a class="dropdown-item"
-             ng-click="showTitle(paragraph)"
-             title="Show title">
-            <i class="fas fa-font drop-icon"></i>
-            Show title
-          </a>
-        </li>
-        <li ng-show="paragraph.config.lineNumbers">
-          <a class="dropdown-item"
-             ng-click="hideLineNumbers(paragraph)"
-             title="Hide line numbers (Ctrl+Alt+M)">
-            <i class="fas fa-list-ol drop-icon"></i>
-            Hide line numbers
-          </a>
-        </li>
-        <li ng-show="!paragraph.config.lineNumbers">
-          <a class="dropdown-item"
-             ng-click="showLineNumbers(paragraph)"
-             title="Show line numbers (Ctrl+Alt+M)">
-            <i class="fas fa-list-ol drop-icon"></i>
-            Show line numbers
+          <a ng-if="value.jobLabel !== undefined"
+             href="{{value['jobUrl']}}"
+             target="_blank">
+            <i class="fas fa-up-right-from-square jobs-icon me-2"></i>
+            {{value['jobLabel']}}
           </a>
         </li>
       </ul>
     </div>
-    <div class="ms-auto d-flex align-items-center">
+
+    <!-- Paragraph controls -->
+    <div class="flex-fill d-flex align-items-center">
+      <div class="responsive-col d-flex align-items-center">
+        <button class="btn btn-link btn-sm ps-0"
+                ng-click="toggleEditor(paragraph)">
+          <i class="{{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"
+             title="{{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+E)"></i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-click="toggleOutput(paragraph)">
+          <i class="{{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"
+             title="{{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+O)"></i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-click="copyParagraph(getEditorValue())"
+                ng-class="{'disabled':isParagraphRunning()}">
+          <i class="fas fa-copy"
+             title="Clone paragraph (Ctrl+Shift+C)"></i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-click="clearParagraphOutput(paragraph)"
+                ng-class="{'disabled':isParagraphRunning()}">
+          <i class="fas fa-eraser"
+             title="Clear output"></i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-click="hideTitle(paragraph)"
+                ng-show="paragraph.config.title">
+          <i class="fas fa-font"
+             title="Hide title"></i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-click="showTitle(paragraph)"
+                ng-show="!paragraph.config.title">
+          <i class="fas fa-font"
+             title="Show title"></i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-click="hideLineNumbers(paragraph)"
+                ng-show="paragraph.config.lineNumbers">
+          <i class="fas fa-list-ol"
+             title="Hide line numbers (Ctrl+Alt+M)"></i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-click="showLineNumbers(paragraph)"
+                ng-show="!paragraph.config.lineNumbers">
+          <i class="fas fa-list-ol"
+             title="Show line numbers (Ctrl+Alt+M)"></i>
+        </button>
+      </div>
+      <!-- responsive drop-down menu for smaller screens -->
+      <div class="responsive-col-dropdown dropdown">
+        <button class="btn btn-link btn-sm ps-0"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item"
+               ng-click="toggleEditor(paragraph)"
+               title="{{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+E)">
+              <i class="drop-icon {{paragraph.config.editorHide ? 'fas fa-expand' : 'fas fa-compress'}}"></i>
+              {{(paragraph.config.editorHide ? 'Show' : 'Hide')}} editor
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item"
+               ng-click="toggleOutput(paragraph)"
+               title="{{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+O)">
+              <i class="drop-icon {{paragraph.config.tableHide ? 'fas fa-book-open' : 'fas fa-book'}}"></i>
+              {{(paragraph.config.tableHide ? 'Show' : 'Hide')}} output
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item"
+               ng-click="copyParagraph(getEditorValue())"
+               ng-class="{'disabled':isParagraphRunning()}"
+               title="Clone paragraph (Ctrl+Shift+C)">
+              <i class="fas fa-copy drop-icon">
+              </i>
+              Clone paragraph
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item disabled"
+               ng-click="clearParagraphOutput(paragraph)"
+               ng-class="{'disabled':isParagraphRunning()}"
+               title="Clear output">
+              <i class="fas fa-eraser drop-icon"></i>
+              Clear output
+            </a>
+          </li>
+          <li ng-show="paragraph.config.title">
+            <a class="dropdown-item"
+               ng-click="hideTitle(paragraph)"
+               title="Hide title">
+              <i class="fas fa-font drop-icon"></i>
+              Hide title
+            </a>
+          </li>
+          <li ng-show="!paragraph.config.title">
+            <a class="dropdown-item"
+               ng-click="showTitle(paragraph)"
+               title="Show title">
+              <i class="fas fa-font drop-icon"></i>
+              Show title
+            </a>
+          </li>
+          <li ng-show="paragraph.config.lineNumbers">
+            <a class="dropdown-item"
+               ng-click="hideLineNumbers(paragraph)"
+               title="Hide line numbers (Ctrl+Alt+M)">
+              <i class="fas fa-list-ol drop-icon"></i>
+              Hide line numbers
+            </a>
+          </li>
+          <li ng-show="!paragraph.config.lineNumbers">
+            <a class="dropdown-item"
+               ng-click="showLineNumbers(paragraph)"
+               title="Show line numbers (Ctrl+Alt+M)">
+              <i class="fas fa-list-ol drop-icon"></i>
+              Show line numbers
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="ms-auto d-flex align-items-center">
       <span class="me-2"
             ng-class="{'status-running' : paragraph.status=='RUNNING', 'status-pending' : paragraph.status=='PENDING'}">
         {{paragraph.status}}
       </span>
-      <span class="me-2 status-running"
-            ng-if="paragraph.status === 'RUNNING'">
+        <span class="me-2 status-running"
+              ng-if="paragraph.status === 'RUNNING'">
         {{getProgress()}}%
       </span>
-      <button class="btn btn-link btn-sm"
-              ng-click="cancelParagraph(paragraph)"
-              ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'">
-        <i class="fas fa-pause"
-           title="Cancel (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+C)">
-        </i>
-      </button>
-      <button class="btn btn-link btn-sm"
-              ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING' && paragraph.config.enabled"
-              ng-click="runParagraphFromButton(getEditorValue())"
-              ng-class="{'disabled':isParagraphRunning()}">
-        <i class="fas fa-play"
-           role="button"
-           title="Run this paragraph (Shift+Enter)">
-        </i>
-      </button>
-      <!--<div class="dropdown me-2">
-        <i class="fas fa-clock"
-           role="button"
-           ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING'"
-           ng-class="{'item-disable' : !(paragraph.status!='RUNNING' && paragraph.status!='PENDING')}"
-           data-bs-toggle="dropdown"
-           data-bs-auto-close="outside"
-           type="button"
-           aria-haspopup="true"
-           aria-expanded="false"></i>-->
+        <button class="btn btn-link btn-sm"
+                ng-click="cancelParagraph(paragraph)"
+                ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'">
+          <i class="fas fa-pause"
+             title="Cancel (Ctrl+{{ (isMac ? 'Option' : 'Alt') }}+C)">
+          </i>
+        </button>
+        <button class="btn btn-link btn-sm"
+                ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING' && paragraph.config.enabled"
+                ng-click="runParagraphFromButton(getEditorValue())"
+                ng-class="{'disabled':isParagraphRunning()}">
+          <i class="fas fa-play"
+             role="button"
+             title="Run this paragraph (Shift+Enter)">
+          </i>
+        </button>
+        <!--<div class="dropdown me-2">
+          <i class="fas fa-clock"
+             role="button"
+             ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING'"
+             ng-class="{'item-disable' : !(paragraph.status!='RUNNING' && paragraph.status!='PENDING')}"
+             data-bs-toggle="dropdown"
+             data-bs-auto-close="outside"
+             type="button"
+             aria-haspopup="true"
+             aria-expanded="false"></i>-->
         <!-- TODO: fix time-sets feature -->
         <!--<div class="time-sets dropdown-menu dropdown-menu-end p-0"
              id="timeset_{{paragraph.id}}">
           <div class="accordion accordion-flush" id="accordionFlush_{{paragraph.id}}">-->
-            <!--<div class="accordion-item">
-              <h2 class="accordion-header" id="headingAll_{{paragraph.id}}">
-                <button class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flushAll_{{paragraph.id}}"
-                        aria-expanded="false"
-                        ng-click="setScopeVar('TimeSet', 'All')"
-                        aria-controls="flush-collapseOne">
-                  All-Time
-                </button>
-              </h2>
-              <div id="flushAll_{{paragraph.id}}"
-                   class="accordion-collapse collapse"
-                   aria-labelledby="headingAll_{{paragraph.id}}"
-                   data-bs-parent="#accordionFlush_{{paragraph.id}}">
-              </div>
-            </div>-->
-            <!-- Real-time -->
-            <!--<div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne_{{paragraph.id}}">
-                <button class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flushOne_{{paragraph.id}}"
-                        aria-expanded="false"
-                        aria-controls="flush-collapseOne">
-                  Real-time
-                </button>
-              </h2>
-              <div id="flushOne_{{paragraph.id}}"
-                   class="accordion-collapse collapse"
-                   aria-labelledby="headingOne_{{paragraph.id}}"
-                   data-bs-parent="#accordionFlush_{{paragraph.id}}">
-                <div class="accordion-body">
-                  <div class="row">
-                    <div class="col btn-section">
-                      <button class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === '30s' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet','30s')">
-                        30 sec window
-                      </button>
-                      <button class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === '1m' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', '1m')">
-                        1 min window
-                      </button>
-                      <button class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === '5m' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', '5m')">
-                        5 min window
-                      </button>
-                      <button class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === '30m' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet','30m')">
-                        30 min window
-                      </button>
-                      <button class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === '1h' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', '1h')">
-                        1 hour window
-                      </button>
-                      <hr>
-                    </div>
-                  </div>
-                  <form>
-                    <div class="row">
-                      <div class="col-auto">
-                        <div id="rtcFrom" class="input-group mb-3">
-                          <input ng-model="RTCNum"
-                                 type="number"
-                                 class="form-control"
-                                 ng-init="RTCNum = 5"
-                                 aria-labelledby="rtcFrom"
-                                 required />
-                          <select ng-init="optionsRTC = ['seconds ago',
-                                                          'minutes ago',
-                                                          'hours ago',
-                                                          'days ago',
-                                                          'weeks ago',
-                                                          'month ago',
-                                                          'years ago'];
-                                           RTCMeasure='seconds ago'"
-                                  ng-model="RTCMeasure"
-                                  ng-options="x for x in optionsRTC"
-                                  ng-click="setScopeVar('RTCMeasure', RTCMeasure)"
-                                  aria-labelledby="rtcFrom"
-                                  class="form-select"
-                                  style="width: 80px;">
-                          </select>
-                          <span class="input-group-text">
-                            to the present
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="RTCMessage = ''"
-                         ng-hide="RTCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{RTCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button ng-click="setScopeVar('RTCNum', RTCNum);
-                                          setScopeVar('RTCMeasure', RTCMeasure);
-                                          setScopeVar('TimeSet', 'RTC');"
-                                type="submit"
-                                class="btn btn-secondary">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
+        <!--<div class="accordion-item">
+          <h2 class="accordion-header" id="headingAll_{{paragraph.id}}">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flushAll_{{paragraph.id}}"
+                    aria-expanded="false"
+                    ng-click="setScopeVar('TimeSet', 'All')"
+                    aria-controls="flush-collapseOne">
+              All-Time
+            </button>
+          </h2>
+          <div id="flushAll_{{paragraph.id}}"
+               class="accordion-collapse collapse"
+               aria-labelledby="headingAll_{{paragraph.id}}"
+               data-bs-parent="#accordionFlush_{{paragraph.id}}">
+          </div>
+        </div>-->
+        <!-- Real-time -->
+        <!--<div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne_{{paragraph.id}}">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flushOne_{{paragraph.id}}"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseOne">
+              Real-time
+            </button>
+          </h2>
+          <div id="flushOne_{{paragraph.id}}"
+               class="accordion-collapse collapse"
+               aria-labelledby="headingOne_{{paragraph.id}}"
+               data-bs-parent="#accordionFlush_{{paragraph.id}}">
+            <div class="accordion-body">
+              <div class="row">
+                <div class="col btn-section">
+                  <button class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === '30s' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet','30s')">
+                    30 sec window
+                  </button>
+                  <button class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === '1m' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', '1m')">
+                    1 min window
+                  </button>
+                  <button class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === '5m' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', '5m')">
+                    5 min window
+                  </button>
+                  <button class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === '30m' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet','30m')">
+                    30 min window
+                  </button>
+                  <button class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === '1h' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', '1h')">
+                    1 hour window
+                  </button>
+                  <hr>
                 </div>
               </div>
-            </div>-->
-            <!-- Relative -->
-            <!--<div class="accordion-item">
-              <h2 class="accordion-header"
-                  id="headingTwo_{{paragraph.id}}">
-                <button class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flushTwo_{{paragraph.id}}"
-                        aria-expanded="false"
-                        aria-controls="flushTwo_{{paragraph.id}}">
-                  Relative
-                </button>
-              </h2>
-              <div id="flushTwo_{{paragraph.id}}"
-                   class="accordion-collapse collapse"
-                   aria-labelledby="headingTwo_{{paragraph.id}}"
-                   data-bs-parent="#accordionFlush_{{paragraph.id}}">
-                <div class="accordion-body">
-                  <div class="row">
-                    <div class="col btn-section">
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'today' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'today')">
-                        Today
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'yesterday' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'yesterday')">
-                        Yesterday
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'week' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'week')">
-                        This week
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'weekP' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'weekP')">
-                        Previous week
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'Bweek' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'Bweek')">
-                        This business week
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'BweekP' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'BweekP')">
-                        Previous business week
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'month' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'month')">
-                        This month
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'monthP' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'monthP')">
-                        Previous month
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'year' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'year')">
-                        This year
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'yearP' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'yearP')">
-                        Previous year
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'L15m' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'L15m')">
-                        Last 15 min
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'L60m' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'L60m')">
-                        Last 60 min
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'L4h' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'L4h')">
-                        Last 4 hours
-                      </button>
-                      <button type="button"
-                              class="badge rounded-pill bg-light mb-2"
-                              ng-class = "TimeSet === 'L24h' ? 'active': '' "
-                              ng-click="setScopeVar('TimeSet', 'L24h')">
-                        Last 24 hours
-                      </button>
-                      <hr>
+              <form>
+                <div class="row">
+                  <div class="col-auto">
+                    <div id="rtcFrom" class="input-group mb-3">
+                      <input ng-model="RTCNum"
+                             type="number"
+                             class="form-control"
+                             ng-init="RTCNum = 5"
+                             aria-labelledby="rtcFrom"
+                             required />
+                      <select ng-init="optionsRTC = ['seconds ago',
+                                                      'minutes ago',
+                                                      'hours ago',
+                                                      'days ago',
+                                                      'weeks ago',
+                                                      'month ago',
+                                                      'years ago'];
+                                       RTCMeasure='seconds ago'"
+                              ng-model="RTCMeasure"
+                              ng-options="x for x in optionsRTC"
+                              ng-click="setScopeVar('RTCMeasure', RTCMeasure)"
+                              aria-labelledby="rtcFrom"
+                              class="form-select"
+                              style="width: 80px;">
+                      </select>
+                      <span class="input-group-text">
+                        to the present
+                      </span>
                     </div>
                   </div>
-                  <form>
-                    <div class="row mb-3">
-                      <div class="col-auto">
-                        <label class="form-label"
-                               for="rcFrom">
-                          From
+                </div>
+                <div class="row mb-3"
+                     ng-init="RTCMessage = ''"
+                     ng-hide="RTCMessage === ''">
+                  <div class="col">
+                    <p class="warning">
+                      <b>{{RTCMessage}}</b>
+                    </p>
+                  </div>
+                </div>
+                <div class="row dpl-submit">
+                  <div class="col">
+                    <button ng-click="setScopeVar('RTCNum', RTCNum);
+                                      setScopeVar('RTCMeasure', RTCMeasure);
+                                      setScopeVar('TimeSet', 'RTC');"
+                            type="submit"
+                            class="btn btn-secondary">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>-->
+        <!-- Relative -->
+        <!--<div class="accordion-item">
+          <h2 class="accordion-header"
+              id="headingTwo_{{paragraph.id}}">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flushTwo_{{paragraph.id}}"
+                    aria-expanded="false"
+                    aria-controls="flushTwo_{{paragraph.id}}">
+              Relative
+            </button>
+          </h2>
+          <div id="flushTwo_{{paragraph.id}}"
+               class="accordion-collapse collapse"
+               aria-labelledby="headingTwo_{{paragraph.id}}"
+               data-bs-parent="#accordionFlush_{{paragraph.id}}">
+            <div class="accordion-body">
+              <div class="row">
+                <div class="col btn-section">
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'today' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'today')">
+                    Today
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'yesterday' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'yesterday')">
+                    Yesterday
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'week' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'week')">
+                    This week
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'weekP' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'weekP')">
+                    Previous week
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'Bweek' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'Bweek')">
+                    This business week
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'BweekP' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'BweekP')">
+                    Previous business week
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'month' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'month')">
+                    This month
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'monthP' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'monthP')">
+                    Previous month
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'year' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'year')">
+                    This year
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'yearP' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'yearP')">
+                    Previous year
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'L15m' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'L15m')">
+                    Last 15 min
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'L60m' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'L60m')">
+                    Last 60 min
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'L4h' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'L4h')">
+                    Last 4 hours
+                  </button>
+                  <button type="button"
+                          class="badge rounded-pill bg-light mb-2"
+                          ng-class = "TimeSet === 'L24h' ? 'active': '' "
+                          ng-click="setScopeVar('TimeSet', 'L24h')">
+                    Last 24 hours
+                  </button>
+                  <hr>
+                </div>
+              </div>
+              <form>
+                <div class="row mb-3">
+                  <div class="col-auto">
+                    <label class="form-label"
+                           for="rcFrom">
+                      From
+                    </label>
+                    <div id="rcFrom" class="input-group mb-3">
+                      <input ng-model="RCNum"
+                             type="number"
+                             ng-init="RCNum = 5"
+                             class="form-control"
+                             aria-label="5"
+                             required />
+                      <select ng-init="optionsRC = ['seconds ago',
+                                                    'minutes ago',
+                                                    'hours ago',
+                                                    'days ago',
+                                                    'weeks ago',
+                                                    'month ago',
+                                                    'years ago'];
+                                       RCMeasure='seconds ago'"
+                              ng-model="RCMeasure"
+                              ng-options="x for x in optionsRC"
+                              ng-click="setScopeVar('RCMeasure', RCMeasure)"
+                              class="form-select">
+                      </select>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input"
+                             type="radio"
+                             name="rcSnapRadio"
+                             id="rcSnapRadio1"
+                             ng-model="RCSnap"
+                             ng-init="RCSnap=false"
+                             ng-value="false"
+                             checked />
+                      <label class="form-check-label"
+                             for="rcSnapRadio1">
+                        No snap
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input"
+                             type="radio"
+                             name="rcSnapRadio"
+                             id="rcSnapRadio2"
+                             ng-value="true"
+                             ng-model="RCSnap" />
+                      <label class="form-check-label"
+                             for="rcSnapRadio2">
+                        Start of the hour
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label class="form-label"
+                           for="rcSnapRadioTo">
+                      To
+                    </label>
+                    <div id="rcSnapRadioTo" class="radio-group mb-3">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               ng-model="RCTo"
+                               ng-init="RCTo='Now'"
+                               type="radio"
+                               name="rcRadioTo"
+                               id="rcSnapRadio3"
+                               value="Now"
+                               checked />
+                        <label class="form-check-label"
+                               for="rcSnapRadio3">
+                          Now
                         </label>
-                        <div id="rcFrom" class="input-group mb-3">
-                          <input ng-model="RCNum"
-                                 type="number"
-                                 ng-init="RCNum = 5"
-                                 class="form-control"
-                                 aria-label="5"
-                                 required />
-                          <select ng-init="optionsRC = ['seconds ago',
-                                                        'minutes ago',
-                                                        'hours ago',
-                                                        'days ago',
-                                                        'weeks ago',
-                                                        'month ago',
-                                                        'years ago'];
-                                           RCMeasure='seconds ago'"
-                                  ng-model="RCMeasure"
-                                  ng-options="x for x in optionsRC"
-                                  ng-click="setScopeVar('RCMeasure', RCMeasure)"
-                                  class="form-select">
-                          </select>
-                        </div>
-                        <div class="form-check form-check-inline">
-                          <input class="form-check-input"
-                                 type="radio"
-                                 name="rcSnapRadio"
-                                 id="rcSnapRadio1"
-                                 ng-model="RCSnap"
-                                 ng-init="RCSnap=false"
-                                 ng-value="false"
-                                 checked />
-                          <label class="form-check-label"
-                                 for="rcSnapRadio1">
-                            No snap
-                          </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                          <input class="form-check-input"
-                                 type="radio"
-                                 name="rcSnapRadio"
-                                 id="rcSnapRadio2"
-                                 ng-value="true"
-                                 ng-model="RCSnap" />
-                          <label class="form-check-label"
-                                 for="rcSnapRadio2">
-                            Start of the hour
-                          </label>
-                        </div>
                       </div>
-                    </div>
-                    <div class="row mb-3">
-                      <div class="col">
-                        <label class="form-label"
-                               for="rcSnapRadioTo">
-                          To
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input"
+                               ng-model="RCTo"
+                               type="radio"
+                               name="rcRadioTo"
+                               value="Hour"
+                               id="rcSnapRadio4" />
+                        <label class="form-check-label"
+                               for="rcSnapRadio4">
+                          Start of the hour
                         </label>
-                        <div id="rcSnapRadioTo" class="radio-group mb-3">
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input"
-                                   ng-model="RCTo"
-                                   ng-init="RCTo='Now'"
-                                   type="radio"
-                                   name="rcRadioTo"
-                                   id="rcSnapRadio3"
-                                   value="Now"
-                                   checked />
-                            <label class="form-check-label"
-                                   for="rcSnapRadio3">
-                              Now
-                            </label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input"
-                                   ng-model="RCTo"
-                                   type="radio"
-                                   name="rcRadioTo"
-                                   value="Hour"
-                                   id="rcSnapRadio4" />
-                            <label class="form-check-label"
-                                   for="rcSnapRadio4">
-                              Start of the hour
-                            </label>
-                          </div>
-                        </div>
                       </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="RCMessage = ''"
-                         ng-hide="RCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{RCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button type="submit"
-                                ng-click="setScopeVar('RCNum', RCNum);
-                                          setScopeVar('RCTo', RCTo);
-                                          setScopeVar('RCSnap', RCSnap);
-                                          setScopeVar('RCMeasure', RCMeasure);
-                                          setScopeVar('TimeSet', 'RC');"
-                                class="btn btn-secondary float-end">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>-->
-            <!-- Date range -->
-            <!--<div class="accordion-item">
-              <h2 class="accordion-header"
-                  id="headingThree_{{paragraph.id}}">
-                <button class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flushThree_{{paragraph.id}}"
-                        aria-expanded="false"
-                        aria-controls="flushThree_{{paragraph.id}}">
-                  Date range
-                </button>
-              </h2>
-              <div id="flushThree_{{paragraph.id}}"
-                   class="accordion-collapse collapse"
-                   aria-labelledby="headingThree_{{paragraph.id}}"
-                   data-bs-parent="#accordionFlush_{{paragraph.id}}">
-                <div class="accordion-body">
-                  <div class="row mb-3">
-                    <div class="col">
-                      <select class="form-select"
-                              ng-init="optionsDC = ['between',
-                                                    'before',
-                                                    'since'];
-                                       DCMeasure='between'"
-                              ng-model="DCMeasure"
-                              ng-options="x for x in optionsDC"
-                              ng-click="setScopeVar('DCMeasure', DCMeasure)">
-                          </select>
-                    </div>
-                  </div>-->
-                  <!-- Between -->
-                  <!--<form ng-hide="DCMeasure!='between'">
-                    <div class="row">
-                      <div class="col">
-                        <div class="input-group mb-3">
-                          <input type="date"
-                                 ng-model="DC1"
-                                 class="form-control"
-                                 aria-label="date"
-                                 required />
-                          <span class="input-group-text">and</span>
-                          <input type="date"
-                                 ng-model="DC2"
-                                 class="form-control"
-                                 aria-label="date"
-                                 required />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="DCMessage = ''"
-                         ng-hide="DCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{DCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button class="btn btn-secondary"
-                                type="submit"
-                                ng-hide="DCMeasure!='between'"
-                                ng-click="setScopeVar('DC1', DC1);
-                                          setScopeVar('DC2', DC2);
-                                          setScopeVar('DCMeasure', DCMeasure);
-                                          setScopeVar('TimeSet', 'DC');">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>-->
-                  <!-- Before -->
-                  <!--<form ng-hide="DCMeasure!='before'">
-                    <div class="row">
-                      <div class="col">
-                        <div class="input-group mb-3">
-                          <input ng-model="DC1"
-                                 class="form-control"
-                                 type="date"
-                                 aria-label="date"
-                                 required />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="DCMessage = ''"
-                         ng-hide="DCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{DCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button class="btn btn-secondary"
-                                type="submit"
-                                ng-hide="DCMeasure!='before'"
-                                ng-click="setScopeVar('DC1', DC1);
-                                          setScopeVar('DC2', undefined);
-                                          setScopeVar('DCMeasure', DCMeasure);
-                                          setScopeVar('TimeSet', 'DC');">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>-->
-                  <!-- Since -->
-                  <!--<form ng-hide="DCMeasure!='since'">
-                    <div class="row">
-                      <div class="col">
-                      <div class="input-group mb-3">
-                        <input ng-model="DC1"
-                               placeholder="Set here a date"
-                               class="form-control"
-                               type="date"
-                               aria-label="date"
-                               required />
-                        <span class="input-group-text">-</span>
-                        <input type="text"
-                               aria-label="text"
-                               placeholder="Up to present"
-                               class="form-control"
-                               disabled />
-                      </div>
-                    </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="DCMessage = ''"
-                         ng-hide="DCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{DCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button class="btn btn-secondary"
-                                type="submit"
-                                ng-hide="DCMeasure!='since'"
-                                ng-click="setScopeVar('DC1', DC1);
-                                          setScopeVar('DC2', Date.now());
-                                          setScopeVar('DCMeasure', DCMeasure);
-                                          setScopeVar('TimeSet', 'DC');">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>-->
-            <!-- Date & time range -->
-            <!--<div class="accordion-item">
-              <h2 class="accordion-header"
-                  id="headingFour_{{paragraph.id}}">
-                <button class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flushFour_{{paragraph.id}}"
-                        aria-expanded="false"
-                        aria-controls="flushFour_{{paragraph.id}}">
-                  Date & time range
-                </button>
-              </h2>
-              <div id="flushFour_{{paragraph.id}}"
-                   class="accordion-collapse collapse"
-                   aria-labelledby="headingFour_{{paragraph.id}}"
-                   data-bs-parent="#accordionFlush_{{paragraph.id}}">
-                <div class="accordion-body">
-                  <div class="row mb-3">
-                    <div class="col-auto">
-                      <select class="form-select"
-                              ng-init="optionsDTC = ['between','before','since'];
-                                       DTCMeasure='between'"
-                              ng-model="DTCMeasure"
-                              ng-options="x for x in optionsDTC"
-                              ng-click="setScopeVar('DTCMeasure', DTCMeasure)">
-                        </select>
                     </div>
                   </div>
-                  <form ng-hide="DTCMeasure!='between'">
-                    <div class="row">
-                      <div class="col">
-                        <div class="input-group mb-2">
-                          <input type="date"
-                                 ng-model="DTC1"
-                                 class="form-control"
-                                 aria-label="date"
-                                 required />
-                          <input type="time"
-                                 ng-model="DTC1T"
-                                 class="form-control"
-                                 aria-label="time"
-                                 required />
-                        </div>
-                        <label class="form-label">and</label>
-                        <div class="input-group mb-3">
-                          <input type="date"
-                                 ng-model="DTC2"
-                                 class="form-control"
-                                 aria-label="date"
-                                 required />
-                          <input type="time"
-                                 ng-model="DTC2T"
-                                 class="form-control"
-                                 aria-label="time"
-                                 required />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="DTCMessage = ''"
-                         ng-hide="DTCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{DTCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button class="btn btn-secondary"
-                                type="submit"
-                                ng-click="setScopeVar('DTC1', DTC1);
-                                          setScopeVar('DTC1T', DTC1T);
-                                          setScopeVar('DTC2', DTC2);
-                                          setScopeVar('DTC2T', DTC2T);
-                                          setScopeVar('DTCMeasure', DTCMeasure);
-                                          setScopeVar('TimeSet', 'DTC');">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                  <form ng-hide="DTCMeasure!='before'">
-                    <div class="row">
-                      <div class="col">
-                        <div class="input-group mb-3">
-                          <input ng-model="DTC1"
-                                 placeholder="Set here a date"
-                                 type="date"
-                                 required
-                                 class="form-control" />
-                          <input ng-model="DTC1T"
-                                 placeholder="Set here time"
-                                 type="time"
-                                 required
-                                 class="form-control" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="DTCMessage = ''"
-                         ng-hide="DTCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{DTCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button class="btn btn-secondary"
-                                type="submit"
-                                ng-click="setScopeVar('DTC1', DTC1);
-                                          setScopeVar('DTC1T', DTC1T);
-                                          setScopeVar('DTC2', undefined);
-                                          setScopeVar('DTCMeasure', DTCMeasure);
-                                          setScopeVar('TimeSet', 'DTC');">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                  <form ng-hide="DTCMeasure!='since'">
-                    <div class="row">
-                      <div class="col">
-                        <div class="input-group mb-2">
-                          <input ng-model="DTC1"
-                                 placeholder="Set here a date"
-                                 type="date"
-                                 required
-                                 class="form-control" />
-                          <input ng-model="DTC1T"
-                                 placeholder="Set here time"
-                                 type="time"
-                                 required
-                                 class="form-control" />
-                          <span class="input-group-text">-</span>
-                          <input placeholder="Up to present"
-                                 class="form-control"
-                                 disabled />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3"
-                         ng-init="DTCMessage = ''"
-                         ng-hide="DTCMessage === ''">
-                      <div class="col">
-                        <p class="warning">
-                          <b>{{DTCMessage}}</b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button class="btn btn-secondary"
-                                type="submit"
-                                ng-click="setScopeVar('DTC1', DTC1);
-                                          setScopeVar('DTC1T', DTC1T);
-                                          setScopeVar('DTC2', Date.now());
-                                          setScopeVar('DTC1T', Date.now());
-                                          setScopeVar('DTCMeasure', DTCMeasure);
-                                          setScopeVar('TimeSet', 'DTC');">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
                 </div>
-              </div>
-            </div>-->
-            <!-- Advanced -->
-            <!--<div class="accordion-item">
-              <h2 class="accordion-header"
-                  id="headingFive_{{paragraph.id}}">
-                <button class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#flushFive_{{paragraph.id}}"
-                        aria-expanded="false"
-                        aria-controls="flushFive_{{paragraph.id}}">
-                  Advanced
-                </button>
-              </h2>
-              <div id="flushFive_{{paragraph.id}}"
-                   class="accordion-collapse collapse"
-                   aria-labelledby="headingFive_{{paragraph.id}}"
-                   data-bs-parent="#accordionFlush_{{paragraph.id}}">
-                <div class="accordion-body">
-                  <form>
-                    <div class="row mb-3">
-                      <div class="col">
-                        <label for="acStart" class="form-label">Start</label>
-                        <input ng-model="AC1"
-                               id="acStart"
-                               placeholder="expression"
-                               type="text"
-                               class="form-control" />
-                      </div>
-                      <div class="col">
-                        <label for="acEnd" class="form-label">End</label>
-                        <input ng-model="AC2"
-                               id="acEnd"
-                               placeholder="expression"
-                               type="text"
-                               class="form-control" />
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                        <p>
-                          <a href="https://docs.teragrep.com/doc_01/1.0.0/User%20Manual/timesets.html#_advanced" target="_blank">
-                            Instructions
-                            <i class="fas fa-up-right-from-square out-link align-text-top"></i>
-                          </a>
-                        </p>
-                        <p ng-init="ACMessage = ''" ng-hide="ACMessage === ''">
-                          <b class="warning">
-                            {{ACMessage}}
-                          </b>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row dpl-submit">
-                      <div class="col">
-                        <button class="btn btn-secondary"
-                                type="submit"
-                                ng-click="setScopeVar('AC1', AC1);
-                                          setScopeVar('AC2', AC2);
-                                          setScopeVar('TimeSet', 'AC');">
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </form>
+                <div class="row mb-3"
+                     ng-init="RCMessage = ''"
+                     ng-hide="RCMessage === ''">
+                  <div class="col">
+                    <p class="warning">
+                      <b>{{RCMessage}}</b>
+                    </p>
+                  </div>
                 </div>
+                <div class="row dpl-submit">
+                  <div class="col">
+                    <button type="submit"
+                            ng-click="setScopeVar('RCNum', RCNum);
+                                      setScopeVar('RCTo', RCTo);
+                                      setScopeVar('RCSnap', RCSnap);
+                                      setScopeVar('RCMeasure', RCMeasure);
+                                      setScopeVar('TimeSet', 'RC');"
+                            class="btn btn-secondary float-end">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>-->
+        <!-- Date range -->
+        <!--<div class="accordion-item">
+          <h2 class="accordion-header"
+              id="headingThree_{{paragraph.id}}">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flushThree_{{paragraph.id}}"
+                    aria-expanded="false"
+                    aria-controls="flushThree_{{paragraph.id}}">
+              Date range
+            </button>
+          </h2>
+          <div id="flushThree_{{paragraph.id}}"
+               class="accordion-collapse collapse"
+               aria-labelledby="headingThree_{{paragraph.id}}"
+               data-bs-parent="#accordionFlush_{{paragraph.id}}">
+            <div class="accordion-body">
+              <div class="row mb-3">
+                <div class="col">
+                  <select class="form-select"
+                          ng-init="optionsDC = ['between',
+                                                'before',
+                                                'since'];
+                                   DCMeasure='between'"
+                          ng-model="DCMeasure"
+                          ng-options="x for x in optionsDC"
+                          ng-click="setScopeVar('DCMeasure', DCMeasure)">
+                      </select>
+                </div>
+              </div>-->
+        <!-- Between -->
+        <!--<form ng-hide="DCMeasure!='between'">
+          <div class="row">
+            <div class="col">
+              <div class="input-group mb-3">
+                <input type="date"
+                       ng-model="DC1"
+                       class="form-control"
+                       aria-label="date"
+                       required />
+                <span class="input-group-text">and</span>
+                <input type="date"
+                       ng-model="DC2"
+                       class="form-control"
+                       aria-label="date"
+                       required />
               </div>
             </div>
           </div>
+          <div class="row mb-3"
+               ng-init="DCMessage = ''"
+               ng-hide="DCMessage === ''">
+            <div class="col">
+              <p class="warning">
+                <b>{{DCMessage}}</b>
+              </p>
+            </div>
+          </div>
+          <div class="row dpl-submit">
+            <div class="col">
+              <button class="btn btn-secondary"
+                      type="submit"
+                      ng-hide="DCMeasure!='between'"
+                      ng-click="setScopeVar('DC1', DC1);
+                                setScopeVar('DC2', DC2);
+                                setScopeVar('DCMeasure', DCMeasure);
+                                setScopeVar('TimeSet', 'DC');">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>-->
+        <!-- Before -->
+        <!--<form ng-hide="DCMeasure!='before'">
+          <div class="row">
+            <div class="col">
+              <div class="input-group mb-3">
+                <input ng-model="DC1"
+                       class="form-control"
+                       type="date"
+                       aria-label="date"
+                       required />
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3"
+               ng-init="DCMessage = ''"
+               ng-hide="DCMessage === ''">
+            <div class="col">
+              <p class="warning">
+                <b>{{DCMessage}}</b>
+              </p>
+            </div>
+          </div>
+          <div class="row dpl-submit">
+            <div class="col">
+              <button class="btn btn-secondary"
+                      type="submit"
+                      ng-hide="DCMeasure!='before'"
+                      ng-click="setScopeVar('DC1', DC1);
+                                setScopeVar('DC2', undefined);
+                                setScopeVar('DCMeasure', DCMeasure);
+                                setScopeVar('TimeSet', 'DC');">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>-->
+        <!-- Since -->
+        <!--<form ng-hide="DCMeasure!='since'">
+          <div class="row">
+            <div class="col">
+            <div class="input-group mb-3">
+              <input ng-model="DC1"
+                     placeholder="Set here a date"
+                     class="form-control"
+                     type="date"
+                     aria-label="date"
+                     required />
+              <span class="input-group-text">-</span>
+              <input type="text"
+                     aria-label="text"
+                     placeholder="Up to present"
+                     class="form-control"
+                     disabled />
+            </div>
+          </div>
+          </div>
+          <div class="row mb-3"
+               ng-init="DCMessage = ''"
+               ng-hide="DCMessage === ''">
+            <div class="col">
+              <p class="warning">
+                <b>{{DCMessage}}</b>
+              </p>
+            </div>
+          </div>
+          <div class="row dpl-submit">
+            <div class="col">
+              <button class="btn btn-secondary"
+                      type="submit"
+                      ng-hide="DCMeasure!='since'"
+                      ng-click="setScopeVar('DC1', DC1);
+                                setScopeVar('DC2', Date.now());
+                                setScopeVar('DCMeasure', DCMeasure);
+                                setScopeVar('TimeSet', 'DC');">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>-->
+        <!-- Date & time range -->
+        <!--<div class="accordion-item">
+          <h2 class="accordion-header"
+              id="headingFour_{{paragraph.id}}">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flushFour_{{paragraph.id}}"
+                    aria-expanded="false"
+                    aria-controls="flushFour_{{paragraph.id}}">
+              Date & time range
+            </button>
+          </h2>
+          <div id="flushFour_{{paragraph.id}}"
+               class="accordion-collapse collapse"
+               aria-labelledby="headingFour_{{paragraph.id}}"
+               data-bs-parent="#accordionFlush_{{paragraph.id}}">
+            <div class="accordion-body">
+              <div class="row mb-3">
+                <div class="col-auto">
+                  <select class="form-select"
+                          ng-init="optionsDTC = ['between','before','since'];
+                                   DTCMeasure='between'"
+                          ng-model="DTCMeasure"
+                          ng-options="x for x in optionsDTC"
+                          ng-click="setScopeVar('DTCMeasure', DTCMeasure)">
+                    </select>
+                </div>
+              </div>
+              <form ng-hide="DTCMeasure!='between'">
+                <div class="row">
+                  <div class="col">
+                    <div class="input-group mb-2">
+                      <input type="date"
+                             ng-model="DTC1"
+                             class="form-control"
+                             aria-label="date"
+                             required />
+                      <input type="time"
+                             ng-model="DTC1T"
+                             class="form-control"
+                             aria-label="time"
+                             required />
+                    </div>
+                    <label class="form-label">and</label>
+                    <div class="input-group mb-3">
+                      <input type="date"
+                             ng-model="DTC2"
+                             class="form-control"
+                             aria-label="date"
+                             required />
+                      <input type="time"
+                             ng-model="DTC2T"
+                             class="form-control"
+                             aria-label="time"
+                             required />
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3"
+                     ng-init="DTCMessage = ''"
+                     ng-hide="DTCMessage === ''">
+                  <div class="col">
+                    <p class="warning">
+                      <b>{{DTCMessage}}</b>
+                    </p>
+                  </div>
+                </div>
+                <div class="row dpl-submit">
+                  <div class="col">
+                    <button class="btn btn-secondary"
+                            type="submit"
+                            ng-click="setScopeVar('DTC1', DTC1);
+                                      setScopeVar('DTC1T', DTC1T);
+                                      setScopeVar('DTC2', DTC2);
+                                      setScopeVar('DTC2T', DTC2T);
+                                      setScopeVar('DTCMeasure', DTCMeasure);
+                                      setScopeVar('TimeSet', 'DTC');">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <form ng-hide="DTCMeasure!='before'">
+                <div class="row">
+                  <div class="col">
+                    <div class="input-group mb-3">
+                      <input ng-model="DTC1"
+                             placeholder="Set here a date"
+                             type="date"
+                             required
+                             class="form-control" />
+                      <input ng-model="DTC1T"
+                             placeholder="Set here time"
+                             type="time"
+                             required
+                             class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3"
+                     ng-init="DTCMessage = ''"
+                     ng-hide="DTCMessage === ''">
+                  <div class="col">
+                    <p class="warning">
+                      <b>{{DTCMessage}}</b>
+                    </p>
+                  </div>
+                </div>
+                <div class="row dpl-submit">
+                  <div class="col">
+                    <button class="btn btn-secondary"
+                            type="submit"
+                            ng-click="setScopeVar('DTC1', DTC1);
+                                      setScopeVar('DTC1T', DTC1T);
+                                      setScopeVar('DTC2', undefined);
+                                      setScopeVar('DTCMeasure', DTCMeasure);
+                                      setScopeVar('TimeSet', 'DTC');">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <form ng-hide="DTCMeasure!='since'">
+                <div class="row">
+                  <div class="col">
+                    <div class="input-group mb-2">
+                      <input ng-model="DTC1"
+                             placeholder="Set here a date"
+                             type="date"
+                             required
+                             class="form-control" />
+                      <input ng-model="DTC1T"
+                             placeholder="Set here time"
+                             type="time"
+                             required
+                             class="form-control" />
+                      <span class="input-group-text">-</span>
+                      <input placeholder="Up to present"
+                             class="form-control"
+                             disabled />
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3"
+                     ng-init="DTCMessage = ''"
+                     ng-hide="DTCMessage === ''">
+                  <div class="col">
+                    <p class="warning">
+                      <b>{{DTCMessage}}</b>
+                    </p>
+                  </div>
+                </div>
+                <div class="row dpl-submit">
+                  <div class="col">
+                    <button class="btn btn-secondary"
+                            type="submit"
+                            ng-click="setScopeVar('DTC1', DTC1);
+                                      setScopeVar('DTC1T', DTC1T);
+                                      setScopeVar('DTC2', Date.now());
+                                      setScopeVar('DTC1T', Date.now());
+                                      setScopeVar('DTCMeasure', DTCMeasure);
+                                      setScopeVar('TimeSet', 'DTC');">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>-->
+        <!-- Advanced -->
+        <!--<div class="accordion-item">
+          <h2 class="accordion-header"
+              id="headingFive_{{paragraph.id}}">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flushFive_{{paragraph.id}}"
+                    aria-expanded="false"
+                    aria-controls="flushFive_{{paragraph.id}}">
+              Advanced
+            </button>
+          </h2>
+          <div id="flushFive_{{paragraph.id}}"
+               class="accordion-collapse collapse"
+               aria-labelledby="headingFive_{{paragraph.id}}"
+               data-bs-parent="#accordionFlush_{{paragraph.id}}">
+            <div class="accordion-body">
+              <form>
+                <div class="row mb-3">
+                  <div class="col">
+                    <label for="acStart" class="form-label">Start</label>
+                    <input ng-model="AC1"
+                           id="acStart"
+                           placeholder="expression"
+                           type="text"
+                           class="form-control" />
+                  </div>
+                  <div class="col">
+                    <label for="acEnd" class="form-label">End</label>
+                    <input ng-model="AC2"
+                           id="acEnd"
+                           placeholder="expression"
+                           type="text"
+                           class="form-control" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p>
+                      <a href="https://docs.teragrep.com/doc_01/1.0.0/User%20Manual/timesets.html#_advanced" target="_blank">
+                        Instructions
+                        <i class="fas fa-up-right-from-square out-link align-text-top"></i>
+                      </a>
+                    </p>
+                    <p ng-init="ACMessage = ''" ng-hide="ACMessage === ''">
+                      <b class="warning">
+                        {{ACMessage}}
+                      </b>
+                    </p>
+                  </div>
+                </div>
+                <div class="row dpl-submit">
+                  <div class="col">
+                    <button class="btn btn-secondary"
+                            type="submit"
+                            ng-click="setScopeVar('AC1', AC1);
+                                      setScopeVar('AC2', AC2);
+                                      setScopeVar('TimeSet', 'AC');">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-      </div>-->
-      <div class="dropdown">
-        <button class="btn btn-link btn-sm pe-0"
-                role="button"
-                data-bs-toggle="dropdown"
-                type="button"
-                aria-haspopup="true"
-                aria-expanded="false">
-          <i class="fas fa-gear">
-          </i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end paragraph-dropdown">
-          <li ng-controller="clipboardCtrl"
-              ng-click="$event.stopPropagation()">
-            <a title="{{tooltip}}"
-               class="dropdown-item user-select-all">
-              {{paragraph.id}}
-            </a>
-          </li>
-          <li class="divider">
-            <hr class="dropdown-divider">
-          </li>
-          <li class="dropdown-item d-flex align-items-center">
+      </div>
+    </div>
+  </div>-->
+        <div class="dropdown">
+          <button class="btn btn-link btn-sm pe-0"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  type="button"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+            <i class="fas fa-gear">
+            </i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end paragraph-dropdown">
+            <li ng-controller="clipboardCtrl"
+                ng-click="$event.stopPropagation()">
+              <a title="{{tooltip}}"
+                 class="dropdown-item user-select-all">
+                {{paragraph.id}}
+              </a>
+            </li>
+            <li class="divider">
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-item d-flex align-items-center">
             <span class="drop-icon">
               <i class="fas fa-left-right"></i>
             </span>
-            Width
-            <span class="ms-auto"
-                  ng-click="$event.stopPropagation()">
+              Width
+              <span class="ms-auto"
+                    ng-click="$event.stopPropagation()">
               <select ng-model="paragraph.config.colWidth"
                       class="form-select form-select-sm"
                       ng-change="changeColWidth(paragraph, paragraph.config.colWidth)"
                       ng-options="col for col in colWidthOption">
               </select>
             </span>
-          </li>
-          <li class="dropdown-item d-flex align-items-center">
+            </li>
+            <li class="dropdown-item d-flex align-items-center">
             <span class="drop-icon">
               <i class="fas fa-text-height"></i>
             </span>
-            Font size
-            <span class="ms-auto" ng-click="$event.stopPropagation()">
+              Font size
+              <span class="ms-auto" ng-click="$event.stopPropagation()">
               <select ng-model="paragraph.config.fontSize"
                       class="form-select form-select-sm"
                       ng-change="changeFontSize(paragraph, paragraph.config.fontSize)"
                       ng-options="s for s in fontSizeOption"></select>
             </span>
-          </li>
-          <li class="d-flex align-items-center">
-            <a class="dropdown-item"
-               ng-click="toggleEnableDisable(paragraph)"
-               ng-class="{'disabled':isParagraphRunning()}">
+            </li>
+            <li class="d-flex align-items-center">
+              <a class="dropdown-item"
+                 ng-click="toggleEnableDisable(paragraph)"
+                 ng-class="{'disabled':isParagraphRunning()}">
               <span class="drop-icon">
                 <i class="fas fa-play"></i>
               </span>
-              {{paragraph.config.enabled ? "Disable" : "Enable"}} run
-            </a>
-          </li>
-          <li class="divider"
-              ng-hide="$first && $last">
-            <hr class="dropdown-divider">
-          </li>
-          <li ng-hide="$index <= 1"
-              class="d-flex align-items-center">
-            <a class="dropdown-item"
-               ng-class="{'disabled':isParagraphRunning()}"
-               ng-click="moveTop(paragraph)">
+                {{paragraph.config.enabled ? "Disable" : "Enable"}} run
+              </a>
+            </li>
+            <li class="divider"
+                ng-hide="$first && $last">
+              <hr class="dropdown-divider">
+            </li>
+            <li ng-hide="$index <= 1"
+                class="d-flex align-items-center">
+              <a class="dropdown-item"
+                 ng-class="{'disabled':isParagraphRunning()}"
+                 ng-click="moveTop(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-double-up"></i>
               </span>
-              Move to the top
-            </a>
-          </li>
-          <li ng-hide="$index <= 1"
-              class="d-flex align-items-center">
-            <a class="dropdown-item"
-               ng-class="{'disabled':isParagraphRunning()}"
-               ng-click="moveUp(paragraph)">
+                Move to the top
+              </a>
+            </li>
+            <li ng-hide="$index <= 1"
+                class="d-flex align-items-center">
+              <a class="dropdown-item"
+                 ng-class="{'disabled':isParagraphRunning()}"
+                 ng-click="moveUp(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-up"></i>
               </span>
-              Move up
-            </a>
-          </li>
-          <li ng-hide="$last" class="d-flex align-items-center">
-            <a class="dropdown-item"
-               ng-class="{'disabled':isParagraphRunning()}"
-               ng-click="moveDown(paragraph)">
+                Move up
+              </a>
+            </li>
+            <li ng-hide="$last" class="d-flex align-items-center">
+              <a class="dropdown-item"
+                 ng-class="{'disabled':isParagraphRunning()}"
+                 ng-click="moveDown(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-down"></i>
               </span>
-              Move down
-              <span class="shortcut-keys float-end">
+                Move down
+                <span class="shortcut-keys float-end">
                 Ctrl+{{ isMac ? 'Option' : 'Alt'}}+J
               </span>
-            </a>
-          </li>
-          <li ng-hide="$last" class="d-flex align-items-center">
-            <a class="dropdown-item"
-               ng-class="{'disabled':isParagraphRunning()}"
-               ng-click="moveBottom(paragraph)">
+              </a>
+            </li>
+            <li ng-hide="$last" class="d-flex align-items-center">
+              <a class="dropdown-item"
+                 ng-class="{'disabled':isParagraphRunning()}"
+                 ng-click="moveBottom(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-angle-double-down"></i>
               </span>
-              Move to the bottom
-            </a>
-          </li>
-          <li ng-hide="$index <= 1"
-              class="d-flex align-items-center">
-            <a class="dropdown-item"
-               ng-class="{'disabled':isParagraphRunning()}"
-               ng-click="runAllToThis(paragraph)">
+                Move to the bottom
+              </a>
+            </li>
+            <li ng-hide="$index <= 1"
+                class="d-flex align-items-center">
+              <a class="dropdown-item"
+                 ng-class="{'disabled':isParagraphRunning()}"
+                 ng-click="runAllToThis(paragraph)">
               <span class="drop-icon rotate-transform">
                 <i class="fas fa-share"></i>
               </span>
-              Run all above
-            </a>
-          </li>
-          <li ng-hide="$last"
-              class="d-flex align-items-center">
-            <a class="dropdown-item"
-               ng-class="{'disabled':isParagraphRunning()}"
-               ng-click="runAllFromThis(paragraph)">
+                Run all above
+              </a>
+            </li>
+            <li ng-hide="$last"
+                class="d-flex align-items-center">
+              <a class="dropdown-item"
+                 ng-class="{'disabled':isParagraphRunning()}"
+                 ng-click="runAllFromThis(paragraph)">
               <span class="drop-icon rotate-transform">
                 <i class="fas fa-reply"></i>
               </span>
-              Run all below
-            </a>
-          </li>
-          <li class="divider">
-            <hr class="dropdown-divider">
-          </li>
-          <li class="d-flex align-items-center">
-            <a class="dropdown-item" ng-click="goToSingleParagraph()">
+                Run all below
+              </a>
+            </li>
+            <li class="divider">
+              <hr class="dropdown-divider">
+            </li>
+            <li class="d-flex align-items-center">
+              <a class="dropdown-item" ng-click="goToSingleParagraph()">
               <span class="drop-icon">
                 <i class="fas fa-link"></i>
               </span>
-              Link to results
-            </a>
-          </li>
-          <li class="divider"
-              ng-if="note.paragraphs.length > 1">
-            <hr class="dropdown-divider">
-          </li>
-          <li class="d-flex align-items-center"
-              ng-if="note.paragraphs.length > 1">
-            <a class="dropdown-item"
-               ng-class="{'disabled':isParagraphRunning()}"
-               ng-click="removeParagraph(paragraph)">
+                Link to results
+              </a>
+            </li>
+            <li class="divider"
+                ng-if="note.paragraphs.length > 1">
+              <hr class="dropdown-divider">
+            </li>
+            <li class="d-flex align-items-center"
+                ng-if="note.paragraphs.length > 1">
+              <a class="dropdown-item"
+                 ng-class="{'disabled':isParagraphRunning()}"
+                 ng-click="removeParagraph(paragraph)">
               <span class="drop-icon">
                 <i class="fas fa-times"></i>
               </span>
-              Remove
-              <span class="shortcut-keys float-end">Ctrl+{{ isMac ? 'Option' : 'Alt'}}+D</span>
-            </a>
-          </li>
-        </ul>
+                Remove
+                <span class="shortcut-keys float-end">Ctrl+{{ isMac ? 'Option' : 'Alt'}}+D</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
+  </div>
+  <!-- report mode -->
+  <div ng-if="!revisionView && viewOnly"
+       class="float-end dropdown">
+    <button class="btn btn-link"
+            type="button"
+            data-bs-toggle="dropdown">
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end paragraph-dropdown">
+      <li>
+        <a class="dropdown-item"
+           ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING' && paragraph.config.enabled"
+           ng-click="runParagraphFromButton(getEditorValue())"
+           ng-class="{'disabled':isParagraphRunning()}">
+          <i class="fas fa-play me-2"></i>
+          Run this paragraph
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item"
+           ng-click="toggleEnableDisable(paragraph)"
+           ng-class="{'disabled':isParagraphRunning()}">
+          <i class="fas fa-play me-2"></i>
+          {{paragraph.config.enabled ? "Disable" : "Enable"}} run
+        </a>
+      </li>
+      <li class="divider">
+        <hr class="dropdown-divider">
+      </li>
+      <li class="dropdown-item d-flex align-items-center">
+        <i class="fas fa-left-right me-2"></i>
+        Width
+        <span class="ms-auto"
+              ng-click="$event.stopPropagation()">
+          <select ng-model="paragraph.config.colWidth"
+                  class="form-select form-select-sm"
+                  ng-change="changeColWidth(paragraph, paragraph.config.colWidth)"
+                  ng-options="col for col in colWidthOption">
+          </select>
+        </span>
+      </li>
+      <li class="divider">
+        <hr class="dropdown-divider">
+      </li>
+      <li ng-hide="$index <= 1">
+        <a class="dropdown-item"
+           ng-class="{'disabled':isParagraphRunning()}"
+           ng-click="moveTop(paragraph)">
+          <i class="fas fa-angle-double-up me-2"></i>
+          Move to the top
+        </a>
+      </li>
+      <li ng-hide="$index <= 1">
+        <a class="dropdown-item"
+           ng-class="{'disabled':isParagraphRunning()}"
+           ng-click="moveUp(paragraph)">
+          <i class="fas fa-angle-up me-2"></i>
+          Move up
+        </a>
+      </li>
+      <li ng-hide="$last">
+        <a class="dropdown-item"
+           ng-class="{'disabled':isParagraphRunning()}"
+           ng-click="moveDown(paragraph)">
+          <i class="fas fa-angle-down me-2"></i>
+          Move down
+        </a>
+      </li>
+      <li ng-hide="$last">
+        <a class="dropdown-item"
+           ng-class="{'disabled':isParagraphRunning()}"
+           ng-click="moveBottom(paragraph)">
+          <i class="fas fa-angle-double-down me-2"></i>
+          Move to the bottom
+        </a>
+      </li>
+      <li class="divider">
+        <hr class="dropdown-divider">
+      </li>
+      <li ng-if="note.paragraphs.length > 1">
+        <a class="dropdown-item"
+           ng-class="{'disabled':isParagraphRunning()}"
+           ng-click="removeParagraph(paragraph)">
+          <i class="fa-solid fa-trash-can me-2"></i>
+          Remove paragraph
+        </a>
+      </li>
+    </ul>
   </div>
 </div>
