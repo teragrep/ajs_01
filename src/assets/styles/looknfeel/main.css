@@ -1,0 +1,141 @@
+:root {
+  --bs-font-sans-serif: sans-serif;
+  --bs-font-monospace: monospace;
+}
+
+body {
+  background: var(--grey-200);
+  color: var(--grey-800);
+  font: 400 16px var(--font-body-text);
+  &.dark-mode {
+    color: var(--dm-grey-200);
+    background: var(--dm-grey-800);
+  }
+}
+
+#clusterPage,
+#credentialPage,
+#configurationPage,
+#homePage,
+#interpreterPage,
+#jobPage,
+#nodePage,
+#repoPage,
+#searchResults {
+  margin-top: 90px;
+}
+
+.body-as-iframe {
+  background: var(--grey-000) !important;
+  #main {
+    margin-top: 56px;
+  }
+  .note-action,
+  .permissions,
+  .settings,
+  .navbar-form {
+    display: none !important;
+  }
+  a.navbar-brand {
+    pointer-events: none;
+  }
+  ul.navbar-nav {
+    display: flex;
+  }
+}
+
+/* backgrounds */
+
+.bg-secondary {
+  background-color: var(--grey-300) !important;
+}
+
+.dark-mode .bg-secondary {
+  background-color: var(--dm-grey-500) !important;
+}
+
+.bg-info {
+  background-color: var(--secondary-300) !important;
+}
+
+.bg-light {
+  background-color: var(--grey-100) !important;
+}
+
+.dark-mode .bg-light {
+  background-color: var(--dm-grey-800) !important;
+}
+
+.rounded-bottom-0 {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.rounded-top-0 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.text-dark {
+  color: var(--grey-800) !important;
+}
+
+.dark-mode .text-dark {
+  color: var(--dm-grey-200) !important;
+}
+
+.text-info {
+  color: var(--secondary-700) !important;
+}
+
+.w-20 {
+  width: 20% !important;
+}
+
+.w-40 {
+  width: 40% !important;
+}
+
+.w-60 {
+  width: 60% !important;
+}
+
+.w-80 {
+  width: 80% !important;
+}
+
+/* Card */
+
+.card {
+  border: 1px solid var(--grey-400)
+}
+
+.dark-mode .card {
+  background: var(--dm-grey-600);
+  border: 1px solid var(--dm-grey-500)
+}
+
+/* Progress bar */
+
+.progress {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  z-index: 100;
+  border-radius: 0;
+  .progress-bar {
+    background-color: var(--primary-500);
+    z-index: 0;
+  }
+}
+
+.dark-mode .progress .progress-bar {
+  background-color: var(--secondary-500);
+}
+
+/* badges */
+
+.rounded-pill {
+  border-radius: 50rem !important;
+  border: none !important;
+}
