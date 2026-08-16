@@ -4303,6 +4303,7 @@ table.dataTable .timestamp-table {
   font: 400 14px 'Roboto Mono', monospace;
   white-space: pre-wrap;
   /** to preserve white-space and newlines of result */
+  overflow: auto;
 }
 .graph-container {
   position: relative;
