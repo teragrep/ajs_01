@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {AfterViewInit, Component, ElementRef, input, OnChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, input, OnChanges, OnDestroy, ViewChild} from '@angular/core';
 import uPlot from 'uplot';
 import {BasicOptions} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/basicOptions';
 import {GraphType} from '../../../../../objects/output/format/uPlot/graphType';
@@ -58,11 +58,12 @@ import {UPlotOptions} from '../../../../../objects/output/format/uPlot/uPlotPlug
     <div #anchor></div>
   `
 })
-export class UPlotOutputView implements AfterViewInit, OnChanges {
+export class UPlotOutputView implements AfterViewInit, OnChanges, OnDestroy {
   graphType = input.required<string>();
   basicOptions = input.required<BasicOptions>();
   uPlotData = input.required<uPlot.AlignedData>();
   @ViewChild('anchor') anchor: ElementRef;
+  private resizeListener:ResizeListener;
 
   ngOnChanges() {
     if(!this.anchor) {
@@ -76,6 +77,10 @@ export class UPlotOutputView implements AfterViewInit, OnChanges {
     this.initializeGraph();
   }
 
+  ngOnDestroy():void {
+    this.resizeListener.unregister();
+  }
+
   private initializeGraph(): void {
     let uPlotOptions:UPlotOptions;
     if(this.graphType() === GraphType.bar){
@@ -85,8 +90,8 @@ export class UPlotOutputView implements AfterViewInit, OnChanges {
       uPlotOptions = this.basicOptions();
     }
     const graph = new uPlot(uPlotOptions.options(), this.uPlotData(), this.anchor.nativeElement);
-    const resizeListener:ResizeListener = new ResizeListenerImpl();
-    resizeListener.registerToWindow(graph);
-    resizeListener.registerToElement(graph, this.anchor.nativeElement);
+    this.resizeListener = new ResizeListenerImpl();
+    this.resizeListener.registerToWindow(graph);
+    this.resizeListener.registerToElement(graph, this.anchor.nativeElement);
   }
 }

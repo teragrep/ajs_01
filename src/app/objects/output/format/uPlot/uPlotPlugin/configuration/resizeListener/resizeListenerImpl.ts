@@ -45,11 +45,13 @@
  */
 import uPlot from 'uplot';
 import {ResizeListener} from './resizeListener';
-import {fromEvent} from 'rxjs';
+import {fromEvent, Subscription} from 'rxjs';
 
 export class ResizeListenerImpl implements ResizeListener {
   private readonly _width: number;
   private readonly _height: number;
+  private _subscription: Subscription;
+  private _resizeObserver: ResizeObserver;
 
   constructor() {
     this._width = window.visualViewport.width - 100;
@@ -57,8 +59,8 @@ export class ResizeListenerImpl implements ResizeListener {
   }
 
   registerToWindow(graph: uPlot): void {
-    const updateEvent = fromEvent(window, 'resize');
-    updateEvent.subscribe(() => {
+    const observableEvent = fromEvent(window, 'resize');
+    this._subscription = observableEvent.subscribe(() => {
       window.requestAnimationFrame(() => {
         graph.setSize(
           {
@@ -72,7 +74,7 @@ export class ResizeListenerImpl implements ResizeListener {
 
   registerToElement(graph: uPlot, el:Element):void {
     let width = 0;
-    const resizeObserver = new ResizeObserver((entries) => {
+    this._resizeObserver = new ResizeObserver((entries) => {
       const entry = entries.pop();
       if(entry){
         const newWidth = entry.contentRect.width;
@@ -85,6 +87,15 @@ export class ResizeListenerImpl implements ResizeListener {
         }
       }
     });
-    resizeObserver.observe(el);
+    this._resizeObserver.observe(el);
+  }
+
+  unregister():void {
+    if(this._subscription){
+      this._subscription.unsubscribe();
+    }
+    if(this._resizeObserver){
+      this._resizeObserver.disconnect();
+    }
   }
 }
