@@ -64,6 +64,7 @@ export class UPlotOutputView implements AfterViewInit, OnChanges, OnDestroy {
   uPlotData = input.required<uPlot.AlignedData>();
   @ViewChild('anchor') anchor: ElementRef;
   private resizeListener:ResizeListener;
+  private graph:uPlot;
 
   ngOnChanges() {
     if(!this.anchor) {
@@ -79,6 +80,7 @@ export class UPlotOutputView implements AfterViewInit, OnChanges, OnDestroy {
 
   ngOnDestroy():void {
     this.resizeListener.unregister();
+    this.graph.destroy();
   }
 
   private initializeGraph(): void {
@@ -93,5 +95,6 @@ export class UPlotOutputView implements AfterViewInit, OnChanges, OnDestroy {
     this.resizeListener = new ResizeListenerImpl();
     this.resizeListener.registerToWindow(graph);
     this.resizeListener.registerToElement(graph, this.anchor.nativeElement);
+    this.graph = graph;
   }
 }

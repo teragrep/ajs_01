@@ -43,8 +43,9 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {AfterViewInit, Component, ElementRef, input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, input, OnDestroy, ViewChild} from '@angular/core';
 import {DataTablesPlugin} from '../../../../../objects/output/format/dataTables/dataTablesPlugin/dataTablesPlugin';
+import {Api} from 'datatables.net-bs5';
 
 @Component({
   selector: 'dataTablesView',
@@ -52,11 +53,16 @@ import {DataTablesPlugin} from '../../../../../objects/output/format/dataTables/
     <table #table class="table table-bordered table-striped"></table>
   `
 })
-export class DataTablesOutputView implements AfterViewInit {
+export class DataTablesOutputView implements AfterViewInit, OnDestroy {
   dataTablesPlugin = input.required<DataTablesPlugin>();
   @ViewChild('table') table: ElementRef;
+  private dataTablesInstance:Api<unknown>;
 
   ngAfterViewInit() {
-    this.dataTablesPlugin().initializedTable(this.table.nativeElement);
+    this.dataTablesInstance = this.dataTablesPlugin().initializedTable(this.table.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.dataTablesInstance.destroy(true);
   }
 }
