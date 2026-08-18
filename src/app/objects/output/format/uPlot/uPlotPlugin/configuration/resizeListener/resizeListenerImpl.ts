@@ -60,6 +60,7 @@ export class ResizeListenerImpl implements ResizeListener {
 
   registerToWindow(graph: uPlot): void {
     const observableEvent = fromEvent(window, 'resize');
+    this.unregister();
     this._subscription = observableEvent.subscribe(() => {
       window.requestAnimationFrame(() => {
         graph.setSize(
@@ -73,11 +74,12 @@ export class ResizeListenerImpl implements ResizeListener {
   }
 
   registerToElement(graph: uPlot, el:Element):void {
-    let width = 0;
+    this.unregister();
     this._resizeObserver = new ResizeObserver((entries) => {
       const entry = entries.pop();
       if(entry){
         const newWidth = entry.contentRect.width;
+        let width = 0;
         if(newWidth !== width){
           window.requestAnimationFrame(() => {
             width = newWidth;
