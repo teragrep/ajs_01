@@ -75,11 +75,11 @@ export class ResizeListenerImpl implements ResizeListener {
 
   registerToElement(graph: uPlot, el:Element):void {
     this.disconnectResizeObserver();
+    let width = 0;
     this._resizeObserver = new ResizeObserver((entries) => {
       const entry = entries.pop();
       if(entry){
         const newWidth = entry.contentRect.width;
-        let width = 0;
         if(newWidth !== width){
           window.requestAnimationFrame(() => {
             width = newWidth;
