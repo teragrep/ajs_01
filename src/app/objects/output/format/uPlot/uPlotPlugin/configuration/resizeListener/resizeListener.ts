@@ -48,4 +48,5 @@ import uPlot from 'uplot';
 export interface ResizeListener {
   registerToWindow(graph: uPlot):void;
   registerToElement(graph: uPlot, el:Element):void;
+  unregister():void;
 }
