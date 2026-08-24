@@ -65,7 +65,7 @@ export class OutputContainerImpl implements OutputContainer{
   constructor(channel:Channel, paragraphId:string) {
     this._channel = channel;
     this._outputFormats = new OutputFormatsImpl(this);
-    this._interpreterErrorListener = new InterpreterErrorListenerImpl();
+    this._interpreterErrorListener = new InterpreterErrorListenerImpl(paragraphId);
     this._paragraphId = paragraphId;
     this._componentView = new ComponentViewStub();
   }
