@@ -46,7 +46,7 @@
 import {InterpreterErrorListener} from './interpreterErrorListener';
 import {MessageImpl} from '../message/messageImpl';
 import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
-import {computed, Signal} from '@angular/core';
+import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ComponentView} from '../rendering/componentView/componentView';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
@@ -54,16 +54,19 @@ import {ComponentViewImpl} from '../rendering/componentView/componentViewImpl';
 import {InterpreterErrorView} from '../../ui/angular2+/interpreterError/interpreterErrorView';
 
 export class InterpreterErrorListenerImpl implements InterpreterErrorListener {
-  private _componentView:ComponentView;
+  private readonly _paragraphId:string;
+  private readonly _componentView:WritableSignal<ComponentView>;
 
-  constructor() {
-    this._componentView = new ComponentViewStub();
+  constructor(paragraphId:string) {
+    this._paragraphId = paragraphId;
+    this._componentView = signal(new ComponentViewStub());
   }
 
   print(): Signal<RenderNode> {
     return computed(() => ({
-     children: computed(() => []),
-     componentView: this._componentView
+      paragraphId:this._paragraphId,
+      children: computed(() => []),
+      componentView: this._componentView()
     }));
   }
 
@@ -72,7 +75,7 @@ export class InterpreterErrorListenerImpl implements InterpreterErrorListener {
     if(message.operation() === 'INTERPRETER_ERROR'){
       const errorData = new SafeJsonImpl(message.data());
       const errorMessage = errorData.getProperty('message', 'string');
-      this._componentView = new ComponentViewImpl(InterpreterErrorView, computed(() => ({errorMessage: errorMessage})));
+      this._componentView.set(new ComponentViewImpl(InterpreterErrorView, computed(() => ({errorMessage: errorMessage}))));
     }
   }
 }

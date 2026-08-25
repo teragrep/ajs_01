@@ -47,9 +47,10 @@ import {InterpreterErrorListener} from './interpreterErrorListener';
 import {InterpreterErrorListenerImpl} from './interpreterErrorListenerImpl';
 
 describe('InterpreterErrorListener', () => {
+  const paragraphId = 'paragraphId';
   let interpreterErrorListener: InterpreterErrorListener;
   beforeEach(() => {
-    interpreterErrorListener = new InterpreterErrorListenerImpl();
+    interpreterErrorListener = new InterpreterErrorListenerImpl(paragraphId);
   });
 
   describe('Birth', () =>{
