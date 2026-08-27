@@ -49,7 +49,7 @@ import {render, fireEvent} from '@testing-library/angular';
 import {ComponentFixture} from '@angular/core/testing';
 
 describe('InterpreterErrorView functional test', () => {
-  const errorMessage = 'Error message';
+  const errorMessage = {errorMessage: 'Error message'};
   let fixture: ComponentFixture<InterpreterErrorView>;
   beforeEach(async () => {
     const renderResult = await render(InterpreterErrorView, {
@@ -70,7 +70,7 @@ describe('InterpreterErrorView functional test', () => {
     });
 
     it('Should have error text visible', () => {
-      expect(screen.getByText(errorMessage)).toBeDefined();
+      expect(screen.getByText(errorMessage.errorMessage)).toBeDefined();
     });
 
     it('Should have close button visible', () => {
@@ -81,7 +81,7 @@ describe('InterpreterErrorView functional test', () => {
   describe('View actions', () => {
     it('Should close modal on button click', async () => {
       fireEvent.click(screen.getByLabelText('Close'));
-      expect(screen.getByText(errorMessage)).not.toBeVisible();
+      expect(screen.getByText(errorMessage.errorMessage)).not.toBeVisible();
     });
   });
 });

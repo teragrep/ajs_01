@@ -43,8 +43,9 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {AfterViewInit, Component, ElementRef, input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, input, OnChanges, ViewChild} from '@angular/core';
 import * as bootstrap from 'bootstrap';
+import {Modal} from 'bootstrap';
 
 @Component({
   selector: 'interpreterErrorView',
@@ -57,19 +58,28 @@ import * as bootstrap from 'bootstrap';
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>{{errorMessage()}}</p>
+            <p>{{errorMessage().errorMessage}}</p>
           </div>
         </div>
       </div>
     </div>
   `
 })
-export class InterpreterErrorView implements AfterViewInit {
+export class InterpreterErrorView implements AfterViewInit, OnChanges{
   @ViewChild('modal') modal!: ElementRef;
-  errorMessage = input.required<string>();
+  errorMessage = input.required<{errorMessage: string}>();
+  myModal:Modal;
 
   ngAfterViewInit() {
-    const myModal = new bootstrap.Modal(this.modal.nativeElement);
-    myModal.show();
+    this.myModal = new bootstrap.Modal(this.modal.nativeElement);
+    if(this.errorMessage()){
+      this.myModal.show();
+    }
+  }
+
+  ngOnChanges() {
+    if(this.errorMessage() && this.myModal){
+      this.myModal.show();
+    }
   }
 }

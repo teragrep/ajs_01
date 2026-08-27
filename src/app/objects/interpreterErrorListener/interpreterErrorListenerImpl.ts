@@ -75,7 +75,7 @@ export class InterpreterErrorListenerImpl implements InterpreterErrorListener {
     if(message.operation() === 'INTERPRETER_ERROR'){
       const errorData = new SafeJsonImpl(message.data());
       const errorMessage = errorData.getProperty('message', 'string');
-      this._componentView.set(new ComponentViewImpl(InterpreterErrorView, computed(() => ({errorMessage: errorMessage}))));
+      this._componentView.set(new ComponentViewImpl(InterpreterErrorView, signal({errorMessage: {errorMessage:errorMessage}})));
     }
   }
 }
