@@ -35,6 +35,21 @@
             </configuration>
           </execution>
           <execution>
+            <id>run eslint</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>bash</executable>
+              <arguments>
+                <argument>-c</argument>
+                <argument>yarn lint:once || true</argument>
+              </arguments>
+              <workingDirectory>${project.basedir}</workingDirectory>
+            </configuration>
+          </execution>
+          <execution>
             <id>webpack</id>
             <phase>process-sources</phase>
             <goals>
