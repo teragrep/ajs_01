@@ -61,11 +61,6 @@ function HomeCtrl($scope,
     vm.noteCustomHome = false;
   };
 
-  $scope.reloadNoteList = function() {
-    websocketMsgSrv.reloadAllNotesFromRepo();
-    $scope.isReloadingNotes = true;
-  };
-
   $scope.createNote = function(path) {
 
     noteCreateService.init(path);
