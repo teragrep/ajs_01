@@ -1,6 +1,6 @@
 {
-  "name": "zeppelin-web",
-  "license": "Apache-2.0",
+  "name": "ajs_01",
+  "license": "AGPLv3",
   "version": "0.0.0",
   "engines": {
     "node": ">=0.10.0",
@@ -142,6 +142,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:apache/zeppelin.git"
+    "url": "git@github.com/teragrep/ajs_01"
   }
 }
