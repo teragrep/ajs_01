@@ -150,24 +150,6 @@ body {
   width: 80% !important;
 }
 
-/* Progress bar */
-
-.progress {
-  position: relative;
-  width: 100%;
-  height: 4px;
-  z-index: 100;
-  border-radius: 0;
-  .progress-bar {
-    background-color: var(--primary-500);
-    z-index: 0;
-  }
-}
-
-.dark-mode .progress .progress-bar {
-  background-color: var(--secondary-500);
-}
-
 /* badges */
 
 .rounded-pill {
