@@ -95,15 +95,14 @@ limitations under the License.
       </div>
       <!-- List of existing notebooks -->
       <div id="notebook-names" class="notebook-list">
-        <!-- TODO what the heck is this piece, remove if not used -->
-        <!--<ul>
+        <ul>
           <li ng-repeat="note in home.notes.list | filter:query.q track by $index">
             <i class="icon-doc"></i>
             <a href="#/notebook/{{note.id}}">
               {{noteName(note)}}
             </a>
           </li>
-        </ul>-->
+        </ul>
         <ul class="list-unstyled" ng-if="!query.q || query.q === ''">
           <li ng-repeat="node in home.notes.root.children"
               ng-include src="'/app/home/notebook-template.html'"
