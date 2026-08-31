@@ -150,17 +150,6 @@ body {
   width: 80% !important;
 }
 
-/* Card */
-
-.card {
-  border: 1px solid var(--grey-400)
-}
-
-.dark-mode .card {
-  background: var(--dm-grey-600);
-  border: 1px solid var(--dm-grey-500)
-}
-
 /* Progress bar */
 
 .progress {
