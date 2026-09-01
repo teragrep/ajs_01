@@ -45,7 +45,4 @@
  */
 export default interface BaseMessage {
   op: string;
-  ticket: string;
-  principal: string;
-  roles: string;
 };

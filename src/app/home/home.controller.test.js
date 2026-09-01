@@ -108,6 +108,7 @@ describe('Controller: Home', function() {
 
   const websocketMsgSrvMock = {
     reloadAllNotesFromRepo: function() {},
+    getNoteList: function() {}
   };
 
   const noteCreateServiceMock = {

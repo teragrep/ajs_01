@@ -61,3 +61,5 @@ import './fonts/google-fonts.css';
 
 import './assets/styles/looknfeel/style.css';
 import './assets/styles/printMode.css';
+
+import 'uplot/dist/uPlot.min.css';

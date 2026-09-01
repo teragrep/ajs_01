@@ -46,7 +46,7 @@ export function WebsocketMessageService($rootScope, websocketEvents) {
     },
 
     restoreAll: function() {
-      websocketEvents.sendNewEvent({op: 'RESTORE_ALL'});
+      websocketEvents.sendNewEvent({op: 'RESTORE_ALL', data:{}});
     },
 
     deleteNote: function(noteId) {
@@ -58,7 +58,7 @@ export function WebsocketMessageService($rootScope, websocketEvents) {
     },
 
     emptyTrash: function() {
-      websocketEvents.sendNewEvent({op: 'EMPTY_TRASH'});
+      websocketEvents.sendNewEvent({op: 'EMPTY_TRASH', data:{}});
     },
 
     cloneNote: function(noteIdToClone, newNoteName) {
@@ -66,11 +66,11 @@ export function WebsocketMessageService($rootScope, websocketEvents) {
     },
 
     getNoteList: function() {
-      websocketEvents.sendNewEvent({op: 'LIST_NOTES'});
+      websocketEvents.sendNewEvent({op: 'LIST_NOTES', data:{}});
     },
 
     reloadAllNotesFromRepo: function() {
-      websocketEvents.sendNewEvent({op: 'RELOAD_NOTES_FROM_REPO'});
+      websocketEvents.sendNewEvent({op: 'RELOAD_NOTES_FROM_REPO', data:{}});
     },
 
     getNote: function(noteId) {
@@ -329,11 +329,11 @@ export function WebsocketMessageService($rootScope, websocketEvents) {
     },
 
     getJobs: function() {
-      websocketEvents.sendNewEvent({op: 'LIST_NOTE_JOBS'});
+      websocketEvents.sendNewEvent({op: 'LIST_NOTE_JOBS', data:{}});
     },
 
     disconnectJobEvent: function() {
-      websocketEvents.sendNewEvent({op: 'UNSUBSCRIBE_UPDATE_NOTE_JOBS'});
+      websocketEvents.sendNewEvent({op: 'UNSUBSCRIBE_UPDATE_NOTE_JOBS', data:{}});
     },
 
     getUpdateNoteJobsList: function(lastUpdateServerUnixTime) {
@@ -352,11 +352,11 @@ export function WebsocketMessageService($rootScope, websocketEvents) {
     },
 
     listConfigurations: function() {
-      websocketEvents.sendNewEvent({op: 'LIST_CONFIGURATIONS'});
+      websocketEvents.sendNewEvent({op: 'LIST_CONFIGURATIONS', data:{}});
     },
 
     getInterpreterSettings: function() {
-      websocketEvents.sendNewEvent({op: 'GET_INTERPRETER_SETTINGS'});
+      websocketEvents.sendNewEvent({op: 'GET_INTERPRETER_SETTINGS', data:{}});
     },
 
     paragraphUpdateResult: function(noteId, paragraphId, draw, start, length, search) {

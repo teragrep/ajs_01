@@ -9,8 +9,29 @@
     "sourceMap": true,
     "allowUmdGlobalAccess": true,
     "experimentalDecorators": true,
+    "skipLibCheck": true
   },
-  "include": [
-    "./devServer/**/*"
+  "files":[
+    "./src/main.ts"
   ],
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "./src/app/shared/components/Toaster/fakeToasterService.ts",
+    "./src/app/objects/webSocket/service/fakeWebSocketService.ts",
+    "./src/app/objects/webSocket/service/fakeWebSocket.ts",
+    "./src/app/objects/output/switcher/button/fakeOutputSwitcherButton.ts",
+    "./src/app/objects/output/format/dataTables/dataTablesPlugin/dataTablesPlugin.ts",
+    "./src/app/objects/channel/fakeChannel.ts",
+    "./karma.conf.ts",
+    "./vite.config.ts",
+    "./src/index.ts",
+    "./devServer/**/*",
+    "./webpack.config.ts",
+    "./webpack.config.dev.ts",
+    "./webpack.config.karma.ts",
+    "./src/test/*",
+    "./**/*.spec.ts"
+  ]
 }

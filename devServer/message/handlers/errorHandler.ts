@@ -44,30 +44,20 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Receive, Send} from '../../interfaces/handler';
-import {ReceiveMessage} from '../../interfaces/receiveMessage';
-import {sendOperation} from '../webSocketOperations';
-import {ErrorMessage} from '../../interfaces/sendMessage';
+import {receiveOperation, sendOperation} from '../webSocketOperations';
+import {Handler} from './handler';
 
-export default class ErrorHandler implements Receive<ReceiveMessage>, Send<ErrorMessage>{
-  private readonly _client: WebSocket;
+export default class ErrorHandler implements Handler<object>{
 
-  constructor(client: WebSocket) {
-    this._client = client;
-  }
-
-  execute(message:ReceiveMessage): void {
+  execute(message: object, client: WebSocket): void {
     const msg = {
       op: sendOperation.errorInfo,
-      data: {error: 'Unknown operation', op: message.op},
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
+      data: {error: 'Unknown operation', op: message['op']},
     };
-    this.send(msg);
+    client.send(JSON.stringify(msg));
   }
 
-  send(msg: ErrorMessage): void {
-    this._client.send(JSON.stringify(msg));
-  }
+  operation(): receiveOperation {
+    throw new Error('Not implemented.');
+  };
 }

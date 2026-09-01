@@ -45,23 +45,20 @@
  */
 import NoteFactory from '../data/note/noteFactory';
 import NoteService from './noteService';
-import ParagraphFactory from '../data/paragraph/paragraphFactory';
 
 export default class FakeService {
   private readonly _noteService: NoteService;
+  private readonly _noteFactory: NoteFactory;
 
   constructor(noteService: NoteService) {
     this._noteService = noteService;
+    this._noteFactory = new NoteFactory();
   }
 
   seed(){
-    const paragraphFactory = new ParagraphFactory();
-    const paragraphs = paragraphFactory.paragraphCollection();
-    const noteFactory = new NoteFactory();
-    const notes = noteFactory.seed(paragraphs);
-
+    const notes = this._noteFactory.seed();
     notes.map((note) => {
-      this._noteService.add(note, note.id());
+      this._noteService.add(note, note.id);
     });
   }
 }

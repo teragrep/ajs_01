@@ -56,6 +56,7 @@ export const enum sendOperation {
   collaborativeModeStatus= 'COLLABORATIVE_MODE_STATUS',
   paragraphAppendOutput= 'PARAGRAPH_APPEND_OUTPUT',
   paragraphUpdateOutput='PARAGRAPH_UPDATE_OUTPUT',
+  paragraphOutput='PARAGRAPH_OUTPUT',
   progress= 'PROGRESS',
   completionList= 'COMPLETION_LIST',
   editorSetting= 'EDITOR_SETTING',
@@ -138,4 +139,5 @@ export const enum receiveOperation {
   listConfigurations= 'LIST_CONFIGURATIONS',
   getInterpreterSettings= 'GET_INTERPRETER_SETTINGS',
   paragraphUpdateResult= 'PARAGRAPH_UPDATE_RESULT',
+  paragraphOutputRequest='PARAGRAPH_OUTPUT_REQUEST',
 }

@@ -45,9 +45,47 @@
  */
 import '@angular/compiler';
 import '@analogjs/vitest-angular/setup-snapshots';
+import '@testing-library/jest-dom/vitest';
 import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 
 import angular from 'angular';
 angular.module('zeppelinWebApp', []);
+
+angular.module('zeppelinWebApp.comToaster', []);
+
+// uPlot dependency
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  }),
+});
+
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+vi.stubGlobal('ResizeObserver', ResizeObserverMock);
+
+vi.mock('uplot', () => {
+  return {
+    default: class {
+      destroy = vi.fn();
+    }
+  };
+});
+
+vi.stubGlobal('visualViewport', {
+  value:{
+    height: vi.fn(),
+    width: vi.fn(),
+  }
+});
 
 setupTestBed();

@@ -44,31 +44,22 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {PongMessage} from '../../interfaces/sendMessage';
 import {PingMessage} from '../../interfaces/receiveMessage';
 import {sendOperation, receiveOperation} from '../webSocketOperations';
 
-export default class PingHandler implements Handler<PingMessage, PongMessage>{
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.ping;
+export default class PingHandler implements Handler<PingMessage>{
+  operation(){
+    return receiveOperation.ping;
+  };
 
-  constructor(client: WebSocket) {
-    this._client = client;
-  }
 
-  execute(message: PingMessage): void {
+  execute(message: PingMessage, client: WebSocket): void {
     const msg: PongMessage = {
       op:sendOperation.pong,
       data: {},
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
     };
-    this.send(msg);
-  }
-
-  send(message: PongMessage): void {
-    this._client.send(JSON.stringify(message));
+    client.send(JSON.stringify(msg));
   }
 }

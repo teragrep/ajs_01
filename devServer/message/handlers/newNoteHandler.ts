@@ -44,45 +44,35 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {NewNoteMessage as NoteCreatedMessage} from '../../interfaces/sendMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
 import NoteService from '../../services/noteService';
 import {NewNoteMessage as CreateNoteMessage} from '../../interfaces/receiveMessage';
-import Notebook from '../../data/note/notebook';
-import SparkPara from '../../data/paragraph/sparkPara';
-import ParagraphCollection from '../../data/paragraph/paragraphCollection';
-import Paragraph from '../../data/paragraph/paragraph';
-import ParagraphResult from '../../data/paragraph/paragraphResult';
+import NotebookImpl from '../../data/note/notebookImpl';
+import {SparkPara} from '../../data/paragraph/sparkPara';
+import ParagraphImpl from '../../data/paragraph/paragraphImpl';
 
-export default class NewNoteHandler implements Handler<CreateNoteMessage, NoteCreatedMessage>{
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.newNote;
+export default class NewNoteHandler implements Handler<CreateNoteMessage>{
   private readonly _noteService: NoteService;
 
-  constructor(client: WebSocket, noteService: NoteService) {
-    this._client = client;
+  constructor(noteService: NoteService) {
     this._noteService = noteService;
   }
 
-  execute(message: CreateNoteMessage) {
+  operation(){
+    return receiveOperation.newNote;
+  };
+
+  execute(message: CreateNoteMessage, client: WebSocket) {
     const name = message.data.name;
-    const notebook = new Notebook(name, new ParagraphCollection([new Paragraph('READY', new ParagraphResult(), '%dpl'),new SparkPara()]));
-    this._noteService.add(notebook, notebook.id());
+    const notebook = new NotebookImpl(name, [new ParagraphImpl('READY', undefined,'%dpl'), SparkPara]);
+    this._noteService.add(notebook, notebook.id);
 
     const msg : NoteCreatedMessage = {
       op: sendOperation.newNote,
-      data:{
-        note:notebook.serialized()
-      },
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
+      data:notebook,
     };
-    this.send(msg);
-  }
-
-  send(message: NoteCreatedMessage) {
-    this._client.send(JSON.stringify(message));
+    client.send(JSON.stringify(msg));
   }
 }

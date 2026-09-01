@@ -44,45 +44,37 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {InsertParagraphMessage} from '../../interfaces/receiveMessage';
 import {ParagraphAddedMessage} from '../../interfaces/sendMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
 import NoteService from '../../services/noteService';
-import Paragraph from '../../data/paragraph/paragraph';
-import ParagraphResult from '../../data/paragraph/paragraphResult';
+import ParagraphImpl from '../../data/paragraph/paragraphImpl';
 
-export default class InsertParagraphHandler implements Handler<InsertParagraphMessage,ParagraphAddedMessage>{
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.insertParagraph;
+export default class InsertParagraphHandler implements Handler<InsertParagraphMessage>{
   private readonly _noteService: NoteService;
 
-  constructor(client: WebSocket, noteService: NoteService) {
-    this._client = client;
+  constructor(noteService: NoteService) {
     this._noteService = noteService;
   }
 
-  execute(message: InsertParagraphMessage) {
+  operation(){
+    return receiveOperation.insertParagraph;
+  };
+
+  execute(message: InsertParagraphMessage, client: WebSocket) {
     const noteId = this._noteService.lastNoteId();
     const note = this._noteService.find(noteId);
-    const result = new ParagraphResult();
-    const paragraph = new Paragraph('READY', result);
-    note.paragraphs().addParagraph(paragraph, message.data.index);
-    this._noteService.update(note, note.id());
+    const paragraph = new ParagraphImpl('READY');
+    note.paragraphs.splice(message.data.index, 0, paragraph);
+    this._noteService.update(note, note.id);
     const msg : ParagraphAddedMessage = {
       op: sendOperation.paragraphAdded,
       data:{
-        paragraph: paragraph.serialized(),
+        paragraph: paragraph,
         index: message.data.index
       },
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
     };
-    this.send(msg);
-  }
-
-  send(message: ParagraphAddedMessage) {
-    this._client.send(JSON.stringify(message));
+    client.send(JSON.stringify(msg));
   }
 }

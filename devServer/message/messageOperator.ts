@@ -53,47 +53,43 @@ import RunParagraphHandler from './handlers/runParagraphHandler';
 import NewNoteHandler from './handlers/newNoteHandler';
 import FileService from '../services/fileService';
 import NoteService from '../services/noteService';
-import ParagraphUpdateResultHandler from './handlers/paragraphUpdateResultHandler';
+import ParagraphOutputRequestHandler from './handlers/paragraphOutputRequestHandler';
 import InsertParagraphHandler from './handlers/insertParagraphHandler';
-import {Handler} from '../interfaces/handler';
-import {ReceiveMessage} from '../interfaces/receiveMessage';
-import {SendMessage} from '../interfaces/sendMessage';
+import {Handler} from './handlers/handler';
 import CompletionListHandler from './handlers/completionListHandler';
 import EditorSettingsHandler from './handlers/editorSettingsHandler';
 
 
 export default class MessageOperator {
-  private readonly _handlers: Handler<ReceiveMessage, SendMessage>[];
+  private readonly _client: WebSocket;
+  private readonly _handlers: Handler<unknown>[];
   private readonly _errorHandler: ErrorHandler;
-  private readonly _handlerMap= new Map<string, Handler<ReceiveMessage, SendMessage>>();
 
   constructor(client: WebSocket, fileService: FileService) {
+    this._client = client;
     const noteService = new NoteService(fileService);
     this._handlers = [
-      new PingHandler(client),
-      new NoteHandler(client, noteService),
-      new NotesInfoHandler(client, noteService),
-      new HomeNoteHandler(client),
-      new RunParagraphHandler(client, noteService),
-      new ParagraphUpdateResultHandler(client),
-      new InsertParagraphHandler(client, noteService),
-      new NewNoteHandler(client, noteService),
-      new CompletionListHandler(client),
-      new EditorSettingsHandler(client)
+      new PingHandler(),
+      new NoteHandler(noteService),
+      new NotesInfoHandler(noteService),
+      new HomeNoteHandler(),
+      new RunParagraphHandler(noteService),
+      new ParagraphOutputRequestHandler(),
+      new InsertParagraphHandler(noteService),
+      new NewNoteHandler(noteService),
+      new CompletionListHandler(),
+      new EditorSettingsHandler()
     ];
-    this._errorHandler = new ErrorHandler(client);
-    this._handlers.forEach(handler => {
-      this._handlerMap.set(handler.operation, handler);
-    });
+    this._errorHandler = new ErrorHandler();
   }
 
-  handleMessage(message: ReceiveMessage) {
-    const handler = this._handlerMap.get(message.op);
+  handleMessage(message: object) {
+    const handler = this._handlers.find(h => h.operation() === message['op']);
     if(handler !== undefined) {
-      handler.execute(message);
+      handler.execute(message, this._client);
     }
     else{
-      this._errorHandler.execute(message);
+      this._errorHandler.execute(message, this._client);
     }
   }
 }

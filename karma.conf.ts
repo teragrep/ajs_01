@@ -21,7 +21,7 @@
 // generator-karma 0.8.3
 
 require('karma-spec-reporter');
-var webpackConfig = require('./webpack.config.ts')();
+var webpackConfig = require('./webpack.config.karma.ts')();
 
 module.exports = function(config) {
   'use strict';

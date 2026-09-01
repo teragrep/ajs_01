@@ -43,9 +43,11 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import angular from 'angular';
+
 angular.module('zeppelinWebApp.comToaster').service('ToasterService', ['$rootScope', ToasterService]);
 
-function ToasterService($rootScope) {
+export function ToasterService($rootScope) {
 
   const self = this;
   self.toaster = [];

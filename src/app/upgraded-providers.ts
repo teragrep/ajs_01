@@ -45,6 +45,7 @@
  */
 import {WsMessageListenerImpl} from './shared/components/websocket/wsMessageListenerImpl';
 import {WebsocketMessageService} from './shared/components/websocket/websocket-message.service';
+import {ToasterService} from './shared/components/Toaster/notifications.service';
 
 export function wsMessageListenerFactory(i) {
   return i.get('wsMessageListener');
@@ -64,5 +65,15 @@ export function WebsocketMessageFactory(i) {
 export const WebsocketMessageProvider = {
   provide: WebsocketMessageService,
   useFactory: WebsocketMessageFactory,
+  deps: ['$injector']
+};
+
+export function ToasterFactory(i) {
+  return i.get('ToasterService');
+}
+
+export const ToasterProvider = {
+  provide: ToasterService,
+  useFactory: ToasterFactory,
   deps: ['$injector']
 };

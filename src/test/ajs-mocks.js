@@ -56,3 +56,19 @@ beforeEach(angular.mock.module('zeppelinWebApp', function ($provide) {
     };
   });
 }));
+
+beforeEach(angular.mock.module('zeppelinWebApp', function ($provide) {
+  $provide.service('webSocketService', function () {
+    this.connected = () => {
+      return {
+        onStateChange: () => {},
+        value: () =>{}
+      };
+    };
+    this.connection = () => {
+      return {
+        addEventListener: (name, callback) => {},
+      };
+    };
+  });
+}));

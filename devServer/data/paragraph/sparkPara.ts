@@ -43,15 +43,9 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import Paragraph from './paragraph';
-import ParagraphResult from './paragraphResult';
-import {ResultType} from '../../types/resultData';
+import ParagraphImpl from './paragraphImpl';
 
-export default class SparkPara extends Paragraph{
-  constructor(){
-    const text = '%spark.conf';
-    const title  = 'hideMeSparkPinger';
-    const result = new ParagraphResult('SUCCESS', ResultType.SPARKPINGER);
-    super('FINISHED', result, text, title);
-  }
-}
+
+const text = '%spark.conf';
+const title  = 'hideMeSparkPinger';
+export const SparkPara = new ParagraphImpl('FINISHED', undefined, text, title);

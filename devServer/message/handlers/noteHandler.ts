@@ -44,36 +44,30 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {NoteMessage} from '../../interfaces/sendMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
 import NoteService from '../../services/noteService';
 import {GetNoteMessage} from '../../interfaces/receiveMessage';
 
-export default class NoteHandler implements Handler<GetNoteMessage, NoteMessage> {
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.getNote;
+export default class NoteHandler implements Handler<GetNoteMessage> {
   private readonly _noteService: NoteService;
 
-  constructor(client: WebSocket, noteService: NoteService) {
-    this._client = client;
+  constructor(noteService: NoteService) {
     this._noteService = noteService;
   }
 
-  execute(message: GetNoteMessage) {
+  operation(){
+    return receiveOperation.getNote;
+  };
+
+  execute(message: GetNoteMessage, client: WebSocket) {
     const noteId= message.data.id;
     const note = this._noteService.find(noteId);
     const msg: NoteMessage = {
       op: sendOperation.note,
-      data: {note: note.serialized()},
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
+      data: note,
     };
-    this.send(msg);
-  }
-
-  send(message: NoteMessage)  {
-    this._client.send(JSON.stringify(message));
+    client.send(JSON.stringify(msg));
   }
 }

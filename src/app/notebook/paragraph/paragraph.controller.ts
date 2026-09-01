@@ -62,14 +62,13 @@ function ParagraphCtrl($scope,
                        ToasterService,
                        noteVarShareService,
                        ParagraphDeleteService
-                       ) {
+) {
 
   const ANGULAR_FUNCTION_OBJECT_NAME_PREFIX = '_Z_ANGULAR_FUNC_';
   $rootScope.keys = Object.keys;
   $scope.parentNote = null;
   $scope.paragraph = {};
   $scope.paragraph.results = {};
-  $scope.paragraph.results.msg = [];
   $scope.originalText = '';
   $scope.editor = null;
   $scope.cursorPosition = null;
@@ -207,32 +206,6 @@ function ParagraphCtrl($scope,
       editorSetting.isOutputHidden = config.editorSetting['editOnDblClick'];
     }
   };
-
-  $scope.$on('updateParagraphOutput', function(event, data) {
-    if (data.data === '') {return;}
-    if ($scope.paragraph.id === data.paragraphId) {
-
-      if (!$scope.paragraph.results) {
-        $scope.paragraph.results = {};
-      }
-      if (!$scope.paragraph.results.msg) {
-        $scope.paragraph.results.msg = [];
-      }
-
-      $scope.paragraph.results.msg[data.index] = {
-        data: data.data,
-        type: data.type,
-      };
-
-      $rootScope.$broadcast(
-        'updateResult',
-        $scope.paragraph.results.msg[data.index],
-        $scope.paragraph.config.results[data.index],
-        $scope.paragraph,
-        data.index);
-
-    }
-  });
 
   $scope.getIframeDimensions = function() {
     if ($scope.asIframe) {
@@ -622,7 +595,7 @@ function ParagraphCtrl($scope,
   $scope.updateParagraphText = function(text:string) {
     $scope.paragraph.text = text;
     websocketMsgSrv.commitParagraph($scope.paragraph.id, $scope.paragraph.title, $scope.paragraph.text, $scope.paragraph.config, $scope.paragraph.settings,
-        $route.current.pathParams.noteId);
+      $route.current.pathParams.noteId);
   };
 
   $scope.sendPatch = function() {
@@ -734,7 +707,7 @@ function ParagraphCtrl($scope,
   $scope.goToSingleParagraph = function() {
     const noteId = $route.current.pathParams.noteId;
     const redirectToUrl = `${location.protocol}//${location.host}${location.pathname}#/notebook/${noteId
-      }/paragraph/${$scope.paragraph.id}?asIframe`;
+    }/paragraph/${$scope.paragraph.id}?asIframe`;
     $window.open(redirectToUrl);
   };
 
@@ -844,19 +817,19 @@ function ParagraphCtrl($scope,
   function isUpdateRequired(oldPara, newPara) {
     return newPara.id === oldPara.id &&
       (newPara.dateCreated !== oldPara.dateCreated ||
-      newPara.text !== oldPara.text ||
-      newPara.dateFinished !== oldPara.dateFinished ||
-      newPara.dateStarted !== oldPara.dateStarted ||
-      newPara.dateUpdated !== oldPara.dateUpdated ||
-      newPara.status !== oldPara.status ||
-      newPara.jobName !== oldPara.jobName ||
-      newPara.title !== oldPara.title ||
-      isEmpty(newPara.results) !== isEmpty(oldPara.results) ||
+        newPara.text !== oldPara.text ||
+        newPara.dateFinished !== oldPara.dateFinished ||
+        newPara.dateStarted !== oldPara.dateStarted ||
+        newPara.dateUpdated !== oldPara.dateUpdated ||
+        newPara.status !== oldPara.status ||
+        newPara.jobName !== oldPara.jobName ||
+        newPara.title !== oldPara.title ||
+        isEmpty(newPara.results) !== isEmpty(oldPara.results) ||
         !angular.equals(newPara.results, oldPara.results) ||
-      newPara.errorMessage !== oldPara.errorMessage ||
-      !angular.equals(newPara.settings, oldPara.settings) ||
-      !angular.equals(newPara.config, oldPara.config) ||
-      !angular.equals(newPara.runtimeInfos, oldPara.runtimeInfos));
+        newPara.errorMessage !== oldPara.errorMessage ||
+        !angular.equals(newPara.settings, oldPara.settings) ||
+        !angular.equals(newPara.config, oldPara.config) ||
+        !angular.equals(newPara.runtimeInfos, oldPara.runtimeInfos));
   }
 
   $scope.updateAllScopeTexts = function(oldPara, newPara) {
@@ -919,19 +892,16 @@ function ParagraphCtrl($scope,
     }
   };
 
-  $scope.updateParagraph = function(oldPara, newPara, updateCallback) {
-     // 1. can't update on revision view
+  $scope.updateParagraph = function(oldPara, newPara) {
+    // 1. can't update on revision view
     if ($scope.revisionView === true) {
       return;
     }
 
-     // 3. update texts managed by $scope
+    // 3. update texts managed by $scope
     $scope.updateAllScopeTexts(oldPara, newPara);
 
-     // 4. execute callback to update result
-    updateCallback();
-
-     // 5. update remaining paragraph objects
+    // 5. update remaining paragraph objects
     $scope.updateParagraphObjectWhenUpdated(newPara);
   };
 
@@ -941,41 +911,19 @@ function ParagraphCtrl($scope,
   };
 
   $scope.$on('updateParagraph', function(event, data) {
-    const newPara = data.paragraph;
-    if(newPara.id !== $scope.paragraph.id){
+    if(data.id !== $scope.paragraph.id){
       return;
     }
     const oldPara = $scope.paragraph;
 
-    updateParagraphStatus(newPara);
-    if(newPara.results === undefined) {return;}
+    updateParagraphStatus(data);
+    if(data.results === undefined) {return;}
 
-    if (!isUpdateRequired(oldPara, newPara)) {
+    if (!isUpdateRequired(oldPara, data)) {
 
       return;
     }
-
-    const updateCallback = () => {
-      // broadcast `updateResult` message to trigger result update
-      if (newPara.results && newPara.results.msg) {
-        //if newPara.results is undefined - this will cause a crash
-        for (const i in newPara.results.msg) {
-          if (Object.prototype.hasOwnProperty.call(newPara.results.msg, i)) {
-            const newResult = newPara.results.msg ? newPara.results.msg[i] : {};
-            const oldResult = oldPara.results && oldPara.results.msg
-              ? oldPara.results.msg[i] : {};
-            const newConfig = newPara.config.results ? newPara.config.results[i] : {};
-            const oldConfig = oldPara.config.results ? oldPara.config.results[i] : {};
-            if (!angular.equals(newResult, oldResult) ||
-              !angular.equals(newConfig, oldConfig)) {
-              $rootScope.$broadcast('updateResult', newResult, newConfig, newPara, parseInt(i));
-            }
-          }
-        }
-      }
-    };
-
-    $scope.updateParagraph(oldPara, newPara, updateCallback);
+    $scope.updateParagraph(oldPara, data);
   });
 
   $scope.$on('patchReceived', function(event, data) {
@@ -1112,8 +1060,8 @@ function ParagraphCtrl($scope,
       openEditorAndCloseTable($scope.paragraph);
       $timeout(
         $scope.$on('updateParagraph', function(event, data) {
-          deferred.resolve(data);
-        }
+            deferred.resolve(data);
+          }
         ), 1000);
 
       deferred.promise.then(function(data) {
@@ -1217,25 +1165,25 @@ function ParagraphCtrl($scope,
         break;
       case 'RTC':
         returnable = `in real-time between ${
-                      $scope.RTCNum} ${$scope.RTCMeasure
-                      } and the current moment`;
+          $scope.RTCNum} ${$scope.RTCMeasure
+        } and the current moment`;
         break;
       case 'RC':
         returnable = `in relative time from ${
-                      $scope.RCNum} ${$scope.RCMeasure
-                      }${$scope.RCSnap ? ' (snapped to the start of hour)' : ''
-                      } to ${$scope.RCTo==='Now'? 'the present.':'the start of hour.'}`;
+          $scope.RCNum} ${$scope.RCMeasure
+        }${$scope.RCSnap ? ' (snapped to the start of hour)' : ''
+        } to ${$scope.RCTo==='Now'? 'the present.':'the start of hour.'}`;
         break;
       case 'DC':
         pruneDate($scope.DC1);
         returnable = `records ${
           $scope.DCMeasure} ${pruneDate($scope.DC1)
-          }${$scope.DCMeasure==='between' ? ` and ${pruneDate($scope.DC2)}` : ''}`;
+        }${$scope.DCMeasure==='between' ? ` and ${pruneDate($scope.DC2)}` : ''}`;
         break;
       case 'DTC':
         returnable = `records ${
           $scope.DTCMeasure} ${pruneDate($scope.DTC1)} ${pruneTime($scope.DTC1T)
-          }${$scope.DTCMeasure==='between' ? ` and ${pruneDate($scope.DTC2)} ${pruneTime($scope.DTC2T)}` : ''}`;
+        }${$scope.DTCMeasure==='between' ? ` and ${pruneDate($scope.DTC2)} ${pruneTime($scope.DTC2T)}` : ''}`;
         break;
       case 'AC':
         returnable = 'advanced data expression. '+
@@ -1330,6 +1278,6 @@ function ParagraphCtrl($scope,
   }
 
   $scope.$watch('TimeSet', function (newVal, oldVal){
-      $scope.timesetExist = !!newVal;
+    $scope.timesetExist = !!newVal;
   });
 }

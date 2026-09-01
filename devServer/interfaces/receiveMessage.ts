@@ -66,14 +66,13 @@ export interface RunParagraphMessage extends BaseMessage {
   data: {id:string, title:string, paragraph:string};
 }
 
-export interface ParagraphUpdateResultMessage extends BaseMessage {
+export interface ParagraphOutputRequest extends BaseMessage {
   op: receiveOperation.paragraphUpdateResult;
   data: {
-    noteId: string,
-    paragraphId: string,
-    draw: number,
-    start: number,
-    length: number,
+    noteId: string
+    paragraphId: string
+    type: string
+    requestOptions:unknown
   };
 }
 
@@ -115,7 +114,7 @@ export type ReceiveMessage = PingMessage
   | GetNoteMessage
   | GetHomeNoteMessage
   | RunParagraphMessage
-  | ParagraphUpdateResultMessage
+  | ParagraphOutputRequest
   | InsertParagraphMessage
   | ListNotesMessage
   | NewNoteMessage

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-angular.module('zeppelinWebApp.comLogin', []).controller('LoginCtrl', ['$scope', '$rootScope', '$http', '$httpParamSerializer', 'baseUrlSrv', '$location', 'LoginService', '$timeout', LoginCtrl]);
+angular.module('zeppelinWebApp.comLogin', []).controller('LoginCtrl', ['$scope', '$rootScope', '$http', '$httpParamSerializer', 'baseUrlSrv', '$location', 'LoginService', '$timeout', 'authenticationServiceImpl', LoginCtrl]);
 
 
 function LoginCtrl($scope,
@@ -22,7 +22,8 @@ function LoginCtrl($scope,
                    baseUrlSrv,
                    $location,
                    LoginService,
-                   $timeout) {
+                   $timeout,
+                   authenticationServiceImpl) {
 
   const self = this;
 
@@ -42,12 +43,14 @@ function LoginCtrl($scope,
         'password': $scope.loginParams.password,
       }),
     }).then(function successCallback(response) {
-      $rootScope.ticket = response.data.body;
+      return authenticationServiceImpl.requestTicket();
+    }).then(() => {
+      const authentication = authenticationServiceImpl.authentication();
+      $rootScope.ticket = authentication.ticket();
       self.closeModal('loginModal');
       $rootScope.$broadcast('loginSuccess', true);
       $rootScope.userName = $scope.loginParams.userName;
       $scope.SigningIn = false;
-
       // redirect to the page from where the user originally was
       if ($location.search() && $location.search()['ref']) {
         $timeout(function() {
