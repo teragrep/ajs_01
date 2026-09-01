@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-/* Paragraphs */
+
 .batch-message{
   white-space: pre-line;
 }
@@ -154,6 +154,24 @@
 
 .dark-mode .jobs-icon {
   color: var(--tertiary-300);
+}
+
+/* Progress bar */
+
+.progress {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  z-index: 100;
+  border-radius: 0;
+  .progress-bar {
+    background-color: var(--primary-500);
+    z-index: 0;
+  }
+}
+
+.dark-mode .progress .progress-bar {
+  background-color: var(--secondary-500);
 }
 
 /* Paragraph as Iframe CSS */
