@@ -68,7 +68,16 @@ body {
 #nodePage,
 #repoPage,
 #searchResults {
-  margin-top: 90px;
+  margin-top: var(--navbar-height);
+}
+
+#homePage {
+  background-color: var(--grey-000);
+  height: calc(100vh - var(--navbar-height));
+  overflow: auto;
+  > .container {
+    min-height: calc(100vh - var(--navbar-height));
+  }
 }
 
 .body-as-iframe {
