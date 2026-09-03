@@ -45,7 +45,7 @@
  */
 
 .notebook-mt {
-  padding-top: calc(var(--note-action-height) + 2.75rem);
+  padding-top: calc(var(--navbar-height) + var(--note-action-height) + 2.75rem);
   transition: all 0.5s;
   &.collapsed {
     padding-top: 2.75rem;
