@@ -279,15 +279,22 @@ limitations under the License.
       </div>
       <!-- about dialog body -->
       <div class="modal-body">
-        <div class="row">
-          <div class="hidden-xs col-sm-4 d-flex align-items-center justify-content-center">
-            <img src="../../../../assets/images/avatar.png"
-                 class="logo"
-                 alt="Teragrep"
-                 title="Teragrep" />
+        <div class="row align-items-center">
+          <div class="hidden-xs col-sm-4 text-center">
+            <p ng-if="!isDarkMode">
+              <img src="../../../../assets/images/teragrep-mark.svg"
+                   class="logo"
+                   alt="Teragrep"
+                   title="Teragrep" />
+            </p>
+            <p ng-if="isDarkMode">
+              <img src="../../../../assets/images/teragrep-mark-white-color.svg"
+                   class="logo"
+                   alt="Teragrep"
+                   title="Teragrep" />
+            </p>
           </div>
           <div class="col-xs-12 col-sm-8 content">
-            <h2>Teragrep</h2>
             <p>
               <span id="i18n-14">
                 Version
