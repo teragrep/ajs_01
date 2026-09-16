@@ -62,83 +62,79 @@ describe('Controller: ParagraphCtrl', function() {
   };
 
   const paragraphExampleMock = {
-    paragraph:{
-      'text': '%dpl\nindex = test ',
-      'user': 'admin',
-      'dateUpdated': '2023-01-01T01:12:11+0000',
-      'progress': 0,
-      'config': {
-        'editorSetting': {
-          'language': 'text',
-          'editOnDblClick': false,
-          'completionKey': 'TAB',
-          'completionSupport': true
-        },
-        'colWidth': 12,
-        'editorMode': 'ace/mode/text',
-        'fontSize': 9,
-        'results': {},
-        'enabled': true,
-        'lineNumbers': true
+    'text': '%dpl\nindex = test ',
+    'user': 'admin',
+    'dateUpdated': '2023-01-01T01:12:11+0000',
+    'progress': 0,
+    'config': {
+      'editorSetting': {
+        'language': 'text',
+        'editOnDblClick': false,
+        'completionKey': 'TAB',
+        'completionSupport': true
       },
-      'settings': {
-        'params': {},
-        'forms': {}
-      },
-      'results': {
-        'code': 'SUCCESS',
-        'msg':
-          [{
-            'type': 'ANGULAR',
-            'data': '\n<div class="zeppelin-datatables"> <div class="dpl-table table-responsive"> <table id="DT_table_paragraph_123456789" class="table table-striped table-bordered"><thead><tr><th>test1</th><th>test2</th><th>index</th><th>_raw</th></tr></thead></table></div></div>'
-          }],
-      },
-      'apps': [],
-      'runtimeInfos': {},
-      'progressUpdateIntervalMs': 500,
-      'jobName': 'paragraph_123456789',
-      'id': 'paragraph_123456789',
-      'dateCreated': '2023-01-01T01:10:11+0000',
-      'dateStarted': '2023-01-01T01:11:11+0000',
-      'dateFinished': '2023-01-01T01:12:11+0000',
-      'status': 'FINISHED'
-    }
+      'colWidth': 12,
+      'editorMode': 'ace/mode/text',
+      'fontSize': 9,
+      'results': {},
+      'enabled': true,
+      'lineNumbers': true
+    },
+    'settings': {
+      'params': {},
+      'forms': {}
+    },
+    'results': {
+      'code': 'SUCCESS',
+      'msg':
+        [{
+          'type': 'ANGULAR',
+          'data': '\n<div class="zeppelin-datatables"> <div class="dpl-table table-responsive"> <table id="DT_table_paragraph_123456789" class="table table-striped table-bordered"><thead><tr><th>test1</th><th>test2</th><th>index</th><th>_raw</th></tr></thead></table></div></div>'
+        }],
+    },
+    'apps': [],
+    'runtimeInfos': {},
+    'progressUpdateIntervalMs': 500,
+    'jobName': 'paragraph_123456789',
+    'id': 'paragraph_123456789',
+    'dateCreated': '2023-01-01T01:10:11+0000',
+    'dateStarted': '2023-01-01T01:11:11+0000',
+    'dateFinished': '2023-01-01T01:12:11+0000',
+    'status': 'FINISHED'
   };
 
   const paragraphClearMock = {
-    paragraph:{
-      'text': '%dpl\nindex = test ',
-      'user': 'admin',
-      'dateUpdated': '2023-01-01T01:13:11+0000',
-      'progress': 0,
-      'config': {
-        'editorSetting': {
-          'language': 'text',
-          'editOnDblClick': false,
-          'completionKey': 'TAB',
-          'completionSupport': true
-        },
-        'colWidth': 12,
-        'editorMode': 'ace/mode/text',
-        'fontSize': 9,
-        'results': {},
-        'enabled': true,
-        'lineNumbers': true
+    'text': '%dpl\nindex = test ',
+    'user': 'admin',
+    'dateUpdated': '2023-01-01T01:13:11+0000',
+    'progress': 0,
+    'config': {
+      'editorSetting': {
+        'language': 'text',
+        'editOnDblClick': false,
+        'completionKey': 'TAB',
+        'completionSupport': true
       },
-      'settings': {
-        'params': {},
-        'forms': {}
-      },
-      'apps': [],
-      'runtimeInfos': {},
-      'progressUpdateIntervalMs': 500,
-      'jobName': 'paragraph_123456789',
-      'id': 'paragraph_123456789',
-      'dateCreated': '2023-01-01T01:13:11+0000',
-      'dateStarted': '2023-01-01T01:14:11+0000',
-      'dateFinished': '2023-01-01T01:15:11+0000',
-      'status': 'FINISHED'
-    }
+      'colWidth': 12,
+      'editorMode': 'ace/mode/text',
+      'fontSize': 9,
+      'results': {},
+      'enabled': true,
+      'lineNumbers': true
+    },
+    'settings': {
+      'params': {},
+      'forms': {}
+    },
+    'apps': [],
+    'runtimeInfos': {},
+    'progressUpdateIntervalMs': 500,
+    'jobName': 'paragraph_123456789',
+    'id': 'paragraph_123456789',
+    'dateCreated': '2023-01-01T01:13:11+0000',
+    'dateStarted': '2023-01-01T01:14:11+0000',
+    'dateFinished': '2023-01-01T01:15:11+0000',
+    'status': 'FINISHED'
   };
 
   const paragraphMock = {
@@ -291,7 +287,7 @@ describe('Controller: ParagraphCtrl', function() {
     scope.paragraph = paragraphMock;
     scope.revisionView = false;
     spyOn(scope, 'updateParagraph');
-    paragraphClearMock.paragraph.results = {};
+    paragraphClearMock.results = {};
     rootscope.$broadcast('updateParagraph', paragraphClearMock);
     expect(scope.updateParagraph).toHaveBeenCalled();
   });
@@ -308,24 +304,18 @@ describe('Controller: ParagraphCtrl', function() {
   it('update should call correct subfunctions', function() {
     scope.paragraph = paragraphExampleMock.paragraph;
     scope.revisionView = false;
-    const emptyCallback = function () {
-
-    };
-
     spyOn(scope, 'updateParagraphObjectWhenUpdated');
     spyOn(scope, 'updateAllScopeTexts');
-    scope.updateParagraph(paragraphExampleMock.paragraph, paragraphClearMock.paragraph, emptyCallback);
+    scope.updateParagraph(paragraphExampleMock.paragraph, paragraphClearMock.paragraph);
     expect(scope.updateParagraphObjectWhenUpdated).toHaveBeenCalled();
     expect(scope.updateAllScopeTexts).toHaveBeenCalled();
   });
 
   it('update should change the paragraph', function() {
-    scope.paragraph = paragraphExampleMock.paragraph;
-
-    expect(scope.paragraph).toEqual(paragraphExampleMock.paragraph);
-    paragraphClearMock.paragraph.results = {};
-    scope.updateParagraphObjectWhenUpdated(paragraphClearMock.paragraph);
-
+    scope.paragraph = paragraphExampleMock;
+    expect(scope.paragraph).toEqual(paragraphExampleMock);
+    paragraphClearMock.results = {};
+    scope.updateParagraphObjectWhenUpdated(paragraphClearMock);
     expect(scope.paragraph.results).toEqual({});
   });
 

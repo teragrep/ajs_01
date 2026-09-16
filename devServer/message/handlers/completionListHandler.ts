@@ -44,20 +44,17 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {CompletionMessage} from '../../interfaces/receiveMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
 import {CompletionListMessage} from '../../interfaces/sendMessage';
 
-export default class CompletionListHandler implements Handler<CompletionMessage, CompletionListMessage>{
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.completion;
+export default class CompletionListHandler implements Handler<CompletionMessage>{
+  operation(){
+    return receiveOperation.completion;
+  };
 
-  constructor(client: WebSocket) {
-    this._client = client;
-  }
-
-  execute(message:CompletionMessage): void {
+  execute(message:CompletionMessage, client: WebSocket): void {
     const msg: CompletionListMessage = {
       op: sendOperation.completionList,
       data: {
@@ -73,15 +70,8 @@ export default class CompletionListHandler implements Handler<CompletionMessage,
         ],
         id:message.data.id,
       },
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
     };
-    this.send(msg);
-  }
-
-  send(msg: CompletionListMessage): void {
-    this._client.send(JSON.stringify(msg));
+    client.send(JSON.stringify(msg));
   }
 }
 

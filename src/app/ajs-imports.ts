@@ -103,6 +103,8 @@ import './app.controller';
 import './home/home.controller';
 import './notebook/notebook.controller';
 
+import './ui/angularJs/angularPlugin.ajs';
+
 import './notebook/paragraph/result/baseClasses/visualization';
 import './notebook/paragraph/result/baseClasses/visualization-nvd3chart';
 import './notebook/paragraph/result/barchart/visualization-barchart';

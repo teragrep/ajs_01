@@ -45,9 +45,8 @@
  */
 import BaseMessage from './baseMessage';
 import {sendOperation} from '../message/webSocketOperations';
-import {NotebookDTO} from '../types/notebookDTO';
-import {ParagraphDTO} from '../types/paragraphDTO';
-import {ResultType, ResultData} from '../types/resultData';
+import {NotebookDTO} from '../data/note/notebookDTO';
+import {ParagraphDTO} from '../data/paragraph/paragraphDTO';
 
 export interface PongMessage extends BaseMessage {
   op: sendOperation.pong;
@@ -64,16 +63,19 @@ export interface NoteMessage extends BaseMessage{
   data: { note:NotebookDTO} | object ; // one use-case is for sending empty object -> {}
 }
 
-export interface ParagraphUpdateOutputMessage extends BaseMessage{
-  op: sendOperation.paragraphUpdateOutput;
+export interface ParagraphOutputMessage extends BaseMessage{
+  op: sendOperation.paragraphOutput;
   data: {
-    data: ResultData,
-    index:number,
     noteId:string,
-    paragraphId:string,
-    type: ResultType
+    paragraphId: string,
+    result:{
+      type: string,
+      data: unknown,
+      options?: unknown
+    }
   };
 }
+
 
 export interface ParagraphAddedMessage extends BaseMessage{
   op: sendOperation.paragraphAdded;
@@ -82,7 +84,7 @@ export interface ParagraphAddedMessage extends BaseMessage{
 
 export interface ParagraphMessage extends BaseMessage{
   op: sendOperation.paragraph;
-  data: {paragraph: ParagraphDTO};
+  data: ParagraphDTO;
 }
 
 export interface ProgressMessage extends BaseMessage{
@@ -96,7 +98,7 @@ export interface ErrorMessage extends BaseMessage {
 
 export interface NewNoteMessage extends BaseMessage {
   op: sendOperation.newNote;
-  data: { note: NotebookDTO };
+  data: NotebookDTO;
 }
 
 export interface CompletionListMessage extends BaseMessage {
@@ -123,7 +125,7 @@ export type SendMessage = PongMessage
   | NotesInfoMessage
   | NoteMessage
   | ParagraphMessage
-  | ParagraphUpdateOutputMessage
+  | ParagraphOutputMessage
   | ParagraphAddedMessage
   | ProgressMessage
   | ErrorMessage

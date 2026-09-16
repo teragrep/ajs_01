@@ -44,56 +44,48 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
-import {ParagraphMessage, ParagraphUpdateOutputMessage, ProgressMessage} from '../../interfaces/sendMessage';
+import {Handler} from './handler';
+import {ParagraphMessage, ProgressMessage} from '../../interfaces/sendMessage';
 import {RunParagraphMessage} from '../../interfaces/receiveMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
-import Paragraph from '../../data/paragraph/paragraph';
-import DataService from '../../services/dataService';
+import ParagraphImpl from '../../data/paragraph/paragraphImpl';
+import {DataTablesService} from '../../services/dataService/dataTablesService';
+import DataTablesServiceImpl from '../../services/dataService/dataTablesServiceImpl';
 import NoteService from '../../services/noteService';
-import {PaginatedData, RawData, ResultData, ResultType} from '../../types/resultData';
-import ParagraphResult from '../../data/paragraph/paragraphResult';
+import {OutputType} from '../../../src/app/objects/output/outputType';
 
-type SentMessages = ParagraphMessage | ProgressMessage | ParagraphUpdateOutputMessage;
-
-export default class RunParagraphHandler implements Handler<RunParagraphMessage, SentMessages>{
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.runParagraph;
+export default class RunParagraphHandler implements Handler<RunParagraphMessage>{
   private readonly _noteService: NoteService;
-  private readonly _dataService: DataService;
-  private readonly _columnCount = 10; // arbitrary
+  private readonly _dataTablesService: DataTablesService;
   private readonly _rowCount = 1000; // arbitrary
-  private readonly _headers: string[];
-  private readonly _baseData: RawData;
+  private readonly _baseData: object[];
 
-  constructor(client, noteService: NoteService) {
-    this._client = client;
+  constructor(noteService: NoteService) {
     this._noteService = noteService;
-    this._dataService = new DataService();
-    this._headers = this._dataService.headers(this._columnCount);
-    this._baseData = this._dataService.rawData(this._columnCount, this._rowCount);
+    this._dataTablesService = new DataTablesServiceImpl();
+    this._baseData = this._dataTablesService.rawData(this._rowCount);
   }
 
-  execute(message: RunParagraphMessage): void {
+  operation(){
+    return receiveOperation.runParagraph;
+  }
+
+  execute(message: RunParagraphMessage, client: WebSocket): void {
     const paragraphId = message.data.id;
     const title = message.data.title;
     const text = message.data.paragraph;
-    const messageQueue: SentMessages[] = [];
-    const result1 = new ParagraphResult();
-    const paragraph = new Paragraph('PENDING', result1, text, title, paragraphId);
-    messageQueue.push(this.paraMessage(paragraph, message));
+    const messageQueue: object[] = [];
+    const paragraph = new ParagraphImpl('PENDING', undefined, text, title, paragraphId);
+    messageQueue.push(this.paraMessage(paragraph));
 
-    paragraph.updateStatus('RUNNING');
-    paragraph.updateProgress(0);
-    messageQueue.push(this.paraMessage(paragraph, message));
+    paragraph.status = 'RUNNING';
+    paragraph.progress = 0;
+    messageQueue.push(this.paraMessage(paragraph));
 
     for (let i = 1; i < 20; i++) {
       const progress: ProgressMessage = {
         op: sendOperation.progress,
         data:{progress: i*5, id:paragraphId},
-        ticket: message.ticket,
-        principal: message.principal,
-        roles: message.roles,
       };
       messageQueue.push(progress);
     }
@@ -102,73 +94,65 @@ export default class RunParagraphHandler implements Handler<RunParagraphMessage,
 
     for (let i = 1; i < draws; i++) {
       const index = messageQueue.length / draws;
-
-      const data = {
-        headers: this._headers,
-        data: this._dataService.paginated(this._baseData, 0, i*2),
-        draw: i,
-        recordsTotal: this._rowCount,
-        recordsFiltered: this._rowCount,
-      };
-
-      const updateOutputMessage: ParagraphUpdateOutputMessage = {
-        op: sendOperation.paragraphUpdateOutput,
-        data:{
-          data: data,
-          noteId:this._noteService.lastNoteId(),
-          paragraphId: paragraphId,
-          index: 0,
-          type: ResultType.JSONTABLE
+      const updateOutputMessage = {
+        op: sendOperation.paragraphOutput,
+        data: {
+          noteId: this._noteService.lastNoteId(),
+          paragraphId: message.data.id,
+          output:{
+            type: OutputType.dataTables,
+            data: this._dataTablesService.paginated(this._baseData, 0, i*8, i),
+            options: this._dataTablesService.options(this._baseData),
+            isAggregated: true
+          }
         },
-        ticket: message.ticket,
-        principal: message.principal,
-        roles: message.roles,
       };
+
       messageQueue.splice(i*index,0, updateOutputMessage);
     }
-    const resultData: PaginatedData = {
-      headers: this._headers,
-      data: this._dataService.paginated(this._baseData, 0, 25),
-      draw: draws,
-      recordsTotal: this._rowCount,
-      recordsFiltered: this._rowCount,
+    const data2 = this._dataTablesService.paginated(this._baseData, 0, 50, draws);
+    const output2 = {data: data2, options: this._dataTablesService.options(this._baseData), type:OutputType.dataTables, isAggregated:true};
+    paragraph.status = 'FINISHED';
+    paragraph.progress = 100;
+    paragraph.output = output2;
+
+    const updateOutputMessage = {
+      op: sendOperation.paragraphOutput,
+      data: {
+        noteId: this._noteService.lastNoteId(),
+        paragraphId: message.data.id,
+        output:{data: data2, options: this._dataTablesService.options(this._baseData), type:OutputType.dataTables, isAggregated:true}
+      },
     };
-    const result2 = new ParagraphResult('SUCCESS', ResultType.JSONTABLE, resultData);
-    paragraph.updateStatus('FINISHED');
-    paragraph.updateProgress(100);
-    paragraph.updateResult(result2);
-    messageQueue.push(this.paraMessage(paragraph, message));
+
+    messageQueue.push(updateOutputMessage);
+    messageQueue.push(this.paraMessage(paragraph));
     this.updateNotebook(paragraph);
-    this.emitMessageQueue(messageQueue);
+    this.emitMessageQueue(messageQueue, client);
   }
 
-  send(msg: SentMessages){
-    this._client.send(JSON.stringify(msg));
-  }
-
-  private updateNotebook(paragraph: Paragraph){
+  private updateNotebook(paragraph: ParagraphImpl){
     const noteId = this._noteService.lastNoteId();
     const notebook = this._noteService.find(noteId);
-    notebook.paragraphs().updateParagraph(paragraph.id(), paragraph);
-    this._noteService.update(notebook, notebook.id());
+
+    const paragraphIndex = notebook.paragraphs.findIndex(p => p.id === paragraph.id);
+    notebook.paragraphs.splice(paragraphIndex,1, paragraph);
+    this._noteService.update(notebook, notebook.id);
   }
 
-  private emitMessageQueue(messageQueue: SentMessages[]) {
+  private emitMessageQueue(messageQueue: object[], client: WebSocket) {
     for(let i = 0; i < messageQueue.length; i++) {
       const timeout =  (i + 1) * 1000;
       setTimeout(() => {
-        this.send(messageQueue[i]);
+        client.send(JSON.stringify(messageQueue[i]));
       }, timeout);
     }
   }
 
-  private paraMessage(paragraph:Paragraph, receivedMessage:RunParagraphMessage): ParagraphMessage{
+  private paraMessage(paragraph:ParagraphImpl): ParagraphMessage {
     return {
       op: sendOperation.paragraph,
-      data: {paragraph: paragraph.serialized()},
-      ticket: receivedMessage.ticket,
-      principal: receivedMessage.principal,
-      roles: receivedMessage.roles,
+      data: JSON.parse(JSON.stringify(paragraph)),
     };
   }
 }

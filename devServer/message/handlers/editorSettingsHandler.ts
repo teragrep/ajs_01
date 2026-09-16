@@ -43,23 +43,21 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {EditorSettingMessage as sentEditorSettings} from '../../interfaces/sendMessage';
 import {EditorSettingMessage as receivedEditorSettings} from '../../interfaces/receiveMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
 import {WebSocket} from 'ws';
 
-export default class EditorSettingsHandler implements Handler<receivedEditorSettings, sentEditorSettings> {
-  operation: receiveOperation = receiveOperation.editorSetting;
-  private readonly _client: WebSocket;
+export default class EditorSettingsHandler implements Handler<receivedEditorSettings> {
   private readonly _supportedLanguages: string[] = ['sql', 'scala', 'python'];
   private readonly _defaultLanguage: string = 'text';
 
-  constructor(client: WebSocket) {
-    this._client = client;
-  }
+  operation(){
+    return receiveOperation.editorSetting;
+  };
 
-  execute(message: receivedEditorSettings): void {
+  execute(message: receivedEditorSettings, client: WebSocket): void {
     const language = this.parseLanguage(message.data.paragraphText);
     const msg: sentEditorSettings = {
       op:sendOperation.editorSetting,
@@ -72,15 +70,8 @@ export default class EditorSettingsHandler implements Handler<receivedEditorSett
         },
         paragraphId:message.data.paragraphId
       },
-      ticket:'anoymous',
-      principal:'anoymous',
-      roles:''
     };
-    this.send(msg);
-  }
-
-  send(message: sentEditorSettings): void {
-    this._client.send(JSON.stringify(message));
+    client.send(JSON.stringify(msg));
   }
 
   private parseLanguage(text:string):string{

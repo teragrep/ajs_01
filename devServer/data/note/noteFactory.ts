@@ -43,20 +43,25 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import Notebook from './notebook';
-import ParagraphCollection from '../paragraph/paragraphCollection';
+import NotebookImpl from './notebookImpl';
+import ParagraphFactory from '../paragraph/paragraphFactory';
+import {NotebookDTO} from './notebookDTO';
 
 export default class NoteFactory{
+  private readonly _paragraphFactory: ParagraphFactory;
 
-  constructor() {}
+  constructor() {
+    this._paragraphFactory = new ParagraphFactory();
+  }
 
-  seed(paragraphs: ParagraphCollection){
-    const notes:Notebook[] = [];
+  seed(){
+    const notes:NotebookDTO[] = [];
     const noteCount = 5;
+    const paragraphs = this._paragraphFactory.paragraphCollection();
     for(let i= 0; i < noteCount; i++){
       const id = Math.random().toString(36).slice(2, 8);
       const name = Math.random().toString(36).slice(2, 7);
-      const note = new Notebook(name, paragraphs, id);
+      const note = new NotebookImpl(name, paragraphs, id);
       notes.push(note);
     }
     return notes;

@@ -11,7 +11,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import Visualization from '../baseClasses/visualization';
 import d3 from 'd3';
 import _ from 'lodash';

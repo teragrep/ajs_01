@@ -44,40 +44,34 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {NotesInfoMessage} from '../../interfaces/sendMessage';
 import {ListNotesMessage} from '../../interfaces/receiveMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
 import NoteService from '../../services/noteService';
 
-export default class NotesInfoHandler implements Handler<ListNotesMessage, NotesInfoMessage>{
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.listNotes;
+export default class NotesInfoHandler implements Handler<ListNotesMessage>{
   private readonly _noteService: NoteService;
 
-  constructor(client: WebSocket, noteService: NoteService) {
-    this._client = client;
+  constructor(noteService: NoteService) {
     this._noteService = noteService;
   }
 
-  execute(message: ListNotesMessage) {
+  operation(){
+    return receiveOperation.listNotes;
+  };
+
+  execute(message: ListNotesMessage, client: WebSocket) {
     const notes = this._noteService.all();
     const data:{id:string, isTrash:boolean, name:string, path:string }[] = [];
     for (const note of notes){
-      data.push(note.info());
+      const info = {id:note.id, isTrash:false, name:note.name, path:note.path };
+      data.push(info);
     }
     const msg: NotesInfoMessage =  {
       op: sendOperation.notesInfo,
       data: {notes: data},
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
     };
-    this.send(msg);
+    client.send(JSON.stringify(msg));
   }
-
-  send(msg: NotesInfoMessage) {
-    this._client.send(JSON.stringify(msg));
-  }
-
 }

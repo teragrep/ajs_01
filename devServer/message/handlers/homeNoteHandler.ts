@@ -44,31 +44,21 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {Handler} from '../../interfaces/handler';
+import {Handler} from './handler';
 import {NoteMessage} from '../../interfaces/sendMessage';
 import {receiveOperation, sendOperation} from '../webSocketOperations';
 import {GetHomeNoteMessage} from '../../interfaces/receiveMessage';
 
-export default class HomeNoteHandler implements Handler<GetHomeNoteMessage, NoteMessage>{
-  private readonly _client: WebSocket;
-  readonly operation = receiveOperation.getHomeNote;
+export default class HomeNoteHandler implements Handler<GetHomeNoteMessage>{
+  operation(){
+    return receiveOperation.getHomeNote;
+  };
 
-  constructor(client: WebSocket) {
-    this._client = client;
-  }
-
-  execute(message: GetHomeNoteMessage) {
+  execute(message: GetHomeNoteMessage, client: WebSocket) {
     const msg: NoteMessage = {
       op: sendOperation.note,
       data: {},
-      ticket: message.ticket,
-      principal: message.principal,
-      roles: message.roles,
     };
-    this.send(msg);
-  }
-
-  send(message: NoteMessage) {
-    this._client.send(JSON.stringify(message));
+    client.send(JSON.stringify(msg));
   }
 }

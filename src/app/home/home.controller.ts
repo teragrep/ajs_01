@@ -58,6 +58,7 @@ function HomeCtrl($scope,
   $scope.query = {q: ''};
 
   $scope.initHome = function() {
+    websocketMsgSrv.getNoteList();
     vm.noteCustomHome = false;
   };
 

@@ -43,42 +43,33 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import Paragraph from './paragraph';
-import SparkPara from './sparkPara';
-import DataService from '../../services/dataService';
-import ParagraphCollection from './paragraphCollection';
-import ParagraphResult from './paragraphResult';
-import {AggregatedData, PaginatedData, ResultType} from '../../types/resultData';
+import ParagraphImpl from './paragraphImpl';
+import {SparkPara} from './sparkPara';
+import {DataTablesService} from '../../services/dataService/dataTablesService';
+import DataTablesServiceImpl from '../../services/dataService/dataTablesServiceImpl';
+import {OutputType} from '../../../src/app/objects/output/outputType';
 
 export default class ParagraphFactory{
-
-  private readonly _sparkPara: Paragraph;
-  private readonly _dataService : DataService;
+  private readonly _dataTablesService : DataTablesService;
 
   constructor() {
-    this._sparkPara = new SparkPara();
-    this._dataService = new DataService();
+    this._dataTablesService = new DataTablesServiceImpl();
   }
 
-  paragraphCollection(){
-    const code = 'SUCCESS';
-    const paginatedData: PaginatedData = {
-      headers:this._dataService.headers(10),
-      data: this._dataService.paginated(this._dataService.rawData(10, 25), 0, 25),
-      draw: 1,
-      recordsTotal: 1000,
-      recordsFiltered: 1000,
+  paragraphCollection() {
+    const baseData = this._dataTablesService.rawData(50);
+    const output1 = {
+      type: OutputType.dataTables,
+      data: this._dataTablesService.paginated(baseData, 0, 50,1),
+      options: this._dataTablesService.options(baseData),
+      isAggregated: true,
     };
-    const result1 = new ParagraphResult(code, ResultType.JSONTABLE, paginatedData);
-    const para1 = new Paragraph('FINISHED', result1,'%dpl\n *raw data query*', '');
-
-    const aggregatedData: AggregatedData = this._dataService.aggregatedData(10, 1000);
-    const result2 = new ParagraphResult(code, ResultType.TABLE, aggregatedData);
-    const para2 = new Paragraph('FINISHED', result2, '%dpl\n *Aggregated data query*', '');
-
-    const result3 = new ParagraphResult('ERROR', ResultType.TEXT, 'foo bar text test test 123 123 123 1');
-    const para3 = new Paragraph('FINISHED', result3,'%dpl\n *raw data query*', '');
-
-    return new ParagraphCollection([para1, para2, para3, this._sparkPara]);
+    const para1 = new ParagraphImpl('FINISHED', output1,'%dpl\n *raw data query*', '');
+    const output2 = {
+      type: OutputType.text,
+      data: 'Error: 1291kmfv910yht1 g1rj190+2u90',
+    };
+    const para2 = new ParagraphImpl('FINISHED', output2,'%dpl\n *raw data query fails*', '');
+    return [para1, para2, SparkPara];
   }
 }

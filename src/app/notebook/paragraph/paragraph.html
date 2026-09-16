@@ -55,7 +55,7 @@ limitations under the License.
   </div>
   <div ng-include src="'/app/notebook/paragraph/paragraph-progress-bar.html'"></div>
   <div class="paragraph-output" ng-show="!paragraph.config.tableHide">
-    <div ng-include src="'/app/notebook/paragraph/result/result.html'"></div>
+    <web-app-view-port [container-id]="paragraph.id">
     <div id="{{paragraph.id}}_error"
          class="error text"
          ng-bind="paragraph.errorMessage">

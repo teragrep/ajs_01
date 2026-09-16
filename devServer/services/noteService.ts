@@ -45,13 +45,9 @@
  */
 import {SerializedDataService} from '../interfaces/common';
 import FileService from './fileService';
-import {NotebookDTO} from '../types/notebookDTO';
-import Notebook from '../data/note/notebook';
-import Paragraph from '../data/paragraph/paragraph';
-import ParagraphCollection from '../data/paragraph/paragraphCollection';
-import ParagraphResult from '../data/paragraph/paragraphResult';
+import {NotebookDTO} from '../data/note/notebookDTO';
 
-export default class NoteService implements SerializedDataService<Notebook>{
+export default class NoteService implements SerializedDataService<NotebookDTO>{
   private readonly _fileService: FileService;
   private _lastNoteId: string;
 
@@ -59,47 +55,25 @@ export default class NoteService implements SerializedDataService<Notebook>{
     this._fileService = fileService;
   }
 
-  all(){
-    const notes = this._fileService.readAll<NotebookDTO>();
-    const notebookList: Notebook[] =[];
-    for(const note of notes){
-      notebookList.push(this.instantiateNotebook(note));
-    }
-    return notebookList;
+  all(): NotebookDTO[]{
+    return this._fileService.readAll<NotebookDTO>();
   }
 
-  find(notebookId:string){
+  find(notebookId:string): NotebookDTO{
     const notebook = this._fileService.read<NotebookDTO>(notebookId);
     this._lastNoteId = notebookId;
-    return this.instantiateNotebook(notebook);
+    return notebook;
   }
 
-  add(notebook:Notebook, id:string){
-    this._fileService.write<NotebookDTO>(notebook.serialized(), id, false);
+  add(notebook:NotebookDTO, id:string){
+    this._fileService.write<NotebookDTO>(notebook, id, false);
   }
 
-  update(notebook:Notebook, id:string){
-    this._fileService.write<NotebookDTO>(notebook.serialized(), id, true);
+  update(notebook:NotebookDTO, id:string){
+    this._fileService.write<NotebookDTO>(notebook, id, true);
   }
 
   lastNoteId(){
     return this._lastNoteId;
-  }
-
-  private instantiateNotebook(notebookData:NotebookDTO): Notebook{
-    const paragraphs = [];
-    for(const paragraph of notebookData.paragraphs){
-      let result: ParagraphResult;
-      if(paragraph.results !== undefined && paragraph.results.code !== undefined  && paragraph.results.msg !== undefined){
-        result = new ParagraphResult(paragraph.results.code, paragraph.results.msg[0].type, paragraph.results.msg[0].data);
-      }
-      else{
-        result = new ParagraphResult();
-      }
-      const para = new Paragraph(paragraph.status, result, paragraph.text, paragraph.title,paragraph.id);
-      paragraphs.push(para);
-    }
-    const paraCollection = new ParagraphCollection(paragraphs);
-    return new Notebook(notebookData.name, paraCollection, notebookData.id);
   }
 }

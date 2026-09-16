@@ -45,6 +45,7 @@
  */
 'use strict';
 
+const { AngularWebpackPlugin } = require('@ngtools/webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -65,7 +66,7 @@ var config = {
     vendor: [
       'angular',
       'jquery',
-      'jquery-ui/jquery-ui', // TODO update
+      'jquery-ui/jquery-ui',
       'ace-builds/src-noconflict/ace',
       'ace-builds/src-noconflict/ext-language_tools',
 
@@ -88,9 +89,9 @@ var config = {
       'angular-route/angular-route',
       'angular-sanitize/angular-sanitize',
       'angular-touch/angular-touch',
-      'angular-ui-ace/ui-ace', // TODO investigate alternatives
+      'angular-ui-ace/ui-ace',
       'd3/d3',
-      // TODO replace removed elastic input with CSS
+
       'datatables.net-bs5',
       'datatables.net-buttons-bs5',
       'datatables.net-buttons/js/buttons.colVis.mjs',
@@ -102,10 +103,10 @@ var config = {
 
 
       'jsdiff/diff',
-      'lodash/lodash', // TODO update
+      'lodash/lodash',
       'ng-sortable/dist/ng-sortable',
       'nvd3/build/nv.d3',
-      'select2/dist/js/select2', // TODO investigate alternatives
+      'select2/dist/js/select2',
 
       'cron-parser',
     ],
@@ -154,11 +155,13 @@ var config = {
   },
 
   plugins: [
+    new AngularWebpackPlugin({
+      tsconfig: './tsconfig.json',
+    }),
     new CopyPlugin({
       patterns: [
         { from: "node_modules/ace-builds/src-noconflict/mode-*.js", to: "[name][ext]" },
         { from: './src/assets', to: 'assets' },
-        //{ from: "src/assets/styles/ace-teragrep/theme-teragrep.js", to: "[name][ext]" } // TODO Fix theme-teragrep.js
       ],
     }),
     new HtmlWebpackPlugin({
@@ -190,7 +193,10 @@ var config = {
   ],
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: 'ts-loader' },
+      {
+        test: /\.[jt]sx?$/,
+        loader: '@ngtools/webpack',
+      },
       {
         test: require.resolve('headroom.js'),
         use: 'imports-loader?this=>window,define=>false,exports=>false'
