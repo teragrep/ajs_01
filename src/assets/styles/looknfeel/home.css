@@ -66,6 +66,16 @@
 
 /* front page */
 
+.login {
+  min-height: inherit;
+  padding-bottom: var(--navbar-height); /* gives the illusion that the content is vertically centered */
+}
+
+.home-start {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
 .home-some {
   .fas, .fab {
     color: var(--primary-400);
@@ -85,113 +95,39 @@
   }
 }
 
-/* Notebook buttons */
-
-.btn-import, .btn-create {
-  background: var(--primary-700);
-  color: var(--primary-100);
-  border-color: var(--primary-700);
-  padding: 15px 20px;
-  border-radius: 10px;
-  font-size: 16px;
-  text-transform: uppercase;
-  font-weight: 500;
-  transition: all 0.1s;
-  &:hover, &:active, &:focus {
-    background: var(--primary-800);
-    border-color: var(--primary-800);
-    color: var(--grey-000);
-    text-decoration: none;
-  }
-  .fas {
-    font-size: 16px;
-    line-height: normal;
-    color: var(--primary-300);
-  }
-}
-
-.dark-mode .btn-import,
-.dark-mode .btn-create {
-  background: var(--tertiary-200);
-  border-color: var(--tertiary-200);
-  color: var(--tertiary-900);
-  transition: all 0.1s;
-  &:hover, &:active, &:focus {
-    background: var(--tertiary-300);
-    border-color: var(--tertiary-300);
-  }
-  .fas {
-    color: var(--tertiary-600);
-  }
-}
-
-/* Sidebar */
-
-.sidebar {
-  background: var(--grey-200);
-  padding: 30px 35px 20px;
-  border-radius: 20px;
-  .fas, .far, .fab {
-    margin-right: 10px;
-    color: var(--primary-400);
-  }
-  p {
-    line-height: 22px;
-  }
-}
-
-.dark-mode .sidebar {
-  background: var(--dm-grey-600);
-  .fas, .far, .fab {
-    color: var(--tertiary-500);
-  }
-}
-
 /* Home's notebook list */
 
-.notebook-reload {
-  font-size: 0.7em;
-  cursor: pointer;
-  color: var(--primary-500);
-  &:hover {
-    color: var(--primary-600);
-  }
-  .fas {
-    color: var(--primary-300);
-  }
-}
-
-.dark-mode .notebook-reload {
-  color: var(--tertiary-400);
-  &:hover {
-    color: var(--tertiary-300);
-  }
-  .fas {
-    color: var(--tertiary-500);
-  }
+.notebook-list {
+  padding-bottom: 3rem;
 }
 
 .home-body-text {
   .filter-names .form-control-search {
-    position: absolute;
-    margin: 14px 0 0 16px;
+    position: relative;
+    top: 2rem;
+    left: 1rem;
     font-size: 14px;
     color: var(--grey-500);
   }
   .filter-names input {
-    padding: 10px 15px 10px 40px;
-    border-radius: 30px;
+    background-color: var(--grey-200);
+    border-color: var(--grey-200);
+    padding-left: 2.5rem;
+    &::placeholder {
+      color: var(--grey-600);
+    }
   }
 }
 
 .dark-mode .home-body-text {
   .filter-names .form-control-search {
-    color: var(--dm-grey-100);
+    color: var(--dm-grey-300);
   }
   .filter-names input {
-    border: 2px solid var(--dm-grey-500);
+    background-color: var(--dm-grey-800);
+    border: 1px solid var(--dm-grey-800);
     &::placeholder {
-      color: var(--dm-grey-300);
+      color: var(--dm-grey-400);
     }
   }
 }

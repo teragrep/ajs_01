@@ -12,18 +12,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div id="homePage" class="container-fluid px-5">
-  <div ng-controller="HomeCtrl as home"
-       data-ng-init="initHome()"
-       class="box my-5">
-    <div class="row">
-      <!-- before signing in -->
-      <div ng-if="!ticket" class="col-lg-5">
+<div id="homePage"
+     ng-controller="HomeCtrl as home"
+     data-ng-init="initHome()">
+  <div class="container">
+    <!-- before signing in -->
+    <div class="row login align-items-center"
+         ng-if="!ticket">
+      <div class="col-lg-5">
         <img src="../../assets/images/home.svg"
              class="img-fluid"
              alt="grep your data and create pivot charts" />
       </div>
-      <div ng-if="!ticket" class="col align-self-center text-center text-lg-start">
+      <div class="col text-center text-lg-start">
         <h1 class="mb-3">
           Know Everything
         </h1>
@@ -55,60 +56,53 @@ limitations under the License.
           </div>
         </div>
       </div>
-      <!-- after signing in -->
-      <div ng-if="ticket" class="home-body-text col-12">
-        <h1 class="mb-3" id="welcome">
-          Welcome to Teragrep
-        </h1>
-        <!-- Import and create notebooks -->
-        <div class="mb-5 d-grid gap-2 d-lg-block">
-          <button class="btn btn-import me-lg-2"
-                  ng-click="openImportModal()">
-            <i class="fas fa-upload me-2"></i>
-            Import a notebook
-          </button>
-          <button class="btn btn-create"
-                  ng-click="createNote()">
-            <i class="fas fa-book me-2"></i>
-            Create a new notebook
-          </button>
-        </div>
-        <h2 class="d-flex align-items-center">
-          Notebooks
-          <small class="notebook-reload ms-3">
-            <a ng-click="reloadNoteList();"
-               title="Reload notes from storage">
-              <i class="me-1"
-                 ng-class="isReloadingNotes ? 'fas fa-sync-alt fa-spin' : 'fas fa-sync-alt'"></i>
-              Refresh
-            </a>
-          </small>
-        </h2>
-        <!-- Search notebooks by their name -->
-        <div class="filter-names">
-          <form class="mb-3">
-            <span class="form-control-search">
-              <i class="fas fa-magnifying-glass"></i>
-            </span>
-            <input type="text"
-                   class="note-name-query form-control"
-                   ng-click="$event.stopPropagation()"
-                   placeholder="Search for a notebook"
-                   ng-model="$parent.query.q"
-                   ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 } }" />
-          </form>
+    </div>
+    <!-- after signing in -->
+    <div class="row"
+         ng-if="ticket">
+      <div class="home-body-text text-center col-12">
+        <div class="home-start">
+          <h1 class="mb-3" id="welcome">
+            Welcome to Teragrep
+          </h1>
+          <!-- Search notebooks by their name -->
+          <div class="filter-names">
+            <form class="text-start mb-3">
+          <span class="form-control-search">
+            <i class="fas fa-magnifying-glass"></i>
+          </span>
+              <input type="text"
+                     class="note-name-query form-control form-control-lg"
+                     ng-click="$event.stopPropagation()"
+                     placeholder="Search for a notebook"
+                     ng-model="$parent.query.q"
+                     ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 } }" />
+            </form>
+          </div>
+          <!-- Import and create notebooks -->
+          <div class="mb-5 d-grid gap-2 d-lg-block">
+            <button class="btn btn-lg btn-primary me-lg-2"
+                    ng-click="createNote()">
+              <i class="fa-solid fa-file-circle-plus me-2"></i>
+              New notebook
+            </button>
+            <button class="btn btn-lg btn-secondary"
+                    ng-click="openImportModal()">
+              <i class="fas fa-upload me-2"></i>
+              Import notebook
+            </button>
+          </div>
         </div>
         <!-- List of existing notebooks -->
-        <div id="notebook-names">
-          <!-- TODO what the heck is this piece, remove if not used -->
-          <!--<ul>
+        <div id="notebook-names" class="notebook-list">
+          <ul>
             <li ng-repeat="note in home.notes.list | filter:query.q track by $index">
               <i class="icon-doc"></i>
               <a href="#/notebook/{{note.id}}">
                 {{noteName(note)}}
               </a>
             </li>
-          </ul>-->
+          </ul>
           <ul class="list-unstyled" ng-if="!query.q || query.q === ''">
             <li ng-repeat="node in home.notes.root.children"
                 ng-include src="'/app/home/notebook-template.html'"
@@ -124,20 +118,20 @@ limitations under the License.
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Load notebook -->
-  <div ng-show="home.notebookHome" id="{{currentParagraph.id}}_paragraphColumn_main"
-       ng-repeat="currentParagraph in home.note.paragraphs"
-       ng-controller="ParagraphCtrl"
-       ng-init="init(currentParagraph, home.note)"
-       ng-class="columnWidthClass(currentParagraph.config.colWidth)"
-       class="m-0 p-0">
-    <div id="{{currentParagraph.id}}_paragraphColumn"
-         ng-if="currentParagraph.results"
-         ng-include src="'/app/notebook/paragraph/paragraph.html'"
-         ng-class="{'paragraph-space box paragraph-margin': !asIframe, 'focused': paragraphFocused}"
-         ng-hide="currentParagraph.config.tableHide && home.viewOnly">
+    <!-- Load notebook -->
+    <div ng-show="home.notebookHome" id="{{currentParagraph.id}}_paragraphColumn_main"
+         ng-repeat="currentParagraph in home.note.paragraphs"
+         ng-controller="ParagraphCtrl"
+         ng-init="init(currentParagraph, home.note)"
+         ng-class="columnWidthClass(currentParagraph.config.colWidth)"
+         class="m-0 p-0">
+      <div id="{{currentParagraph.id}}_paragraphColumn"
+           ng-if="currentParagraph.results"
+           ng-include src="'/app/notebook/paragraph/paragraph.html'"
+           ng-class="{'paragraph-space box paragraph-margin': !asIframe, 'focused': paragraphFocused}"
+           ng-hide="currentParagraph.config.tableHide && home.viewOnly">
+      </div>
     </div>
   </div>
 </div>
