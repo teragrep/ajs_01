@@ -43,6 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface Response {
-  response(data: object):void;
+export interface Requestable {
+  request(data:object):void;
 }

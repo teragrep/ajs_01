@@ -43,10 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Response} from './response';
-import {Request} from './request';
+import {Respondable} from './respondable';
+import {Requestable} from './requestable';
 
-export interface Channel extends Response, Request {
+export interface Channel extends Respondable, Requestable {
   request(data: object):void;
   response(data: object):void;
 }

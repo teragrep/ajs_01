@@ -44,10 +44,10 @@
  * a licensee so wish it.
  */
 import {Printable} from '../../rendering/printable/printable';
-import {Response} from '../../channel/response';
+import {Respondable} from '../../channel/respondable';
 import {RenderNode} from '../../rendering/renderNode/renderNode';
 import {Signal} from '@angular/core';
 
-export interface OutputFormat extends Response, Printable {
+export interface OutputFormat extends Respondable, Printable {
   switcherButtons(): Signal<RenderNode>[];
 }

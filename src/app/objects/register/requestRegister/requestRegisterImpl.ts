@@ -46,13 +46,13 @@
 import {RequestRegister} from './requestRegister';
 import {MessageImpl} from '../../message/messageImpl';
 import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
-import {Request} from '../../channel/request';
+import {Requestable} from '../../channel/requestable';
 
 export class RequestRegisterImpl implements RequestRegister {
-  private readonly _request:Request;
+  private readonly _request:Requestable;
   private readonly _subscribers: Map<string, (json:object) => void>;
 
-  constructor(request:Request){
+  constructor(request:Requestable){
     this._request = request;
     this._subscribers = new Map();
   }

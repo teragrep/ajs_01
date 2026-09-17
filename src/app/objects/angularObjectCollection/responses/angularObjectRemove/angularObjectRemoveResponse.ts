@@ -43,12 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Response} from '../../../channel/response';
+import {Respondable} from '../../../channel/respondable';
 import {AngularObject} from '../../../angularObject/angularObject';
 import {MessageImpl} from '../../../message/messageImpl';
 import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
 
-export class AngularObjectRemoveResponse implements Response {
+export class AngularObjectRemoveResponse implements Respondable {
   private readonly _angularObjects: AngularObject[];
 
   constructor(angularObjects: AngularObject[]) {
