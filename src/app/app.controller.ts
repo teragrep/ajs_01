@@ -23,19 +23,6 @@ angular.module('zeppelinWebApp').controller('MainCtrl', [
   '$http',
   'baseUrlSrv',
   'CrossControllerDataTransfer',
-
-  'vizRegisterService',
-  'vizTableService',//the list of viz goes here, but should be resolved in a better way later
-  'vizBarchartService',
-  'vizPiechartService',
-  'vizLinechartService',
-  'vizAreachartService',
-  'vizScatterchartService',
-  'vizNetworkService',
-  'vizHTMLService',
-  'vizTextService',
-  'vizAngularService',
-  'vizJsonTableService',
   MainCtrl
 ]);
 
