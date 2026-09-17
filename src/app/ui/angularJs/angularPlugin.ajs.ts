@@ -45,7 +45,7 @@
  */
 import angular, {IPostLink, IScope} from 'angular';
 import {AngularObject} from '../../objects/angularObject/angularObject';
-import {Request} from '../../objects/channel/request';
+import {Requestable} from '../../objects/channel/requestable';
 
 export class AngularPluginAjs implements IPostLink{
   static $inject = ['$compile', '$scope', '$element'];
@@ -54,7 +54,7 @@ export class AngularPluginAjs implements IPostLink{
   private readonly $element;
   template!: string;
   angularObjects!: AngularObject[];
-  requestable: Request;
+  requestable: Requestable;
 
   constructor($compile, $scope: IScope, $element) {
     this.$compile = $compile;

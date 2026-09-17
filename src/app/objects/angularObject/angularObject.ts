@@ -43,9 +43,9 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Request} from '../channel/request';
+import {Requestable} from '../channel/requestable';
 
-export interface AngularObject extends Request{
+export interface AngularObject extends Requestable{
   name(): string;
   value(): unknown;
   update(value:unknown):void;

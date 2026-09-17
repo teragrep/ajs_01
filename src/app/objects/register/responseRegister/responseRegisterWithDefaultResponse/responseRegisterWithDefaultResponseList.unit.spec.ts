@@ -46,13 +46,13 @@
 import {ResponseRegister} from '../responseRegister';
 import {ResponseRegisterImpl} from '../responseRegisterImpl';
 import {ResponseRegisterWithDefaultResponseList} from './responseRegisterWithDefaultResponseList';
-import {Response} from '../../../channel/response';
+import {Respondable} from '../../../channel/respondable';
 import {Mock} from 'vitest';
 
 describe('ResponseRegisterWithDefaultResponseList unit test', () => {
   let responseRegister: ResponseRegister;
   let responseRegisterWithDefaultResponseList: ResponseRegister;
-  let defaultResponseList: Response[];
+  let defaultResponseList: Respondable[];
   let responseSpy: Mock;
 
   beforeEach(() => {

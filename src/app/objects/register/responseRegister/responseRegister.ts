@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Response} from '../../channel/response';
+import {Respondable} from '../../channel/respondable';
 import {Register} from '../register';
 
-export interface ResponseRegister extends Response, Register {}
+export interface ResponseRegister extends Respondable, Register {}
