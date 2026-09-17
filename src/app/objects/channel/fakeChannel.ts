@@ -46,7 +46,7 @@
 import {Channel} from './channel';
 
 export class FakeChannel implements Channel {
-  request(data: object): void {}
+  request(json: object): void {}
 
-  response(data: object): void {}
+  response(json: object): void {}
 }

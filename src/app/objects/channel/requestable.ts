@@ -44,5 +44,5 @@
  * a licensee so wish it.
  */
 export interface Requestable {
-  request(data:object):void;
+  request(json:object):void;
 }

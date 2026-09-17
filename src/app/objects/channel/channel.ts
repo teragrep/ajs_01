@@ -46,7 +46,4 @@
 import {Respondable} from './respondable';
 import {Requestable} from './requestable';
 
-export interface Channel extends Respondable, Requestable {
-  request(data: object):void;
-  response(data: object):void;
-}
+export interface Channel extends Respondable, Requestable {}

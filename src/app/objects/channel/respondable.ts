@@ -44,5 +44,5 @@
  * a licensee so wish it.
  */
 export interface Respondable {
-  response(data: object):void;
+  response(json: object):void;
 }
