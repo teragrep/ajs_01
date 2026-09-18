@@ -55,7 +55,7 @@ import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {ResponseRegister} from '../register/responseRegister/responseRegister';
 import {ResponseRegisterImpl} from '../register/responseRegister/responseRegisterImpl';
 import {ParagraphMessageImpl} from '../message/paragraphMessage/paragraphMessageImpl';
-import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../safeJson/webSocketPayloadImpl';
 import {MessageImpl} from '../message/messageImpl';
 import {ParagraphAddedMessageImpl} from '../message/paragraphAddedMessage/paragraphAddedMessageImpl';
 import {ParagraphRemovedMessageImpl} from '../message/paragraphRemovedMessage/paragraphRemovedMessageImpl';
@@ -89,7 +89,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   }
 
   private paragraphResponse(json:object):void{
-    const paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new SafeJsonImpl(json)));
+    const paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new WebSocketPayloadImpl(json)));
     const paragraph = paragraphMessage.paragraph(this);
     this._paragraphs.update(paragraphs => {
       paragraphs.set(paragraph.id(), paragraph);
@@ -99,7 +99,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   }
 
   private paragraphAddedResponse(json:object):void{
-    const paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new SafeJsonImpl(json)));
+    const paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(json)));
     const index = paragraphAddedMessage.index();
     const paragraph = paragraphAddedMessage.paragraph(this);
     this._paragraphs.update(paragraphs => {
@@ -117,7 +117,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   }
 
   private paragraphRemovedResponse(json:object):void{
-    const paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new SafeJsonImpl(json)));
+    const paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(json)));
     const paragraphId = paragraphRemovedMessage.paragraphId();
     this._paragraphs.update(paragraphs => {
       paragraphs.delete(paragraphId);

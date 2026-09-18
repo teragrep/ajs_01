@@ -45,7 +45,7 @@
  */
 import {ParagraphOutputRequest} from './paragraphOutputRequest';
 import {ParagraphOutputRequestImpl} from './paragraphOutputRequestImpl';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../safeJson/webSocketPayloadImpl';
 import {MessageImpl} from '../../../message/messageImpl';
 
 describe('Paragraph Output Request unit test', () => {
@@ -57,21 +57,13 @@ describe('Paragraph Output Request unit test', () => {
   };
   let paragraphOutputRequest: ParagraphOutputRequest;
   beforeEach(() => {
-    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputRequestData)));
+    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
   });
 
 
   describe('Birth', () => {
     it('Should be initialized', () => {
       expect(paragraphOutputRequest).toBeDefined();
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphOutputRequest.operation()).toEqual('PARAGRAPH_OUTPUT_REQUEST');
-    });
-
-    it('Should have data', () => {
-      expect(paragraphOutputRequest.data()).toEqual(paragraphOutputRequestData.data);
     });
 
     it('Should not be stub', () => {
@@ -90,7 +82,7 @@ describe('Paragraph Output Request unit test', () => {
   describe('Validation', () => {
     it('Should throw if operation is not "PARAGRAPH_OUTPUT_REQUEST"', () => {
       paragraphOutputRequestData.op = '';
-      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputRequestData)));
+      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
       expect(() => paragraphOutputRequest.type()).toThrow();
     });
   });

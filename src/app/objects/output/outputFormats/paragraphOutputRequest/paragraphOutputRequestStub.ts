@@ -50,14 +50,6 @@ export class ParagraphOutputRequestStub implements ParagraphOutputRequest {
     return true;
   }
 
-  data(): object {
-    throw new Error('ParagraphOutputRequestStub: Method not implemented.');
-  }
-
-  operation(): string {
-    throw new Error('ParagraphOutputRequestStub: Method not implemented.');
-  }
-
   request(): object {
     throw new Error('ParagraphOutputRequestStub: Method not implemented.');
   }

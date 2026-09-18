@@ -45,23 +45,23 @@
  */
 import {computed, Signal} from '@angular/core';
 import {RenderNode} from '../../rendering/renderNode/renderNode';
-import {SafeJson} from '../../safeJson/safeJson';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayload} from '../../safeJson/webSocketPayload';
+import {WebSocketPayloadImpl} from '../../safeJson/webSocketPayloadImpl';
 import {ComponentView} from '../../rendering/componentView/componentView';
 import {ComponentViewStub} from '../../rendering/componentView/componentViewStub';
 import {NotebookIndex} from './notebookIndex';
 
 export class NotebookIndexImpl implements NotebookIndex {
-  private readonly _notebookIndexData:SafeJson;
+  private readonly _notebookIndexData:WebSocketPayload;
   private readonly _componentView:ComponentView;
 
   constructor(notebookIndexData:object) {
-      this._notebookIndexData = new SafeJsonImpl(notebookIndexData);
+      this._notebookIndexData = new WebSocketPayloadImpl(notebookIndexData);
       this._componentView = new ComponentViewStub();
   }
 
   id():string {
-    return this._notebookIndexData.getProperty('id', 'string');
+    return this._notebookIndexData.stringProperty('id');
   }
 
   print(): Signal<RenderNode> {

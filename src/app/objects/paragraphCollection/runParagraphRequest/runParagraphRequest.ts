@@ -46,7 +46,7 @@
 import {Request} from '../../channel/request';
 import {Channel} from '../../channel/channel';
 import {MessageImpl} from '../../message/messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../safeJson/webSocketPayloadImpl';
 import {Message} from '../../message/message';
 
 export class RunParagraphRequest implements Request {
@@ -59,10 +59,10 @@ export class RunParagraphRequest implements Request {
   }
 
   request(data: object) {
-    const message = new MessageImpl(new SafeJsonImpl(data));
+    const message = new MessageImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'RUN_PARAGRAPH'){
-      const runParagraphData = new SafeJsonImpl(message.data());
-      const paragraphId:string = runParagraphData.getProperty('id', 'string');
+      const runParagraphData = new WebSocketPayloadImpl(message.data());
+      const paragraphId= runParagraphData.stringProperty('id');
       const paragraphData = this._decoratorParagraphs.get(paragraphId);
       if(paragraphData === undefined){
         throw new Error(`Failed to decorate run paragraph request: paragraph "${paragraphId}" not found in collection`);
@@ -73,11 +73,11 @@ export class RunParagraphRequest implements Request {
 
   private decoratedMessage(message:Message, paragraphData:object):object {
     const data = message.data();
-    const decoratorData = new SafeJsonImpl(paragraphData);
-    data['paragraph'] = decoratorData.getProperty<string>('text', 'string');
-    data['config'] = decoratorData.getProperty<object>('config', 'object');
-    const settings = decoratorData.getProperty<object>('settings', 'object');
-    data['params'] = new SafeJsonImpl(settings).getProperty<object>('params', 'object');
+    const decoratorData = new WebSocketPayloadImpl(paragraphData);
+    data['paragraph'] = decoratorData.stringProperty('text');
+    data['config'] = decoratorData.objectProperty('config');
+    const settings = decoratorData.objectPropertyAsPayload('settings');
+    data['params'] = settings.objectProperty('params');
     return {
       op: message.operation(),
       data: data

@@ -56,21 +56,13 @@ export class ParagraphOutputRequestImpl implements ParagraphOutputRequest {
 
   request(): object {
     return {
-      op:this.operation(),
-      data:this.data(),
+      op:this._message.operation(),
+      data:this._message.data(),
     };
   }
 
   type(): string {
     return this._message.data()['type'];
-  }
-
-  operation(): string {
-    return this._message.operation();
-  }
-
-  data(): object {
-    return this._message.data();
   }
 
   isStub(): boolean {

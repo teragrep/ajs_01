@@ -47,7 +47,7 @@ import {Response} from '../../../channel/response';
 import {AngularObject} from '../../../angularObject/angularObject';
 import {Channel} from '../../../channel/channel';
 import {MessageImpl} from '../../../message/messageImpl';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../safeJson/webSocketPayloadImpl';
 import {AngularObjectImpl} from '../../../angularObject/angularObjectImpl';
 
 export class AngularObjectUpdateResponse implements Response {
@@ -60,11 +60,10 @@ export class AngularObjectUpdateResponse implements Response {
   }
 
   response(data: object) {
-    const message = new MessageImpl(new SafeJsonImpl(data));
+    const message = new MessageImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'ANGULAR_OBJECT_UPDATE'){
-      const angularObjectUpdateData = new SafeJsonImpl(message.data());
-      const angularObjectData:object = angularObjectUpdateData.getProperty('angularObject', 'object');
-      const interpreterGroupId:string = angularObjectUpdateData.getProperty('interpreterGroupId', 'string');
+      const angularObjectData = message.dataAsWebSocketPayload().objectProperty('angularObject');
+      const interpreterGroupId:string = message.dataAsWebSocketPayload().stringProperty('interpreterGroupId');
       const angularObject = new AngularObjectImpl(this._channel, angularObjectData, interpreterGroupId);
       const existingAngularObjectIndex = this._angularObjects.findIndex(ao => ao.name() === angularObject.name());
       if(existingAngularObjectIndex === -1){

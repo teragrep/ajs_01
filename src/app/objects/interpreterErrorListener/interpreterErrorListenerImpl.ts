@@ -45,7 +45,7 @@
  */
 import {InterpreterErrorListener} from './interpreterErrorListener';
 import {MessageImpl} from '../message/messageImpl';
-import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../safeJson/webSocketPayloadImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ComponentView} from '../rendering/componentView/componentView';
@@ -71,10 +71,10 @@ export class InterpreterErrorListenerImpl implements InterpreterErrorListener {
   }
 
   response(data: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(data));
+    const message = new MessageImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'INTERPRETER_ERROR'){
-      const errorData = new SafeJsonImpl(message.data());
-      const errorMessage = errorData.getProperty('message', 'string');
+      const errorData = new WebSocketPayloadImpl(message.data());
+      const errorMessage = errorData.stringProperty('message');
       this._componentView.set(new ComponentViewImpl(InterpreterErrorView, signal({errorMessage: {errorMessage:errorMessage}})));
     }
   }
