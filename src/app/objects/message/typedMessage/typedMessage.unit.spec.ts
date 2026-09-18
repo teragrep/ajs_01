@@ -46,7 +46,7 @@
 import {TypedMessage} from './typedMessage';
 import {Message} from '../message';
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../safeJson/webSocketPayloadImpl';
 
 describe('TypedMessage unit test', () => {
   const type = 'type';
@@ -57,7 +57,7 @@ describe('TypedMessage unit test', () => {
   let message:Message;
   let typedMessage: Message;
   beforeEach(() => {
-    message = new MessageImpl(new SafeJsonImpl(json));
+    message = new MessageImpl(new WebSocketPayloadImpl(json));
     typedMessage = new TypedMessage(type, message);
   });
 
@@ -70,6 +70,11 @@ describe('TypedMessage unit test', () => {
       expect(typedMessage.data()).toEqual(json.data);
     });
 
+    it('Should have data as WebSocketPayload', () => {
+      const expected = new WebSocketPayloadImpl(json.data);
+      expect(typedMessage.dataAsWebSocketPayload()).toEqual(expected);
+    });
+
     it('Should have operation', () => {
       expect(typedMessage.operation()).toEqual(json.op);
     });
@@ -79,6 +84,7 @@ describe('TypedMessage unit test', () => {
     it('Should throw error if type is wrong', () => {
       typedMessage = new TypedMessage('wrongType', message);
       expect(() => typedMessage.data()).toThrow();
+      expect(() => typedMessage.dataAsWebSocketPayload()).toThrow();
       expect(() => typedMessage.operation()).toThrow();
     });
   });
