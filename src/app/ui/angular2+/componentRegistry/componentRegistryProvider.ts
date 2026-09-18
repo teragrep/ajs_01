@@ -43,44 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DoBootstrap, NgModule, provideAppInitializer, inject, provideZonelessChangeDetection} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
-import './ajs-imports';
-import './downgraded-components';
-import {wsMessageListenerProvider, WebsocketMessageProvider, ToasterProvider} from './upgraded-providers';
-import {AuthenticationServiceImpl} from './shared/services/authenticationServiceImpl';
-import { provideHttpClient } from '@angular/common/http';
-import {WebSocketServiceImpl} from './objects/webSocket/service/webSocketServiceImpl';
-import {webAppRoot} from './objects/webAppRoot/webAppRootImpl';
-import {ComponentRegistryProvider} from './ui/angular2+/componentRegistry/componentRegistryProvider';
+import {Provider, Type} from '@angular/core';
+import {COMPONENT_REGISTRY} from './componentRegistry';
+import {RegisteredComponents} from './registeredComponents';
+import {InterpreterErrorView} from '../interpreterError/interpreterErrorView';
+import {AngularOutputView} from '../output/outputViews/angularOutputView/angularOutputView';
+import {DataTablesOutputView} from '../output/outputViews/dataTablesOutputView/dataTablesOutputView';
+import {HtmlOutputView} from '../output/outputViews/htmlOutputView/htmlOutputView';
+import {TextOutputView} from '../output/outputViews/textOutputView/textOutputView';
+import {UPlotOutputView} from '../output/outputViews/uPlotOutputView/uPlotOutputView';
+import {OutputSwitcherView} from '../output/switcher/outputSwitcherView';
+import {OutputSwitcherButtonView} from '../output/switcher/switcherButton/outputSwitcherButtonView';
 
-@NgModule({
-  declarations: [],
-  imports: [
-    BrowserModule,
-    UpgradeModule,
-  ],
-  providers: [
-    provideZonelessChangeDetection(),
-    provideHttpClient(),
-    AuthenticationServiceImpl,
-    provideAppInitializer(() => {
-      webAppRoot.initialize(inject(WebSocketServiceImpl));
-      const authService = inject(AuthenticationServiceImpl);
-      return authService.requestTicket();
-    }),
-    wsMessageListenerProvider,
-    WebsocketMessageProvider,
-    ToasterProvider,
-    ComponentRegistryProvider
-  ]
-})
-
-export class AppModule implements DoBootstrap {
-  private upgrade = inject(UpgradeModule);
-
-  ngDoBootstrap() {
-    this.upgrade.bootstrap(document.body, ['zeppelinWebApp'], {strictDi: true});
-  }
-}
+export const ComponentRegistryProvider: Provider = {
+  provide: COMPONENT_REGISTRY,
+  useValue: new Map<string, Type<unknown>>([
+    [RegisteredComponents.INTERPRETER_ERROR_VIEW, InterpreterErrorView],
+    [RegisteredComponents.ANGULAR_OUTPUT_VIEW, AngularOutputView],
+    [RegisteredComponents.DATATABLES_OUTPUT_VIEW, DataTablesOutputView],
+    [RegisteredComponents.HTML_OUTPUT_VIEW, HtmlOutputView],
+    [RegisteredComponents.TEXT_OUTPUT_VIEW, TextOutputView],
+    [RegisteredComponents.UPLOT_OUTPUT_VIEW, UPlotOutputView],
+    [RegisteredComponents.OUTPUT_SWITCHER_VIEW, OutputSwitcherView],
+    [RegisteredComponents.OUTPUT_SWITCHER_BUTTON_VIEW, OutputSwitcherButtonView],
+  ])
+};

@@ -43,44 +43,18 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DoBootstrap, NgModule, provideAppInitializer, inject, provideZonelessChangeDetection} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
-import './ajs-imports';
-import './downgraded-components';
-import {wsMessageListenerProvider, WebsocketMessageProvider, ToasterProvider} from './upgraded-providers';
-import {AuthenticationServiceImpl} from './shared/services/authenticationServiceImpl';
-import { provideHttpClient } from '@angular/common/http';
-import {WebSocketServiceImpl} from './objects/webSocket/service/webSocketServiceImpl';
-import {webAppRoot} from './objects/webAppRoot/webAppRootImpl';
-import {ComponentRegistryProvider} from './ui/angular2+/componentRegistry/componentRegistryProvider';
-
-@NgModule({
-  declarations: [],
-  imports: [
-    BrowserModule,
-    UpgradeModule,
-  ],
-  providers: [
-    provideZonelessChangeDetection(),
-    provideHttpClient(),
-    AuthenticationServiceImpl,
-    provideAppInitializer(() => {
-      webAppRoot.initialize(inject(WebSocketServiceImpl));
-      const authService = inject(AuthenticationServiceImpl);
-      return authService.requestTicket();
-    }),
-    wsMessageListenerProvider,
-    WebsocketMessageProvider,
-    ToasterProvider,
-    ComponentRegistryProvider
-  ]
-})
-
-export class AppModule implements DoBootstrap {
-  private upgrade = inject(UpgradeModule);
-
-  ngDoBootstrap() {
-    this.upgrade.bootstrap(document.body, ['zeppelinWebApp'], {strictDi: true});
-  }
+export enum RegisteredComponents {
+  INTERPRETER_ERROR_VIEW ='INTERPRETER_ERROR_VIEW',
+  ANGULAR_OUTPUT_VIEW = 'ANGULAR_OUTPUT_VIEW',
+  DATATABLES_OUTPUT_VIEW = 'DATATABLES_OUTPUT_VIEW',
+  HTML_OUTPUT_VIEW = 'HTML_OUTPUT_VIEW',
+  TEXT_OUTPUT_VIEW = 'TEXT_OUTPUT_VIEW',
+  UPLOT_OUTPUT_VIEW = 'UPLOT_OUTPUT_VIEW',
+  OUTPUT_SWITCHER_VIEW = 'OUTPUT_SWITCHER_VIEW',
+  OUTPUT_SWITCHER_BUTTON_VIEW = 'OUTPUT_SWITCHER_BUTTON_VIEW',
+  NOTEBOOK_COLLECTION_VIEW = 'NOTEBOOK_COLLECTION_VIEW',
+  NOTEBOOK_VIEW = 'NOTEBOOK_VIEW',
+  PARAGRAPH_COLLECTION_VIEW = 'PARAGRAPH_COLLECTION_VIEW',
+  PARAGRAPH_VIEW = 'PARAGRAPH_VIEW',
+  OUTPUT_VIEW = 'OUTPUT_VIEW',
 }
