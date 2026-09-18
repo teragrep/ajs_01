@@ -43,10 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Signal} from '@angular/core';
-import Stubable from '../../../shared/interfaces/stubable';
+import {RenderNode} from './renderNode';
+import {RenderNodeImpl} from './renderNodeImpl';
+import {signal} from '@angular/core';
 
-export interface RenderNode extends Stubable{
-  componentView(): string;
-  inputs(): Signal<Record<string, unknown>>;
-}
+describe('RenderNode unit test', () => {
+  let renderNode: RenderNode;
+  const componentView = 'componentView';
+  const inputs = signal({test:'test'});
+
+  beforeEach(() => {
+    renderNode = new RenderNodeImpl(componentView, inputs);
+  });
+
+  it('Should not be a stub', () => {
+    expect(renderNode.isStub()).toBe(false);
+  });
+
+  it('Should have componentView', () => {
+    expect(renderNode.componentView()).toEqual(componentView);
+  });
+
+  it('Should have inputs', () => {
+    expect(renderNode.inputs()()).toEqual(inputs());
+  });
+});
