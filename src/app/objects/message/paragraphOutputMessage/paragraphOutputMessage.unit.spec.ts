@@ -45,7 +45,7 @@
  */
 import {ParagraphOutputMessage} from './paragraphOutputMessage';
 import {ParagraphOutputMessageImpl} from './paragraphOutputMessageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../safeJson/webSocketPayloadImpl';
 import {MessageImpl} from '../messageImpl';
 
 describe('ParagraphOutputMessage unit test', () => {
@@ -81,7 +81,7 @@ describe('ParagraphOutputMessage unit test', () => {
         }
       }
     };
-    paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputMessageData)));
+    paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
   });
 
   describe('Birth', () => {
@@ -89,16 +89,8 @@ describe('ParagraphOutputMessage unit test', () => {
       expect(paragraphOutputMessage).toBeDefined();
     });
 
-    it('Should have data', () => {
-      expect(paragraphOutputMessage.data()).toEqual(paragraphOutputMessageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphOutputMessage.operation()).toEqual(paragraphOutputMessageData.op);
-    });
-
     it('Should have outputData', () => {
-      expect(paragraphOutputMessage.outputData<object>('object')).toEqual(paragraphOutputMessageData.data.output.data);
+      expect(paragraphOutputMessage.outputData('object')).toEqual(paragraphOutputMessageData.data.output.data);
     });
 
     it('Should print', () => {
@@ -112,13 +104,13 @@ describe('ParagraphOutputMessage unit test', () => {
 
       it('Should be false if property is false', () => {
         paragraphOutputMessageData.data.output.isAggregated = false;
-        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputMessageData)));
+        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
         expect(paragraphOutputMessage.isAggregated()).toEqual(false);
       });
 
       it('Should be false if property is undefined', () => {
         delete paragraphOutputMessageData.data.output.isAggregated;
-        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputMessageData)));
+        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
         expect(paragraphOutputMessage.isAggregated()).toEqual(false);
       });
     });
@@ -131,7 +123,7 @@ describe('ParagraphOutputMessage unit test', () => {
 
       it('Should have options stub', () => {
         delete paragraphOutputMessageData.data.output.options;
-        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputMessageData)));
+        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
         expect(paragraphOutputMessage.options().isStub()).toBe(true);
       });
     });
@@ -144,13 +136,12 @@ describe('ParagraphOutputMessage unit test', () => {
   describe('Operation validation', () => {
     it('Should throw if operation is not "PARAGRAPH_OUTPUT"', () => {
       paragraphOutputMessageData.op = '';
-      paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputMessageData)));
-      expect(() => paragraphOutputMessage.data()).toThrow();
-      expect(() => paragraphOutputMessage.operation()).toThrow();
+      paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
       expect(() => paragraphOutputMessage.options()).toThrow();
       expect(() => paragraphOutputMessage.type()).toThrow();
       expect(() => paragraphOutputMessage.isAggregated()).toThrow();
       expect(() => paragraphOutputMessage.outputData('object')).toThrow();
+      expect(() => paragraphOutputMessage.print()).toThrow();
     });
   });
 });

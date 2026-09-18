@@ -45,7 +45,7 @@
  */
 import {OutputFormat} from '../outputFormat';
 import {OutputType} from '../../outputType';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../safeJson/webSocketPayloadImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
 import {ComponentViewStub} from '../../../rendering/componentView/componentViewStub';
@@ -65,14 +65,14 @@ export class TextFormat implements OutputFormat {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.text) {
         this._componentView.set(this._componentViewStub);
       }
       else{
-        const textOutput:string = paragraphOutputMessage.outputData('string');
+        const textOutput = paragraphOutputMessage.outputData('string');
         const componentView = new ComponentViewImpl(TextOutputView, signal({textOutput: textOutput}));
         this._componentView.set(componentView);
       }

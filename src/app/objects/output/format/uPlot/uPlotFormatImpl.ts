@@ -45,7 +45,7 @@
  */
 import {uPlotSwitcherButton} from './switcherButton/uPlotSwitcherButton';
 import {GraphType} from './graphType';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../safeJson/webSocketPayloadImpl';
 import {OutputType} from '../../outputType';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
@@ -84,19 +84,19 @@ export class UPlotFormatImpl implements UPlotFormat {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT') {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.uPlot){
         this._componentView.set(this._componentViewStub);
       }
       else{
-        const uPlotData:uPlot.AlignedData = paragraphOutputMessage.outputData('object');
-        const safeOutputOptions = new SafeJsonImpl(paragraphOutputMessage.options().value());
-        const labels = safeOutputOptions.getProperty<string[]>('labels', 'object');
-        const series = safeOutputOptions.getProperty<string[]>('series', 'object');
-        const xAxisLabel = safeOutputOptions.getProperty<string>('xAxisLabel', 'string');
-        const graphType = safeOutputOptions.getProperty<string>('graphType', 'string');
+        const uPlotData = paragraphOutputMessage.outputData('object') as uPlot.AlignedData;
+        const safeOutputOptions = new WebSocketPayloadImpl(paragraphOutputMessage.options().value());
+        const labels = safeOutputOptions.arrayProperty<string>('labels');
+        const series = safeOutputOptions.arrayProperty<string>('series');
+        const xAxisLabel = safeOutputOptions.stringProperty('xAxisLabel');
+        const graphType = safeOutputOptions.stringProperty('graphType');
         const basicOptions = new BasicOptionsImpl(labels, series, xAxisLabel, graphType);
         this._componentView.set(new ComponentViewImpl(UPlotOutputView, signal({graphType: graphType, basicOptions: basicOptions, uPlotData: uPlotData})));
       }

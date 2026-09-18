@@ -45,19 +45,19 @@
  */
 import {AngularObject} from './angularObject';
 import {Channel} from '../channel/channel';
-import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
-import {SafeJson} from '../safeJson/safeJson';
+import {WebSocketPayloadImpl} from '../safeJson/webSocketPayloadImpl';
+import {WebSocketPayload} from '../safeJson/webSocketPayload';
 
 export class AngularObjectImpl implements AngularObject{
   private readonly _channel:Channel;
-  private readonly _angularObjectData:object;
-  private readonly _safeAngularObjectData:SafeJson;
+  private readonly _rawAngularObjectData: object;
+  private readonly _angularObjectData:WebSocketPayload;
   private readonly _interpreterGroupId:string;
 
   constructor(channel:Channel, angularObjectData:object, interpreterGroupId:string) {
     this._channel = channel;
-    this._safeAngularObjectData = new SafeJsonImpl(angularObjectData);
-    this._angularObjectData = angularObjectData;
+    this._rawAngularObjectData = angularObjectData;
+    this._angularObjectData = new WebSocketPayloadImpl(angularObjectData);
     this._interpreterGroupId = interpreterGroupId;
   }
 
@@ -70,25 +70,25 @@ export class AngularObjectImpl implements AngularObject{
   }
 
   name(): string {
-    return this._safeAngularObjectData.getProperty('name', 'string');
+    return this._angularObjectData.stringProperty('name');
   }
 
   value(): unknown {
-    return this._angularObjectData['object'];
+    return this._rawAngularObjectData['object'];
   }
 
   private updateRequest(value:unknown): object {
     const message = {
       op: 'ANGULAR_OBJECT_UPDATED',
       data: {
-        noteId: this._safeAngularObjectData.getProperty('noteId', 'string'),
-        name: this._safeAngularObjectData.getProperty('name', 'string'),
+        noteId: this._angularObjectData.stringProperty('noteId'),
+        name: this._angularObjectData.stringProperty('name'),
         value: value,
         interpreterGroupId: this._interpreterGroupId
       },
     };
-    if(this._safeAngularObjectData.propertyExists('paragraphId')){
-      message.data['paragraphId'] = this._safeAngularObjectData.getProperty<string>('paragraphId', 'string');
+    if(this._angularObjectData.propertyExists('paragraphId')){
+      message.data['paragraphId'] = this._angularObjectData.stringProperty('paragraphId');
     }
     return message;
   }

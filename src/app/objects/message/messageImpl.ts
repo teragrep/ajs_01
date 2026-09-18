@@ -44,22 +44,25 @@
  * a licensee so wish it.
  */
 import {Message} from './message';
-import {SafeJson} from '../safeJson/safeJson';
+import {WebSocketPayload} from '../safeJson/webSocketPayload';
+import {WebSocketPayloadImpl} from '../safeJson/webSocketPayloadImpl';
 
 export class MessageImpl implements Message{
-  private readonly _safeJson:SafeJson;
+  private readonly _webSocketPayload:WebSocketPayload;
 
-  constructor(safeJson:SafeJson) {
-    this._safeJson = safeJson;
+  constructor(safeJson:WebSocketPayload) {
+    this._webSocketPayload = safeJson;
+  }
+
+  dataAsWebSocketPayload(): WebSocketPayload {
+    return new WebSocketPayloadImpl(this.data());
   }
 
   data(): object {
-    const key = 'data';
-    return this._safeJson.getProperty(key, 'object');
+    return this._webSocketPayload.objectProperty('data');
   }
 
   operation(): string {
-    const key = 'op';
-    return this._safeJson.getProperty(key, 'string');
+    return this._webSocketPayload.stringProperty('op');
   }
 }

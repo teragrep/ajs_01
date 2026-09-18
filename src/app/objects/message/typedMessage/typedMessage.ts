@@ -43,15 +43,21 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import { WebSocketPayload } from '../../safeJson/webSocketPayload';
 import {Message} from '../message';
 
 export class TypedMessage implements Message {
-  private readonly _type:string;
-  private readonly _message:Message;
+  private readonly _type: string;
+  private readonly _message: Message;
 
-  constructor(type:string, message:Message) {
+  constructor(type: string, message: Message) {
     this._type = type;
     this._message = message;
+  }
+
+  dataAsWebSocketPayload(): WebSocketPayload {
+    this.validateType();
+    return this._message.dataAsWebSocketPayload();
   }
 
   data(): object {

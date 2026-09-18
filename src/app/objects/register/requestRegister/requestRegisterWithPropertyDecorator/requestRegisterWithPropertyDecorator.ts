@@ -45,7 +45,7 @@
  */
 import {RequestRegister} from '../requestRegister';
 import {MessageImpl} from '../../../message/messageImpl';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../safeJson/webSocketPayloadImpl';
 
 export class RequestRegisterWithPropertyDecorator implements RequestRegister {
   private readonly _requestRegister:RequestRegister;
@@ -61,8 +61,8 @@ export class RequestRegisterWithPropertyDecorator implements RequestRegister {
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
-    const messageData = new SafeJsonImpl(message.data());
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const messageData = new WebSocketPayloadImpl(message.data());
     const requestMessage = {
       op:message.operation(),
       data:message.data()

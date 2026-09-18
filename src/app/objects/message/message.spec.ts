@@ -1,5 +1,5 @@
 import {Message} from './message';
-import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../safeJson/webSocketPayloadImpl';
 import {MessageImpl} from './messageImpl';
 
 describe('Message', () => {
@@ -13,7 +13,7 @@ describe('Message', () => {
 
   describe('Birth', () => {
     beforeEach(() => {
-      message = new MessageImpl(new SafeJsonImpl(json));
+      message = new MessageImpl(new WebSocketPayloadImpl(json));
     });
 
     it('Should have been initialized', () => {
@@ -26,6 +26,11 @@ describe('Message', () => {
 
     it('Should have data', () => {
       expect(message.data()).toEqual(json.data);
+    });
+
+    it('Should have data as WebSocketPayload', () => {
+      const expected = new WebSocketPayloadImpl(json.data);
+      expect(message.dataAsWebSocketPayload()).toEqual(expected);
     });
   });
 });

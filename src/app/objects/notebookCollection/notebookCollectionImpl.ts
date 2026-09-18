@@ -54,10 +54,10 @@ import {NotebookIndex} from './notebookIndex/notebookIndex';
 import {NotebookStub} from '../notebook/notebookStub';
 import {NoteMessageImpl} from '../message/noteMessage/noteMessageImpl';
 import {MessageImpl} from '../message/messageImpl';
-import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
 import {NotesInfoMessageImpl} from '../message/notesInfoMessage/notesInfoMessageImpl';
 import {ResponseRegister} from '../register/responseRegister/responseRegister';
 import {ResponseRegisterImpl} from '../register/responseRegister/responseRegisterImpl';
+import {WebSocketPayloadImpl} from '../safeJson/webSocketPayloadImpl';
 
 export class NotebookCollectionImpl implements NotebookCollection{
   private readonly _channel:Channel;
@@ -77,11 +77,11 @@ export class NotebookCollectionImpl implements NotebookCollection{
   }
 
   private notesInfoResponse(json:object):void{
-    this._notebookIndices.set(new NotesInfoMessageImpl(new MessageImpl(new SafeJsonImpl(json))).notebookIndices());
+    this._notebookIndices.set(new NotesInfoMessageImpl(new MessageImpl(new WebSocketPayloadImpl(json))).notebookIndices());
   }
 
   private noteResponse(json:object):void{
-    this._currentNotebook.set(new NoteMessageImpl(new MessageImpl(new SafeJsonImpl(json))).notebook(this));
+    this._currentNotebook.set(new NoteMessageImpl(new MessageImpl(new WebSocketPayloadImpl(json))).notebook(this));
   }
 
   print(): Signal<RenderNode> {

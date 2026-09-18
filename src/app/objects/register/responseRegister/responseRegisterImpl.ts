@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {ResponseRegister} from './responseRegister';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../safeJson/webSocketPayloadImpl';
 import {MessageImpl} from '../../message/messageImpl';
 
 export class ResponseRegisterImpl implements ResponseRegister {
@@ -59,7 +59,7 @@ export class ResponseRegisterImpl implements ResponseRegister {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     const subscription = this._subscribers.get(message.operation());
     if(subscription){
       subscription(json);

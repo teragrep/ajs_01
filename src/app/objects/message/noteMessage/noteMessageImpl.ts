@@ -60,12 +60,4 @@ export class NoteMessageImpl implements NoteMessage{
   notebook(channel: Channel): Notebook {
     return new NotebookImpl(channel, this._message.data());
   }
-
-  data(): object {
-    return this._message.data();
-  }
-
-  operation(): string {
-    return this._message.operation();
-  }
 }

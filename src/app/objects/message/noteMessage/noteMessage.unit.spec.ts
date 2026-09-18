@@ -45,7 +45,7 @@
  */
 import {NoteMessage} from './noteMessage';
 import {Message} from '../message';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../safeJson/webSocketPayloadImpl';
 import {MessageImpl} from '../messageImpl';
 import {NoteMessageImpl} from './noteMessageImpl';
 import {FakeChannel} from '../../channel/fakeChannel';
@@ -65,21 +65,13 @@ describe('Note message unit test', () => {
 
   beforeEach(() => {
     channel = new FakeChannel();
-    message = new MessageImpl(new SafeJsonImpl(messageData));
+    message = new MessageImpl(new WebSocketPayloadImpl(messageData));
     noteMessage = new NoteMessageImpl(message);
   });
 
   describe('Birth', () => {
     it('Should be initialized', () => {
       expect(noteMessage).toBeDefined();
-    });
-
-    it('Should have operation', () => {
-      expect(noteMessage.operation()).toEqual('NOTE');
-    });
-
-    it('Should have data', () => {
-      expect(noteMessage.data()).toEqual(messageData.data);
     });
 
     it('Should have notebook', () => {
@@ -90,10 +82,8 @@ describe('Note message unit test', () => {
   describe('Validation', () => {
     it('Should throw if message operation is not "NOTE"', () => {
       messageData.op = '';
-      message = new MessageImpl(new SafeJsonImpl(messageData));
+      message = new MessageImpl(new WebSocketPayloadImpl(messageData));
       noteMessage = new NoteMessageImpl(message);
-      expect(() => noteMessage.data()).toThrow();
-      expect(() => noteMessage.operation()).toThrow();
       expect(() => noteMessage.notebook(channel)).toThrow();
     });
   });
