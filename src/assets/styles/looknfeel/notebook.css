@@ -44,11 +44,6 @@
  * a licensee so wish it.
  */
 
-#notebookPage {
-  margin-top: 60px; /* the height of navbar */
-  min-height: calc(100vh - 106px);
-}
-
 .notebook-mt {
   padding-top: calc(var(--navbar-height) + var(--note-action-height) + 2.75rem);
   transition: all 0.5s;
