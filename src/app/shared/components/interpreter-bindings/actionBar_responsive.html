@@ -129,3 +129,56 @@
     </a>
   </div>
 </div>
+<!-- controls for report mode -->
+<div class="dropdown"
+     ng-if="!revisionView && viewOnly">
+  <button type="button"
+          class="btn btn-link ms-2"
+          data-bs-toggle="dropdown">
+    <i class="fa-solid fa-ellipsis"></i>
+  </button>
+  <div class="dropdown-menu dropdown-menu-end"
+       role="menu">
+    <li ng-hide="$index <= 1">
+      <a class="dropdown-item"
+         ng-class="{'disabled':isNoteRunning()}"
+         ng-click="runAllParagraphs(note.id)">
+        <span class="drop-icon">
+          <i class="fas fa-play"></i>
+        </span>
+        Run all
+      </a>
+    </li>
+    <li ng-hide="$index <= 1">
+      <a class="dropdown-item"
+         ng-class="{'disabled':isNoteRunning()}"
+         ng-click="clearAllParagraphOutput(note.id)">
+        <span class="drop-icon">
+          <i class="fas fa-eraser"></i>
+        </span>
+        Clear all
+      </a>
+    </li>
+    <li class="divider">
+      <hr class="dropdown-divider">
+    </li>
+    <li ng-hide="$index <= 1">
+      <a class="dropdown-item"
+         ng-click="cloneThisNote(note.name)">
+        <span class="drop-icon">
+          <i class="far fa-copy"></i>
+        </span>
+        Clone notebook
+      </a>
+    </li>
+    <li ng-hide="$index <= 1">
+      <a class="dropdown-item"
+         ng-click="exportNote()">
+        <span class="drop-icon">
+          <i class="fas fa-download"></i>
+        </span>
+        Export notebook
+      </a>
+    </li>
+  </div>
+</div>

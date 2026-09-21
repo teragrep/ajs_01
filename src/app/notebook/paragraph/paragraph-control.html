@@ -1137,7 +1137,9 @@ limitations under the License.
            ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING' && paragraph.config.enabled"
            ng-click="runParagraphFromButton(getEditorValue())"
            ng-class="{'disabled':isParagraphRunning()}">
-          <i class="fas fa-play me-2"></i>
+          <span class="drop-icon">
+            <i class="fas fa-play"></i>
+          </span>
           Run this paragraph
         </a>
       </li>
@@ -1145,7 +1147,9 @@ limitations under the License.
         <a class="dropdown-item"
            ng-click="toggleEnableDisable(paragraph)"
            ng-class="{'disabled':isParagraphRunning()}">
-          <i class="fas fa-play me-2"></i>
+          <span class="drop-icon">
+            <i class="fas fa-play"></i>
+          </span>
           {{paragraph.config.enabled ? "Disable" : "Enable"}} run
         </a>
       </li>
@@ -1153,7 +1157,9 @@ limitations under the License.
         <hr class="dropdown-divider">
       </li>
       <li class="dropdown-item d-flex align-items-center">
-        <i class="fas fa-left-right me-2"></i>
+        <span class="drop-icon">
+          <i class="fas fa-left-right"></i>
+        </span>
         Width
         <span class="ms-auto"
               ng-click="$event.stopPropagation()">
@@ -1171,7 +1177,9 @@ limitations under the License.
         <a class="dropdown-item"
            ng-class="{'disabled':isParagraphRunning()}"
            ng-click="moveTop(paragraph)">
-          <i class="fas fa-angle-double-up me-2"></i>
+          <span class="drop-icon">
+            <i class="fas fa-angle-double-up"></i>
+          </span>
           Move to the top
         </a>
       </li>
@@ -1179,7 +1187,9 @@ limitations under the License.
         <a class="dropdown-item"
            ng-class="{'disabled':isParagraphRunning()}"
            ng-click="moveUp(paragraph)">
-          <i class="fas fa-angle-up me-2"></i>
+          <span class="drop-icon">
+            <i class="fas fa-angle-up"></i>
+          </span>
           Move up
         </a>
       </li>
@@ -1187,7 +1197,9 @@ limitations under the License.
         <a class="dropdown-item"
            ng-class="{'disabled':isParagraphRunning()}"
            ng-click="moveDown(paragraph)">
-          <i class="fas fa-angle-down me-2"></i>
+          <span class="drop-icon">
+            <i class="fas fa-angle-down"></i>
+          </span>
           Move down
         </a>
       </li>
@@ -1195,7 +1207,9 @@ limitations under the License.
         <a class="dropdown-item"
            ng-class="{'disabled':isParagraphRunning()}"
            ng-click="moveBottom(paragraph)">
-          <i class="fas fa-angle-double-down me-2"></i>
+          <span class="drop-icon">
+            <i class="fas fa-angle-double-down"></i>
+          </span>
           Move to the bottom
         </a>
       </li>
@@ -1206,7 +1220,9 @@ limitations under the License.
         <a class="dropdown-item"
            ng-class="{'disabled':isParagraphRunning()}"
            ng-click="removeParagraph(paragraph)">
-          <i class="fa-solid fa-trash-can me-2"></i>
+          <span class="drop-icon">
+            <i class="fa-solid fa-trash-can"></i>
+          </span>
           Remove paragraph
         </a>
       </li>
