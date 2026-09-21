@@ -74,8 +74,10 @@ export class RenderNodeHostView {
     if(!this.renderNode().isStub()){
       componentInputs = {
         ...this.renderNode().inputs()(),
-        containerId:this.containerId()
       };
+      if(this.containerId() !== ''){
+        componentInputs['containerId'] = this.containerId();
+      }
     }
     return componentInputs;
   });
