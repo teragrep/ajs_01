@@ -127,8 +127,6 @@
     }
   }
   .dropdown-menu {
-    min-width: min-content;
-    width: max-content;
     @media only screen and (max-width: 992px) {
       width: 100%;
       border: 0;
@@ -146,11 +144,6 @@
       }
     }
     .drop-icon {
-      width: 20px;
-      display: inline-block;
-      text-align: center;
-      color: var(--primary-700);
-      margin-right: 5px;
       @media only screen and (max-width: 992px) {
         color: var(--primary-300);
       }
@@ -225,7 +218,6 @@
       }
     }
     .drop-icon {
-      color: var(--tertiary-300) !important;
       @media only screen and (max-width: 992px) {
         color: var(--tertiary-300);
       }
