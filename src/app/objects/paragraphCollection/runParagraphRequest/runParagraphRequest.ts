@@ -43,13 +43,13 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Request} from '../../channel/request';
+import {Requestable} from '../../channel/requestable';
 import {Channel} from '../../channel/channel';
 import {MessageImpl} from '../../message/messageImpl';
 import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
 import {Message} from '../../message/message';
 
-export class RunParagraphRequest implements Request {
+export class RunParagraphRequest implements Requestable {
   private readonly _channel: Channel;
   private readonly _decoratorParagraphs:Map<string,  object>;
 

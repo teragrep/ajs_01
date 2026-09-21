@@ -44,6 +44,6 @@
  * a licensee so wish it.
  */
 import {Register} from '../register';
-import {Request} from '../../channel/request';
+import {Requestable} from '../../channel/requestable';
 
-export interface RequestRegister extends Request, Register {}
+export interface RequestRegister extends Requestable, Register {}

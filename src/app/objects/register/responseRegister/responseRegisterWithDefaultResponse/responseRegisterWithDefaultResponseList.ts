@@ -44,13 +44,13 @@
  * a licensee so wish it.
  */
 import {ResponseRegister} from '../responseRegister';
-import {Response} from '../../../channel/response';
+import {Respondable} from '../../../channel/respondable';
 
 export class ResponseRegisterWithDefaultResponseList implements ResponseRegister{
   private readonly _responseRegister: ResponseRegister;
-  private readonly _responseList:Response[];
+  private readonly _responseList:Respondable[];
 
-  constructor(responseRegister: ResponseRegister, responseList:Response[]) {
+  constructor(responseRegister: ResponseRegister, responseList:Respondable[]) {
     this._responseRegister = responseRegister;
     this._responseList = responseList;
   }
