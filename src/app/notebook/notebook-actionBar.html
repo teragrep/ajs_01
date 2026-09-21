@@ -65,6 +65,7 @@ has been fixed.
                   class="btn btn-secondary rm-show"
                   ng-click="runAllParagraphs(note.id)"
                   ng-class="{'disabled':isNoteRunning()}"
+                  ng-if="!viewOnly"
                   title="Run all paragraphs"
                   ng-disabled="revisionView">
             <i class="fa-solid fa-play"></i>
