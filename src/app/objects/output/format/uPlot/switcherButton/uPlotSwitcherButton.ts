@@ -49,15 +49,15 @@ import {computed, Signal} from '@angular/core';
 import { RenderNode } from '../../../../rendering/renderNode/renderNode';
 import {ComponentViewImpl} from '../../../../rendering/componentView/componentViewImpl';
 import {OutputSwitcherButtonView} from '../../../../../ui/angular2+/output/switcher/switcherButton/outputSwitcherButtonView';
-import {Request} from '../../../../channel/request';
+import {Requestable} from '../../../../channel/requestable';
 
 export class uPlotSwitcherButton implements Printable {
-  private readonly _request: Request;
+  private readonly _request: Requestable;
   private readonly _title: string;
   private readonly _icon: string;
   private readonly _graphType: string;
 
-  constructor(request: Request, title: string, icon: string, graphType: string) {
+  constructor(request: Requestable, title: string, icon: string, graphType: string) {
     this._request = request;
     this._title = title;
     this._icon = icon;

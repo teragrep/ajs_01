@@ -46,7 +46,7 @@
 import {Directive, ElementRef, Inject, Injector, input} from '@angular/core';
 import { UpgradeComponent } from '@angular/upgrade/static';
 import {AngularObject} from '../../../../../objects/angularObject/angularObject';
-import {Request} from '../../../../../objects/channel/request';
+import {Requestable} from '../../../../../objects/channel/requestable';
 
 @Directive({
   selector: 'ajs-angular-view'
@@ -54,7 +54,7 @@ import {Request} from '../../../../../objects/channel/request';
 export class AngularViewUpgradeModule extends UpgradeComponent {
   template = input.required<string>();
   angularObjects= input.required<AngularObject[]>();
-  requestable = input.required<Request>();
+  requestable = input.required<Requestable>();
 
   constructor(
     @Inject(ElementRef) elementRef: ElementRef,

@@ -45,7 +45,7 @@
  */
 import {OutputType} from '../../../outputType';
 import {Printable} from '../../../../rendering/printable/printable';
-import {Request} from '../../../../channel/request';
+import {Requestable} from '../../../../channel/requestable';
 import {computed, Signal} from '@angular/core';
 import { RenderNode } from '../../../../rendering/renderNode/renderNode';
 import {ComponentViewImpl} from '../../../../rendering/componentView/componentViewImpl';
@@ -53,9 +53,9 @@ import {OutputSwitcherButtonView} from '../../../../../ui/angular2+/output/switc
 
 export class DataTableSwitcherButton implements Printable {
   private readonly _type: string = OutputType.dataTables;
-  private readonly _request: Request;
+  private readonly _request: Requestable;
 
-  constructor(request: Request) {
+  constructor(request: Requestable) {
     this._request = request;
   }
 

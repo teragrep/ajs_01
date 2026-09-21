@@ -46,7 +46,7 @@
 import {Component, input} from '@angular/core';
 import {AngularViewUpgradeModule} from './angularViewUpgradeModule';
 import {AngularObject} from '../../../../../objects/angularObject/angularObject';
-import {Request} from '../../../../../objects/channel/request';
+import {Requestable} from '../../../../../objects/channel/requestable';
 
 @Component({
   selector: 'angular-view',
@@ -60,5 +60,5 @@ import {Request} from '../../../../../objects/channel/request';
 export class AngularOutputView {
   template = input.required<string>();
   angularObjects= input.required<AngularObject[]>();
-  requestable = input.required<Request>();
+  requestable = input.required<Requestable>();
 }
