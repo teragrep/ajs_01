@@ -75,7 +75,8 @@
     width: 100%;
     height: 500px;
   }
-  .execution-time, .elapsed-time {
+  .execution-time,
+  .elapsed-time {
     color: var(--grey-600);
     font-size: 12px;
     margin-top: 10px;
@@ -110,41 +111,40 @@
       z-index: 10003;
     }
   }
-  .paragraph-title {
-    .paragraph-title-inactive {
-      font: 700 16px 'Roboto', sans-serif;
-      color: var(--primary-700);
-      text-transform: uppercase;
-      word-spacing: 3px;
-    }
-    input {
-      width: 50%;
-    }
-  }
 }
 
 .dark-mode .paragraph {
-  .execution-time, .elapsed-time {
+  .execution-time,
+  .elapsed-time {
     color: var(--dm-grey-300);
   }
-  .paragraph-title .paragraph-title-inactive {
-    color: var(--tertiary-200);
+  .control {
+    background: var(--dm-grey-600);
+    color: var(--grey-300);
+    li {
+      color: var(--dm-grey-100);
+    }
+    .dropdown-menu .drop-icon {
+      color: var(--dm-grey-300);
+    }
+  }
+  .title div {
+    color: var(--tertiary-300);
   }
 }
 
-.dark-mode .paragraph .control {
-  background: var(--dm-grey-600);
-  color: var(--grey-300);
-  li {
-    color: var(--dm-grey-100);
-  }
-  .dropdown-menu .drop-icon {
-    color: var(--dm-grey-300);
+.paragraph-title {
+  font: 700 16px 'Roboto', sans-serif;
+  color: var(--primary-700);
+  text-transform: uppercase;
+  word-spacing: 3px;
+  input {
+    width: 50%;
   }
 }
 
-.dark-mode .paragraph .title div {
-  color: var(--tertiary-300);
+.dark-mode .paragraph-title {
+  color: var(--tertiary-200);
 }
 
 .jobs-icon {
