@@ -52,23 +52,22 @@ import {MessageImpl} from '../../../message/messageImpl';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {OutputType} from '../../outputType';
-import {ComponentViewStub} from '../../../rendering/componentView/componentViewStub';
-import {ComponentView} from '../../../rendering/componentView/componentView';
-import {ComponentViewImpl} from '../../../rendering/componentView/componentViewImpl';
-import {AngularOutputView} from '../../../../ui/angular2+/output/outputViews/angularOutputView/angularOutputView';
 import {AngularFormat} from './angularFormat';
+import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeStub} from '../../../rendering/renderNode/renderNodeStub';
+import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
 
 export class AngularFormatImpl implements AngularFormat {
   private readonly _channel: Channel;
   private readonly _angularObjectCollection: AngularObjectCollection;
-  private readonly _componentViewStub: ComponentView;
-  private readonly _componentView: WritableSignal<ComponentView>;
+  private readonly _renderNode: WritableSignal<RenderNode>;
+  private readonly _renderNodeStub: RenderNode;
 
   constructor(channel: Channel) {
     this._channel = channel;
     this._angularObjectCollection = new AngularObjectCollectionImpl(this);
-    this._componentViewStub = new ComponentViewStub();
-    this._componentView = signal(this._componentViewStub);
+    this._renderNodeStub = new RenderNodeStub();
+    this._renderNode = signal(this._renderNodeStub);
   }
 
   request(json: object): void {
@@ -80,20 +79,17 @@ export class AngularFormatImpl implements AngularFormat {
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.angular){
-        this._componentView.set(this._componentViewStub);
+        this._renderNode.set(this._renderNodeStub);
       }
       else{
         const template:string = paragraphOutputMessage.outputData('string') as string;
-        this._componentView.set(new ComponentViewImpl(AngularOutputView, signal({template:template, angularObjects: this._angularObjectCollection.angularObjects(), requestable:this})));
+        this._renderNode.set(new RenderNodeImpl(RegisteredComponents.ANGULAR_OUTPUT_VIEW, signal({template:template, angularObjects: this._angularObjectCollection.angularObjects(), requestable:this})));
       }
     }
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView(),
-      children: computed(() => [])
-    }));
+    return this._renderNode;
   }
 
   switcherButtons(): Signal<RenderNode>[] {
