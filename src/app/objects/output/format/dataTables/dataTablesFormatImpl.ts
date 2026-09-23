@@ -48,41 +48,37 @@ import {DataTableSwitcherButton} from './switcherButton/dataTablesSwitcherButton
 import {OutputType} from '../../outputType';
 import {DataTablesPluginImpl} from './dataTablesPlugin/dataTablesPluginImpl';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
-import {computed, signal, Signal, WritableSignal} from '@angular/core';
+import {signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../../rendering/renderNode/renderNode';
 import {MessageImpl} from '../../../message/messageImpl';
 import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
-import {ComponentViewImpl} from '../../../rendering/componentView/componentViewImpl';
-import {ComponentView} from '../../../rendering/componentView/componentView';
-import {ComponentViewStub} from '../../../rendering/componentView/componentViewStub';
 import {DataTablesPlugin} from './dataTablesPlugin/dataTablesPlugin';
 import {DataTablesPluginStub} from './dataTablesPlugin/dataTablesPluginStub';
-import {DataTablesOutputView} from '../../../../ui/angular2+/output/outputViews/dataTablesOutputView/dataTablesOutputView';
 import {Printable} from '../../../rendering/printable/printable';
 import {DataTablesFormat} from './dataTablesFormat';
+import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeStub} from '../../../rendering/renderNode/renderNodeStub';
+import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
 
 export class DataTablesFormatImpl implements DataTablesFormat {
   private readonly _channel: Channel;
   private readonly _switcherButton: Printable;
-  private readonly _componentViewStub: ComponentView;
-  private readonly _componentView: WritableSignal<ComponentView>;
+  private readonly _renderNode: WritableSignal<RenderNode>;
+  private readonly _renderNodeStub: RenderNode;
   private readonly _pluginStub: DataTablesPlugin;
   private readonly _plugin: WritableSignal<DataTablesPlugin>;
 
   constructor(channel: Channel) {
     this._channel = channel;
     this._switcherButton = new DataTableSwitcherButton(this);
-    this._componentViewStub = new ComponentViewStub();
-    this._componentView = signal(this._componentViewStub);
+    this._renderNodeStub = new RenderNodeStub();
+    this._renderNode = signal(this._renderNodeStub);
     this._pluginStub = new DataTablesPluginStub();
     this._plugin = signal(this._pluginStub);
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView(),
-      children: computed(() => [])
-    }));
+    return this._renderNode;
   }
 
   response(json: object): void {
@@ -90,7 +86,7 @@ export class DataTablesFormatImpl implements DataTablesFormat {
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.dataTables){
-        this._componentView.set(this._componentViewStub);
+        this._renderNode.set(this._renderNodeStub);
         this._plugin.set(this._pluginStub);
       }
       else{
@@ -101,7 +97,7 @@ export class DataTablesFormatImpl implements DataTablesFormat {
         else{
           const dataTablesOptions = paragraphOutputMessage.options();
           this._plugin.set(new DataTablesPluginImpl(this, dataTablesData, dataTablesOptions.value()));
-          this._componentView.set(new ComponentViewImpl(DataTablesOutputView, signal({dataTablesPlugin: this._plugin()})));
+          this._renderNode.set(new RenderNodeImpl(RegisteredComponents.DATATABLES_OUTPUT_VIEW, signal({dataTablesPlugin: this._plugin()})));
         }
       }
     }

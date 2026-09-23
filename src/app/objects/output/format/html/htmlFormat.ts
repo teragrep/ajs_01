@@ -46,22 +46,21 @@
 import {OutputFormat} from '../outputFormat';
 import {OutputType} from '../../outputType';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
-import {computed, signal, Signal, WritableSignal} from '@angular/core';
+import {signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
 import {MessageImpl} from '../../../message/messageImpl';
 import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
-import {ComponentView} from '../../../rendering/componentView/componentView';
-import {ComponentViewStub} from '../../../rendering/componentView/componentViewStub';
-import {ComponentViewImpl} from '../../../rendering/componentView/componentViewImpl';
-import {HtmlOutputView} from '../../../../ui/angular2+/output/outputViews/htmlOutputView/htmlOutputView';
+import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeStub} from '../../../rendering/renderNode/renderNodeStub';
+import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
 
 export class HTMLFormat implements OutputFormat{
-  private readonly _componentViewStub: ComponentView;
-  private readonly _componentView: WritableSignal<ComponentView>;
+  private readonly _renderNode: WritableSignal<RenderNode>;
+  private readonly _renderNodeStub: RenderNode;
 
   constructor() {
-    this._componentViewStub = new ComponentViewStub();
-    this._componentView = signal(this._componentViewStub);
+    this._renderNodeStub = new RenderNodeStub();
+    this._renderNode = signal(this._renderNodeStub);
   }
 
   response(json: object): void {
@@ -69,21 +68,17 @@ export class HTMLFormat implements OutputFormat{
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.html) {
-        this._componentView.set(this._componentViewStub);
+        this._renderNode.set(this._renderNodeStub);
       }
       else{
         const htmlTemplate:string = paragraphOutputMessage.outputData('string') as string;
-        const componentView = new ComponentViewImpl(HtmlOutputView, signal({htmlTemplate: htmlTemplate}));
-        this._componentView.set(componentView);
+        this._renderNode.set(new RenderNodeImpl(RegisteredComponents.HTML_OUTPUT_VIEW, signal({htmlTemplate: htmlTemplate})));
       }
     }
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView(),
-      children: computed(() => []),
-    }));
+    return this._renderNode;
   }
 
   switcherButtons(): Signal<RenderNode>[] {
