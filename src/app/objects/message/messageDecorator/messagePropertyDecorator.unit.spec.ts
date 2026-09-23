@@ -43,46 +43,42 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-
-import {MessageDecorator} from './messageDecorator';
-import {MessagePropertyDecorator} from './messagePropertyDecorator';
+import {PropertyDecoratedMessage} from './propertyDecoratedMessage';
 import {MessageImpl} from '../messageImpl';
 import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {Message} from '../message';
 
 describe('MessagePropertyDecorator unit test', () => {
   const propertyName = 'propertyName';
   const propertyValue = 'propertyValue';
-  const messagePropertyDecorator:MessageDecorator = new MessagePropertyDecorator(propertyName, propertyValue);
+  let propertyDecoratedMessage: Message;
+  const operation = 'op';
 
-  it('Should decorate message', () => {
-    const messageWithDecoratedProperty = new MessageImpl(new SafeJsonImpl({
-      op:'op',
+  it('Should decorate data', () => {
+    const messageWithPropertyToDecorate = new MessageImpl(new SafeJsonImpl({
+      op:operation,
       data:{
         [propertyName]:''
       }
     }));
-    const decoratedMessage = messagePropertyDecorator.decoratedMessage(messageWithDecoratedProperty);
-    expect(decoratedMessage).toEqual({
-      op:'op',
-      data:{
-        [propertyName]:propertyValue
-      }
-    });
+    propertyDecoratedMessage = new PropertyDecoratedMessage(messageWithPropertyToDecorate, propertyName, propertyValue);
+    const expectedData = {
+      [propertyName]:propertyValue
+    };
+    expect(propertyDecoratedMessage.data()).toEqual(expectedData);
+    expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 
   it('Should not decorate message', () => {
-    const messageWithoutDecoratedProperty = new MessageImpl(new SafeJsonImpl({
+    const messageData ={
+      test:'test'
+    };
+    const messageWithoutPropertyToDecorate = new MessageImpl(new SafeJsonImpl({
       op:'op',
-      data:{
-        test:'test'
-      }
+      data:messageData
     }));
-    const decoratedMessage = messagePropertyDecorator.decoratedMessage(messageWithoutDecoratedProperty);
-    expect(decoratedMessage).toEqual({
-      op:'op',
-      data:{
-        test:'test'
-      }
-    });
+    propertyDecoratedMessage = new PropertyDecoratedMessage(messageWithoutPropertyToDecorate, propertyName, propertyValue);
+    expect(propertyDecoratedMessage.data()).toEqual(messageData);
+    expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 });

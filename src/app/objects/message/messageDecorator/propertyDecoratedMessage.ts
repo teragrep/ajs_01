@@ -45,6 +45,26 @@
  */
 import {Message} from '../message';
 
-export interface MessageDecorator {
-  decoratedMessage(message:Message): {op:string, data:object};
+export class PropertyDecoratedMessage implements Message {
+  private readonly _message:Message;
+  private readonly _propertyName: string;
+  private readonly _propertyValue: unknown;
+
+  constructor(message:Message, propertyName: string, propertyValue: unknown) {
+    this._message = message;
+    this._propertyName = propertyName;
+    this._propertyValue = propertyValue;
+  }
+
+  data(): object {
+    const messageData= this._message.data();
+    if(this._propertyName in messageData){
+      messageData[this._propertyName] = this._propertyValue;
+    }
+    return messageData;
+  }
+
+  operation(): string {
+    return this._message.operation();
+  }
 }
