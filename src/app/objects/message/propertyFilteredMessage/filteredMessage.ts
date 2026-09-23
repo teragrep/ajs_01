@@ -44,7 +44,6 @@
  * a licensee so wish it.
  */
 import Stubable from '../../../shared/interfaces/stubable';
+import {Message} from '../message';
 
-export interface FilteredMessage extends Stubable {
-  toJson():{op:string, data:object};
-}
+export interface FilteredMessage extends Stubable, Message {}

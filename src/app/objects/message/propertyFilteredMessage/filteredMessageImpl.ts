@@ -53,11 +53,12 @@ export class FilteredMessageImpl implements FilteredMessage {
     this._message = message;
   }
 
-  toJson():{op:string, data:object}{
-    return {
-      op:this._message.operation(),
-      data:this._message.data(),
-    };
+  data(): object {
+    return this._message.data();
+  }
+
+  operation(): string {
+    return this._message.operation();
   }
 
   isStub(): boolean {

@@ -49,8 +49,10 @@ export class FilteredMessageStub implements FilteredMessage {
   isStub(): boolean {
     return true;
   }
-
-  toJson():{op:string, data:object} {
+  data(): object {
+    throw new Error('PropertyFilteredMessageStub: Method not implemented.');
+  }
+  operation(): string {
     throw new Error('PropertyFilteredMessageStub: Method not implemented.');
   }
 }

@@ -101,7 +101,10 @@ export class NotebookImpl implements Notebook {
     const message = new MessageImpl(new SafeJsonImpl(json));
     const filteredMessage = this._noteIdFilter.filteredMessage(message);
     if(!filteredMessage.isStub()){
-      this._paragraphCollection.response(filteredMessage.toJson());
+      this._paragraphCollection.response({
+        op:filteredMessage.operation(),
+        data:filteredMessage.data()
+      });
     }
   }
 

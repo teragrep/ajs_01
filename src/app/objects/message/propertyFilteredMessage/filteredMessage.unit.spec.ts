@@ -50,8 +50,8 @@ import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
 
 describe('FilteredMessage unit test', () => {
   const jsonMessage = {
-    op:'',
-    data:{}
+    op:'test',
+    data:{test:'test'}
   };
   const filteredMessage: FilteredMessage = new FilteredMessageImpl(new MessageImpl(new SafeJsonImpl(jsonMessage)));
 
@@ -59,7 +59,11 @@ describe('FilteredMessage unit test', () => {
     expect(filteredMessage.isStub()).toBe(false);
   });
 
-  it('Should yield to json', () => {
-    expect(filteredMessage.toJson()).toEqual(jsonMessage);
+  it('Should have operation', () => {
+    expect(filteredMessage.operation()).toEqual(jsonMessage.op);
+  });
+
+  it('Should have data', () => {
+    expect(filteredMessage.data()).toEqual(jsonMessage.data);
   });
 });

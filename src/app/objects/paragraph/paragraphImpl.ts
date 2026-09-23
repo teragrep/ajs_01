@@ -107,7 +107,10 @@ export class ParagraphImpl implements Paragraph {
     const message = new MessageImpl(new SafeJsonImpl(json));
     const filteredMessage = this._paragraphIdFilter.filteredMessage(message);
     if(!filteredMessage.isStub()) {
-      this._outputContainer.response(filteredMessage.toJson());
+      this._outputContainer.response({
+        op:filteredMessage.operation(),
+        data:filteredMessage.data()
+      });
     }
   }
 }
