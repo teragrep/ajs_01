@@ -49,39 +49,34 @@ import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
 import {ParagraphCollectionImpl} from '../paragraphCollection/paragraphCollectionImpl';
 import {ParagraphCollection} from '../paragraphCollection/paragraphCollection';
-import {computed, Signal} from '@angular/core';
+import {signal, Signal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
-import {ComponentView} from '../rendering/componentView/componentView';
-import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {MessageFilter} from '../message/messageFilter/messageFilter';
 import {MessageWithField} from '../message/messageWithField/messageWithField';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
 import {MessageImpl} from '../message/messageImpl';
+import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 
 export class NotebookImpl implements Notebook {
   private readonly _channel: Channel;
   private readonly _notebook: WebSocketPayload;
   private readonly _paragraphCollection: ParagraphCollection;
-  private readonly _componentView:ComponentView;
+  private readonly _renderNode: Signal<RenderNode>;
   private readonly _noteIdFilter:MessageFilter;
 
   constructor(channel: Channel, notebook: object) {
     this._channel = channel;
     this._notebook = new WebSocketPayloadImpl(notebook);
     this._paragraphCollection = new ParagraphCollectionImpl(this, this._notebook.arrayProperty('paragraphs'));
-    this._componentView = new ComponentViewStub();
     this._noteIdFilter = new MessagePropertyEqualsFilter('noteId', this.id());
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.NOTEBOOK_VIEW, signal({
+      paragraphCollection: this._paragraphCollection.print()()
+    })));
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView,
-      children: computed(() => {
-        const children:RenderNode[] = [];
-        children.push(this._paragraphCollection.print()());
-        return children;
-      }),
-    }));
+    return this._renderNode;
   }
 
   id(): string {
