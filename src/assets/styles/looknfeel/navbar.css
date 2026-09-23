@@ -92,7 +92,7 @@
   .navbar-nav .nav-link,
   .navbar-nav .btn-link {
     color: var(--primary-100);
-    font: 500 16px 'Roboto', sans-serif;
+    font: 500 var(--fs-2) 'Roboto', sans-serif;
     &:hover {
       color: var(--primary-200);
     }
@@ -102,14 +102,14 @@
   .btn-link:hover .fas.server-connected,
   .btn-link:hover .far.server-connected {
     color: var(--tertiary-400) !important;
-    font-size: 12px;
+    font-size: var(--fs-1);
   }
   .server-disconnected,
   .server-disconnected:hover,
   .btn-link:hover .fas.server-disconnected,
   .btn-link:hover .far.server-disconnected {
     color: var(--danger-400) !important;
-    font-size: 12px;
+    font-size: var(--fs-1);
   }
   .btn-link {
     display: inline-block;
@@ -174,13 +174,13 @@
     .form-control-search {
       position: absolute;
       margin: 11px 0 0 12px;
-      font-size: 13px;
+      font-size: var(--fs-1);
       line-height: 1;
       color: var(--grey-600);
     }
     .note-name-query {
       padding: 6px 6px 4px 32px;
-      font-size: 14px;
+      font-size: var(--fs-1);
       border: 1px solid var(--grey-400) !important;
     }
   }
