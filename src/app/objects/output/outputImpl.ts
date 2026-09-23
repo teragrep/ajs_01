@@ -113,10 +113,11 @@ export class OutputImpl implements Output {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(!this._previousParagraphOutputRequest.isStub() && paragraphOutputMessage.type() !== this._previousParagraphOutputRequest.type()){
         this._channel.request(this._previousParagraphOutputRequest.request());
-        return;
       }
-      this._outputFormats.forEach(format => format.response(json));
-      this._outputSwitcher.response(json);
+      else{
+        this._outputFormats.forEach(format => format.response(json));
+        this._outputSwitcher.response(json);
+      }
     }
   }
 }
