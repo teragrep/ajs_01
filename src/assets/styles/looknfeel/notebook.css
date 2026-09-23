@@ -168,7 +168,7 @@
 
 .form-control_title-input {
   height: auto;
-  font: 500 var(--fs-4) 'Roboto';
+  font: 500 var(--fs-4) var(--font-heading);
   line-height: normal;
   color: var(--grey-900);
   background: white;
@@ -197,7 +197,7 @@
   direction: rtl;
   unicode-bidi: plaintext;
   text-align: left;
-  font: 600 var(--fs-4) 'Roboto';
+  font: 600 var(--fs-4) var(--font-heading), sans-serif;
   margin: 0;
   padding-top: 4px;
   &:after {
@@ -612,7 +612,7 @@
 /* DPL */
 
 .log-message {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-monospace-text), monospace;
   color: var(--dm-grey-500);
   word-break: break-all;
 }

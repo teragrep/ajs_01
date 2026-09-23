@@ -138,7 +138,7 @@
 }
 
 .plain-text {
-  font: 400 14px 'Roboto Mono', monospace;
+  font: 400 14px var(--font-monospace-text), monospace;
   white-space: pre-wrap; /** to preserve white-space and newlines of result */
 }
 
