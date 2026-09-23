@@ -104,9 +104,10 @@ export class NotebookCollectionImpl implements NotebookCollection{
 
   response(json: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const event = this._responseEvents.get(message.operation());
-    if(event !== undefined){
-      event(message);
+    const eventName = message.operation();
+    if(this._responseEvents.has(eventName)){
+      const eventCallback = this._responseEvents.get(eventName);
+      eventCallback(message);
     }
     else if(!this._currentNotebook().isStub()){
       this._currentNotebook().response(json);

@@ -165,9 +165,10 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
 
   response(json: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const responseEvent = this._responseEvents.get(message.operation());
-    if(responseEvent){
-      responseEvent(message);
+    const eventName = message.operation();
+    if(this._responseEvents.has(eventName)){
+      const eventCallback = this._responseEvents.get(eventName);
+      eventCallback(message);
     }
     else{
       this._paragraphs().forEach(paragraph => paragraph.response(json));
