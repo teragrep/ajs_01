@@ -48,8 +48,6 @@ import {Notebook} from '../notebook/notebook';
 import {Channel} from '../channel/channel';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
-import {ComponentView} from '../rendering/componentView/componentView';
-import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {NotebookIndex} from './notebookIndex/notebookIndex';
 import {NotebookStub} from '../notebook/notebookStub';
 import {NoteMessageImpl} from '../message/noteMessage/noteMessageImpl';
