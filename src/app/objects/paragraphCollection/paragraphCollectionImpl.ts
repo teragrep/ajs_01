@@ -50,8 +50,6 @@ import {ParagraphCollection} from './paragraphCollection';
 import {ParagraphImpl} from '../paragraph/paragraphImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
-import {ComponentView} from '../rendering/componentView/componentView';
-import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {ResponseRegister} from '../register/responseRegister/responseRegister';
 import {ResponseRegisterImpl} from '../register/responseRegister/responseRegisterImpl';
 import {ParagraphMessageImpl} from '../message/paragraphMessage/paragraphMessageImpl';
@@ -61,6 +59,8 @@ import {ParagraphAddedMessageImpl} from '../message/paragraphAddedMessage/paragr
 import {ParagraphRemovedMessageImpl} from '../message/paragraphRemovedMessage/paragraphRemovedMessageImpl';
 import {RequestRegister} from '../register/requestRegister/requestRegister';
 import {RequestRegisterImpl} from '../register/requestRegister/requestRegisterImpl';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 
 export class ParagraphCollectionImpl implements ParagraphCollection {
   private readonly _channel: Channel;
@@ -68,7 +68,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   private readonly _decoratorParagraphs:Map<string,  object>;
   private readonly _responseRegister:ResponseRegister;
   private readonly _requestRegister:RequestRegister;
-  private readonly _componentView: ComponentView;
+  private readonly _renderNode: Signal<RenderNode>;
 
   constructor(channel: Channel, initialParagraphData: object[]) {
     this._channel = channel;
@@ -80,7 +80,9 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     this._responseRegister.register('PARAGRAPH_REMOVED', (json) => this.paragraphRemovedResponse(json));
     this._requestRegister = new RequestRegisterImpl(this._channel);
     this._requestRegister.register('RUN_PARAGRAPH', (json) => this.runParagraphRequest(json));
-    this._componentView = new ComponentViewStub();
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_COLLECTION_VIEW, computed(() => ({
+      paragraphs: Array.from(this._paragraphs().values()).map(paragraph => paragraph.print()()),
+    }))));
   }
 
   private runParagraphRequest(json:object):void {
@@ -141,20 +143,13 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
       const paragraph = new ParagraphImpl(this, paragraphData);
       paragraphMap.set(paragraph.id(), paragraph);
     });
-    return signal(paragraphMap);
+    return signal(paragraphMap, {
+      equal: () => false
+    });
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView,
-      children: computed(() => {
-        const children:RenderNode[] = [];
-        this._paragraphs().forEach(paragraph => {
-          children.push(paragraph.print()());
-        });
-        return children;
-      }),
-    }));
+    return this._renderNode;
   }
 
   request(data: object): void {
