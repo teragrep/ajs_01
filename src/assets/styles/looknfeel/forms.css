@@ -57,14 +57,14 @@
   color: var(--grey-900);
   border: 1px solid var(--grey-400);
   background: var(--grey-000);
-  font-size: 16px;
+  font-size: var(--fs-2);
   &::placeholder {
     color: var(--grey-500);
   }
 }
 
 .form-control.form-control-sm {
-  font-size: 0.875rem;
+  font-size: var(--fs-1);
 }
 
 .dark-mode .form-control {
@@ -84,7 +84,7 @@
   appearance: none;
   border: 1px solid var(--grey-400) !important;
   cursor: pointer;
-  font-size: 16px;
+  font-size: var(--fs-2);
 }
 
 select {

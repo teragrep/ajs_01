@@ -51,7 +51,7 @@ a {
     color: var(--primary-900);
   }
   .out-link {
-    font-size: 10px;
+    font-size: var(--fs-1);
     color: var(--primary-400) !important;
   }
 }
@@ -101,12 +101,8 @@ hr {
   color: var(--dm-grey-200) !important;
 }
 
-.fs-6 {
-  font-size: 1rem !important;
-}
-
 .password {
-  font-size: 10px;
+  font-size: var(--fs-1);
 }
 
 /* Titles */
@@ -123,12 +119,12 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-h1 {font-size: 28px;}
-h2 {font-size: 26px;}
-h3 {font-size: 22px;}
-h4 {font-size: 20px;}
-h5 {font-size: 18px;}
-h6 {font-size: 16px;}
+h1 {font-size: var(--fs-7);}
+h2 {font-size: var(--fs-6);}
+h3 {font-size: var(--fs-5);}
+h4 {font-size: var(--fs-4);}
+h5 {font-size: var(--fs-3);}
+h6 {font-size: var(--fs-2);}
 
 .dark-mode {
   h1, h2, h3, h4, h5, h6 {
@@ -143,7 +139,7 @@ div > :first-child {
 /* Markdown output */
 
 .markdown-body {
-  font: 16px var(--font-body-text), sans-serif !important;
+  font: var(--fs-2) var(--font-body-text), sans-serif !important;
   color: var(--grey-800) !important;
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading), sans-serif !important;
@@ -152,20 +148,20 @@ div > :first-child {
     color: var(--grey-900);
   }
   h1 {
-    font-size: 28px !important;
+    font-size: var(--fs-7) !important;
     border-bottom: none !important;
     padding: 0 !important;
   }
   h2 {
-    font-size: 26px !important;
+    font-size: var(--fs-6) !important;
     background: none;
     border-bottom: none !important;
     padding: 0 !important;
   }
-  h3 {font-size: 22px !important;}
-  h4 {font-size: 20px !important;}
-  h5 {font-size: 18px !important;}
-  h6 {font-size: 16px !important;}
+  h3 {font-size: var(--fs-5) !important;}
+  h4 {font-size: var(--fs-4) !important;}
+  h5 {font-size: var(--fs-3) !important;}
+  h6 {font-size: var(--fs-2) !important;}
   code {
     background: var(--grey-300) !important;
   }
@@ -173,10 +169,8 @@ div > :first-child {
     margin: 10px 0 !important;
     padding: 10px 15px !important;
     border-left: 5px solid var(--secondary-300) !important;
-    font-family: var(--font-body-text), sans-serif;
-    font-style: italic;
-    font-size: 16px !important;
-    background: white;
+    font: italic var(--fs-2) var(--font-body-text), sans-serif !important;
+    background: var(--grey-000);
     color: var(--grey-700) !important;
   }
   li {
