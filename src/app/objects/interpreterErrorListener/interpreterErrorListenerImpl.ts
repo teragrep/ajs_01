@@ -46,35 +46,28 @@
 import {InterpreterErrorListener} from './interpreterErrorListener';
 import {MessageImpl} from '../message/messageImpl';
 import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
-import {computed, signal, Signal, WritableSignal} from '@angular/core';
+import {signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
-import {ComponentView} from '../rendering/componentView/componentView';
-import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
-import {ComponentViewImpl} from '../rendering/componentView/componentViewImpl';
-import {InterpreterErrorView} from '../../ui/angular2+/interpreterError/interpreterErrorView';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeStub} from '../rendering/renderNode/renderNodeStub';
+import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 
 export class InterpreterErrorListenerImpl implements InterpreterErrorListener {
-  private readonly _paragraphId:string;
-  private readonly _componentView:WritableSignal<ComponentView>;
+  private readonly _renderNode: WritableSignal<RenderNode>;
 
   constructor() {
-    this._componentView = signal(new ComponentViewStub());
+    this._renderNode = signal(new RenderNodeStub());
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      paragraphId:this._paragraphId,
-      children: computed(() => []),
-      componentView: this._componentView()
-    }));
+    return this._renderNode;
   }
 
   response(data: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'INTERPRETER_ERROR'){
-      const errorData = new WebSocketPayloadImpl(message.data());
-      const errorMessage = errorData.stringProperty('message');
-      this._componentView.set(new ComponentViewImpl(InterpreterErrorView, signal({errorMessage: {errorMessage:errorMessage}})));
+      const errorMessage = message.dataAsWebSocketPayload().stringProperty('message');
+      this._renderNode.set(new RenderNodeImpl(RegisteredComponents.INTERPRETER_ERROR_VIEW, signal({errorMessage: {errorMessage:errorMessage}})));
     }
   }
 }
