@@ -43,31 +43,25 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Component, input, Signal} from '@angular/core';
-import {NgComponentOutlet} from '@angular/common';
-import {RenderNode} from '../../../../objects/rendering/renderNode/renderNode';
-import {RenderNodeHostView} from '../../renderNodeHost/renderNodeHostView';
+import {Component, input} from '@angular/core';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
 
 @Component({
-  selector: 'output-switcher',
+  selector: 'output-container',
   imports: [
     RenderNodeHostView
   ],
   template: `
-    @if (outputIsSwitchable()) {
-      <div class="btn-group" role="group">
-        @for (button of switcherButtons(); track $index) {
-          <render-node-host [renderNode]="button()"></render-node-host>
-        }
-      </div>
-      @if (switchIsPending()) {
-        <div class="spinner-border mx-2 text-primary" role="status"></div>
-      }
+    <render-node-host [renderNode]="interpreterErrorListener()"></render-node-host>
+    <render-node-host [renderNode]="outputSwitcher()"></render-node-host>
+    @for(outputFormat of outputFormats(); track $index){
+      <render-node-host [renderNode]="outputFormat"></render-node-host>
     }
   `
 })
-export class OutputSwitcherView {
-  switcherButtons = input.required<Signal<RenderNode>[]>();
-  switchIsPending= input.required<boolean>();
-  outputIsSwitchable= input.required<boolean>();
+export class OutputView {
+  interpreterErrorListener = input.required<RenderNode>();
+  outputSwitcher = input.required<RenderNode>();
+  outputFormats = input.required<RenderNode[]>();
 }
