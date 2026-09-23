@@ -60,7 +60,8 @@ export class MessagePropertyEqualsFilter implements MessageFilter {
 
   filteredMessage(message: Message): FilteredMessage {
     let stubableMessage: FilteredMessage;
-    if(message.dataAsWebSocketPayload().propertyExists(this._propertyName) && message.data()[this._propertyName] !== this._propertyValue){
+    const property = message.data()[this._propertyName];
+    if(property && property !== this._propertyValue){
       stubableMessage = new FilteredMessageStub();
     }
     else{

@@ -45,15 +45,15 @@
  */
 import {FilteredMessage} from './filteredMessage';
 import {FilteredMessageImpl} from './filteredMessageImpl';
-import {WebSocketPayloadImpl} from '../../safeJson/webSocketPayloadImpl';
 import {MessageImpl} from '../messageImpl';
+import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
 
 describe('FilteredMessage unit test', () => {
   const jsonMessage = {
     op:'',
     data:{}
   };
-  const filteredMessage: FilteredMessage = new FilteredMessageImpl(new MessageImpl(new WebSocketPayloadImpl(jsonMessage)));
+  const filteredMessage: FilteredMessage = new FilteredMessageImpl(new MessageImpl(new SafeJsonImpl(jsonMessage)));
 
   it('Should not be stub', () => {
     expect(filteredMessage.isStub()).toBe(false);
