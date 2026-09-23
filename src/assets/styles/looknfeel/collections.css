@@ -49,13 +49,13 @@
   background: var(--grey-000);
   border-radius: 20px;
   box-shadow: 0 2px 4px var(--grey-400);
-  .header-top {
-    padding: 30px 35px;
+  .header-top,
+  .header-bottom {
+    padding: var(--p-6) var(--p-7);
   }
   .header-bottom {
     background: var(--grey-100);
     border-radius: 0 0 20px 20px;
-    padding: 30px 35px;
   }
 }
 
@@ -72,7 +72,7 @@
 .job {
   background: var(--grey-000);
   border-radius: 20px;
-  padding: 20px 35px;
+  padding: var(--p-6) var(--p-7);
   box-shadow: 0 2px 4px var(--grey-400);
   .run-control {
     height: 4px;
@@ -179,8 +179,8 @@
 
 .optional-settings {
   background: var(--grey-200);
-  padding: 1rem;
-  margin: 20px -1rem -1rem;
+  padding: var(--p-5);
+  margin: var(--m-6) calc(var(--m-5) * -1) calc(var(--m-5) * -1);
 }
 
 .dark-mode .optional-settings {
@@ -195,31 +195,31 @@
 }
 
 .cluster {
-  padding: 2px 8px 4px 8px;
+  padding: var(--p-1) var(--p-3) var(--p-2) var(--p-3);
   min-height: 32px;
 }
 
 .cluster-search-tool {
   display: inline-block;
-  margin-left: 15px;
+  margin-left: var(--m-5);
   .dropdown-text-desc {
     color: gray;
     font-weight: 400;
   }
   .dropdown-text-value {
-    margin-left: 2px;
+    margin-left: var(--m-1);
   }
 }
 
 #cluster-manager-header .cluster-search-tool {
   .search-input {
-    margin-right: 7px;
+    margin-right: var(--m-3);
     min-width: 215px;
     > input {
       font-family: 'FontAwesome', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       border-radius: 4px;
       font-size: 14px;
-      padding-left: 10px;
+      padding-left: var(--p-4);
     }
   }
   .dropdown-toggle {
@@ -227,7 +227,7 @@
     float: none;
     min-width: 150px;
     text-align: left;
-    margin-right: 5px;
+    margin-right: var(--m-2);
   }
   .date-sort-button {
     min-width: 180px;
@@ -244,20 +244,20 @@
 
 .cluster-icon-desc-container {
   display: inline-block;
-  margin-top: 10px;
-  margin-right: 30px;
+  margin-top: var(--m-4);
+  margin-right: var(--m-7);
   float: right;
 }
 
 .cluster-desc-icon {
-  margin-right: 3px;
+  margin-right: var(--m-1);
 }
 
 .cluster-counter {
   float: right;
   clear: both;
-  margin-left: 8px;
-  margin-top: 6px;
+  margin-left: var(--m-3);
+  margin-top: var(--m-2);
   .cluster-counter-label {
     color: gray;
   }
@@ -272,14 +272,14 @@
 */
 
 .node-space {
-  margin-bottom: 5px !important;
-  padding: 10px 10px 10px 10px !important;
+  margin-bottom: var(--m-2) !important;
+  padding: var(--p-4) !important;
   min-height: 30px;
 }
 
 .node-margin {
-  margin-right: 2px;
-  margin-left: 2px;
+  margin-right: var(--m-1);
+  margin-left: var(--m-1);
 }
 
 .node-types i {
@@ -309,19 +309,18 @@
   background: rgba(255,255,255,0.85);
   float: right;
   color: #999;
-  margin-top: 1px;
-  margin-right: 5px;
+  margin-right: var(--m-2);
   position: absolute;
   clear: both;
   right: 15px;
   text-align: right;
   font-size: 12px;
-  padding: 4px;
+  padding: var(--p-1);
   span {
-    margin-left: 4px;
+    margin-left: var(--m-1);
   }
   li {
-    margin-bottom: 4px;
+    margin-bottom: var(--m-1);
     color: #333333;
   }
   .tooltip {
@@ -347,7 +346,7 @@
 .localPkgInfo {
   margin-right: 0;
   p {
-    margin: 10px 0 0;
+    margin: var(--m-4) 0 0;
     font-size: 11px;
     font-style: italic;
     color: var(--grey-700);
