@@ -45,8 +45,7 @@
  */
 import {ParagraphOutputMessage} from './paragraphOutputMessage';
 import {Message} from '../message';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
-import {SafeJson} from '../../safeJson/safeJson';
+import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 import { StubableObject } from '../../stubableObject/stubableObject';
 import {TypedMessage} from '../typedMessage/typedMessage';
 import {StubableObjectImpl} from '../../stubableObject/stubableObjectImpl';
@@ -67,22 +66,29 @@ export class ParagraphOutputMessageImpl implements ParagraphOutputMessage {
 
   isAggregated(): boolean {
     const output = this.output();
-    return output.propertyExists('isAggregated') && output.getProperty('isAggregated', 'boolean');
+    return output.propertyExists('isAggregated') && output.booleanProperty('isAggregated');
   }
 
   type(): string {
-    return this.output().getProperty('type', 'string');
+    return this.output().stringProperty('type');
   }
 
-  outputData<T>(type: string): T {
-    return this.output().getProperty('data', type);
+  outputData(type: string): string | object {
+    let outputData: string | object;
+    if(type === 'string') {
+      outputData = this.output().stringProperty('data');
+    }
+    else if(type === 'object') {
+      outputData = this.output().objectProperty('data');
+    }
+    return outputData;
   }
 
   options(): StubableObject {
     let options: StubableObject;
     const output = this.output();
     if(output.propertyExists('options')){
-      options = new StubableObjectImpl(output.getProperty('options', 'object'));
+      options = new StubableObjectImpl(output.objectProperty('options'));
     }
     else{
       options = new StubableObjectStub();
@@ -90,8 +96,8 @@ export class ParagraphOutputMessageImpl implements ParagraphOutputMessage {
     return options;
   }
 
-  private output(): SafeJson {
-    return new SafeJsonImpl(new SafeJsonImpl(this.data()).getProperty('output', 'object'));
+  private output(): WebSocketPayload {
+    return this._message.dataAsWebSocketPayload().objectPropertyAsPayload('output');
   }
 
   data(): object {

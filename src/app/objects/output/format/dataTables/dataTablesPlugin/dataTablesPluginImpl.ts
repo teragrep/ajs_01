@@ -48,7 +48,7 @@ import 'datatables.net-buttons-bs5';
 import {Channel} from '../../../../channel/channel';
 import {DataTablesAjaxImpl} from './ajax/dataTablesAjaxImpl';
 import {DataTablesAjax} from './ajax/dataTablesAjax';
-import {SafeJsonImpl} from '../../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../../webSocketPayload/webSocketPayloadImpl';
 import {DataTablesPlugin} from './dataTablesPlugin';
 
 export class DataTablesPluginImpl implements DataTablesPlugin {
@@ -73,8 +73,8 @@ export class DataTablesPluginImpl implements DataTablesPlugin {
   }
 
   initializedTable(tableElement: HTMLTableElement): Api<unknown>{
-    const safeOptions = new SafeJsonImpl(this._outputOptions);
-    const headers:Array<string> = safeOptions.getProperty('headers', 'object');
+    const safeOptions = new WebSocketPayloadImpl(this._outputOptions);
+    const headers:Array<string> = safeOptions.arrayProperty<string>('headers');
     const config: Config = {
       ajax: this._dataTablesAjax.configFunction(this._outputData),
       serverSide: true,

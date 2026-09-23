@@ -47,7 +47,7 @@ import {Channel} from '../../../channel/channel';
 import {DataTableSwitcherButton} from './switcherButton/dataTablesSwitcherButton';
 import {OutputType} from '../../outputType';
 import {DataTablesPluginImpl} from './dataTablesPlugin/dataTablesPluginImpl';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../../rendering/renderNode/renderNode';
 import {MessageImpl} from '../../../message/messageImpl';
@@ -86,7 +86,7 @@ export class DataTablesFormatImpl implements DataTablesFormat {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.dataTables){

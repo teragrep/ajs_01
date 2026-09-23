@@ -47,7 +47,7 @@ import {NotesInfoMessage} from './notesInfoMessage';
 import {NotebookIndex} from '../../notebookCollection/notebookIndex/notebookIndex';
 import {Message} from '../message';
 import {TypedMessage} from '../typedMessage/typedMessage';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {NotebookIndexImpl} from '../../notebookCollection/notebookIndex/notebookIndexImpl';
 
 export class NotesInfoMessageImpl implements NotesInfoMessage {
@@ -62,7 +62,7 @@ export class NotesInfoMessageImpl implements NotesInfoMessage {
   }
 
   notebookIndices(): Map<string, NotebookIndex> {
-    const messageData = new SafeJsonImpl(this._message.data());
+    const messageData = new WebSocketPayloadImpl(this._message.data());
     const notebookIndices = new Map<string, NotebookIndex>();
     const notebookIndicesData = messageData.getProperty<Array<object>>('notes', 'object');
     notebookIndicesData.forEach(notebookIndexData => {

@@ -46,7 +46,7 @@
 import {ParagraphRemovedMessage} from './paragraphRemovedMessage';
 import {Message} from '../message';
 import {TypedMessage} from '../typedMessage/typedMessage';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 export class ParagraphRemovedMessageImpl implements ParagraphRemovedMessage {
   private readonly _message:Message;
@@ -56,8 +56,7 @@ export class ParagraphRemovedMessageImpl implements ParagraphRemovedMessage {
   }
 
   paragraphId(): string {
-    const paragraphRemovedData = new SafeJsonImpl(this._message.data());
-    return paragraphRemovedData.getProperty('id', 'string');
+    return this._message.dataAsWebSocketPayload().stringProperty('id');
   }
 
   data(): object {

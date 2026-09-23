@@ -45,7 +45,7 @@
  */
 import {NoteMessage} from './noteMessage';
 import {Message} from '../message';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {MessageImpl} from '../messageImpl';
 import {NoteMessageImpl} from './noteMessageImpl';
 import {FakeChannel} from '../../channel/fakeChannel';
@@ -65,7 +65,7 @@ describe('Note message unit test', () => {
 
   beforeEach(() => {
     channel = new FakeChannel();
-    message = new MessageImpl(new SafeJsonImpl(messageData));
+    message = new MessageImpl(new WebSocketPayloadImpl(messageData));
     noteMessage = new NoteMessageImpl(message);
   });
 
@@ -90,7 +90,7 @@ describe('Note message unit test', () => {
   describe('Validation', () => {
     it('Should throw if message operation is not "NOTE"', () => {
       messageData.op = '';
-      message = new MessageImpl(new SafeJsonImpl(messageData));
+      message = new MessageImpl(new WebSocketPayloadImpl(messageData));
       noteMessage = new NoteMessageImpl(message);
       expect(() => noteMessage.data()).toThrow();
       expect(() => noteMessage.operation()).toThrow();

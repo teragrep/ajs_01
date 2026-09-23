@@ -51,7 +51,7 @@ import {Ticket} from '../../../shared/types/securityTicket';
 import {AuthenticationImpl} from '../../../shared/objects/security/authenticationImpl';
 import {Message} from '../message';
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('DecoratedMessage', () => {
   const messageId = 'messageId';
@@ -73,7 +73,7 @@ describe('DecoratedMessage', () => {
         op: '',
         data: {}
       };
-      message = new MessageImpl(new SafeJsonImpl(messageData));
+      message = new MessageImpl(new WebSocketPayloadImpl(messageData));
     });
     it('Decorates with stub authentication', () => {
       const expectedMessage = {

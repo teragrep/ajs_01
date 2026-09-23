@@ -45,7 +45,7 @@
  */
 import {ParagraphOutputRequest} from './paragraphOutputRequest';
 import {ParagraphOutputRequestImpl} from './paragraphOutputRequestImpl';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 import {MessageImpl} from '../../../message/messageImpl';
 
 describe('Paragraph Output Request unit test', () => {
@@ -57,7 +57,7 @@ describe('Paragraph Output Request unit test', () => {
   };
   let paragraphOutputRequest: ParagraphOutputRequest;
   beforeEach(() => {
-    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputRequestData)));
+    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
   });
 
 
@@ -90,7 +90,7 @@ describe('Paragraph Output Request unit test', () => {
   describe('Validation', () => {
     it('Should throw if operation is not "PARAGRAPH_OUTPUT_REQUEST"', () => {
       paragraphOutputRequestData.op = '';
-      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputRequestData)));
+      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
       expect(() => paragraphOutputRequest.type()).toThrow();
     });
   });

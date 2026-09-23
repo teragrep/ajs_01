@@ -46,7 +46,7 @@
 import {Respondable} from '../../../channel/respondable';
 import {AngularObject} from '../../../angularObject/angularObject';
 import {MessageImpl} from '../../../message/messageImpl';
-import {SafeJsonImpl} from '../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 
 export class AngularObjectRemoveResponse implements Respondable {
   private readonly _angularObjects: AngularObject[];
@@ -56,10 +56,10 @@ export class AngularObjectRemoveResponse implements Respondable {
   }
 
   response(data: object) {
-    const message = new MessageImpl(new SafeJsonImpl(data));
+    const message = new MessageImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'ANGULAR_OBJECT_REMOVE'){
-      const angularObjectRemoveData = new SafeJsonImpl(message.data());
-      const objectToRemoveName:string = angularObjectRemoveData.getProperty('name', 'string');
+      const angularObjectRemoveData = new WebSocketPayloadImpl(message.data());
+      const objectToRemoveName:string = angularObjectRemoveData.stringProperty('name');
       const objectIndex = this._angularObjects.findIndex(ao => ao.name() === objectToRemoveName);
       if(objectIndex === -1){
         throw new Error(`Error during angular object remove: no object "${objectToRemoveName}" in current collection.`);
