@@ -92,7 +92,7 @@
   .navbar-nav .nav-link,
   .navbar-nav .btn-link {
     color: var(--primary-100);
-    font: 500 var(--fs-2) 'Roboto', sans-serif;
+    font: 500 var(--fs-2) var(--font-buttons), sans-serif;
     &:hover {
       color: var(--primary-200);
     }
