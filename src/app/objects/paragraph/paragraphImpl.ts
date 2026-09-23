@@ -55,8 +55,8 @@ import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {ComponentView} from '../rendering/componentView/componentView';
 import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
-import {MessagePropertyDecorator} from '../message/messageDecorator/messagePropertyDecorator';
 import {MessageImpl} from '../message/messageImpl';
+import {PropertyDecoratedMessage} from '../message/messageDecorator/propertyDecoratedMessage';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;
@@ -64,8 +64,6 @@ export class ParagraphImpl implements Paragraph {
   private readonly _paragraph: WebSocketPayload;
   private readonly _componentView: ComponentView;
   private readonly _paragraphIdFilter: MessagePropertyEqualsFilter;
-  private readonly _paragraphIdDecorator: MessagePropertyDecorator;
-
 
   constructor(channel: Channel, paragraph: object) {
     this._channel = channel;
@@ -73,7 +71,6 @@ export class ParagraphImpl implements Paragraph {
     this._outputContainer = this.initializedOutputContainer(paragraph);
     this._componentView = new ComponentViewStub();
     this._paragraphIdFilter = new MessagePropertyEqualsFilter('paragraphId', this.id());
-    this._paragraphIdDecorator = new MessagePropertyDecorator('paragraphId', this.id());
   }
 
   private initializedOutputContainer(paragraph: object): OutputContainer {
@@ -99,8 +96,11 @@ export class ParagraphImpl implements Paragraph {
 
   request(json: object): void {
     const message = new MessageImpl(new SafeJsonImpl(json));
-    const decoratedMessage = this._paragraphIdDecorator.decoratedMessage(message);
-    this._channel.request(decoratedMessage);
+    const paragraphIdDecoratedMessage = new PropertyDecoratedMessage(message, 'paragraphId', this.id());
+    this._channel.request({
+      op:paragraphIdDecoratedMessage.operation(),
+      data:paragraphIdDecoratedMessage.data()
+    });
   }
 
   response(json: object): void {

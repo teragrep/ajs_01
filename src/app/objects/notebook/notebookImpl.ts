@@ -53,9 +53,8 @@ import {computed, Signal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
 import {ComponentView} from '../rendering/componentView/componentView';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
-import {MessageDecorator} from '../message/messageDecorator/messageDecorator';
 import {MessageFilter} from '../message/messageFilter/messageFilter';
-import {MessagePropertyDecorator} from '../message/messageDecorator/messagePropertyDecorator';
+import {PropertyDecoratedMessage} from '../message/messageDecorator/propertyDecoratedMessage';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
 import {MessageImpl} from '../message/messageImpl';
 
@@ -65,7 +64,6 @@ export class NotebookImpl implements Notebook {
   private readonly _paragraphCollection: ParagraphCollection;
   private readonly _componentView:ComponentView;
   private readonly _noteIdFilter:MessageFilter;
-  private readonly _noteIdDecorator: MessageDecorator;
 
   constructor(channel: Channel, notebook: object) {
     this._channel = channel;
@@ -73,7 +71,6 @@ export class NotebookImpl implements Notebook {
     this._paragraphCollection = new ParagraphCollectionImpl(this, this._notebook.arrayProperty('paragraphs'));
     this._componentView = new ComponentViewStub();
     this._noteIdFilter = new MessagePropertyEqualsFilter('noteId', this.id());
-    this._noteIdDecorator = new MessagePropertyDecorator('noteId', this.id());
   }
 
   print(): Signal<RenderNode> {
@@ -93,8 +90,11 @@ export class NotebookImpl implements Notebook {
 
   request(json: object): void {
     const message = new MessageImpl(new SafeJsonImpl(json));
-    const decoratedMessage = this._noteIdDecorator.decoratedMessage(message);
-    this._channel.request(decoratedMessage);
+    const noteIdDecoratedMessage = new PropertyDecoratedMessage(message, 'noteId', this.id());
+    this._channel.request({
+      op:noteIdDecoratedMessage.operation(),
+      data:noteIdDecoratedMessage.data()
+    });
   }
 
   response(json: object): void {
