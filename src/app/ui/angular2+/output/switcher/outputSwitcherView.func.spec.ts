@@ -46,18 +46,14 @@
 import {ComponentFixture} from '@angular/core/testing';
 import {render, screen} from '@testing-library/angular';
 import {OutputSwitcherView} from './outputSwitcherView';
-import {Component, signal, Signal} from '@angular/core';
+import {Component, Signal, signal} from '@angular/core';
 import {RenderNode} from '../../../../objects/rendering/renderNode/renderNode';
-import {ComponentViewImpl} from '../../../../objects/rendering/componentView/componentViewImpl';
 import {By} from '@angular/platform-browser';
+import {FakeRenderNode} from '../../../../../test/fakes/fakeRenderNode';
+import {FakeComponent} from '../../../../../test/fakes/fakeComponent';
+import {FakeComponentRegistryProvider} from '../../../../../test/fakes/fakeComponentRegistryProvider';
 
 describe('OutputSwitcherView functional test', () => {
-  @Component({
-    selector:'fake-component',
-    template: ''
-  })
-  class FakeComponent {}
-
   let fixture: ComponentFixture<OutputSwitcherView>;
   let switcherButtons: Signal<RenderNode>[];
   let switchIsPending: boolean;
@@ -65,14 +61,8 @@ describe('OutputSwitcherView functional test', () => {
 
   beforeEach(async () => {
     switcherButtons = [
-      signal({
-        componentView: new ComponentViewImpl(FakeComponent, signal({test:''})),
-        children:signal([])
-      }),
-      signal({
-        componentView: new ComponentViewImpl(FakeComponent, signal({test:''})),
-        children:signal([])
-      })
+      signal(new FakeRenderNode()),
+      signal(new FakeRenderNode())
     ];
     switchIsPending = false;
     outputIsSwitchable = true;
@@ -82,7 +72,8 @@ describe('OutputSwitcherView functional test', () => {
         switcherButtons: switcherButtons,
         switchIsPending: switchIsPending,
         outputIsSwitchable: outputIsSwitchable
-      }
+      },
+      providers: [FakeComponentRegistryProvider]
     });
     fixture = renderResult.fixture;
   });
