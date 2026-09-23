@@ -43,11 +43,11 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Message} from '../message';
 import {Paragraph} from '../../paragraph/paragraph';
 import {Channel} from '../../channel/channel';
+import {Message} from '../message';
 
-export interface ParagraphAddedMessage extends Message{
+export interface ParagraphAddedMessage extends Pick<Message, 'data'>{
   paragraph(channel:Channel):Paragraph;
   index():number;
 }

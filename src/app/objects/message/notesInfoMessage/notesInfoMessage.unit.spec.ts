@@ -70,14 +70,6 @@ describe('NotesInfoMessage unit test', () => {
       expect(notesInfoMessage).toBeDefined();
     });
 
-    it('Should have operation', () => {
-      expect(notesInfoMessage.operation()).toEqual(messageData.op);
-    });
-
-    it('Should have data', () => {
-      expect(notesInfoMessage.data()).toEqual(messageData.data);
-    });
-
     it('Should have notebookIndices', () => {
       const expectedNotebookIndices = new Map([
         ['notebook1', new NotebookIndexImpl({id:'notebook1'})],
@@ -92,8 +84,6 @@ describe('NotesInfoMessage unit test', () => {
       messageData.op = '';
       message = new MessageImpl(new WebSocketPayloadImpl(messageData));
       notesInfoMessage = new NotesInfoMessageImpl(message);
-      expect(() => notesInfoMessage.data()).toThrow();
-      expect(() => notesInfoMessage.operation()).toThrow();
       expect(() => notesInfoMessage.notebookIndices()).toThrow();
     });
   });

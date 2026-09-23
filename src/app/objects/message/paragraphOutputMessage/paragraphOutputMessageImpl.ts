@@ -59,8 +59,8 @@ export class ParagraphOutputMessageImpl implements ParagraphOutputMessage {
   }
   print():{op:string,data:object}{
     return {
-      op:this.operation(),
-      data:this.data(),
+      op:this._message.operation(),
+      data:this._message.data(),
     };
   }
 
@@ -98,14 +98,6 @@ export class ParagraphOutputMessageImpl implements ParagraphOutputMessage {
 
   private output(): WebSocketPayload {
     return this._message.dataAsWebSocketPayload().objectPropertyAsPayload('output');
-  }
-
-  data(): object {
-    return this._message.data();
-  }
-
-  operation(): string {
-    return this._message.operation();
   }
 
   isStub(): boolean {

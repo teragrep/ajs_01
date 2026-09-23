@@ -71,20 +71,16 @@ describe('ParagraphAddedMessage unit test', () => {
       expect(paragraphAddedMessage).toBeDefined();
     });
 
-    it('Should have data', () => {
-      expect(paragraphAddedMessage.data()).toEqual(messageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphAddedMessage.operation()).toEqual(messageData.op);
-    });
-
     it('Should have paragraph', () => {
       expect(paragraphAddedMessage.paragraph(channel)).toBeDefined();
     });
 
     it('Should have index', () => {
       expect(paragraphAddedMessage.index()).toEqual(messageData.data.index);
+    });
+
+    it('Should have data', () => {
+      expect(paragraphAddedMessage.data()).toEqual(messageData.data);
     });
   });
 
@@ -93,7 +89,6 @@ describe('ParagraphAddedMessage unit test', () => {
       messageData.op = '';
       paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
       expect(() => paragraphAddedMessage.data()).toThrow();
-      expect(() => paragraphAddedMessage.operation()).toThrow();
       expect(() => paragraphAddedMessage.paragraph(channel)).toThrow();
       expect(() => paragraphAddedMessage.index()).toThrow();
     });

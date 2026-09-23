@@ -89,16 +89,8 @@ describe('ParagraphOutputMessage unit test', () => {
       expect(paragraphOutputMessage).toBeDefined();
     });
 
-    it('Should have data', () => {
-      expect(paragraphOutputMessage.data()).toEqual(paragraphOutputMessageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphOutputMessage.operation()).toEqual(paragraphOutputMessageData.op);
-    });
-
     it('Should have outputData', () => {
-      expect(paragraphOutputMessage.outputData<object>('object')).toEqual(paragraphOutputMessageData.data.output.data);
+      expect(paragraphOutputMessage.outputData('object')).toEqual(paragraphOutputMessageData.data.output.data);
     });
 
     it('Should print', () => {
@@ -145,8 +137,6 @@ describe('ParagraphOutputMessage unit test', () => {
     it('Should throw if operation is not "PARAGRAPH_OUTPUT"', () => {
       paragraphOutputMessageData.op = '';
       paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
-      expect(() => paragraphOutputMessage.data()).toThrow();
-      expect(() => paragraphOutputMessage.operation()).toThrow();
       expect(() => paragraphOutputMessage.options()).toThrow();
       expect(() => paragraphOutputMessage.type()).toThrow();
       expect(() => paragraphOutputMessage.isAggregated()).toThrow();

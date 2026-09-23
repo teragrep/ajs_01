@@ -48,7 +48,6 @@ import {Channel} from '../../channel/channel';
 import {Paragraph} from '../../paragraph/paragraph';
 import {Message} from '../message';
 import {TypedMessage} from '../typedMessage/typedMessage';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {ParagraphImpl} from '../../paragraph/paragraphImpl';
 
 export class ParagraphAddedMessageImpl implements ParagraphAddedMessage {
@@ -59,21 +58,15 @@ export class ParagraphAddedMessageImpl implements ParagraphAddedMessage {
   }
 
   paragraph(channel: Channel): Paragraph {
-    const paragraphAddedData = new WebSocketPayloadImpl(this._message.data());
-    const paragraphData:object = paragraphAddedData.getProperty('paragraph', 'object');
+    const paragraphData:object = this._message.dataAsWebSocketPayload().objectProperty('paragraph');
     return new ParagraphImpl(channel, paragraphData);
   }
 
   index(): number {
-    const paragraphAddedData = new WebSocketPayloadImpl(this._message.data());
-    return paragraphAddedData.getProperty('index', 'number');
+    return this._message.dataAsWebSocketPayload().numberProperty('index');
   }
 
   data(): object {
     return this._message.data();
-  }
-
-  operation(): string {
-    return this._message.operation();
   }
 }

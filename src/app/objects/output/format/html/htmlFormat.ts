@@ -72,7 +72,7 @@ export class HTMLFormat implements OutputFormat{
         this._componentView.set(this._componentViewStub);
       }
       else{
-        const htmlTemplate:string = paragraphOutputMessage.outputData('string');
+        const htmlTemplate:string = paragraphOutputMessage.outputData('string') as string;
         const componentView = new ComponentViewImpl(HtmlOutputView, signal({htmlTemplate: htmlTemplate}));
         this._componentView.set(componentView);
       }

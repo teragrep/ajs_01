@@ -66,14 +66,6 @@ describe('Paragraph Output Request unit test', () => {
       expect(paragraphOutputRequest).toBeDefined();
     });
 
-    it('Should have operation', () => {
-      expect(paragraphOutputRequest.operation()).toEqual('PARAGRAPH_OUTPUT_REQUEST');
-    });
-
-    it('Should have data', () => {
-      expect(paragraphOutputRequest.data()).toEqual(paragraphOutputRequestData.data);
-    });
-
     it('Should not be stub', () => {
       expect(paragraphOutputRequest.isStub()).toBe(false);
     });
