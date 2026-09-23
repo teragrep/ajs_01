@@ -49,10 +49,15 @@
   --bs-font-monospace: monospace;
 }
 
+html {
+  font-size: var(--base-unit);
+}
+
 body {
   background: var(--grey-200);
   color: var(--grey-800);
-  font: 400 16px var(--font-body-text);
+  font-family: var(--font-body-text), sans-serif;
+  font-weight: 400;
   &.dark-mode {
     color: var(--dm-grey-200);
     background: var(--dm-grey-800);

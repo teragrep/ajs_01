@@ -115,6 +115,28 @@
   --dm-grey-900: #161C33;
   /** Typography **/
   --font-body-text: 'Nunito Sans', sans-serif;
+  /* Spacing */
+  --base-unit: 16px;
+  --p-1: 0.25rem;
+  --p-2: 0.375rem;
+  --p-3: 0.5rem;
+  --p-4: 0.75rem;
+  --p-5: 1rem; /* 16px */
+  --p-6: 1.5rem;
+  --p-7: 2rem;
+  --p-8: 2.5rem;
+  --p-9: 3rem;
+  --p-10: 4rem;
+  --p-11: 5rem;
+  --p-12: 6rem;
+  --m-1: 0.25rem;
+  --m-2: 0.375rem;
+  --m-3: 0.5rem;
+  --m-4: 0.75rem;
+  --m-5: 1rem; /* 16px */
+  --m-6: 1.5rem;
+  --m-7: 2rem;
+  --m-8: 3rem;
   /* UI dimensions */
   --navbar-height: 3.5rem;
   --note-action-height: 3rem;
