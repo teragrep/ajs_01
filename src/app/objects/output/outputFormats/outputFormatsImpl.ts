@@ -54,7 +54,7 @@ import {TextFormat} from '../format/text/textFormat';
 import {AngularFormatImpl} from '../format/angular/angularFormatImpl';
 import {OutputSwitcherImpl} from '../switcher/outputSwitcherImpl';
 import {OutputSwitcher} from '../switcher/outputSwitcher';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {MessageImpl} from '../../message/messageImpl';
 import {ParagraphOutputRequest} from './paragraphOutputRequest/paragraphOutputRequest';
 import {ParagraphOutputRequestImpl} from './paragraphOutputRequest/paragraphOutputRequestImpl';
@@ -102,7 +102,7 @@ export class OutputFormatsImpl implements OutputFormats {
   }
 
   request(json: object) {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT_REQUEST'){
       this._previousParagraphOutputRequest = new ParagraphOutputRequestImpl(message);
       this._outputSwitcher.request(json);
@@ -111,7 +111,7 @@ export class OutputFormatsImpl implements OutputFormats {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(!this._previousParagraphOutputRequest.isStub() && paragraphOutputMessage.type() !== this._previousParagraphOutputRequest.type()){

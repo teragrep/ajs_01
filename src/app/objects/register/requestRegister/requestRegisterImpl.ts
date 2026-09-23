@@ -45,7 +45,7 @@
  */
 import {RequestRegister} from './requestRegister';
 import {MessageImpl} from '../../message/messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {Requestable} from '../../channel/requestable';
 
 export class RequestRegisterImpl implements RequestRegister {
@@ -62,7 +62,7 @@ export class RequestRegisterImpl implements RequestRegister {
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     const subscription = this._subscribers.get(message.operation());
     if(subscription){
       subscription(json);

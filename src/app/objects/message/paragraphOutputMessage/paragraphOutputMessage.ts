@@ -50,7 +50,7 @@ import {StubableObject} from '../../stubableObject/stubableObject';
 export interface ParagraphOutputMessage extends Message, Stubable {
   isAggregated(): boolean;
   type(): string;
-  outputData<T>(type:string): T;
+  outputData(type:string): string | object;
   options():StubableObject;
   print(): {
     op:string,

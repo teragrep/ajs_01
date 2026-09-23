@@ -46,7 +46,7 @@
 import {Channel} from '../../../../../channel/channel';
 import {OutputType} from '../../../../outputType';
 import {DataTablesAjax} from './dataTablesAjax';
-import {SafeJsonImpl} from '../../../../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../../../../webSocketPayload/webSocketPayloadImpl';
 
 export class DataTablesAjaxImpl implements DataTablesAjax {
   private readonly _channel: Channel;
@@ -67,11 +67,11 @@ export class DataTablesAjaxImpl implements DataTablesAjax {
   }
 
   private validatedData(data: object): {draw:number, recordsTotal:number, recordsFiltered:number, data:object} {
-    const safeJson = new SafeJsonImpl(data);
-    const draw:number = safeJson.getProperty('draw', 'number');
-    const recordsTotal:number = safeJson.getProperty('recordsTotal', 'number');
-    const recordsFiltered:number = safeJson.getProperty('recordsFiltered', 'number');
-    const tableData:object = safeJson.getProperty('data', 'object');
+    const safeJson = new WebSocketPayloadImpl(data);
+    const draw:number = safeJson.numberProperty('draw');
+    const recordsTotal:number = safeJson.numberProperty('recordsTotal');
+    const recordsFiltered:number = safeJson.numberProperty('recordsFiltered');
+    const tableData:object = safeJson.objectProperty('data');
     return {
       draw:draw,
       recordsTotal:recordsTotal,
