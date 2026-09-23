@@ -132,27 +132,32 @@
 /* toasts */
 
 .toast {
-  background-color: var(--grey-100);
-  border: 1px solid var(--grey-300);
-  box-shadow: 0 0.5rem 1rem var(--grey-400);
+  background-color: var(--grey-200);
+  border: 1px solid var(--grey-400);
+  box-shadow: 0 0.1rem 0.2rem var(--grey-700), -0.2rem 0.4rem 0.6rem var(--grey-600);
+  font-size: 1rem;
 }
 
 .dark-mode .toast {
-  background-color: var(--dm-grey-800);
+  background-color: var(--dm-grey-900);
   border: 1px solid var(--dm-grey-700);
-  box-shadow: 0 0.5rem 1rem var(--dm-grey-900);
+  box-shadow: 0 0.1rem 0.2rem var(--dm-grey-900), -0.2rem 0.4rem 0.6rem var(--dm-grey-800);
 }
 
 .toast-header {
   color: var(--grey-700);
-  background-color: var(--grey-000);
-  border-bottom: 1px solid var(--grey-200);
+  background-color: var(--grey-100);
+  border-bottom: 1px solid var(--grey-400);
 }
 
 .dark-mode .toast-header {
   color: var(--dm-grey-200);
-  background-color: var(--dm-grey-700);
+  background-color: var(--dm-grey-900);
   border-bottom: 1px solid var(--dm-grey-700);
+}
+
+.toast-container > :not(:last-child) {
+  margin-bottom: 1rem;
 }
 
 /* badges */
