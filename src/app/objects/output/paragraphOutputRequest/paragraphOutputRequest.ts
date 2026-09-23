@@ -43,9 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import Stubable from '../../../../shared/interfaces/stubable';
+import {Message} from '../../message/message';
+import Stubable from '../../../shared/interfaces/stubable';
 
-export interface ParagraphOutputRequest extends Stubable {
+export interface ParagraphOutputRequest extends Message, Stubable {
   type():string;
   request():object;
 }

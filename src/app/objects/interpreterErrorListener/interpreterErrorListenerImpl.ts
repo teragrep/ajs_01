@@ -57,8 +57,7 @@ export class InterpreterErrorListenerImpl implements InterpreterErrorListener {
   private readonly _paragraphId:string;
   private readonly _componentView:WritableSignal<ComponentView>;
 
-  constructor(paragraphId:string) {
-    this._paragraphId = paragraphId;
+  constructor() {
     this._componentView = signal(new ComponentViewStub());
   }
 

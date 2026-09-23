@@ -43,52 +43,47 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputContainer} from './outputContainer';
-import {Channel} from '../../channel/channel';
-import {computed, Signal} from '@angular/core';
-import {RenderNode} from '../../rendering/renderNode/renderNode';
-import {ComponentView} from '../../rendering/componentView/componentView';
-import {ComponentViewStub} from '../../rendering/componentView/componentViewStub';
+import {ParagraphOutputRequest} from './paragraphOutputRequest';
+import {ParagraphOutputRequestImpl} from './paragraphOutputRequestImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {MessageImpl} from '../../message/messageImpl';
 
-import {InterpreterErrorListener} from '../../interpreterErrorListener/interpreterErrorListener';
-import {InterpreterErrorListenerImpl} from '../../interpreterErrorListener/interpreterErrorListenerImpl';
-import {OutputFormats} from '../outputFormats/outputFormats';
-import {OutputFormatsImpl} from '../outputFormats/outputFormatsImpl';
+describe('Paragraph Output Request unit test', () => {
+  const paragraphOutputRequestData = {
+    op:'PARAGRAPH_OUTPUT_REQUEST',
+    data:{
+      type:'type'
+    }
+  };
+  let paragraphOutputRequest: ParagraphOutputRequest;
+  beforeEach(() => {
+    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
+  });
 
-export class OutputContainerImpl implements OutputContainer{
-  private readonly _channel:Channel;
-  private readonly _outputFormats: OutputFormats;
-  private readonly _interpreterErrorListener:InterpreterErrorListener;
-  private readonly _componentView:ComponentView;
-  private readonly _paragraphId:string;
 
-  constructor(channel:Channel, paragraphId:string) {
-    this._channel = channel;
-    this._outputFormats = new OutputFormatsImpl(this);
-    this._interpreterErrorListener = new InterpreterErrorListenerImpl(paragraphId);
-    this._paragraphId = paragraphId;
-    this._componentView = new ComponentViewStub();
-  }
+  describe('Birth', () => {
+    it('Should be initialized', () => {
+      expect(paragraphOutputRequest).toBeDefined();
+    });
 
-  request(json: object): void {
-    this._channel.request(json);
-  }
+    it('Should not be stub', () => {
+      expect(paragraphOutputRequest.isStub()).toBe(false);
+    });
 
-  response(json: object): void {
-    this._outputFormats.response(json);
-    this._interpreterErrorListener.response(json);
-  }
+    it('Should have type', () => {
+      expect(paragraphOutputRequest.type()).toEqual(paragraphOutputRequestData.data.type);
+    });
 
-  print(): Signal<RenderNode> {
-    return computed(() =>
-      ({
-        paragraphId:this._paragraphId,
-        componentView: this._componentView,
-        children: computed(() => [
-          this._outputFormats.print()(),
-          this._interpreterErrorListener.print()()
-        ]),
-      })
-    );
-  }
-}
+    it('Should have request', () => {
+      expect(paragraphOutputRequest.request()).toEqual(paragraphOutputRequestData);
+    });
+  });
+
+  describe('Validation', () => {
+    it('Should throw if operation is not "PARAGRAPH_OUTPUT_REQUEST"', () => {
+      paragraphOutputRequestData.op = '';
+      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
+      expect(() => paragraphOutputRequest.type()).toThrow();
+    });
+  });
+});
