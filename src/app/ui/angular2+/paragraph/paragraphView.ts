@@ -43,31 +43,23 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Component, input, Signal} from '@angular/core';
-import {NgComponentOutlet} from '@angular/common';
-import {RenderNode} from '../../../../objects/rendering/renderNode/renderNode';
-import {RenderNodeHostView} from '../../renderNodeHost/renderNodeHostView';
+import {Component, input} from '@angular/core';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
 
 @Component({
-  selector: 'output-switcher',
+  selector: 'paragraph',
   imports: [
     RenderNodeHostView
   ],
   template: `
-    @if (outputIsSwitchable()) {
-      <div class="btn-group" role="group">
-        @for (button of switcherButtons(); track $index) {
-          <render-node-host [renderNode]="button()"></render-node-host>
-        }
-      </div>
-      @if (switchIsPending()) {
-        <div class="spinner-border mx-2 text-primary" role="status"></div>
-      }
+    @if(containerId() === paragraphId()){
+      <render-node-host [renderNode]="output()"></render-node-host>
     }
   `
 })
-export class OutputSwitcherView {
-  switcherButtons = input.required<Signal<RenderNode>[]>();
-  switchIsPending= input.required<boolean>();
-  outputIsSwitchable= input.required<boolean>();
+export class ParagraphView{
+  output = input.required<RenderNode>();
+  paragraphId = input.required<string>();
+  containerId = input.required<string>();
 }
