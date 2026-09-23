@@ -114,6 +114,8 @@
   --dm-grey-800: #212A4B;
   --dm-grey-900: #161C33;
   /** Typography **/
+  --bs-font-sans-serif: sans-serif;
+  --bs-font-monospace: monospace;
   --font-body-text: 'Nunito Sans', sans-serif;
   --fs-1: 0.875rem;
   --fs-2: 1rem; /* 16px */
