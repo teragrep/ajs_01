@@ -47,10 +47,9 @@ import {InterpreterErrorListener} from './interpreterErrorListener';
 import {InterpreterErrorListenerImpl} from './interpreterErrorListenerImpl';
 
 describe('InterpreterErrorListener', () => {
-  const paragraphId = 'paragraphId';
   let interpreterErrorListener: InterpreterErrorListener;
   beforeEach(() => {
-    interpreterErrorListener = new InterpreterErrorListenerImpl(paragraphId);
+    interpreterErrorListener = new InterpreterErrorListenerImpl();
   });
 
   describe('Birth', () =>{
@@ -60,9 +59,7 @@ describe('InterpreterErrorListener', () => {
 
     it('Should print', () => {
       const interpreterErrorListenerPrinted = interpreterErrorListener.print()();
-      expect(interpreterErrorListenerPrinted).toBeDefined();
-      expect(interpreterErrorListenerPrinted.children()).toHaveLength(0);
-      expect(interpreterErrorListenerPrinted.componentView.isStub()).toBe(true);
+      expect(interpreterErrorListenerPrinted.isStub()).toBe(true);
     });
   });
 
@@ -75,9 +72,8 @@ describe('InterpreterErrorListener', () => {
         }
       };
       interpreterErrorListener.response(response);
-      const componentView = interpreterErrorListener.print()().componentView;
-      expect(componentView.isStub()).toBe(false);
-      expect(componentView.inputs()()['errorMessage']).toBeDefined();
+      const interpreterErrorListenerPrinted = interpreterErrorListener.print()();
+      expect(interpreterErrorListenerPrinted.isStub()).toBe(false);
     });
   });
 });

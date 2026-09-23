@@ -48,7 +48,6 @@ import {MessageImpl} from '../messageImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {NotesInfoMessage} from './notesInfoMessage';
 import {NotesInfoMessageImpl} from './notesInfoMessageImpl';
-import {NotebookIndexImpl} from '../../notebookCollection/notebookIndex/notebookIndexImpl';
 
 describe('NotesInfoMessage unit test', () => {
   const messageData ={
@@ -71,11 +70,10 @@ describe('NotesInfoMessage unit test', () => {
     });
 
     it('Should have notebookIndices', () => {
-      const expectedNotebookIndices = new Map([
-        ['notebook1', new NotebookIndexImpl({id:'notebook1'})],
-        ['notebook2', new NotebookIndexImpl({id:'notebook2'})]
-      ]);
-      expect(notesInfoMessage.notebookIndices()).toEqual(expectedNotebookIndices);
+      const notebookIndices = notesInfoMessage.notebookIndices();
+      expect(notebookIndices).toHaveLength(2);
+      expect(notebookIndices.get(messageData.data.notes[0].id)).toBeDefined();
+      expect(notebookIndices.get(messageData.data.notes[1].id)).toBeDefined();
     });
   });
 

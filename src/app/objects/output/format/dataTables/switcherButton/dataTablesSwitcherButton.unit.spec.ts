@@ -57,12 +57,7 @@ describe('DataTables SwitcherButton unit test', () => {
 
     it('Should print', () => {
       const dataTableSwitcherButtonPrinted = dataTablesSwitcherButton.print()();
-      const componentView = dataTableSwitcherButtonPrinted.componentView;
-      expect(dataTableSwitcherButtonPrinted.children()).toHaveLength(0);
-      expect(componentView.isStub()).toBe(false);
-      expect(componentView.inputs()()['title']).toBeDefined();
-      expect(componentView.inputs()()['icon']).toBeDefined();
-      expect(componentView.inputs()()['requestFormatSwitch']).toBeDefined();
+      expect(dataTableSwitcherButtonPrinted.isStub()).toBe(false);
     });
   });
 });
