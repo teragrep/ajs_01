@@ -72,12 +72,13 @@
 }
 
 .home-start {
-  padding-top: 6rem;
-  padding-bottom: 6rem;
+  padding-top: var(--p-12);
+  padding-bottom: var(--p-12);
 }
 
 .home-some {
-  .fas, .fab {
+  .fas,
+  .fab {
     color: var(--primary-400);
   }
   a {
@@ -87,7 +88,8 @@
 }
 
 .dark-mode .home-some {
-  .fas, .fab {
+  .fas,
+  .fab {
     color: var(--tertiary-400);
   }
   a {
@@ -98,7 +100,7 @@
 /* Home's notebook list */
 
 .notebook-list {
-  padding-bottom: 3rem;
+  padding-bottom: var(--p-9);
 }
 
 .home-body-text {
@@ -112,7 +114,7 @@
   .filter-names input {
     background-color: var(--grey-200);
     border-color: var(--grey-200);
-    padding-left: 2.5rem;
+    padding-left: var(--p-8);
     &::placeholder {
       color: var(--grey-600);
     }
@@ -139,7 +141,7 @@
 
 .note-folder-item {
   background: var(--secondary-200);
-  padding: 10px 15px;
+  padding: var(--p-4) var(--p-5);
   border-radius: 5px;
   a {
     color: var(--secondary-900);
@@ -165,12 +167,12 @@
 }
 
 .fa-folder-open {
-  margin-right: 5px;
+  margin-right: var(--m-2);
   vertical-align: middle;
 }
 
 .fa-file {
-  margin-right: 6px;
+  margin-right: var(--m-2);
   vertical-align: middle;
 }
 
@@ -267,8 +269,8 @@
 .box {
   border-style: solid;
   min-height: 20px;
-  padding: 40px 35px;
-  margin-bottom: 20px;
+  padding: var(--p-8) var(--p-7);
+  margin-bottom: var(--m-6);
   background: var(--grey-000);
   border-color: var(--grey-300);
   border-width: 1px 1px 2px;
