@@ -48,30 +48,29 @@ import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl'
 import {MessageImpl} from '../../message/messageImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../rendering/renderNode/renderNode';
-import {ComponentViewImpl} from '../../rendering/componentView/componentViewImpl';
-import {OutputSwitcherView} from '../../../ui/angular2+/output/switcher/outputSwitcherView';
 import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
+import {RenderNodeImpl} from '../../rendering/renderNode/renderNodeImpl';
+import {RegisteredComponents} from '../../../ui/angular2+/componentRegistry/registeredComponents';
 
 export class OutputSwitcherImpl implements OutputSwitcher {
   private readonly _outputIsSwitchable:WritableSignal<boolean>;
   private readonly _switchIsPending:WritableSignal<boolean>;
   private readonly _switcherButtons: Signal<RenderNode>[];
+  private readonly _renderNode:Signal<RenderNode>;
 
   constructor(switcherButtons: Signal<RenderNode>[]) {
     this._switcherButtons = switcherButtons;
     this._outputIsSwitchable = signal(false);
     this._switchIsPending = signal(false);
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_SWITCHER_VIEW, computed(() => ({
+      switcherButtons: this._switcherButtons,
+      switchIsPending: this._switchIsPending(),
+      outputIsSwitchable: this._outputIsSwitchable(),
+    }))));
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      children:computed(() => []),
-      componentView: new ComponentViewImpl(OutputSwitcherView, computed(() => ({
-        switcherButtons: this._switcherButtons,
-        switchIsPending: this._switchIsPending(),
-        outputIsSwitchable: this._outputIsSwitchable(),
-      })))
-    }));
+    return this._renderNode;
   }
 
   request(json: object) {
