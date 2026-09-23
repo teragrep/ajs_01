@@ -70,7 +70,7 @@ export class WebSocketPayloadImpl implements WebSocketPayload{
   stringProperty(propertyName: string): string {
     return this.getValidatedProperty(propertyName, 'string');
   }
-  objectProperty(propertyName: string): WebSocketPayload {
+  objectProperty(propertyName: string): object {
     return this.getValidatedProperty(propertyName, 'object');
   }
   objectPropertyAsPayload(propertyName: string): WebSocketPayload {

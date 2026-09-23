@@ -48,7 +48,7 @@ export interface WebSocketPayload {
   booleanProperty(propertyName:string):boolean;
   numberProperty(propertyName:string):number;
   stringProperty(propertyName:string):string;
-  objectProperty(propertyName:string):WebSocketPayload;
+  objectProperty(propertyName:string):object;
   objectPropertyAsPayload(propertyName:string):WebSocketPayload;
   propertyExists(propertyName:string):boolean;
 }
