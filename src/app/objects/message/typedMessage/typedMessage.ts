@@ -44,6 +44,7 @@
  * a licensee so wish it.
  */
 import {Message} from '../message';
+import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 
 export class TypedMessage implements Message {
   private readonly _type:string;
@@ -52,6 +53,11 @@ export class TypedMessage implements Message {
   constructor(type:string, message:Message) {
     this._type = type;
     this._message = message;
+  }
+
+  dataAsWebSocketPayload(): WebSocketPayload {
+    this.validateType();
+    return this._message.dataAsWebSocketPayload();
   }
 
   data(): object {
