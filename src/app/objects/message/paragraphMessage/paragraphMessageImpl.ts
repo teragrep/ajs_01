@@ -61,10 +61,6 @@ export class ParagraphMessageImpl implements ParagraphMessage {
     return this._message.data();
   }
 
-  operation(): string {
-    return this._message.operation();
-  }
-
   paragraph(channel: Channel): Paragraph {
     return new ParagraphImpl(channel, this._message.data());
   }

@@ -45,8 +45,7 @@
  */
 import {Notebook} from '../../notebook/notebook';
 import {Channel} from '../../channel/channel';
-import {Message} from '../message';
 
-export interface NoteMessage extends Message{
+export interface NoteMessage{
   notebook(channel:Channel):Notebook;
 }

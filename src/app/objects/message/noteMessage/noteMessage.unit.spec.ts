@@ -74,14 +74,6 @@ describe('Note message unit test', () => {
       expect(noteMessage).toBeDefined();
     });
 
-    it('Should have operation', () => {
-      expect(noteMessage.operation()).toEqual('NOTE');
-    });
-
-    it('Should have data', () => {
-      expect(noteMessage.data()).toEqual(messageData.data);
-    });
-
     it('Should have notebook', () => {
       expect(noteMessage.notebook(channel)).toBeDefined();
     });
@@ -92,8 +84,6 @@ describe('Note message unit test', () => {
       messageData.op = '';
       message = new MessageImpl(new WebSocketPayloadImpl(messageData));
       noteMessage = new NoteMessageImpl(message);
-      expect(() => noteMessage.data()).toThrow();
-      expect(() => noteMessage.operation()).toThrow();
       expect(() => noteMessage.notebook(channel)).toThrow();
     });
   });

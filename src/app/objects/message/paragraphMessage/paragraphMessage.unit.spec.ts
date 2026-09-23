@@ -68,16 +68,12 @@ describe('ParagraphMessage unit test', () => {
       expect(paragraphMessage).toBeDefined();
     });
 
-    it('Should have data', () => {
-      expect(paragraphMessage.data()).toEqual(messageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphMessage.operation()).toEqual('PARAGRAPH');
-    });
-
     it('Should have paragraph', () => {
       expect(paragraphMessage.paragraph(channel)).toBeDefined();
+    });
+
+    it('Should have data', () => {
+      expect(paragraphMessage.data()).toEqual(messageData.data);
     });
   });
 
@@ -85,9 +81,8 @@ describe('ParagraphMessage unit test', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
       paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
-      expect(() => paragraphMessage.data()).toThrow();
-      expect(() => paragraphMessage.operation()).toThrow();
       expect(() => paragraphMessage.paragraph(channel)).toThrow();
+      expect(() => paragraphMessage.data()).toThrow();
     });
   });
 });

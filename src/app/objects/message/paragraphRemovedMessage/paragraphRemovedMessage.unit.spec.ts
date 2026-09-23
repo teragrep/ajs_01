@@ -50,7 +50,6 @@ import {ParagraphRemovedMessage} from './paragraphRemovedMessage';
 import {ParagraphRemovedMessageImpl} from './paragraphRemovedMessageImpl';
 
 describe('ParagraphAddedMessage unit test', () => {
-  let channel: Channel;
   const messageData = {
     op:'PARAGRAPH_REMOVED',
     data:{
@@ -68,14 +67,6 @@ describe('ParagraphAddedMessage unit test', () => {
       expect(paragraphRemovedMessage).toBeDefined();
     });
 
-    it('Should have data', () => {
-      expect(paragraphRemovedMessage.data()).toEqual(messageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphRemovedMessage.operation()).toEqual(messageData.op);
-    });
-
     it('Should have paragraphId', () => {
       expect(paragraphRemovedMessage.paragraphId()).toEqual(messageData.data.id);
     });
@@ -85,8 +76,6 @@ describe('ParagraphAddedMessage unit test', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
       paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
-      expect(() => paragraphRemovedMessage.data()).toThrow();
-      expect(() => paragraphRemovedMessage.operation()).toThrow();
       expect(() => paragraphRemovedMessage.paragraphId()).toThrow();
     });
   });

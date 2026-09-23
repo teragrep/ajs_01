@@ -43,11 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Message} from '../message';
 import Stubable from '../../../shared/interfaces/stubable';
 import {StubableObject} from '../../stubableObject/stubableObject';
 
-export interface ParagraphOutputMessage extends Message, Stubable {
+export interface ParagraphOutputMessage extends Stubable {
   isAggregated(): boolean;
   type(): string;
   outputData(type:string): string | object;

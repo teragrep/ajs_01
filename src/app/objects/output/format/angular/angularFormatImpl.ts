@@ -83,7 +83,7 @@ export class AngularFormatImpl implements AngularFormat {
         this._componentView.set(this._componentViewStub);
       }
       else{
-        const template:string = paragraphOutputMessage.outputData('string');
+        const template:string = paragraphOutputMessage.outputData('string') as string;
         this._componentView.set(new ComponentViewImpl(AngularOutputView, signal({template:template, angularObjects: this._angularObjectCollection.angularObjects(), requestable:this})));
       }
     }

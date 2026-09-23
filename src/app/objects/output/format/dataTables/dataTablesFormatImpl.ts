@@ -94,7 +94,7 @@ export class DataTablesFormatImpl implements DataTablesFormat {
         this._plugin.set(this._pluginStub);
       }
       else{
-        const dataTablesData:object = paragraphOutputMessage.outputData('object');
+        const dataTablesData:object = paragraphOutputMessage.outputData('object') as object;
         if(!this._plugin().isStub()){
           this._plugin().response(dataTablesData);
         }
