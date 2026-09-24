@@ -124,8 +124,8 @@
     color: var(--dm-grey-300);
   }
   .filter-names input {
-    background-color: var(--dm-grey-800);
-    border: 1px solid var(--dm-grey-800);
+    background-color: var(--dm-grey-700);
+    border: 1px solid var(--dm-grey-700);
     &::placeholder {
       color: var(--dm-grey-400);
     }
@@ -204,7 +204,7 @@
 }
 
 .dark-mode .note-folder-item.ng-scope {
-  background: var(--dm-grey-800);
+  background: var(--dm-grey-700);
   a {
     color: var(--dm-grey-100);
     &:hover {

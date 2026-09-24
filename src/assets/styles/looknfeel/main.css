@@ -80,6 +80,10 @@ body {
   }
 }
 
+.dark-mode #homePage {
+  background-color: var(--dm-grey-800);
+}
+
 .body-as-iframe {
   background: var(--grey-000) !important;
   #main {
