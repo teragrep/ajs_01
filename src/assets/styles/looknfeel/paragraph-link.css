@@ -1,0 +1,8 @@
+#paragraphLinkPage {
+  min-height: 100vh;
+  background-color: var(--grey-100);
+  .notebook-content {
+    padding-top: calc(var(--navbar-height) + var(--note-action-height));
+    padding-bottom: 5rem;
+  }
+}
