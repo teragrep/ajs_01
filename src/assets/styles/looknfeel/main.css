@@ -92,7 +92,7 @@ body {
 .body-as-iframe {
   background: var(--grey-000) !important;
   #main {
-    margin-top: 56px;
+    margin-top: calc(var(--navbar-height) + var(--note-action-height));
   }
   .note-action,
   .permissions,
