@@ -121,6 +121,10 @@
       text-overflow: ellipsis;
       max-width: 120px;
     }
+    .fas,
+    .fa-solid {
+      color: var(--primary-100);
+    }
   }
   .dropdown-menu {
     min-width: min-content;

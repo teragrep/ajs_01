@@ -52,7 +52,7 @@ has been fixed.
                 aria-controls="actionbarContent"
                 aria-expanded="false"
                 aria-label="Toggle navigation">
-          <i class="fas fa-bars"></i>
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
       <div class="collapse navbar-collapse mt-3 mt-lg-0"
@@ -67,7 +67,7 @@ has been fixed.
                   ng-class="{'disabled':isNoteRunning()}"
                   title="Run all paragraphs"
                   ng-disabled="revisionView">
-            <i class="fas fa-play"></i>
+            <i class="fa-solid fa-play"></i>
           </button>
           <button type="button"
                   class="btn btn-secondary"
@@ -75,7 +75,7 @@ has been fixed.
                   ng-if="!viewOnly"
                   title="Show/hide the code"
                   ng-disabled="revisionView">
-            <i ng-class="editorToggled ?  'fas fa-expand' :'fas fa-compress'"></i>
+            <i ng-class="editorToggled ?  'fa-solid fa-expand' :'fa-solid fa-compress'"></i>
           </button>
           <button type="button"
                   class="btn btn-secondary"
@@ -83,7 +83,7 @@ has been fixed.
                   ng-if="!viewOnly"
                   title="Show/hide the output"
                   ng-disabled="revisionView">
-            <i ng-class="tableToggled ? 'fas fa-book-open' : 'fas fa-book'"></i>
+            <i ng-class="tableToggled ? 'fa-solid fa-book-open' : 'fa-solid fa-book'"></i>
           </button>
           <button type="button"
                   class="btn btn-secondary"
@@ -92,7 +92,7 @@ has been fixed.
                   ng-class="{'disabled':isNoteRunning()}"
                   title="Clear output"
                   ng-disabled="revisionView">
-            <i class="fas fa-eraser"></i>
+            <i class="fa-solid fa-eraser"></i>
           </button>
           <button type="button"
                   class="btn btn-secondary"
@@ -100,7 +100,7 @@ has been fixed.
                   title="Clone this notebook"
                   ng-click="cloneThisNote(note.name)"
                   ng-disabled="revisionView">
-            <i class="far fa-copy"></i>
+            <i class="fa-regular fa-copy"></i>
           </button>
           <button type="button"
                   class="btn btn-secondary"
@@ -108,7 +108,7 @@ has been fixed.
                   ng-click="exportNote()"
                   title="Export this notebook"
                   ng-disabled="revisionView">
-            <i class="fas fa-download"></i>
+            <i class="fa-solid fa-download"></i>
           </button>
         </div>
         <!-- Commit, set revision, compare revisions, view commits -->
@@ -127,7 +127,7 @@ has been fixed.
                     data-bs-auto-close="outside"
                     ng-click="focusOn('saveNameInput')"
                     data-bs-toggle="dropdown">
-              <i class="fas fa-floppy-disk"></i>
+              <i class="fa-solid fa-floppy-disk"></i>
             </button>
             <div class="dropdown-menu">
               <div class="commit-container">
@@ -161,14 +161,14 @@ has been fixed.
                   ng-if="revisionView"
                   ng-hide="viewOnly"
                   ng-click="setNoteRevision()">
-            <i class="far fa-circle-right"></i>
+            <i class="fa-regular fa-circle-right"></i>
           </button>
           <button type="button"
                   title="Version history"
                   class="btn btn-secondary rm-show"
                   ng-if="noteRevisions.length > 0"
                   ng-click="toggleRevisionsComparator()">
-            <i class="fas fa-exchange-alt"></i>
+            <i class="fa-solid fa-code-compare"></i>
           </button>
           <div class="btn-group rm-show"
                ng-if="noteRevisions.length > 0"
@@ -206,7 +206,7 @@ has been fixed.
                   ng-class="{'disabled':isNoteRunning()}"
                   title="Remove this notebook permanently"
                   ng-disabled="revisionView">
-            <i class="fas fa-trash-alt"></i>
+            <i class="fa-solid fa-trash-alt"></i>
           </button>
         </div>-->
         <!-- if the note is not in the trash, move to trash -->
@@ -219,7 +219,7 @@ has been fixed.
                   ng-class="{'disabled':isNoteRunning()}"
                   title="Move this notebook to trash"
                   ng-disabled="revisionView">
-            <i class="fas fa-trash-alt"></i>
+            <i class="fa-solid fa-trash-alt"></i>
           </button>
         </div>-->
         <!-- Cron scheduler -->
@@ -233,7 +233,7 @@ has been fixed.
                   ng-class="{ 'btn-info' : note.config.cron && !cronSEWarning, 'btn-danger' : cronSEWarning, 'btn-secondary' : !note.config.cron}"
                   title="Run the notebook with scheduler"
                   ng-disabled="revisionView || isTrash(note)">
-            <i class="fas fa-clock"></i>
+            <i class="fa-solid fa-clock"></i>
             <span class="ms-2" ng-if="note.config.cron">{{getCronOptionNameFromValue(note.config.cron)}}</span>
           </button>
           <div class="dropdown-menu cron-scheduler" role="menu">
