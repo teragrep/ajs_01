@@ -78,13 +78,13 @@
   .execution-time,
   .elapsed-time {
     color: var(--grey-600);
-    font-size: 12px;
+    font-size: var(--fs-1);
     margin-top: 10px;
   }
   .control {
     background: var(--grey-100);
     color: var(--dm-grey-500);
-    font: 14px var(--font-body-text);
+    font: var(--fs-2) var(--font-body-text), sans-serif;
     padding: 10px 40px;
     margin: 0 -40px 20px;
     border-radius: 20px 20px 0 0;
@@ -103,9 +103,9 @@
       transform: rotate(-90deg);
     }
     li {
-      font-size: 13px;
+      font-size: var(--fs-2);
       margin-bottom: 4px;
-      color: #1A202C;
+      color: var(--grey-900);
     }
     .tooltip {
       z-index: 10003;
@@ -134,7 +134,7 @@
 }
 
 .paragraph-title {
-  font: 700 16px 'Roboto', sans-serif;
+  font: 700 var(--fs-2) var(--font-heading), sans-serif;
   color: var(--primary-700);
   text-transform: uppercase;
   word-spacing: 3px;
@@ -148,7 +148,7 @@
 }
 
 .jobs-icon {
-  font-size: 10px;
+  font-size: var(--fs-1);
   color: var(--primary-400);
 }
 
@@ -192,15 +192,15 @@
     display: block !important;
     unicode-bidi: embed;
     margin: 0 10px 5px!important;
-    font-size: 12px!important;
+    font-size: var(--fs-1) !important;
     line-height: 1.42857143!important;
     word-break: break-all!important;
     word-wrap: break-word!important;
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--font-monospace-text), monospace;
   }
   .title {
     font-weight: bold;
-    font-size: 20px !important;
+    font-size: var(--fs-4) !important;
     color: var(--primary-900);
   }
 }
@@ -208,9 +208,8 @@
 /* Paragraph Controls */
 
 .paragraph .runControl {
-  font-size: 1px;
   color: var(--grey-500);
-  height:4px;
+  height: 4px;
   margin: 0;
 }
 
@@ -411,7 +410,7 @@
   }
   .shortcut-keys {
     color: var(--tertiary-700);
-    font-size: 12px;
+    font-size: var(--fs-1);
   }
 }
 
@@ -478,7 +477,7 @@
       border-bottom: 1px solid var(--grey-300);
       .accordion-button {
         text-transform: uppercase;
-        font-size: 12px;
+        font-size: var(--fs-1);
         font-weight: 500;
         background-color: transparent;
         color: var(--grey-900);

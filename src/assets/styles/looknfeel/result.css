@@ -138,7 +138,7 @@
 }
 
 .plain-text {
-  font: 400 14px 'Roboto Mono', monospace;
+  font: 400 var(--fs-1) var(--font-monospace-text), monospace;
   white-space: pre-wrap; /** to preserve white-space and newlines of result */
 }
 
@@ -181,7 +181,7 @@ path.textpath {
 }
 
 text {
-  font-size: 12px;
+  font-size: var(--fs-1);
   pointer-events: none;
   &.shadow {
     stroke: var(--grey-000);
