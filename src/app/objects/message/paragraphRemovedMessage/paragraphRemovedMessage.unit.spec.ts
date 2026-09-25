@@ -44,13 +44,12 @@
  * a licensee so wish it.
  */
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 import {ParagraphRemovedMessage} from './paragraphRemovedMessage';
 import {ParagraphRemovedMessageImpl} from './paragraphRemovedMessageImpl';
 
 describe('ParagraphAddedMessage unit test', () => {
-  let channel: Channel;
   const messageData = {
     op:'PARAGRAPH_REMOVED',
     data:{
@@ -60,20 +59,12 @@ describe('ParagraphAddedMessage unit test', () => {
   let paragraphRemovedMessage: ParagraphRemovedMessage;
 
   beforeEach(() => {
-    paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new SafeJsonImpl(messageData)));
+    paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
   });
 
   describe('Birth', () => {
     it('Should be initialized', () => {
       expect(paragraphRemovedMessage).toBeDefined();
-    });
-
-    it('Should have data', () => {
-      expect(paragraphRemovedMessage.data()).toEqual(messageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphRemovedMessage.operation()).toEqual(messageData.op);
     });
 
     it('Should have paragraphId', () => {
@@ -84,9 +75,7 @@ describe('ParagraphAddedMessage unit test', () => {
   describe('Validation', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
-      paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new SafeJsonImpl(messageData)));
-      expect(() => paragraphRemovedMessage.data()).toThrow();
-      expect(() => paragraphRemovedMessage.operation()).toThrow();
+      paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
       expect(() => paragraphRemovedMessage.paragraphId()).toThrow();
     });
   });

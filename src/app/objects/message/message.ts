@@ -43,7 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
+
 export interface Message{
+  dataAsWebSocketPayload():WebSocketPayload;
   data():object;
   operation():string;
 }

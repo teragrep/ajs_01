@@ -45,23 +45,23 @@
  */
 import {ParagraphOutputMessageFactory} from './paragraphOutputMessageFactory';
 import {ParagraphOutputMessage} from '../../message/paragraphOutputMessage/paragraphOutputMessage';
-import {SafeJson} from '../../safeJson/safeJson';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {ParagraphOutputMessageStub} from '../../message/paragraphOutputMessage/paragraphOutputMessageStub';
 import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {MessageImpl} from '../../message/messageImpl';
 
 export class ParagraphOutputMessageFactoryImpl implements ParagraphOutputMessageFactory {
-  private readonly _paragraph: SafeJson;
+  private readonly _paragraph: WebSocketPayload;
 
   constructor(paragraph:object) {
-    this._paragraph = new SafeJsonImpl(paragraph);
+    this._paragraph = new WebSocketPayloadImpl(paragraph);
   }
 
   paragraphOutputMessage(): ParagraphOutputMessage {
     let paragraphOutputMessage:ParagraphOutputMessage;
     if (this._paragraph.propertyExists('output')) {
-      const paragraphOutput = this._paragraph.getProperty<object>('output', 'object');
+      const paragraphOutput = this._paragraph.objectProperty('output');
       if (paragraphOutput['data'] === undefined || paragraphOutput['type'] === undefined) {
         console.error(`Output data not processed, format invalid: ${JSON.stringify(paragraphOutput)}`);
         paragraphOutputMessage = new ParagraphOutputMessageStub();
@@ -74,7 +74,7 @@ export class ParagraphOutputMessageFactoryImpl implements ParagraphOutputMessage
             output: paragraphOutput,
           }
         };
-        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new SafeJsonImpl(paragraphOutputMessageData)));
+        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
       }
     }
     else {

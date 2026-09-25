@@ -47,8 +47,8 @@ import {Paragraph} from './paragraph';
 import {Channel} from '../channel/channel';
 import {OutputContainer} from '../output/container/outputContainer';
 import {OutputContainerImpl} from '../output/container/outputContainerImpl';
-import {SafeJson} from '../safeJson/safeJson';
-import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
+import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 import {computed, Signal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
@@ -71,14 +71,14 @@ import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;
   private readonly _outputContainer: OutputContainer;
-  private readonly _paragraph: SafeJson;
+  private readonly _paragraph: WebSocketPayload;
   private readonly _componentView: ComponentView;
   private readonly _responseRegister:ResponseRegister;
   private readonly _requestRegister:RequestRegister;
 
   constructor(channel: Channel, paragraph: object) {
     this._channel = channel;
-    this._paragraph = new SafeJsonImpl(paragraph);
+    this._paragraph = new WebSocketPayloadImpl(paragraph);
     this._outputContainer = this.initializedOutputContainer(paragraph);
     this._componentView = new ComponentViewStub();
     this._responseRegister = new ResponseRegisterWithPropertyFilter(new ResponseRegisterWithDefaultResponseList(new ResponseRegisterImpl(), [this._outputContainer]), {name:'paragraphId', type:'string'}, this.id());
@@ -103,7 +103,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   id(): string {
-    return this._paragraph.getProperty('id', 'string');
+    return this._paragraph.stringProperty('id');
   }
 
   request(json: object): void {

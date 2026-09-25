@@ -45,7 +45,7 @@
  */
 import {Message} from '../message';
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {NotesInfoMessage} from './notesInfoMessage';
 import {NotesInfoMessageImpl} from './notesInfoMessageImpl';
 import {NotebookIndexImpl} from '../../notebookCollection/notebookIndex/notebookIndexImpl';
@@ -61,21 +61,13 @@ describe('NotesInfoMessage unit test', () => {
   let notesInfoMessage:NotesInfoMessage;
 
   beforeEach(() => {
-    message = new MessageImpl(new SafeJsonImpl(messageData));
+    message = new MessageImpl(new WebSocketPayloadImpl(messageData));
     notesInfoMessage = new NotesInfoMessageImpl(message);
   });
 
   describe('Birth', () => {
     it('Should be initialized', () => {
       expect(notesInfoMessage).toBeDefined();
-    });
-
-    it('Should have operation', () => {
-      expect(notesInfoMessage.operation()).toEqual(messageData.op);
-    });
-
-    it('Should have data', () => {
-      expect(notesInfoMessage.data()).toEqual(messageData.data);
     });
 
     it('Should have notebookIndices', () => {
@@ -90,10 +82,8 @@ describe('NotesInfoMessage unit test', () => {
   describe('Validation', () => {
     it('Should throw if message operation is not "NOTES_INFO"', () => {
       messageData.op = '';
-      message = new MessageImpl(new SafeJsonImpl(messageData));
+      message = new MessageImpl(new WebSocketPayloadImpl(messageData));
       notesInfoMessage = new NotesInfoMessageImpl(message);
-      expect(() => notesInfoMessage.data()).toThrow();
-      expect(() => notesInfoMessage.operation()).toThrow();
       expect(() => notesInfoMessage.notebookIndices()).toThrow();
     });
   });

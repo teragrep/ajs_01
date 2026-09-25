@@ -45,8 +45,8 @@
  */
 import {Notebook} from './notebook';
 import {Channel} from '../channel/channel';
-import {SafeJsonImpl} from '../safeJson/safeJsonImpl';
-import {SafeJson} from '../safeJson/safeJson';
+import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
 import {ParagraphCollectionImpl} from '../paragraphCollection/paragraphCollectionImpl';
 import {ParagraphCollection} from '../paragraphCollection/paragraphCollection';
 import {computed, Signal} from '@angular/core';
@@ -69,7 +69,7 @@ import {
 
 export class NotebookImpl implements Notebook {
   private readonly _channel: Channel;
-  private readonly _notebook: SafeJson;
+  private readonly _notebook: WebSocketPayload;
   private readonly _paragraphCollection: ParagraphCollection;
   private readonly _componentView:ComponentView;
   private readonly _responseRegister:ResponseRegister;
@@ -77,8 +77,8 @@ export class NotebookImpl implements Notebook {
 
   constructor(channel: Channel, notebook: object) {
     this._channel = channel;
-    this._notebook = new SafeJsonImpl(notebook);
-    this._paragraphCollection = new ParagraphCollectionImpl(this, this._notebook.getProperty('paragraphs', 'object'));
+    this._notebook = new WebSocketPayloadImpl(notebook);
+    this._paragraphCollection = new ParagraphCollectionImpl(this, this._notebook.arrayProperty('paragraphs'));
     this._componentView = new ComponentViewStub();
     this._responseRegister = new ResponseRegisterWithPropertyFilter(new ResponseRegisterWithDefaultResponseList(new ResponseRegisterImpl(), [this._paragraphCollection]),{name:'noteId', type:'string'}, this.id());
     this._requestRegister = new RequestRegisterWithPropertyDecorator(new RequestRegisterImpl(this._channel), {name:'noteId', value:this.id()});
@@ -96,7 +96,7 @@ export class NotebookImpl implements Notebook {
   }
 
   id(): string {
-    return this._notebook.getProperty('id', 'string');
+    return this._notebook.stringProperty('id');
   }
 
   request(json: object): void {

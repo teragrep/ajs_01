@@ -45,6 +45,6 @@
  */
 import {Message} from '../message';
 
-export interface ParagraphRemovedMessage extends Message {
+export interface ParagraphRemovedMessage{
   paragraphId():string;
 }

@@ -46,7 +46,7 @@
 import {ParagraphMessage} from './paragraphMessage';
 import {ParagraphMessageImpl} from './paragraphMessageImpl';
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 
 describe('ParagraphMessage unit test', () => {
@@ -60,7 +60,7 @@ describe('ParagraphMessage unit test', () => {
   let paragraphMessage: ParagraphMessage;
 
   beforeEach(() => {
-    paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new SafeJsonImpl(messageData)));
+    paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
   });
 
   describe('Birth', () => {
@@ -68,26 +68,21 @@ describe('ParagraphMessage unit test', () => {
       expect(paragraphMessage).toBeDefined();
     });
 
-    it('Should have data', () => {
-      expect(paragraphMessage.data()).toEqual(messageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphMessage.operation()).toEqual('PARAGRAPH');
-    });
-
     it('Should have paragraph', () => {
       expect(paragraphMessage.paragraph(channel)).toBeDefined();
+    });
+
+    it('Should have data', () => {
+      expect(paragraphMessage.data()).toEqual(messageData.data);
     });
   });
 
   describe('Validation', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
-      paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new SafeJsonImpl(messageData)));
-      expect(() => paragraphMessage.data()).toThrow();
-      expect(() => paragraphMessage.operation()).toThrow();
+      paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
       expect(() => paragraphMessage.paragraph(channel)).toThrow();
+      expect(() => paragraphMessage.data()).toThrow();
     });
   });
 });

@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 import {ParagraphAddedMessageImpl} from './paragraphAddedMessageImpl';
 import {ParagraphAddedMessage} from './paragraphAddedMessage';
@@ -63,20 +63,12 @@ describe('ParagraphAddedMessage unit test', () => {
   let paragraphAddedMessage: ParagraphAddedMessage;
 
   beforeEach(() => {
-    paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new SafeJsonImpl(messageData)));
+    paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
   });
 
   describe('Birth', () => {
     it('Should be initialized', () => {
       expect(paragraphAddedMessage).toBeDefined();
-    });
-
-    it('Should have data', () => {
-      expect(paragraphAddedMessage.data()).toEqual(messageData.data);
-    });
-
-    it('Should have operation', () => {
-      expect(paragraphAddedMessage.operation()).toEqual(messageData.op);
     });
 
     it('Should have paragraph', () => {
@@ -86,14 +78,17 @@ describe('ParagraphAddedMessage unit test', () => {
     it('Should have index', () => {
       expect(paragraphAddedMessage.index()).toEqual(messageData.data.index);
     });
+
+    it('Should have data', () => {
+      expect(paragraphAddedMessage.data()).toEqual(messageData.data);
+    });
   });
 
   describe('Validation', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
-      paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new SafeJsonImpl(messageData)));
+      paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
       expect(() => paragraphAddedMessage.data()).toThrow();
-      expect(() => paragraphAddedMessage.operation()).toThrow();
       expect(() => paragraphAddedMessage.paragraph(channel)).toThrow();
       expect(() => paragraphAddedMessage.index()).toThrow();
     });

@@ -65,10 +65,4 @@ export class ParagraphOutputMessageStub implements ParagraphOutputMessage {
   options(): StubableObject {
     throw new Error('ParagraphOutputMessageStub: Method not implemented.');
   }
-  data(): object {
-    throw new Error('ParagraphOutputMessageStub: Method not implemented.');
-  }
-  operation(): string {
-    throw new Error('ParagraphOutputMessageStub: Method not implemented.');
-  }
 }
