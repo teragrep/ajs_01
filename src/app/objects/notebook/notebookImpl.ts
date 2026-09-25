@@ -89,7 +89,7 @@ export class NotebookImpl implements Notebook {
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     const noteIdDecoratedMessage = new PropertyDecoratedMessage(message, 'noteId', this.id());
     this._channel.request({
       op:noteIdDecoratedMessage.operation(),
@@ -98,7 +98,7 @@ export class NotebookImpl implements Notebook {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     const filteredMessage = this._noteIdFilter.filteredMessage(message);
     if(!filteredMessage.isStub()){
       this._paragraphCollection.response({

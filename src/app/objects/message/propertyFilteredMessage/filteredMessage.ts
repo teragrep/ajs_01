@@ -46,4 +46,4 @@
 import Stubable from '../../../shared/interfaces/stubable';
 import {Message} from '../message';
 
-export interface FilteredMessage extends Stubable, Message {}
+export interface FilteredMessage extends Stubable, Omit<Message, 'dataAsWebSocketPayload'> {}

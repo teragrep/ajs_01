@@ -95,7 +95,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     const paragraphIdDecoratedMessage = new PropertyDecoratedMessage(message, 'paragraphId', this.id());
     this._channel.request({
       op:paragraphIdDecoratedMessage.operation(),
@@ -104,7 +104,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new SafeJsonImpl(json));
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
     const filteredMessage = this._paragraphIdFilter.filteredMessage(message);
     if(!filteredMessage.isStub()) {
       this._outputContainer.response({

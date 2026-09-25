@@ -45,7 +45,7 @@
  */
 import {Message} from '../message';
 
-export class PropertyDecoratedMessage implements Message {
+export class PropertyDecoratedMessage implements Omit<Message, 'dataAsWebSocketPayload'> {
   private readonly _message:Message;
   private readonly _propertyName: string;
   private readonly _propertyValue: unknown;

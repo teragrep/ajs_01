@@ -47,7 +47,7 @@
 import {MessageFilter} from './messageFilter';
 import {MessagePropertyEqualsFilter} from './messagePropertyEqualsFilter';
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('MessagePropertyFilter unit test', () => {
   const propertyName = 'propertyName';
@@ -55,7 +55,7 @@ describe('MessagePropertyFilter unit test', () => {
   const messagePropertyFilter: MessageFilter = new MessagePropertyEqualsFilter(propertyName, propertyValue);
 
   it('Should return message', () => {
-    const messageWithFilteredProperty = new MessageImpl(new SafeJsonImpl({
+    const messageWithFilteredProperty = new MessageImpl(new WebSocketPayloadImpl({
       op:'',
       data:{
         [propertyName]:propertyValue
@@ -66,7 +66,7 @@ describe('MessagePropertyFilter unit test', () => {
   });
 
   it('Should return message', () => {
-    const messageWithoutFilteredProperty = new MessageImpl(new SafeJsonImpl({
+    const messageWithoutFilteredProperty = new MessageImpl(new WebSocketPayloadImpl({
       op:'',
       data:{}
     }));
@@ -75,7 +75,7 @@ describe('MessagePropertyFilter unit test', () => {
   });
 
   it('Should return message stub', () => {
-    const messageWithNotEqualPropertyValue = new MessageImpl(new SafeJsonImpl({
+    const messageWithNotEqualPropertyValue = new MessageImpl(new WebSocketPayloadImpl({
       op:'',
       data:{
         [propertyName]:'wrongValue'

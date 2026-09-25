@@ -46,14 +46,14 @@
 import {FilteredMessage} from './filteredMessage';
 import {FilteredMessageImpl} from './filteredMessageImpl';
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('FilteredMessage unit test', () => {
   const jsonMessage = {
     op:'test',
     data:{test:'test'}
   };
-  const filteredMessage: FilteredMessage = new FilteredMessageImpl(new MessageImpl(new SafeJsonImpl(jsonMessage)));
+  const filteredMessage: FilteredMessage = new FilteredMessageImpl(new MessageImpl(new WebSocketPayloadImpl(jsonMessage)));
 
   it('Should not be stub', () => {
     expect(filteredMessage.isStub()).toBe(false);

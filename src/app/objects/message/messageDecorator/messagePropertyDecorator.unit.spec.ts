@@ -45,8 +45,8 @@
  */
 import {PropertyDecoratedMessage} from './propertyDecoratedMessage';
 import {MessageImpl} from '../messageImpl';
-import {SafeJsonImpl} from '../../safeJson/safeJsonImpl';
 import {Message} from '../message';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('MessagePropertyDecorator unit test', () => {
   const propertyName = 'propertyName';
@@ -55,7 +55,7 @@ describe('MessagePropertyDecorator unit test', () => {
   const operation = 'op';
 
   it('Should decorate data', () => {
-    const messageWithPropertyToDecorate = new MessageImpl(new SafeJsonImpl({
+    const messageWithPropertyToDecorate = new MessageImpl(new WebSocketPayloadImpl({
       op:operation,
       data:{
         [propertyName]:''
@@ -73,7 +73,7 @@ describe('MessagePropertyDecorator unit test', () => {
     const messageData ={
       test:'test'
     };
-    const messageWithoutPropertyToDecorate = new MessageImpl(new SafeJsonImpl({
+    const messageWithoutPropertyToDecorate = new MessageImpl(new WebSocketPayloadImpl({
       op:'op',
       data:messageData
     }));
