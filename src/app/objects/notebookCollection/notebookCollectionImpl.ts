@@ -56,32 +56,32 @@ import {NoteMessageImpl} from '../message/noteMessage/noteMessageImpl';
 import {MessageImpl} from '../message/messageImpl';
 import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 import {NotesInfoMessageImpl} from '../message/notesInfoMessage/notesInfoMessageImpl';
-import {ResponseRegister} from '../register/responseRegister/responseRegister';
-import {ResponseRegisterImpl} from '../register/responseRegister/responseRegisterImpl';
+import {Message} from '../message/message';
 
 export class NotebookCollectionImpl implements NotebookCollection{
   private readonly _channel:Channel;
-  private readonly _responseRegister:ResponseRegister;
+  private readonly _responseEvents: Map<string, (message:Message) =>void>;
   private readonly _notebookIndices: WritableSignal<Map<string, NotebookIndex>>;
   private readonly _currentNotebook: WritableSignal<Notebook>;
   private readonly _componentView:ComponentView;
 
   constructor(channel:Channel) {
     this._channel = channel;
-    this._responseRegister = new ResponseRegisterImpl();
-    this._responseRegister.register('NOTES_INFO', (json) => this.notesInfoResponse(json));
-    this._responseRegister.register('NOTE', (json) => this.noteResponse(json));
     this._notebookIndices = signal(new Map());
     this._currentNotebook = signal(new NotebookStub());
     this._componentView = new ComponentViewStub();
+    this._responseEvents = new Map([
+      ['NOTES_INFO', (message) => this.notesInfoResponse(message)],
+      ['NOTE', (message) => this.noteResponse(message)],
+    ]);
   }
 
-  private notesInfoResponse(json:object):void{
-    this._notebookIndices.set(new NotesInfoMessageImpl(new MessageImpl(new WebSocketPayloadImpl(json))).notebookIndices());
+  private notesInfoResponse(message:Message):void{
+    this._notebookIndices.set(new NotesInfoMessageImpl(message).notebookIndices());
   }
 
-  private noteResponse(json:object):void{
-    this._currentNotebook.set(new NoteMessageImpl(new MessageImpl(new WebSocketPayloadImpl(json))).notebook(this));
+  private noteResponse(message:Message):void{
+    this._currentNotebook.set(new NoteMessageImpl(message).notebook(this));
   }
 
   print(): Signal<RenderNode> {
@@ -103,8 +103,13 @@ export class NotebookCollectionImpl implements NotebookCollection{
   }
 
   response(json: object): void {
-    this._responseRegister.response(json);
-    if(!this._currentNotebook().isStub()) {
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const eventName = message.operation();
+    if(this._responseEvents.has(eventName)){
+      const eventCallback = this._responseEvents.get(eventName);
+      eventCallback(message);
+    }
+    else if(!this._currentNotebook().isStub()){
       this._currentNotebook().response(json);
     }
   }

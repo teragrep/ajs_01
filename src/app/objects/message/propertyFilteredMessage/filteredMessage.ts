@@ -43,39 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ResponseRegister} from '../responseRegister';
-import {MessageImpl} from '../../../message/messageImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import Stubable from '../../../shared/interfaces/stubable';
+import {Message} from '../message';
 
-export class ResponseRegisterWithPropertyFilter implements ResponseRegister{
-  private readonly _responseRegister: ResponseRegister;
-  private readonly _property: { name:string, type:string };
-  private readonly _value: unknown;
-
-  constructor(responseRegister: ResponseRegister, property: { name:string, type:string }, value: unknown) {
-    this._responseRegister = responseRegister;
-    this._property = property;
-    this._value = value;
-  }
-
-  register(operation: string, callback: (json: object) => void): void {
-    this._responseRegister.register(operation, callback);
-  }
-
-  response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const property = message.data()[this._property.name];
-    if(property !== undefined){
-      const actualType = typeof property;
-      if(actualType !== this._property.type){
-        throw new RangeError(`Filtered property of type ${actualType} does not match expected type ${this._property.type}`);
-      }
-      else if(property === this._value){
-        this._responseRegister.response(json);
-      }
-    }
-    else{
-      this._responseRegister.response(json);
-    }
-  }
-}
+export interface FilteredMessage extends Stubable, Omit<Message, 'dataAsWebSocketPayload'> {}

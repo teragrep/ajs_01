@@ -43,33 +43,30 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {RequestRegister} from '../requestRegister';
-import {MessageImpl} from '../../../message/messageImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {MessageFilter} from './messageFilter';
+import {Message} from '../message';
+import {FilteredMessage} from '../propertyFilteredMessage/filteredMessage';
+import {FilteredMessageStub} from '../propertyFilteredMessage/filteredMessageStub';
+import {FilteredMessageImpl} from '../propertyFilteredMessage/filteredMessageImpl';
 
-export class RequestRegisterWithPropertyDecorator implements RequestRegister {
-  private readonly _requestRegister:RequestRegister;
-  private readonly _property: { name:string, value:unknown };
+export class MessagePropertyEqualsFilter implements MessageFilter {
+  private readonly _propertyName: string;
+  private readonly _propertyValue: unknown;
 
-  constructor(requestRegister:RequestRegister, property: { name:string, value:unknown }) {
-    this._requestRegister = requestRegister;
-    this._property = property;
+  constructor(propertyName: string, propertyValue: unknown) {
+    this._propertyName = propertyName;
+    this._propertyValue = propertyValue;
   }
 
-  register(operation: string, callback: (json: object) => void): void {
-    this._requestRegister.register(operation, callback);
-  }
-
-  request(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const messageData = new WebSocketPayloadImpl(message.data());
-    const requestMessage = {
-      op:message.operation(),
-      data:message.data()
-    };
-    if(messageData.propertyExists(this._property.name)){
-      requestMessage.data[this._property.name] = this._property.value;
+  filteredMessage(message: Message): FilteredMessage {
+    let stubableMessage: FilteredMessage;
+    const property = message.data()[this._propertyName];
+    if(property && property !== this._propertyValue){
+      stubableMessage = new FilteredMessageStub();
     }
-    this._requestRegister.request(requestMessage);
+    else{
+      stubableMessage = new FilteredMessageImpl(message);
+    }
+    return stubableMessage;
   }
 }

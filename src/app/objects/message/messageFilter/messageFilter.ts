@@ -43,6 +43,9 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface Register {
-  register(operation:string, callback:(json:object) => void):void;
+import {Message} from '../message';
+import {FilteredMessage} from '../propertyFilteredMessage/filteredMessage';
+
+export interface MessageFilter {
+  filteredMessage(message:Message): FilteredMessage;
 }

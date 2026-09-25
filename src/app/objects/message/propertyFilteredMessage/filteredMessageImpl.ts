@@ -43,26 +43,25 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ResponseRegister} from './responseRegister';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../message/messageImpl';
+import {FilteredMessage} from './filteredMessage';
+import {Message} from '../message';
 
-export class ResponseRegisterImpl implements ResponseRegister {
-  private readonly _subscribers: Map<string, (json:object) => void>;
+export class FilteredMessageImpl implements FilteredMessage {
+  private readonly _message:Message;
 
-  constructor(){
-    this._subscribers = new Map();
+  constructor(message:Message) {
+    this._message = message;
   }
 
-  register(operation:string, callback: (json:object) => void): void {
-    this._subscribers.set(operation, callback);
+  data(): object {
+    return this._message.data();
   }
 
-  response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const subscription = this._subscribers.get(message.operation());
-    if(subscription){
-      subscription(json);
-    }
+  operation(): string {
+    return this._message.operation();
+  }
+
+  isStub(): boolean {
+    return false;
   }
 }

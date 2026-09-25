@@ -43,45 +43,16 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {RequestRegisterWithPropertyDecorator} from './requestRegisterWithPropertyDecorator';
-import {RequestRegister} from '../requestRegister';
-import {Channel} from '../../../channel/channel';
-import {FakeChannel} from '../../../channel/fakeChannel';
-import {RequestRegisterImpl} from '../requestRegisterImpl';
+import {FilteredMessage} from './filteredMessage';
 
-describe('RequestRegisterWithPropertyDecorator unit test', () => {
-  let channel: Channel;
-  let requestRegister: RequestRegister;
-  let requestRegisterWithPropertyDecorator: RequestRegister;
-
-  beforeEach(() => {
-    channel = new FakeChannel();
-    requestRegister = new RequestRegisterImpl(channel);
-    requestRegisterWithPropertyDecorator = new RequestRegisterWithPropertyDecorator(requestRegister, {name:'propertyName', value: 'propertyValue'});
-  });
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(requestRegisterWithPropertyDecorator).toBeDefined();
-    });
-  });
-
-  describe('Request decoration', () => {
-    it('Should decorate property', () => {
-      const request = {
-        op:'',
-        data:{
-          propertyName:''
-        }
-      };
-      const spy = vi.spyOn(channel, 'request');
-      requestRegisterWithPropertyDecorator.request(request);
-      expect(spy).toHaveBeenCalledExactlyOnceWith({
-        op:'',
-        data:{
-          propertyName:'propertyValue'
-        }
-      });
-    });
-  });
-});
+export class FilteredMessageStub implements FilteredMessage {
+  isStub(): boolean {
+    return true;
+  }
+  data(): object {
+    throw new Error('PropertyFilteredMessageStub: Method not implemented.');
+  }
+  operation(): string {
+    throw new Error('PropertyFilteredMessageStub: Method not implemented.');
+  }
+}

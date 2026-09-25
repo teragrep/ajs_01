@@ -53,36 +53,24 @@ import {computed, Signal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {ComponentView} from '../rendering/componentView/componentView';
-import {ResponseRegister} from '../register/responseRegister/responseRegister';
-import {
-  ResponseRegisterWithPropertyFilter
-} from '../register/responseRegister/responseRegisterWithPropertyFilter/responseRegisterWithPropertyFilter';
-import {
-  ResponseRegisterWithDefaultResponseList
-} from '../register/responseRegister/responseRegisterWithDefaultResponse/responseRegisterWithDefaultResponseList';
-import {ResponseRegisterImpl} from '../register/responseRegister/responseRegisterImpl';
-import {RequestRegister} from '../register/requestRegister/requestRegister';
-import {RequestRegisterImpl} from '../register/requestRegister/requestRegisterImpl';
-import {
-  RequestRegisterWithPropertyDecorator
-} from '../register/requestRegister/requestRegisterWithPropertyDecorator/requestRegisterWithPropertyDecorator';
 import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
+import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
+import {MessageImpl} from '../message/messageImpl';
+import {PropertyDecoratedMessage} from '../message/propertyDecoratedMessage/propertyDecoratedMessage';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;
   private readonly _outputContainer: OutputContainer;
   private readonly _paragraph: WebSocketPayload;
   private readonly _componentView: ComponentView;
-  private readonly _responseRegister:ResponseRegister;
-  private readonly _requestRegister:RequestRegister;
+  private readonly _paragraphIdFilter: MessagePropertyEqualsFilter;
 
   constructor(channel: Channel, paragraph: object) {
     this._channel = channel;
     this._paragraph = new WebSocketPayloadImpl(paragraph);
     this._outputContainer = this.initializedOutputContainer(paragraph);
     this._componentView = new ComponentViewStub();
-    this._responseRegister = new ResponseRegisterWithPropertyFilter(new ResponseRegisterWithDefaultResponseList(new ResponseRegisterImpl(), [this._outputContainer]), {name:'paragraphId', type:'string'}, this.id());
-    this._requestRegister = new RequestRegisterWithPropertyDecorator(new RequestRegisterImpl(this._channel), {name:'paragraphId', value: this.id()});
+    this._paragraphIdFilter = new MessagePropertyEqualsFilter('paragraphId', this.id());
   }
 
   private initializedOutputContainer(paragraph: object): OutputContainer {
@@ -107,10 +95,22 @@ export class ParagraphImpl implements Paragraph {
   }
 
   request(json: object): void {
-    this._requestRegister.request(json);
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const paragraphIdDecoratedMessage = new PropertyDecoratedMessage(message, 'paragraphId', this.id());
+    this._channel.request({
+      op:paragraphIdDecoratedMessage.operation(),
+      data:paragraphIdDecoratedMessage.data()
+    });
   }
 
   response(json: object): void {
-    this._responseRegister.response(json);
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const filteredMessage = this._paragraphIdFilter.filteredMessage(message);
+    if(!filteredMessage.isStub()) {
+      this._outputContainer.response({
+        op:filteredMessage.operation(),
+        data:filteredMessage.data()
+      });
+    }
   }
 }

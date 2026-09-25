@@ -43,62 +43,42 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ResponseRegister} from '../responseRegister';
-import {ResponseRegisterImpl} from '../responseRegisterImpl';
-import {ResponseRegisterWithPropertyFilter} from './responseRegisterWithPropertyFilter';
-import {Mock} from 'vitest';
+import {PropertyDecoratedMessage} from './propertyDecoratedMessage';
+import {MessageImpl} from '../messageImpl';
+import {Message} from '../message';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-describe('ResponseRegisterWithPropertyFilter unit test', () => {
-  let responseRegister: ResponseRegister;
-  let responseRegisterWithPropertyFilter: ResponseRegister;
-  const value = 'someValue';
-  const property = {name: 'keyForSomeValue', type: 'string'};
-  let callback: Mock;
+describe('PropertyDecoratedMessage unit test', () => {
+  const propertyName = 'propertyName';
+  const propertyValue = 'propertyValue';
+  let propertyDecoratedMessage: Omit<Message, 'dataAsWebSocketPayload'> ;
   const operation = 'op';
 
-  beforeEach(() => {
-    callback  = vi.fn();
-    responseRegister = new ResponseRegisterImpl();
-    responseRegisterWithPropertyFilter = new ResponseRegisterWithPropertyFilter(responseRegister, property, value);
-    responseRegisterWithPropertyFilter.register(operation, (data) => callback(data));
+  it('Should decorate data', () => {
+    const messageWithPropertyToDecorate = new MessageImpl(new WebSocketPayloadImpl({
+      op:operation,
+      data:{
+        [propertyName]:''
+      }
+    }));
+    propertyDecoratedMessage = new PropertyDecoratedMessage(messageWithPropertyToDecorate, propertyName, propertyValue);
+    const expectedData = {
+      [propertyName]:propertyValue
+    };
+    expect(propertyDecoratedMessage.data()).toEqual(expectedData);
+    expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(responseRegisterWithPropertyFilter).toBeDefined();
-    });
-  });
-
-  describe('Filtering', () => {
-    it('Should execute callback if property exists and value matches.', () => {
-      const response = {
-        op:'op',
-        data:{
-          keyForSomeValue:'someValue'
-        }
-      };
-      responseRegisterWithPropertyFilter.response(response);
-      expect(callback).toHaveBeenCalledExactlyOnceWith(response);
-    });
-
-    it('Should execute callback if property does not exist', () => {
-      const response = {
-        op:'op',
-        data:{}
-      };
-      responseRegisterWithPropertyFilter.response(response);
-      expect(callback).toHaveBeenCalledExactlyOnceWith(response);
-    });
-
-    it('Should not execute callback if property exists and value does not match', () => {
-      const response = {
-        op:'op',
-        data:{
-          keyForSomeValue:'wrongValue'
-        }
-      };
-      responseRegisterWithPropertyFilter.response(response);
-      expect(callback).toHaveBeenCalledTimes(0);
-    });
+  it('Should not decorate message', () => {
+    const messageData ={
+      test:'test'
+    };
+    const messageWithoutPropertyToDecorate = new MessageImpl(new WebSocketPayloadImpl({
+      op:'op',
+      data:messageData
+    }));
+    propertyDecoratedMessage = new PropertyDecoratedMessage(messageWithoutPropertyToDecorate, propertyName, propertyValue);
+    expect(propertyDecoratedMessage.data()).toEqual(messageData);
+    expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 });

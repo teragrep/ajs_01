@@ -43,7 +43,45 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Respondable} from '../../channel/respondable';
-import {Register} from '../register';
 
-export interface ResponseRegister extends Respondable, Register {}
+import {MessageFilter} from './messageFilter';
+import {MessagePropertyEqualsFilter} from './messagePropertyEqualsFilter';
+import {MessageImpl} from '../messageImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+
+describe('MessagePropertyFilter unit test', () => {
+  const propertyName = 'propertyName';
+  const propertyValue = 'propertyValue';
+  const messagePropertyFilter: MessageFilter = new MessagePropertyEqualsFilter(propertyName, propertyValue);
+
+  it('Should return message', () => {
+    const messageWithFilteredProperty = new MessageImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{
+        [propertyName]:propertyValue
+      }
+    }));
+    const filteredMessage = messagePropertyFilter.filteredMessage(messageWithFilteredProperty);
+    expect(filteredMessage.isStub()).toBe(false);
+  });
+
+  it('Should return message', () => {
+    const messageWithoutFilteredProperty = new MessageImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{}
+    }));
+    const filteredMessage = messagePropertyFilter.filteredMessage(messageWithoutFilteredProperty);
+    expect(filteredMessage.isStub()).toBe(false);
+  });
+
+  it('Should return message stub', () => {
+    const messageWithNotEqualPropertyValue = new MessageImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{
+        [propertyName]:'wrongValue'
+      }
+    }));
+    const filteredMessage = messagePropertyFilter.filteredMessage(messageWithNotEqualPropertyValue);
+    expect(filteredMessage.isStub()).toBe(true);
+  });
+});

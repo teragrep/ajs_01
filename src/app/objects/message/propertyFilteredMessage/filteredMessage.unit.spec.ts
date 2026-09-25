@@ -43,32 +43,27 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {RequestRegister} from './requestRegister';
-import {MessageImpl} from '../../message/messageImpl';
+import {FilteredMessage} from './filteredMessage';
+import {FilteredMessageImpl} from './filteredMessageImpl';
+import {MessageImpl} from '../messageImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {Requestable} from '../../channel/requestable';
 
-export class RequestRegisterImpl implements RequestRegister {
-  private readonly _request:Requestable;
-  private readonly _subscribers: Map<string, (json:object) => void>;
+describe('FilteredMessage unit test', () => {
+  const jsonMessage = {
+    op:'test',
+    data:{test:'test'}
+  };
+  const filteredMessage: FilteredMessage = new FilteredMessageImpl(new MessageImpl(new WebSocketPayloadImpl(jsonMessage)));
 
-  constructor(request:Requestable){
-    this._request = request;
-    this._subscribers = new Map();
-  }
+  it('Should not be stub', () => {
+    expect(filteredMessage.isStub()).toBe(false);
+  });
 
-  register(operation:string, callback: (json:object) => void): void {
-    this._subscribers.set(operation, callback);
-  }
+  it('Should have operation', () => {
+    expect(filteredMessage.operation()).toEqual(jsonMessage.op);
+  });
 
-  request(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const subscription = this._subscribers.get(message.operation());
-    if(subscription){
-      subscription(json);
-    }
-    else{
-      this._request.request(json);
-    }
-  }
-}
+  it('Should have data', () => {
+    expect(filteredMessage.data()).toEqual(jsonMessage.data);
+  });
+});

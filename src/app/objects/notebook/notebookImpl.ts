@@ -53,35 +53,24 @@ import {computed, Signal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
 import {ComponentView} from '../rendering/componentView/componentView';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
-import {ResponseRegister} from '../register/responseRegister/responseRegister';
-import {ResponseRegisterImpl} from '../register/responseRegister/responseRegisterImpl';
-import {
-  ResponseRegisterWithDefaultResponseList
-} from '../register/responseRegister/responseRegisterWithDefaultResponse/responseRegisterWithDefaultResponseList';
-import {
-  ResponseRegisterWithPropertyFilter
-} from '../register/responseRegister/responseRegisterWithPropertyFilter/responseRegisterWithPropertyFilter';
-import {RequestRegister} from '../register/requestRegister/requestRegister';
-import {RequestRegisterImpl} from '../register/requestRegister/requestRegisterImpl';
-import {
-  RequestRegisterWithPropertyDecorator
-} from '../register/requestRegister/requestRegisterWithPropertyDecorator/requestRegisterWithPropertyDecorator';
+import {MessageFilter} from '../message/messageFilter/messageFilter';
+import {PropertyDecoratedMessage} from '../message/propertyDecoratedMessage/propertyDecoratedMessage';
+import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
+import {MessageImpl} from '../message/messageImpl';
 
 export class NotebookImpl implements Notebook {
   private readonly _channel: Channel;
   private readonly _notebook: WebSocketPayload;
   private readonly _paragraphCollection: ParagraphCollection;
   private readonly _componentView:ComponentView;
-  private readonly _responseRegister:ResponseRegister;
-  private readonly _requestRegister:RequestRegister;
+  private readonly _noteIdFilter:MessageFilter;
 
   constructor(channel: Channel, notebook: object) {
     this._channel = channel;
     this._notebook = new WebSocketPayloadImpl(notebook);
     this._paragraphCollection = new ParagraphCollectionImpl(this, this._notebook.arrayProperty('paragraphs'));
     this._componentView = new ComponentViewStub();
-    this._responseRegister = new ResponseRegisterWithPropertyFilter(new ResponseRegisterWithDefaultResponseList(new ResponseRegisterImpl(), [this._paragraphCollection]),{name:'noteId', type:'string'}, this.id());
-    this._requestRegister = new RequestRegisterWithPropertyDecorator(new RequestRegisterImpl(this._channel), {name:'noteId', value:this.id()});
+    this._noteIdFilter = new MessagePropertyEqualsFilter('noteId', this.id());
   }
 
   print(): Signal<RenderNode> {
@@ -100,11 +89,23 @@ export class NotebookImpl implements Notebook {
   }
 
   request(json: object): void {
-    this._requestRegister.request(json);
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const noteIdDecoratedMessage = new PropertyDecoratedMessage(message, 'noteId', this.id());
+    this._channel.request({
+      op:noteIdDecoratedMessage.operation(),
+      data:noteIdDecoratedMessage.data()
+    });
   }
 
   response(json: object): void {
-    this._responseRegister.response(json);
+    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const filteredMessage = this._noteIdFilter.filteredMessage(message);
+    if(!filteredMessage.isStub()){
+      this._paragraphCollection.response({
+        op:filteredMessage.operation(),
+        data:filteredMessage.data()
+      });
+    }
   }
 
   isStub(): boolean {

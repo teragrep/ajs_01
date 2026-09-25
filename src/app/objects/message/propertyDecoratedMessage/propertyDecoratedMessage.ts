@@ -43,42 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ResponseRegister} from '../responseRegister';
-import {ResponseRegisterImpl} from '../responseRegisterImpl';
-import {ResponseRegisterWithDefaultResponseList} from './responseRegisterWithDefaultResponseList';
-import {Respondable} from '../../../channel/respondable';
-import {Mock} from 'vitest';
+import {Message} from '../message';
 
-describe('ResponseRegisterWithDefaultResponseList unit test', () => {
-  let responseRegister: ResponseRegister;
-  let responseRegisterWithDefaultResponseList: ResponseRegister;
-  let defaultResponseList: Respondable[];
-  let responseSpy: Mock;
+export class PropertyDecoratedMessage implements Omit<Message, 'dataAsWebSocketPayload'> {
+  private readonly _message:Message;
+  private readonly _propertyName: string;
+  private readonly _propertyValue: unknown;
 
-  beforeEach(() => {
-    responseRegister = new ResponseRegisterImpl();
-    const response ={
-      response(data: object) {}
-    };
-    defaultResponseList = [response];
-    responseSpy = vi.spyOn(response, 'response');
-    responseRegisterWithDefaultResponseList = new ResponseRegisterWithDefaultResponseList(responseRegister, defaultResponseList);
-  });
+  constructor(message:Message, propertyName: string, propertyValue: unknown) {
+    this._message = message;
+    this._propertyName = propertyName;
+    this._propertyValue = propertyValue;
+  }
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(responseRegisterWithDefaultResponseList).toBeDefined();
-    });
-  });
+  data(): object {
+    const messageData= this._message.data();
+    if(this._propertyName in messageData){
+      messageData[this._propertyName] = this._propertyValue;
+    }
+    return messageData;
+  }
 
-  describe('Default response', () => {
-    it('Should response defaultResponses by default', () => {
-      const response = {
-        op:'',
-        data:{}
-      };
-      responseRegisterWithDefaultResponseList.response(response);
-      expect(responseSpy).toHaveBeenCalledExactlyOnceWith(response);
-    });
-  });
-});
+  operation(): string {
+    return this._message.operation();
+  }
+}
