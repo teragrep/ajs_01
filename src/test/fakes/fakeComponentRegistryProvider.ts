@@ -43,52 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputContainer} from './outputContainer';
-import {Channel} from '../../channel/channel';
-import {computed, Signal} from '@angular/core';
-import {RenderNode} from '../../rendering/renderNode/renderNode';
-import {ComponentView} from '../../rendering/componentView/componentView';
-import {ComponentViewStub} from '../../rendering/componentView/componentViewStub';
+import {FakeComponent} from './fakeComponent';
+import {FakeComponentRegistry} from './fakeComponentRegistry';
+import {COMPONENT_REGISTRY} from '../../app/ui/angular2+/componentRegistry/componentRegistry';
 
-import {InterpreterErrorListener} from '../../interpreterErrorListener/interpreterErrorListener';
-import {InterpreterErrorListenerImpl} from '../../interpreterErrorListener/interpreterErrorListenerImpl';
-import {OutputFormats} from '../outputFormats/outputFormats';
-import {OutputFormatsImpl} from '../outputFormats/outputFormatsImpl';
-
-export class OutputContainerImpl implements OutputContainer{
-  private readonly _channel:Channel;
-  private readonly _outputFormats: OutputFormats;
-  private readonly _interpreterErrorListener:InterpreterErrorListener;
-  private readonly _componentView:ComponentView;
-  private readonly _paragraphId:string;
-
-  constructor(channel:Channel, paragraphId:string) {
-    this._channel = channel;
-    this._outputFormats = new OutputFormatsImpl(this);
-    this._interpreterErrorListener = new InterpreterErrorListenerImpl(paragraphId);
-    this._paragraphId = paragraphId;
-    this._componentView = new ComponentViewStub();
-  }
-
-  request(json: object): void {
-    this._channel.request(json);
-  }
-
-  response(json: object): void {
-    this._outputFormats.response(json);
-    this._interpreterErrorListener.response(json);
-  }
-
-  print(): Signal<RenderNode> {
-    return computed(() =>
-      ({
-        paragraphId:this._paragraphId,
-        componentView: this._componentView,
-        children: computed(() => [
-          this._outputFormats.print()(),
-          this._interpreterErrorListener.print()()
-        ]),
-      })
-    );
-  }
-}
+export const FakeComponentRegistryProvider = {provide: COMPONENT_REGISTRY, useValue:new Map([[FakeComponentRegistry.FAKE_COMPONENT, FakeComponent]])};

@@ -43,21 +43,20 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {computed, Signal} from '@angular/core';
+import {signal, Signal} from '@angular/core';
 import {RenderNode} from '../../rendering/renderNode/renderNode';
 import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {ComponentView} from '../../rendering/componentView/componentView';
-import {ComponentViewStub} from '../../rendering/componentView/componentViewStub';
 import {NotebookIndex} from './notebookIndex';
+import {RenderNodeStub} from '../../rendering/renderNode/renderNodeStub';
 
 export class NotebookIndexImpl implements NotebookIndex {
   private readonly _notebookIndexData:WebSocketPayload;
-  private readonly _componentView:ComponentView;
+  private readonly _renderNode: Signal<RenderNode>;
 
   constructor(notebookIndexData:object) {
-      this._notebookIndexData = new WebSocketPayloadImpl(notebookIndexData);
-      this._componentView = new ComponentViewStub();
+    this._notebookIndexData = new WebSocketPayloadImpl(notebookIndexData);
+    this._renderNode = signal(new RenderNodeStub());
   }
 
   id():string {
@@ -65,9 +64,6 @@ export class NotebookIndexImpl implements NotebookIndex {
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView,
-      children: computed(() =>[])
-    }));
+    return this._renderNode;
   }
 }

@@ -79,8 +79,7 @@ describe('Notebook unit test', () => {
     it('Should print', () => {
       notebook = new NotebookImpl(channel, notebookData);
       const notebookPrinted = notebook.print()();
-      expect(notebookPrinted.componentView.isStub()).toBe(true);
-      expect(notebookPrinted.children()).toHaveLength(1);
+      expect(notebookPrinted.isStub()).toBe(false);
     });
   });
 

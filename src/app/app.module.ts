@@ -53,6 +53,7 @@ import {AuthenticationServiceImpl} from './shared/services/authenticationService
 import { provideHttpClient } from '@angular/common/http';
 import {WebSocketServiceImpl} from './objects/webSocket/service/webSocketServiceImpl';
 import {webAppRoot} from './objects/webAppRoot/webAppRootImpl';
+import {ComponentRegistryProvider} from './ui/angular2+/componentRegistry/componentRegistryProvider';
 
 @NgModule({
   declarations: [],
@@ -72,6 +73,7 @@ import {webAppRoot} from './objects/webAppRoot/webAppRootImpl';
     wsMessageListenerProvider,
     WebsocketMessageProvider,
     ToasterProvider,
+    ComponentRegistryProvider
   ]
 })
 

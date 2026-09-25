@@ -43,21 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DataTableSwitcherButton} from './dataTablesSwitcherButton';
-import {FakeChannel} from '../../../../channel/fakeChannel';
-
-describe('DataTables SwitcherButton unit test', () => {
-  const request = new FakeChannel();
-  const dataTablesSwitcherButton = new DataTableSwitcherButton(request);
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(dataTablesSwitcherButton).toBeDefined();
-    });
-
-    it('Should print', () => {
-      const dataTableSwitcherButtonPrinted = dataTablesSwitcherButton.print()();
-      expect(dataTableSwitcherButtonPrinted.isStub()).toBe(false);
-    });
-  });
-});
+export enum FakeComponentRegistry {
+  FAKE_COMPONENT = 'FAKE_COMPONENT'
+}

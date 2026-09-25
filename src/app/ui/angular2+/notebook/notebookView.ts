@@ -43,21 +43,20 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DataTableSwitcherButton} from './dataTablesSwitcherButton';
-import {FakeChannel} from '../../../../channel/fakeChannel';
+import {Component, input} from '@angular/core';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
 
-describe('DataTables SwitcherButton unit test', () => {
-  const request = new FakeChannel();
-  const dataTablesSwitcherButton = new DataTableSwitcherButton(request);
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(dataTablesSwitcherButton).toBeDefined();
-    });
-
-    it('Should print', () => {
-      const dataTableSwitcherButtonPrinted = dataTablesSwitcherButton.print()();
-      expect(dataTableSwitcherButtonPrinted.isStub()).toBe(false);
-    });
-  });
-});
+@Component({
+  selector: 'notebook',
+  imports: [
+    RenderNodeHostView
+  ],
+  template: `
+    <render-node-host [renderNode]="paragraphCollection()" [containerId]="containerId()"></render-node-host>
+  `
+})
+export class NotebookView {
+  paragraphCollection = input.required<RenderNode>();
+  containerId = input.required<string>();
+}

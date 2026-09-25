@@ -43,47 +43,48 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphOutputRequest} from './paragraphOutputRequest';
-import {ParagraphOutputRequestImpl} from './paragraphOutputRequestImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../../message/messageImpl';
+import {
+  Component, computed,
+  inject,
+  input,
+  Type,
+} from '@angular/core';
+import {COMPONENT_REGISTRY} from '../componentRegistry/componentRegistry';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {NgComponentOutlet} from '@angular/common';
 
-describe('Paragraph Output Request unit test', () => {
-  const paragraphOutputRequestData = {
-    op:'PARAGRAPH_OUTPUT_REQUEST',
-    data:{
-      type:'type'
+@Component({
+  selector: 'render-node-host',
+  imports: [
+    NgComponentOutlet
+  ],
+  template: `
+    @if(!renderNode().isStub()){
+      @let component = componentReference(renderNode().componentView());
+      <ng-container *ngComponentOutlet="component; inputs: componentInputs();"></ng-container>
     }
-  };
-  let paragraphOutputRequest: ParagraphOutputRequest;
-  beforeEach(() => {
-    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
+  `
+})
+export class RenderNodeHostView {
+  renderNode = input.required<RenderNode>();
+  containerId = input<string>('');
+
+  protected componentInputs = computed(() => {
+    let componentInputs = {};
+    if(!this.renderNode().isStub()){
+      componentInputs = {
+        ...this.renderNode().inputs()(),
+      };
+      if(this.containerId() !== ''){
+        componentInputs['containerId'] = this.containerId();
+      }
+    }
+    return componentInputs;
   });
 
+  private readonly componentRegistry = inject(COMPONENT_REGISTRY);
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(paragraphOutputRequest).toBeDefined();
-    });
-
-    it('Should not be stub', () => {
-      expect(paragraphOutputRequest.isStub()).toBe(false);
-    });
-
-    it('Should have type', () => {
-      expect(paragraphOutputRequest.type()).toEqual(paragraphOutputRequestData.data.type);
-    });
-
-    it('Should have request', () => {
-      expect(paragraphOutputRequest.request()).toEqual(paragraphOutputRequestData);
-    });
-  });
-
-  describe('Validation', () => {
-    it('Should throw if operation is not "PARAGRAPH_OUTPUT_REQUEST"', () => {
-      paragraphOutputRequestData.op = '';
-      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
-      expect(() => paragraphOutputRequest.type()).toThrow();
-    });
-  });
-});
+  protected componentReference(componentId:string):Type<unknown>{
+    return this.componentRegistry.get(componentId);
+  }
+}

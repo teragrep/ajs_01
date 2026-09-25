@@ -47,6 +47,7 @@ import {Channel} from '../channel/channel';
 import {NotebookCollection} from './notebookCollection';
 import {FakeChannel} from '../channel/fakeChannel';
 import {NotebookCollectionImpl} from './notebookCollectionImpl';
+import Stubable from '../../shared/interfaces/stubable';
 
 describe('NotebookCollection', () => {
   let channel: Channel;
@@ -64,9 +65,8 @@ describe('NotebookCollection', () => {
 
     it('Should print', () => {
       const notebookCollectionPrinted = notebookCollection.print()();
-      expect(notebookCollectionPrinted).toBeDefined();
-      expect(notebookCollectionPrinted.children()).toHaveLength(0);
-      expect(notebookCollectionPrinted.componentView.isStub()).toBe(true);
+      expect(notebookCollectionPrinted.isStub()).toBe(false);
+      expect((notebookCollectionPrinted.inputs()()['currentNotebook'] as Stubable).isStub()).toBe(true);
     });
   });
 
@@ -93,7 +93,7 @@ describe('NotebookCollection', () => {
       };
       notebookCollection.response(response);
       const notebookCollectionPrinted = notebookCollection.print()();
-      expect(notebookCollectionPrinted.children()).toHaveLength(1);
+      expect((notebookCollectionPrinted.inputs()()['currentNotebook'] as Stubable).isStub()).toBe(false);
     });
   });
 });

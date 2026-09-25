@@ -43,31 +43,23 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ComponentViewImpl} from './componentViewImpl';
-import {signal} from '@angular/core';
+import {Component, input} from '@angular/core';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
 
-describe('ComponentView unit test', () => {
-  class component {
-    someMethod():void{}
-  }
-  const inputs = signal({input1:'val1', input2:123, input3: {nested: 'nested'}});
-  const componentView = new ComponentViewImpl(component, inputs);
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(componentView).toBeDefined();
-    });
-
-    it('Should not be stub', () => {
-      expect(componentView.isStub()).toBe(false);
-    });
-
-    it('Should component', () => {
-      expect(componentView.component()).toBeTypeOf(typeof component);
-    });
-
-    it('Should have inputs', () => {
-      expect(componentView.inputs()()).toEqual(inputs());
-    });
-  });
-});
+@Component({
+  selector: 'paragraph',
+  imports: [
+    RenderNodeHostView
+  ],
+  template: `
+    @if(containerId() === paragraphId()){
+      <render-node-host [renderNode]="output()"></render-node-host>
+    }
+  `
+})
+export class ParagraphView{
+  output = input.required<RenderNode>();
+  paragraphId = input.required<string>();
+  containerId = input.required<string>();
+}

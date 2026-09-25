@@ -43,19 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ComponentView} from './componentView';
-import {Signal} from '@angular/core';
+import {Component} from '@angular/core';
 
-export class ComponentViewStub implements ComponentView {
-  isStub(): boolean {
-    return true;
-  }
-
-  inputs(): Signal<Record<string, unknown>> {
-    throw new Error('ComponentViewStub: method not implemented.');
-  }
-
-  component(): new () => unknown {
-    throw new Error('ComponentViewStub: method not implemented.');
-  }
-}
+@Component({
+  selector: 'fake-component',
+  template: ''
+})
+export class FakeComponent{}

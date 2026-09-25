@@ -67,8 +67,8 @@ describe('ParagraphCollection unit test', () => {
 
     it('Should print', () => {
       const paragraphCollectionPrinted = paragraphCollection.print()();
-      expect(paragraphCollectionPrinted.componentView.isStub()).toBe(true);
-      expect(paragraphCollectionPrinted.children()).toHaveLength(2);
+      expect(paragraphCollectionPrinted.isStub()).toBe(false);
+      expect(paragraphCollectionPrinted.inputs()()['paragraphs']).toHaveLength(2);
     });
   });
 
@@ -130,7 +130,7 @@ describe('ParagraphCollection unit test', () => {
         }
       };
       paragraphCollection.response(paragraphAddedResponse);
-      expect(paragraphCollection.print()().children()).toHaveLength(3);
+      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(3);
     });
 
     it('Should set paragraph', () => {
@@ -141,7 +141,7 @@ describe('ParagraphCollection unit test', () => {
         }
       };
       paragraphCollection.response(paragraphResponse);
-      expect(paragraphCollection.print()().children()).toHaveLength(3);
+      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(3);
     });
 
     it('Should remove paragraph', () => {
@@ -152,7 +152,7 @@ describe('ParagraphCollection unit test', () => {
         }
       };
       paragraphCollection.response(paragraphRemovedResponse);
-      expect(paragraphCollection.print()().children()).toHaveLength(1);
+      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(1);
     });
   });
 });

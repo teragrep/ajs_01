@@ -43,21 +43,40 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DataTableSwitcherButton} from './dataTablesSwitcherButton';
-import {FakeChannel} from '../../../../channel/fakeChannel';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {ComponentFixture} from '@angular/core/testing';
+import {RenderNodeHostView} from './renderNodeHostView';
+import {render} from '@testing-library/angular';
+import {By} from '@angular/platform-browser';
+import {RenderNodeStub} from '../../../objects/rendering/renderNode/renderNodeStub';
+import {FakeRenderNode} from '../../../../test/fakes/fakeRenderNode';
+import {FakeComponentRegistryProvider} from '../../../../test/fakes/fakeComponentRegistryProvider';
+import {FakeComponent} from '../../../../test/fakes/fakeComponent';
 
-describe('DataTables SwitcherButton unit test', () => {
-  const request = new FakeChannel();
-  const dataTablesSwitcherButton = new DataTableSwitcherButton(request);
+describe('RenderNodeHostView integration test', () => {
+  let renderNode:RenderNode;
+  let fixture: ComponentFixture<RenderNodeHostView>;
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(dataTablesSwitcherButton).toBeDefined();
+  beforeEach(async () => {
+    renderNode = new FakeRenderNode();
+    const renderResult = await render(RenderNodeHostView, {
+      inputs:{
+        renderNode: renderNode
+      },
+      providers:[
+        FakeComponentRegistryProvider
+      ]
     });
+    fixture = renderResult.fixture;
+  });
 
-    it('Should print', () => {
-      const dataTableSwitcherButtonPrinted = dataTablesSwitcherButton.print()();
-      expect(dataTableSwitcherButtonPrinted.isStub()).toBe(false);
-    });
+  it('Should render Fake component', () => {
+    expect(fixture.debugElement.query(By.directive(FakeComponent))).toBeDefined();
+  });
+
+  it('Should not render when renderNode is stub', () => {
+    fixture.componentRef.setInput('renderNode', new RenderNodeStub());
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.directive(FakeComponent))).toBeNull();
   });
 });

@@ -43,7 +43,25 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../channel/channel';
-import {Printable} from '../../rendering/printable/printable';
+import {Component, input} from '@angular/core';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
 
-export interface OutputContainer extends Channel, Printable{}
+@Component({
+  selector: 'output-container',
+  imports: [
+    RenderNodeHostView
+  ],
+  template: `
+    <render-node-host [renderNode]="interpreterErrorListener()"></render-node-host>
+    <render-node-host [renderNode]="outputSwitcher()"></render-node-host>
+    @for(outputFormat of outputFormats(); track $index){
+      <render-node-host [renderNode]="outputFormat"></render-node-host>
+    }
+  `
+})
+export class OutputView {
+  interpreterErrorListener = input.required<RenderNode>();
+  outputSwitcher = input.required<RenderNode>();
+  outputFormats = input.required<RenderNode[]>();
+}

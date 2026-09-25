@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../channel/channel';
-import {Printable} from '../../rendering/printable/printable';
+import {Channel} from '../channel/channel';
+import {Printable} from '../rendering/printable/printable';
 
-export interface OutputFormats extends  Channel, Printable {}
+export interface Output extends Printable, Channel{}

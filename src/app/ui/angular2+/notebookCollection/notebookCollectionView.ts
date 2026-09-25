@@ -43,41 +43,20 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Component, computed, input} from '@angular/core';
-import {NgComponentOutlet} from '@angular/common';
+import {Component, input} from '@angular/core';
 import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
-
+import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
 
 @Component({
-  selector: 'recursive-component-draw',
+  selector: 'notebook-collection',
   imports: [
-    NgComponentOutlet
+    RenderNodeHostView
   ],
   template: `
-    @if(!componentView().isStub()){
-      <ng-container
-        *ngComponentOutlet="component(); inputs: inputs()">
-      </ng-container>
-    }
-    @for (child of renderNode().children(); track $index) {
-      @if(child.paragraphId === undefined || child.paragraphId === this.containerId()){
-        <recursive-component-draw [renderNode]="child" [containerId]="containerId()"></recursive-component-draw>
-      }
-    }
+    <render-node-host [renderNode]="currentNotebook()" [containerId]="containerId()"></render-node-host>
   `
 })
-export class RecursiveComponentDraw {
-  renderNode = input.required<RenderNode>();
+export class NotebookCollectionView {
+  currentNotebook = input.required<RenderNode>();
   containerId = input.required<string>();
-  protected componentView = computed(() => this.renderNode().componentView);
-  protected component = computed(() => {
-    if(!this.componentView().isStub()){
-      return this.componentView().component();
-    }
-  });
-  protected inputs = computed(() => {
-    if(!this.componentView().isStub()){
-      return this.componentView().inputs()();
-    }
-  });
 }
