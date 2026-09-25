@@ -45,10 +45,10 @@
  */
 
 .notebook-mt {
-  padding-top: calc(var(--navbar-height) + var(--note-action-height) + 2.75rem);
+  padding-top: calc(var(--navbar-height) + var(--note-action-height) + var(--p-9));
   transition: all 0.5s;
   &.collapsed {
-    padding-top: 2.75rem;
+    padding-top: calc(var(--navbar-height) + var(--note-action-height));
     transition: all 0.5s;
   }
 }
@@ -76,7 +76,7 @@
   }
   .collapse-button {
     z-index: 300;
-    margin-top: -2px;
+    margin-top: -1px; /* negates the 1px border in note-action, so the bg in the button and bar is continuous */
   }
   .btn-collapse {
     background: var(--grey-000);
@@ -115,8 +115,8 @@
   h3 {
     margin-top: 0;
     margin-bottom: 0;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: var(--p-1);
+    padding-bottom: var(--p-1);
   }
   &.headroom {
     position: fixed;
@@ -177,7 +177,7 @@
   -webkit-box-shadow: none;
   box-shadow: none;
   margin: 0;
-  padding: 2px 10px 3px;
+  padding: var(--p-1) var(--p-4) var(--p-1);
   &:after {
     content: "\200E‎";
   }
@@ -199,7 +199,7 @@
   text-align: left;
   font: 600 20px 'Roboto';
   margin: 0;
-  padding-top: 4px;
+  padding-top: var(--p-1);
   &:after {
     content: "\200E‎";
   }
@@ -208,7 +208,7 @@
 .note-export {
   border: 1px solid var(--grey-300);
   border-radius: 20px;
-  padding: 30px 0;
+  padding: var(--p-7) 0;
   text-align: center;
   &:hover {
     background: var(--grey-200);
@@ -232,8 +232,8 @@
 
 /* overwrite bootstrap css for version control button */
 .btn-group > .btn + .dropdown-toggle {
-  padding-right: 5px;
-  padding-left: 5px;
+  padding-right: var(--p-2);
+  padding-left: var(--p-2);
 }
 
 /* Revision */
@@ -266,18 +266,18 @@
 #revisionsDropdown {
   min-height: 32px;
   width: auto;
-  padding: 0 10px 0 5px !important;
+  padding: 0 var(--p-4) 0 var(--p-2) !important;
 }
 
 .caret-separator {
   height: 22px;
   line-height: 9px;
   width: 16px;
-  padding-left: 3px !important;
+  padding-left: var(--p-1) !important;
 }
 
 .commit-container {
-  padding: 10px 20px 6px 20px !important;
+  padding: var(--p-4) var(--p-6) var(--p-2) var(--p-6) !important;
   font-weight: normal;
   word-wrap: break-word;
   white-space: initial;
@@ -286,7 +286,7 @@
     background: transparent !important;
   }
   input {
-    padding: 3px 5px;
+    padding: var(--p-1) var(--p-2);
     border: 1px solid var(--grey-400);
     border-radius: 4px;
   }
@@ -299,7 +299,7 @@
 /* Add New Paragraph */
 
 .new-paragraph{
-  padding: 15px 30px 5px;
+  padding: var(--p-5) var(--p-7) var(--p-2);
   cursor: pointer;
   color: var(--grey-600);
   text-transform: uppercase;
@@ -311,7 +311,7 @@
     content: "\f067";
     font-family: 'Font Awesome 5 Free', fantasy;
     font-weight: 900;
-    padding-right: 5px;
+    padding-right: var(--p-2);
     color: var(--grey-500);
   }
   &:hover {
@@ -355,7 +355,7 @@
 }
 
 .noteBtnfa {
-  margin-left: 3px;
+  margin-left: var(--m-1);
 }
 
 .disable {
@@ -373,7 +373,7 @@
 }
 
 .paragraph-output {
-  margin: 20px 0;
+  margin: var(--m-6) 0;
 }
 
 .editor, .executionTime, .nv-controlsWrap {
@@ -395,14 +395,14 @@
 }
 
 .graphContainer {
-  padding-top: 20px;
+  padding-top: var(--p-6);
 }
 
 /* Notebook Permissions */
 
 .permissions {
   background: white;
-  padding: 30px 35px 0;
+  padding: var(--p-7) var(--p-8) 0;
   box-shadow: -10px 0 30px var(--grey-400), 0 0 10px var(--grey-500);
   border-top: 1px solid var(--grey-300);
   border-left: 1px solid var(--grey-400);
@@ -416,12 +416,12 @@
     font-size: 20px;
   }
   .permissions-content {
-    margin-left: -35px;
-    margin-right: -35px;
-    padding: 0 35px;
+    margin-left: calc(var(--m-7) * -1);
+    margin-right: calc(var(--m-7) * -1);
+    padding: 0 var(--p-7);
   }
   .permissions-form {
-    margin-bottom: 20px;
+    margin-bottom: var(--m-6);
   }
   .info:before {
     content: "\f059";
@@ -490,10 +490,10 @@
 }
 
 .settings-save {
-  background: #F7FAFC;
-  padding: 20px 35px;
-  margin-left: -35px;
-  margin-right: -35px;
+  background: var(--grey-100);
+  padding: var(--p-6) var(--p-7);
+  margin-left: calc(var(--m-7) * -1);
+  margin-right: calc(var(--m-7) * -1);
   border-top: 1px solid var(--grey-300);
 }
 
@@ -511,7 +511,7 @@
   }
   .as-sortable-item {
     border-bottom: 1px solid var(--grey-300);
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--p-3);
     &:last-child {
       border-bottom: none;
       padding-bottom: 0;
@@ -626,14 +626,14 @@
 }
 
 .add-info p {
-  margin-bottom: 5px;
+  margin-bottom: var(--m-2);
 }
 .short-text span:before {
   content: "...";
   color: var(--grey-900);
   font-size: 14px;
   font-weight: normal;
-  margin-right: 8px;
+  margin-right: var(--m-3);
 }
 
 .dark-mode .short-text span:before {
@@ -654,13 +654,13 @@
 }
 
 .partition span {
-  margin-left: 8px;
+  margin-left: var(--m-3);
 }
 
 .partition {word-break: break-all;}
 
 .dpl-time {
-  margin: 20px 0;
+  margin: var(--m-6) 0;
 }
 
 .dpl-time .btn:focus,
@@ -671,9 +671,9 @@
 
 .dpl-time-block {
   background: var(--grey-200);
-  padding: 0 20px;
-  margin-bottom: 20px;
-  border: 1px solid #CBD5E0;
+  padding: 0 var(--p-6);
+  margin-bottom: var(--m-6);
+  border: 1px solid var(--grey-400);
   border-radius: 10px;
 }
 
@@ -698,14 +698,17 @@
   }
 }
 
-.RTC, .RC {
+.RTC,
+.RC {
   width: 50%;
   float: left;
-  margin: 20px 0;
+  margin: var(--m-6) 0;
 }
 
-.DC, .DTC, .AC {
-  padding: 20px 15px;
+.DC,
+.DTC,
+.AC {
+  padding: var(--p-6) var(--p-5);
 }
 
 .dpl-left-center {
@@ -763,12 +766,11 @@ table.dataTable.table-striped > tbody > tr.odd > * {
       margin-bottom: 0;
     }
     select {
-      margin: 0 5px;
+      margin: 0 var(--p-2);
       width: 70px !important;
       font-weight: normal;
-      padding: 2px 10px;
+      padding: var(--p-1) var(--p-4);
       border-radius: 4px;
-      -moz-padding-start: calc(0.75rem - 3px)
     }
   }
   .dataTables_filter {
@@ -780,25 +782,25 @@ table.dataTable.table-striped > tbody > tr.odd > * {
       margin-bottom: 0;
     }
     input {
-      border: 1px solid #CBD5E0;
+      border: 1px solid var(--grey-400);
       border-radius: 4px;
-      background: white;
+      background: var(--grey-000);
       color: var(--grey-900);
-      padding: 2px 10px;
-      margin-left: 10px;
+      padding: var(--p-1) var(--p-4);
+      margin-left: var(--m-4);
     }
   }
   .dataTables_info {
     float: left;
     color: var(--grey-700);
-    padding-top: 3px;
+    padding-top: var(--p-1);
   }
   .dataTables_paginate {
     text-align: right;
     padding-top: 0;
     float: none;
-    margin-top: 1rem !important;
-    margin-bottom: 1rem !important;
+    margin-top: var(--m-5) !important;
+    margin-bottom: var(--m-5) !important;
   }
 }
 
@@ -825,9 +827,12 @@ table.dataTable thead td {
   min-width: 50px !important;
 }
 
-div.dt-button, a.dt-button, button.dt-button, input.dt-button {
-  margin: 0 -1px 0 0;
-  padding: 5px 10px;
+div.dt-button,
+a.dt-button,
+button.dt-button,
+input.dt-button {
+  margin: 0 -1px 0 0; /* makes the buttons to look like a button group */
+  padding: var(--p-2) var(--p-4);
   font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
@@ -897,8 +902,9 @@ input.dt-button.active:not(.disabled):hover:not(.disabled) {
 }
 
 .dt-buttons {
-  &.btn-group .btn, .btn-group .btn {
-    padding: 4px 10px;
+  &.btn-group .btn,
+  .btn-group .btn {
+    padding: var(--p-1) var(--p-4);
   }
   .show-hide {
     border-radius: 0 5px 5px 0;
