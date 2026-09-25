@@ -56,7 +56,7 @@ import {ComponentView} from '../rendering/componentView/componentView';
 import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
 import {MessageImpl} from '../message/messageImpl';
-import {PropertyDecoratedMessage} from '../message/messageDecorator/propertyDecoratedMessage';
+import {PropertyDecoratedMessage} from '../message/propertyDecoratedMessage/propertyDecoratedMessage';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;

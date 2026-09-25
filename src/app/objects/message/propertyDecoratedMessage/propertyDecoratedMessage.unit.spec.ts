@@ -48,10 +48,10 @@ import {MessageImpl} from '../messageImpl';
 import {Message} from '../message';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-describe('MessagePropertyDecorator unit test', () => {
+describe('PropertyDecoratedMessage unit test', () => {
   const propertyName = 'propertyName';
   const propertyValue = 'propertyValue';
-  let propertyDecoratedMessage: Message;
+  let propertyDecoratedMessage: Omit<Message, 'dataAsWebSocketPayload'> ;
   const operation = 'op';
 
   it('Should decorate data', () => {

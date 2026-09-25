@@ -54,7 +54,7 @@ import {RenderNode} from '../rendering/renderNode/renderNode';
 import {ComponentView} from '../rendering/componentView/componentView';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {MessageFilter} from '../message/messageFilter/messageFilter';
-import {PropertyDecoratedMessage} from '../message/messageDecorator/propertyDecoratedMessage';
+import {PropertyDecoratedMessage} from '../message/propertyDecoratedMessage/propertyDecoratedMessage';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
 import {MessageImpl} from '../message/messageImpl';
 
