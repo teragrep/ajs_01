@@ -47,15 +47,25 @@ import {FakeNotebook} from '../fakeNotebook';
 import {FakeNotebookFactory} from './fakeNotebookFactory';
 import {FakeParagraphFactory} from '../../paragraph/paragraphFactory/fakeParagraphFactory';
 import {FakeNotebookImpl} from '../fakeNotebookImpl';
+import {FakeParagraphFactoryImpl} from '../../paragraph/paragraphFactory/fakeParagraphFactoryImpl';
 
 export class FakeNotebookFactoryImpl implements FakeNotebookFactory {
   private readonly _fakeParagraphFactory: FakeParagraphFactory;
 
+  constructor() {
+    this._fakeParagraphFactory = new FakeParagraphFactoryImpl();
+  }
+
+
   fakeNotebooks(count:number):FakeNotebook[]{
     const fakeNotebooks: FakeNotebook[] = [];
     for(let i= 0; i < count; i++){
+      const fakeParagraphs = [
+        this._fakeParagraphFactory.fakeSparkParagraph(),
+        this._fakeParagraphFactory.fakeParagraphs(3)
+      ];
       fakeNotebooks.push(new FakeNotebookImpl(
-        {paragraphs:this._fakeParagraphFactory.fakeParagraphs(3)}
+        {paragraphs:fakeParagraphs}
       ));
     }
     return fakeNotebooks;

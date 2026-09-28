@@ -106,6 +106,14 @@ export class FakeParagraphImpl implements FakeParagraph {
     return paragraphPayload;
   }
 
+  withProgress(progress: number): FakeParagraph {
+    const paragraphDataWithOutput = {
+      ...this._rawParagraphData,
+      progress:progress,
+    };
+    return new FakeParagraphImpl(paragraphDataWithOutput);
+  }
+
   withOutput(output:OutputPayload): FakeParagraph {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,

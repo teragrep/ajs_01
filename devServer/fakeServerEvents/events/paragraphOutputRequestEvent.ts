@@ -109,7 +109,12 @@ export default class ParagraphOutputRequestEvent implements FakeServerEvent {
       xAxisLabel: xAxisLabel,
       graphType: graphType,
     };
-    return new ParagraphOutputServerResponse(paragraphId, noteId, OutputType.uPlot, outputData, true, outputOptions);
+    return new ParagraphOutputServerResponse(paragraphId, noteId, {
+      type:OutputType.uPlot,
+      data:outputData,
+      isAggregated:true,
+      options:outputOptions
+    });
   }
 
   private dataTablesParagraphOutputResponse(requestOptions:WebSocketPayload, paragraphId:string, noteId:string):ParagraphOutputServerResponse{
@@ -119,10 +124,19 @@ export default class ParagraphOutputRequestEvent implements FakeServerEvent {
     const rawData = this._dataTablesDataFactory.rawData(1000);
     const paginatedData = this._dataTablesDataFactory.paginatedData(rawData, start, length, draw);
     const outputOptions = {headers:Object.keys(paginatedData.data[0])};
-    return new ParagraphOutputServerResponse(paragraphId, noteId, OutputType.dataTables, paginatedData, true, outputOptions);
+    return new ParagraphOutputServerResponse(paragraphId, noteId, {
+      type:OutputType.dataTables,
+      data:paginatedData,
+      isAggregated:true,
+      options:outputOptions
+    });
   }
 
   private notImplementedResultResponse(resultType:string, paragraphId:string, noteId:string):ParagraphOutputServerResponse {
-    return new ParagraphOutputServerResponse(paragraphId, noteId, OutputType.text, `Result for type "${resultType}" not implemented.`, true);
+    return new ParagraphOutputServerResponse(paragraphId, noteId, {
+      type:OutputType.text,
+      data:`Result for type "${resultType}" not implemented.`,
+      isAggregated:true
+    });
   }
 }

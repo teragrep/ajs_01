@@ -44,13 +44,14 @@
  * a licensee so wish it.
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
+import {FakeParagraph} from '../../paragraph/fakeParagraph';
 
 export class ParagraphAddedServerResponse implements WebSocketServerResponse {
-  private readonly _paragraphData:object;
+  private readonly _paragraph:FakeParagraph;
   private readonly _paragraphIndex:number;
 
-  constructor(paragraphData:object, paragraphIndex:number) {
-    this._paragraphData = paragraphData;
+  constructor(paragraph:FakeParagraph, paragraphIndex:number) {
+    this._paragraph = paragraph;
     this._paragraphIndex = paragraphIndex;
   }
 
@@ -62,7 +63,7 @@ export class ParagraphAddedServerResponse implements WebSocketServerResponse {
     return {
       op:'PARAGRAPH_ADDED',
       data:{
-        paragraph:this._paragraphData,
+        paragraph:this._paragraph.toPayload(),
         index:this._paragraphIndex,
       }
     };

@@ -44,22 +44,17 @@
  * a licensee so wish it.
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
+import {OutputPayload} from '../../output/outputPayload';
 
 export class ParagraphOutputServerResponse implements WebSocketServerResponse{
   private readonly _paragraphId:string;
   private readonly _noteId:string;
-  private readonly _outputType:string;
-  private readonly _outputData:unknown;
-  private readonly _outputIsAggregated:boolean;
-  private readonly _outputOptions:object;
+  private readonly _outputPayload:OutputPayload;
 
-  constructor(paragraphId:string, noteId:string, outputType:string, outputData:unknown, outputIsAggregated:boolean, outputOptions:object = {}) {
+  constructor(paragraphId:string, noteId:string, outputPayload:OutputPayload) {
     this._paragraphId = paragraphId;
     this._noteId = noteId;
-    this._outputType = outputType;
-    this._outputData = outputData;
-    this._outputIsAggregated = outputIsAggregated;
-    this._outputOptions = outputOptions;
+    this._outputPayload = outputPayload;
   }
 
   toJson(): string {
@@ -70,12 +65,7 @@ export class ParagraphOutputServerResponse implements WebSocketServerResponse{
     return {
       op:'PARAGRAPH_OUTPUT',
       data:{
-        output:{
-          type:this._outputType,
-          data:this._outputData,
-          options:this._outputOptions,
-          isAggregated:this._outputIsAggregated
-        },
+        output:this._outputPayload,
         paragraphId:this._paragraphId,
         noteId:this._noteId
       }

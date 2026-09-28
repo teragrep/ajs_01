@@ -54,4 +54,5 @@ export interface FakeParagraph {
   withStatus(status:string):FakeParagraph;
   withTitle(title:string):FakeParagraph;
   withConfig(config:ConfigPayload):FakeParagraph;
+  withProgress(progress:number):FakeParagraph;
 }

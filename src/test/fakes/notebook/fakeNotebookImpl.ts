@@ -50,7 +50,7 @@ import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketP
 import {FakeIdImpl} from '../id/fakeIdImpl';
 import {ParagraphPayload} from '../paragraph/paragraphPayload';
 import {FakeParagraphFactory} from '../paragraph/paragraphFactory/fakeParagraphFactory';
-import FakeParagraphFactoryImpl from '../paragraph/paragraphFactory/fakeParagraphFactoryImpl';
+import {FakeParagraphFactoryImpl} from '../paragraph/paragraphFactory/fakeParagraphFactoryImpl';
 
 export class FakeNotebookImpl implements FakeNotebook {
   private readonly _notebookData:WebSocketPayload;
@@ -59,6 +59,13 @@ export class FakeNotebookImpl implements FakeNotebook {
   constructor(notebookData:object = {}) {
     this._notebookData = new WebSocketPayloadImpl(notebookData);
     this._fakeParagraphFactory = new FakeParagraphFactoryImpl();
+  }
+
+  withName(name: string): FakeNotebook {
+    return new FakeNotebookImpl({
+      ...this._notebookData,
+      name: name,
+    });
   }
 
   toPayload(): NotebookPayload {

@@ -47,4 +47,5 @@ import {FakeParagraph} from '../fakeParagraph';
 
 export interface FakeParagraphFactory {
   fakeParagraphs(count:number):FakeParagraph[];
+  fakeSparkParagraph():FakeParagraph;
 }

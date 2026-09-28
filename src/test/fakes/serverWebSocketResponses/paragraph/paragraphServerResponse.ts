@@ -44,12 +44,13 @@
  * a licensee so wish it.
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
+import {FakeParagraph} from '../../paragraph/fakeParagraph';
 
 export class ParagraphServerResponse implements WebSocketServerResponse {
-  private readonly _paragraphData:object;
+  private readonly _paragraph:FakeParagraph;
 
-  constructor(paragraphData:object) {
-    this._paragraphData = paragraphData;
+  constructor(paragraph:FakeParagraph) {
+    this._paragraph = paragraph;
   }
 
   toJson(): string {
@@ -59,7 +60,7 @@ export class ParagraphServerResponse implements WebSocketServerResponse {
   toObject(): {op:string, data:object} {
     return {
       op:'PARAGRAPH',
-      data:this._paragraphData
+      data:this._paragraph.toPayload()
     };
   }
 }

@@ -47,4 +47,5 @@ import {NotebookPayload} from './notebookPayload';
 
 export interface FakeNotebook {
   toPayload(): NotebookPayload;
+  withName(name: string): FakeNotebook;
 }

@@ -45,7 +45,6 @@
  */
 import {WebSocket} from 'ws';
 import {FakeServerEvent} from '../fakeServerEvent';
-import ParagraphImpl from '../../data/paragraph/paragraphImpl';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {OutputType} from '../../../src/app/objects/output/outputType';
 import {
@@ -58,6 +57,9 @@ import {
 import { Message } from '../../../src/app/objects/message/message';
 import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
+import {FakeParagraphImpl} from '../../../src/test/fakes/paragraph/fakeParagraphImpl';
+import {FakeParagraph} from '../../../src/test/fakes/paragraph/fakeParagraph';
+import {OutputPayload} from '../../../src/test/fakes/output/outputPayload';
 
 export default class RunParagraphEvent implements FakeServerEvent {
   private readonly _webSocket: WebSocket;
@@ -82,17 +84,18 @@ export default class RunParagraphEvent implements FakeServerEvent {
     const title = requestMessage.data()['title'];
     const text = requestMessageData.stringProperty('paragraph');
     const messageQueue: string[] = [];
-    const paragraph = new ParagraphImpl('PENDING', undefined, text, title, paragraphId);
-    messageQueue.push(new ParagraphServerResponse(paragraph).toJson());
+    const executedParagraph = new FakeParagraphImpl({id:paragraphId}).withStatus('PENDING').withTitle(title).withText(text);
+    messageQueue.push(new ParagraphServerResponse(
+      executedParagraph
+    ).toJson());
 
-    paragraph.status = 'RUNNING';
-    paragraph.progress = 0;
-    messageQueue.push(new ParagraphServerResponse(paragraph).toJson());
+    messageQueue.push(new ParagraphServerResponse(
+      executedParagraph.withStatus('RUNNING')
+    ).toJson());
 
     for (let i = 1; i < 20; i++){
       messageQueue.push(new ProgressServerResponse(i*5, paragraphId).toJson());
     }
-
     const rowCount = 1000;
     const rawData = this._dataTablesDataFactory.rawData(rowCount);
     const outputOptions = {headers:Object.keys(rawData[0])};
@@ -102,20 +105,33 @@ export default class RunParagraphEvent implements FakeServerEvent {
     for (let draw = 1; draw < draws; draw++) {
       const index = messageQueue.length / draws;
       const endIndex = draw*8;
-      const interimOutput = this._dataTablesDataFactory.paginatedData(rawData, startIndex, endIndex, draw);
-      const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, OutputType.dataTables, interimOutput, true, outputOptions);
+      const interimOutputData = this._dataTablesDataFactory.paginatedData(rawData, startIndex, endIndex, draw);
+      const interimOutput:OutputPayload= {
+        type: OutputType.dataTables,
+        data: interimOutputData,
+        isAggregated: true,
+        options: outputOptions
+      };
+      const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, interimOutput);
       const messageIndex = draw*index;
       messageQueue.splice(messageIndex,0, paragraphOutputResponse.toJson());
     }
     const endIndex = 50;
-    const finalOutput = this._dataTablesDataFactory.paginatedData(rawData, startIndex, endIndex, draws);
-    const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, OutputType.dataTables, finalOutput, true, outputOptions);
-    paragraph.status = 'FINISHED';
-    paragraph.progress = 100;
-    paragraph.output = {data: finalOutput, options: outputOptions, type:OutputType.dataTables, isAggregated:true};
+    const finalOutputData = this._dataTablesDataFactory.paginatedData(rawData, startIndex, endIndex, draws);
+    const finalOutput:OutputPayload= {
+      type: OutputType.dataTables,
+      data: finalOutputData,
+      isAggregated: true,
+      options: outputOptions
+    };
+    const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, finalOutput);
     messageQueue.push(paragraphOutputResponse.toJson());
-    messageQueue.push(new ParagraphServerResponse(paragraph).toJson());
-    this.updateNotebook(paragraph);
+    messageQueue.push(new ParagraphServerResponse(
+      executedParagraph.withStatus('FINISHED').withProgress(100).withOutput(
+        {data: finalOutput, options: outputOptions, type:OutputType.dataTables, isAggregated:true}
+      )
+    ).toJson());
+    this.updateNotebook(executedParagraph);
     for(let i = 0; i < messageQueue.length; i++) {
       const timeout =  (i + 1) * 1000;
       setTimeout(() => {
@@ -124,11 +140,12 @@ export default class RunParagraphEvent implements FakeServerEvent {
     }
   }
 
-  private updateNotebook(paragraph: ParagraphImpl){
+  private updateNotebook(paragraph: FakeParagraph){
     const noteId = this._noteService.lastNoteId();
     const notebook = this._noteService.find(noteId);
-    const paragraphIndex = notebook.paragraphs.findIndex(p => p.id === paragraph.id);
-    notebook.paragraphs.splice(paragraphIndex,1, paragraph);
-    this._noteService.update(notebook, notebook.id);
+    const paragraphPayload = paragraph.toPayload();
+    const paragraphIndex = notebook.paragraphs.findIndex(p => p.id === paragraphPayload.id);
+    notebook.paragraphs.splice(paragraphIndex,1, paragraphPayload);
+    this._noteService.update(notebook);
   }
 }

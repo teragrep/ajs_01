@@ -44,12 +44,13 @@
  * a licensee so wish it.
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
+import {FakeNotebook} from '../../notebook/fakeNotebook';
 
 export class NoteServerResponse implements WebSocketServerResponse {
-  private readonly _notebookData:object;
+  private readonly _notebook:FakeNotebook;
 
-  constructor(notebookData:object) {
-    this._notebookData = notebookData;
+  constructor(notebook:FakeNotebook) {
+    this._notebook = notebook;
   }
 
   toJson(): string {
@@ -59,7 +60,7 @@ export class NoteServerResponse implements WebSocketServerResponse {
   toObject(): {op:string, data:object} {
     return {
       op:'NOTE',
-      data:this._notebookData,
+      data:this._notebook.toPayload(),
     };
   }
 }

@@ -51,17 +51,24 @@ import {FakeParagraph} from '../fakeParagraph';
 import {FakeParagraphFactory} from './fakeParagraphFactory';
 import {OutputPayload} from '../../output/outputPayload';
 
-export default class FakeParagraphFactoryImpl implements FakeParagraphFactory {
+export class FakeParagraphFactoryImpl implements FakeParagraphFactory {
   private readonly _dataTablesDataFactory: DataTablesDataFactory;
 
   constructor() {
     this._dataTablesDataFactory = new DataTablesDataFactoryImpl();
   }
 
+  fakeSparkParagraph(): FakeParagraph {
+    const text = '%spark.conf';
+    const title  = 'hideMeSparkPinger';
+    return new FakeParagraphImpl({
+      text:text,
+      title:title,
+    });
+  }
+
   fakeParagraphs(count: number): FakeParagraph[] {
-    const fakeParagraphs: FakeParagraph[] = [
-      this.sparkParagraph()
-    ];
+    const fakeParagraphs: FakeParagraph[] = [];
     for(let i= 0; i < count; ++i){
       fakeParagraphs.push(new FakeParagraphImpl());
     }
@@ -94,14 +101,5 @@ export default class FakeParagraphFactoryImpl implements FakeParagraphFactory {
       };
     }
     return fakeParagraph.withOutput(output);
-  }
-
-  private sparkParagraph():FakeParagraph {
-    const text = '%spark.conf';
-    const title  = 'hideMeSparkPinger';
-    return new FakeParagraphImpl({
-      text:text,
-      title:title,
-    });
   }
 }
