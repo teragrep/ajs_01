@@ -56,7 +56,6 @@ export class FakeNotebookFactoryImpl implements FakeNotebookFactory {
     this._fakeParagraphFactory = new FakeParagraphFactoryImpl();
   }
 
-
   fakeNotebooks(count:number):FakeNotebook[]{
     const fakeNotebooks: FakeNotebook[] = [];
     for(let i= 0; i < count; i++){

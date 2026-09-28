@@ -94,7 +94,7 @@ export class FakeParagraphImpl implements FakeParagraph {
     if(this._paragraphData.propertyExists('output')){
       const outputProperty = this._paragraphData.objectPropertyAsPayload('output');
       const outputPayload:OutputPayload = {
-        type: outputProperty.stringProperty('text'),
+        type: outputProperty.stringProperty('type'),
         isAggregated: outputProperty.booleanProperty('isAggregated'),
         data: this._paragraphData.objectProperty('output')['data'],
       };

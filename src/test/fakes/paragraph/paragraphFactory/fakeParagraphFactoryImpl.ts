@@ -72,14 +72,13 @@ export class FakeParagraphFactoryImpl implements FakeParagraphFactory {
     for(let i= 0; i < count; ++i){
       fakeParagraphs.push(new FakeParagraphImpl());
     }
-    fakeParagraphs.map(fakeParagraph => this.addFakeOutput(fakeParagraph));
-    return fakeParagraphs;
+    return fakeParagraphs.map(fakeParagraph => this.addFakeOutput(fakeParagraph));
   }
 
   private addFakeOutput(fakeParagraph:FakeParagraph):FakeParagraph {
-    const dateNow = Date.now();
     let output:OutputPayload;
-    if(dateNow % 2 === 0){
+    const randomNumber = Math.random();
+    if(randomNumber < 0.5 ){
       const rowCount = Math.floor(Math.random() * 50);
       const rawData = this._dataTablesDataFactory.rawData(rowCount);
       const startIndex = 0;
