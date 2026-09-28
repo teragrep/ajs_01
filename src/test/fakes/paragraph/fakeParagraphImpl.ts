@@ -73,37 +73,52 @@ export class FakeParagraphImpl implements FakeParagraph {
   }
 
   toPayload(): ParagraphPayload {
+    const paragraphId =  this._paragraphData.propertyExists('id') ? this._paragraphData.stringProperty('id') : new FakeIdImpl().id();
+    const status = this._paragraphData.propertyExists('status') ? this._paragraphData.stringProperty('status') : '';
+    const text = this._paragraphData.propertyExists('text') ? this._paragraphData.stringProperty('text') : '';
+    const title = this._paragraphData.propertyExists('title') ? this._paragraphData.stringProperty('title') : '';
+    let config:ConfigPayload;
+    if(this._paragraphData.propertyExists('config')){
+      config = {
+        ...this._defaultConfig,
+        ...this._paragraphData.objectProperty('config')
+      };
+    }
+    else{
+      config = this._defaultConfig;
+    }
     const paragraphPayload:ParagraphPayload = {
       dateCreated: this._dateNow,
       dateFinished: this._dateNow,
       dateStarted: this._dateNow,
       dateUpdated: this._dateNow,
-      id: this._paragraphData.propertyExists('id') ? this._paragraphData.stringProperty('id') : new FakeIdImpl().id(),
+      id: paragraphId,
       jobName: 'jobName',
       progress: 0,
       settings: {forms: undefined, params: undefined},
-      status: this._paragraphData.propertyExists('status') ? this._paragraphData.stringProperty('status') : '',
-      text: this._paragraphData.propertyExists('text') ? this._paragraphData.stringProperty('text') : '',
-      title: this._paragraphData.propertyExists('title') ? this._paragraphData.stringProperty('title') : '',
+      status: status,
+      text: text,
+      title: title,
       user: 'user',
-      config: this._paragraphData.propertyExists('config') ? {
-        ...this._defaultConfig,
-        ...this._paragraphData.objectProperty('config')
-      } : this._defaultConfig
+      config: config
     };
     if(this._paragraphData.propertyExists('output')){
-      const outputProperty = this._paragraphData.objectPropertyAsPayload('output');
-      const outputPayload:OutputPayload = {
-        type: outputProperty.stringProperty('type'),
-        isAggregated: outputProperty.booleanProperty('isAggregated'),
-        data: this._paragraphData.objectProperty('output')['data'],
-      };
-      if(outputProperty.propertyExists('options')){
-        outputPayload.options = outputProperty.objectProperty('options');
-      }
-      paragraphPayload.output = outputPayload;
+      paragraphPayload.output = this.outputPayload();
     }
     return paragraphPayload;
+  }
+
+  private outputPayload():OutputPayload {
+    const outputProperty = this._paragraphData.objectPropertyAsPayload('output');
+    const outputPayload:OutputPayload = {
+      type: outputProperty.stringProperty('type'),
+      isAggregated: outputProperty.booleanProperty('isAggregated'),
+      data: this._paragraphData.objectProperty('output')['data'],
+    };
+    if(outputProperty.propertyExists('options')){
+      outputPayload.options = outputProperty.objectProperty('options');
+    }
+    return outputPayload;
   }
 
   withProgress(progress: number): FakeParagraph {

@@ -80,14 +80,14 @@ export class FakeNotebookImpl implements FakeNotebook {
     const id = this._notebookData.propertyExists('id') ? this._notebookData.stringProperty('id') : new FakeIdImpl().id();
     const name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
     const path = `/${name}`;
-    const config = {
-      isZeppelinNotebookCronEnable: true,
-    };
-    const paragraphs = this._notebookData.propertyExists('paragraphs')
-      ?
-      this._notebookData.arrayProperty<ParagraphPayload>('paragraphs')
-      :
-      this._fakeParagraphFactory.fakeParagraphs(1).map(fakeParagraph => fakeParagraph.toPayload());
+    const config = {isZeppelinNotebookCronEnable: true};
+    let paragraphs:ParagraphPayload[];
+    if(this._notebookData.propertyExists('paragraphs')){
+      paragraphs = this._notebookData.arrayProperty<ParagraphPayload>('paragraphs');
+    }
+    else{
+      paragraphs = this._fakeParagraphFactory.fakeParagraphs(1).map(fakeParagraph => fakeParagraph.toPayload());
+    }
     return {
       id: id,
       name: name,
