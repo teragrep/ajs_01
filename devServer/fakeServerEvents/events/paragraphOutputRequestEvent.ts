@@ -56,18 +56,22 @@ import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTabl
 import {uPlotDataFactory} from '../../../src/test/fakes/output/uPlot/uPlotDataFactory';
 import {uPlotDataFactoryImpl} from '../../../src/test/fakes/output/uPlot/uPlotDataFactoryImpl';
 import {WebSocketPayload} from '../../../src/app/objects/webSocketPayload/webSocketPayload';
+import {FakeOutputPayloadFactory} from '../../../src/test/fakes/output/fakeOutputPayloadFactory';
+import {FakeOutputPayloadFactoryImpl} from '../../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
 
 export default class ParagraphOutputRequestEvent implements FakeServerEvent {
   private readonly  _webSocket: WebSocket;
   private readonly _eventId: string;
   private readonly _dataTablesDataFactory: DataTablesDataFactory;
   private readonly _uPlotDataFactory: uPlotDataFactory;
+  private readonly _fakeOutputPayloadFactory: FakeOutputPayloadFactory;
 
   constructor(webSocket: WebSocket) {
     this._webSocket = webSocket;
     this._eventId = 'PARAGRAPH_OUTPUT_REQUEST';
     this._dataTablesDataFactory = new DataTablesDataFactoryImpl();
     this._uPlotDataFactory = new uPlotDataFactoryImpl();
+    this._fakeOutputPayloadFactory = new FakeOutputPayloadFactoryImpl();
   }
 
   eventId(): string {
@@ -98,23 +102,7 @@ export default class ParagraphOutputRequestEvent implements FakeServerEvent {
     const seriesCount = 5;
     const seriesLength = 30;
     const outputData = this._uPlotDataFactory.uPlotAlignedData(seriesCount, seriesLength);
-    const seriesNames = [];
-    for(let i=0; i< seriesCount; i++) {
-      seriesNames.push(`Series${i + 1}`);
-    }
-    const xAxisLabel = 'xAxisLabel';
-    const outputOptions = {
-      labels: Array(seriesLength).map(v => {return `moment ${v}`;}),
-      series: seriesNames,
-      xAxisLabel: xAxisLabel,
-      graphType: graphType,
-    };
-    return new ParagraphOutputServerResponse(paragraphId, noteId, {
-      type:OutputType.uPlot,
-      data:outputData,
-      isAggregated:true,
-      options:outputOptions
-    });
+    return new ParagraphOutputServerResponse(paragraphId, noteId, this._fakeOutputPayloadFactory.uPlotOutputPayload(outputData, graphType));
   }
 
   private dataTablesParagraphOutputResponse(requestOptions:WebSocketPayload, paragraphId:string, noteId:string):ParagraphOutputServerResponse{
@@ -123,20 +111,11 @@ export default class ParagraphOutputRequestEvent implements FakeServerEvent {
     const draw = requestOptions.numberProperty('draw');
     const rawData = this._dataTablesDataFactory.rawData(1000);
     const paginatedData = this._dataTablesDataFactory.paginatedData(rawData, start, length, draw);
-    const outputOptions = {headers:Object.keys(paginatedData.data[0])};
-    return new ParagraphOutputServerResponse(paragraphId, noteId, {
-      type:OutputType.dataTables,
-      data:paginatedData,
-      isAggregated:true,
-      options:outputOptions
-    });
+    return new ParagraphOutputServerResponse(paragraphId, noteId, this._fakeOutputPayloadFactory.dataTablesOutputPayload(paginatedData));
   }
 
   private notImplementedResultResponse(resultType:string, paragraphId:string, noteId:string):ParagraphOutputServerResponse {
-    return new ParagraphOutputServerResponse(paragraphId, noteId, {
-      type:OutputType.text,
-      data:`Result for type "${resultType}" not implemented.`,
-      isAggregated:true
-    });
+    const notImplementedText = `Result for type "${resultType}" not implemented.`;
+    return new ParagraphOutputServerResponse(paragraphId, noteId,this._fakeOutputPayloadFactory.textOutputPayload(notImplementedText));
   }
 }

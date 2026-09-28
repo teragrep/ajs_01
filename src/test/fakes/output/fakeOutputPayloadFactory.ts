@@ -43,44 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DataTablesDataFactory} from './dataTablesDataFactory';
-import {PaginatedDataTablesData} from './paginatedDataTablesData';
+import {OutputPayload} from './outputPayload';
+import uPlot from 'uplot';
+import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 
-export class DataTablesDataFactoryImpl implements DataTablesDataFactory {
-  private readonly _people: string[] = ['Bob', 'Alice', 'Mark', 'Elise'];
-  private readonly _operation: string[] = ['create', 'read', 'update', 'delete'];
-  private readonly _host: string[] = ['example.test', ''];
-
-  paginatedData(rawData: object[], start: number, length: number, draw: number): PaginatedDataTablesData {
-    return {
-      data: rawData.slice(start, start+length),
-      recordsTotal: rawData.length,
-      recordsFiltered: rawData.length,
-      draw: draw
-    };
-  }
-
-  rawData(rowCount: number): object[]{
-    const rows = [];
-    for(let i = 1; i <= rowCount; i++) {
-      const count = Math.floor(Math.random() *100);
-      const elapsed = Math.random() * 10 - 5;
-      const balance = (Math.random() * 10 - 5) * 200;
-      const row = {
-        person: this.randomValueFromList(this._people),
-        operation: this.randomValueFromList(this._operation),
-        host: this.randomValueFromList(this._host),
-        count: count,
-        elapsed: elapsed,
-        balance: balance,
-      };
-      rows.push(row);
-    }
-    return rows;
-  }
-
-  private randomValueFromList(list:string[]):string {
-    const index = Math.floor(Math.random() * list.length);
-    return list[index];
-  }
+export interface FakeOutputPayloadFactory {
+  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload;
+  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData):OutputPayload;
+  textOutputPayload(textData:string):OutputPayload;
 }

@@ -50,6 +50,7 @@ import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSoc
 import {OutputPayload} from '../output/outputPayload';
 import {ConfigPayload} from './config/configPayload';
 import {FakeIdImpl} from '../id/fakeIdImpl';
+import {FakeConfigImpl} from './config/fakeConfigImpl';
 
 export class FakeParagraphImpl implements FakeParagraph {
   private readonly _paragraphData: WebSocketPayload;
@@ -61,15 +62,7 @@ export class FakeParagraphImpl implements FakeParagraph {
     this._paragraphData = new WebSocketPayloadImpl(paragraphData);
     this._rawParagraphData = paragraphData;
     this._dateNow = Date.now();
-    this._defaultConfig = {
-      colWidth: 12,
-      editorMode: 'ace/mode/dpl',
-      editorSetting: {completionSupport: true, editOnDblClick: false, language: ''},
-      enabled: true,
-      fontSize: 12,
-      lineNumbers: true,
-      title: true
-    };
+    this._defaultConfig = new FakeConfigImpl().toConfigPayload();
   }
 
   toPayload(): ParagraphPayload {

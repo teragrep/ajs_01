@@ -43,44 +43,54 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DataTablesDataFactory} from './dataTablesDataFactory';
-import {PaginatedDataTablesData} from './paginatedDataTablesData';
+import {OutputPayload} from './outputPayload';
+import uPlot from 'uplot';
+import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
+import {FakeOutputPayloadFactory} from './fakeOutputPayloadFactory';
+import {OutputType} from '../../../app/objects/output/outputType';
 
-export class DataTablesDataFactoryImpl implements DataTablesDataFactory {
-  private readonly _people: string[] = ['Bob', 'Alice', 'Mark', 'Elise'];
-  private readonly _operation: string[] = ['create', 'read', 'update', 'delete'];
-  private readonly _host: string[] = ['example.test', ''];
-
-  paginatedData(rawData: object[], start: number, length: number, draw: number): PaginatedDataTablesData {
+export class FakeOutputPayloadFactoryImpl implements FakeOutputPayloadFactory {
+  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData): OutputPayload {
+    const headers = Object.keys(dataTablesData.data[0]);
+    const options = {
+      headers:headers,
+    };
     return {
-      data: rawData.slice(start, start+length),
-      recordsTotal: rawData.length,
-      recordsFiltered: rawData.length,
-      draw: draw
+      type: OutputType.dataTables,
+      data: dataTablesData,
+      options: options,
+      isAggregated: true,
     };
   }
 
-  rawData(rowCount: number): object[]{
-    const rows = [];
-    for(let i = 1; i <= rowCount; i++) {
-      const count = Math.floor(Math.random() *100);
-      const elapsed = Math.random() * 10 - 5;
-      const balance = (Math.random() * 10 - 5) * 200;
-      const row = {
-        person: this.randomValueFromList(this._people),
-        operation: this.randomValueFromList(this._operation),
-        host: this.randomValueFromList(this._host),
-        count: count,
-        elapsed: elapsed,
-        balance: balance,
-      };
-      rows.push(row);
+  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload {
+    const seriesLength = uPlotData[0].length;
+    const seriesCount = uPlotData.length - 1;
+    const labels = Array(seriesLength).map(v => {return `moment ${v}`;});
+    const seriesNames = [];
+    for(let i=0; i< seriesCount; i++) {
+      seriesNames.push(`Series${i + 1}`);
     }
-    return rows;
+    const xAxisLabel = 'xAxisLabel';
+    const outputOptions = {
+      labels: labels,
+      series: seriesNames,
+      xAxisLabel: xAxisLabel,
+      graphType: graphType,
+    };
+    return {
+      type: OutputType.uPlot,
+      data: uPlotData,
+      isAggregated: true,
+      options: outputOptions
+    };
   }
 
-  private randomValueFromList(list:string[]):string {
-    const index = Math.floor(Math.random() * list.length);
-    return list[index];
+  textOutputPayload(textData: string): OutputPayload {
+    return {
+      type: OutputType.text,
+      data: textData,
+      isAggregated: false,
+    };
   }
 }

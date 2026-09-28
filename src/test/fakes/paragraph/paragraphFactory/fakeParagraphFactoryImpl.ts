@@ -43,7 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputType} from '../../../../app/objects/output/outputType';
 import {DataTablesDataFactory} from '../../output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../output/dataTables/dataTablesDataFactoryImpl';
 import {FakeParagraphImpl} from '../fakeParagraphImpl';
@@ -51,12 +50,16 @@ import {FakeParagraph} from '../fakeParagraph';
 import {FakeParagraphFactory} from './fakeParagraphFactory';
 import {OutputPayload} from '../../output/outputPayload';
 import {FakeIdImpl} from '../../id/fakeIdImpl';
+import {FakeOutputPayloadFactory} from '../../output/fakeOutputPayloadFactory';
+import {FakeOutputPayloadFactoryImpl} from '../../output/fakeOutputPayloadFactoryImpl';
 
 export class FakeParagraphFactoryImpl implements FakeParagraphFactory {
   private readonly _dataTablesDataFactory: DataTablesDataFactory;
+  private readonly _fakeOutputPayloadFactory: FakeOutputPayloadFactory;
 
   constructor() {
     this._dataTablesDataFactory = new DataTablesDataFactoryImpl();
+    this._fakeOutputPayloadFactory = new FakeOutputPayloadFactoryImpl();
   }
 
   fakeSparkParagraph(): FakeParagraph {
@@ -88,20 +91,10 @@ export class FakeParagraphFactoryImpl implements FakeParagraphFactory {
       const startIndex = 0;
       const draw = 1;
       const paginatedData = this._dataTablesDataFactory.paginatedData(rawData, startIndex, rowCount, draw);
-      const options = {headers: Object.keys(rawData[0])};
-      output = {
-        type: OutputType.dataTables,
-        data: paginatedData,
-        options: options,
-        isAggregated: true,
-      };
+      output = this._fakeOutputPayloadFactory.dataTablesOutputPayload(paginatedData);
     }
     else{
-      output = {
-        type: OutputType.text,
-        data: 'Some text output',
-        isAggregated: false,
-      };
+      output = this._fakeOutputPayloadFactory.textOutputPayload(new FakeIdImpl().id());
     }
     return fakeParagraph.withOutput(output);
   }

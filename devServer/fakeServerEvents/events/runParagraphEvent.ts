@@ -59,19 +59,22 @@ import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/d
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
 import {FakeParagraphImpl} from '../../../src/test/fakes/paragraph/fakeParagraphImpl';
 import {FakeParagraph} from '../../../src/test/fakes/paragraph/fakeParagraph';
-import {OutputPayload} from '../../../src/test/fakes/output/outputPayload';
+import {FakeOutputPayloadFactory} from '../../../src/test/fakes/output/fakeOutputPayloadFactory';
+import {FakeOutputPayloadFactoryImpl} from '../../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
 
 export default class RunParagraphEvent implements FakeServerEvent {
   private readonly _webSocket: WebSocket;
   private readonly _noteService: NoteServiceImpl;
   private readonly _eventId:string;
   private readonly _dataTablesDataFactory: DataTablesDataFactory;
+  private readonly _fakeOutputPayloadFactory: FakeOutputPayloadFactory;
 
   constructor(webSocket: WebSocket, noteService: NoteServiceImpl) {
     this._webSocket = webSocket;
     this._noteService = noteService;
     this._eventId = 'RUN_PARAGRAPH';
     this._dataTablesDataFactory = new DataTablesDataFactoryImpl();
+    this._fakeOutputPayloadFactory = new FakeOutputPayloadFactoryImpl();
   }
 
   eventId(): string {
@@ -106,24 +109,14 @@ export default class RunParagraphEvent implements FakeServerEvent {
       const index = messageQueue.length / draws;
       const endIndex = draw*8;
       const interimOutputData = this._dataTablesDataFactory.paginatedData(rawData, startIndex, endIndex, draw);
-      const interimOutput:OutputPayload= {
-        type: OutputType.dataTables,
-        data: interimOutputData,
-        isAggregated: true,
-        options: outputOptions
-      };
+      const interimOutput = this._fakeOutputPayloadFactory.dataTablesOutputPayload(interimOutputData);
       const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, interimOutput);
       const messageIndex = draw*index;
       messageQueue.splice(messageIndex,0, paragraphOutputResponse.toJson());
     }
     const endIndex = 50;
     const finalOutputData = this._dataTablesDataFactory.paginatedData(rawData, startIndex, endIndex, draws);
-    const finalOutput:OutputPayload= {
-      type: OutputType.dataTables,
-      data: finalOutputData,
-      isAggregated: true,
-      options: outputOptions
-    };
+    const finalOutput= this._fakeOutputPayloadFactory.dataTablesOutputPayload(finalOutputData);
     const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, finalOutput);
     messageQueue.push(paragraphOutputResponse.toJson());
     messageQueue.push(new ParagraphServerResponse(
