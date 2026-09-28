@@ -43,15 +43,16 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphPayload} from './paragraphPayload';
-import {OutputPayload} from '../output/outputPayload';
-import {ConfigPayload} from './config/configPayload';
+import {FakeId} from './fakeId';
 
-export interface FakeParagraph {
-  toPayload():ParagraphPayload;
-  withOutput(output:OutputPayload):FakeParagraph;
-  withText(text:string):FakeParagraph;
-  withStatus(status:string):FakeParagraph;
-  withTitle(title:string):FakeParagraph;
-  withConfig(config:ConfigPayload):FakeParagraph;
+export class FakeIdImpl implements FakeId {
+  private readonly _id:string;
+
+  constructor() {
+    this._id = Math.random().toString(36).slice(2, 12);
+  }
+
+  id(): string {
+    return this._id;
+  }
 }

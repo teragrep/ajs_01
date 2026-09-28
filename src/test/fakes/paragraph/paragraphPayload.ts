@@ -43,8 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-//TODO what is actually required here, and what values
 import {OutputPayload} from '../output/outputPayload';
+import {ConfigPayload} from './config/configPayload';
 
 export interface ParagraphPayload {
   dateCreated: number;
@@ -54,28 +54,14 @@ export interface ParagraphPayload {
   id: string;
   jobName: string;
   progress:number;
-  progressUpdateIntervalMs:number;
   output?: OutputPayload;
   status: string;
   text: string;
   title: string;
   user: string;
-  settings:{ // TODO can this be just object?
+  settings:{
     params:object,
     forms:object
   }
-  config:{ // TODO can this be just object?
-    lineNumbers: boolean,
-    editorSetting: {
-      language: string,
-      editOnDblClick: boolean,
-      completionKey: string,
-      completionSupport: boolean
-    },
-    colWidth: number,
-    editorMode: string,
-    fontSize: number,
-    title: boolean,
-    enabled: boolean
-  }
+  config:ConfigPayload
 }

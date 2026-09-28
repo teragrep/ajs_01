@@ -43,38 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import ParagraphImpl from './paragraphImpl';
-import {SparkPara} from './sparkPara';
-import {OutputType} from '../../../src/app/objects/output/outputType';
-import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactory';
-import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
-
-export default class ParagraphFactory{
-  private readonly _dataTablesDataFactory: DataTablesDataFactory;
-
-  constructor() {
-    this._dataTablesDataFactory = new DataTablesDataFactoryImpl();
-  }
-
-  paragraphCollection() {
-    const draw = 1;
-    const startIndex = 0;
-    const rowCount = 50;
-    const rawData = this._dataTablesDataFactory.rawData(rowCount);
-    const paginatedData = this._dataTablesDataFactory.paginatedData(rawData, startIndex, rowCount,draw)
-    const options = {headers: Object.keys(paginatedData.data[0])};
-    const dataTablesOutput = {
-      type: OutputType.dataTables,
-      data: paginatedData,
-      options: options,
-      isAggregated: true,
-    };
-    const para1 = new ParagraphImpl('FINISHED', dataTablesOutput,'%dpl\n *raw data output*', '');
-    const textOutput = {
-      type: OutputType.text,
-      data: 'Some text output',
-    };
-    const para2 = new ParagraphImpl('FINISHED', textOutput,'%dpl\n *text data output*', '');
-    return [para1, para2, SparkPara];
-  }
+export interface FakeId {
+  id():string;
 }

@@ -43,15 +43,16 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphPayload} from './paragraphPayload';
-import {OutputPayload} from '../output/outputPayload';
-import {ConfigPayload} from './config/configPayload';
-
-export interface FakeParagraph {
-  toPayload():ParagraphPayload;
-  withOutput(output:OutputPayload):FakeParagraph;
-  withText(text:string):FakeParagraph;
-  withStatus(status:string):FakeParagraph;
-  withTitle(title:string):FakeParagraph;
-  withConfig(config:ConfigPayload):FakeParagraph;
+export interface ConfigPayload {
+  lineNumbers: boolean,
+  editorSetting: {
+    language: string,
+    editOnDblClick: boolean,
+    completionSupport: boolean
+  },
+  colWidth: number,
+  editorMode: string,
+  fontSize: number,
+  title: boolean,
+  enabled: boolean
 }

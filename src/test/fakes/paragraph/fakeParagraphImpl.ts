@@ -48,18 +48,62 @@ import {ParagraphPayload} from './paragraphPayload';
 import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketPayload';
 import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSocketPayloadImpl';
 import {OutputPayload} from '../output/outputPayload';
+import {ConfigPayload} from './config/configPayload';
+import {FakeIdImpl} from '../id/fakeIdImpl';
 
 export class FakeParagraphImpl implements FakeParagraph {
   private readonly _paragraphData: WebSocketPayload;
   private readonly _rawParagraphData: object;
+  private readonly _dateNow:number;
+  private readonly _defaultConfig: ConfigPayload;
 
-  constructor(paragraphData: object) {
+  constructor(paragraphData: object = {}) {
     this._paragraphData = new WebSocketPayloadImpl(paragraphData);
     this._rawParagraphData = paragraphData;
+    this._dateNow = Date.now();
+    this._defaultConfig = {
+      colWidth: 12,
+      editorMode: 'ace/mode/dpl',
+      editorSetting: {completionSupport: true, editOnDblClick: false, language: ''},
+      enabled: true,
+      fontSize: 12,
+      lineNumbers: true,
+      title: true
+    };
   }
 
   toPayload(): ParagraphPayload {
-    return undefined;
+    const paragraphPayload:ParagraphPayload = {
+      dateCreated: this._dateNow,
+      dateFinished: this._dateNow,
+      dateStarted: this._dateNow,
+      dateUpdated: this._dateNow,
+      id: this._paragraphData.propertyExists('id') ? this._paragraphData.stringProperty('id') : new FakeIdImpl().id(),
+      jobName: 'jobName',
+      progress: 0,
+      settings: {forms: undefined, params: undefined},
+      status: this._paragraphData.propertyExists('status') ? this._paragraphData.stringProperty('status') : '',
+      text: this._paragraphData.propertyExists('text') ? this._paragraphData.stringProperty('text') : '',
+      title: this._paragraphData.propertyExists('title') ? this._paragraphData.stringProperty('title') : '',
+      user: 'user',
+      config: this._paragraphData.propertyExists('config') ? {
+        ...this._defaultConfig,
+        ...this._paragraphData.objectProperty('config')
+      } : this._defaultConfig
+    };
+    if(this._paragraphData.propertyExists('output')){
+      const outputProperty = this._paragraphData.objectPropertyAsPayload('output');
+      const outputPayload:OutputPayload = {
+        type: outputProperty.stringProperty('text'),
+        isAggregated: outputProperty.booleanProperty('isAggregated'),
+        data: this._paragraphData.objectProperty('output')['data'],
+      };
+      if(outputProperty.propertyExists('options')){
+        outputPayload.options = outputProperty.objectProperty('options');
+      }
+      paragraphPayload.output = outputPayload;
+    }
+    return paragraphPayload;
   }
 
   withOutput(output:OutputPayload): FakeParagraph {
@@ -74,6 +118,30 @@ export class FakeParagraphImpl implements FakeParagraph {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,
       text:text,
+    };
+    return new FakeParagraphImpl(paragraphDataWithOutput);
+  }
+
+  withStatus(status: string): FakeParagraph {
+    const paragraphDataWithOutput = {
+      ...this._rawParagraphData,
+      status:status,
+    };
+    return new FakeParagraphImpl(paragraphDataWithOutput);
+  }
+
+  withTitle(title: string): FakeParagraph {
+    const paragraphDataWithOutput = {
+      ...this._rawParagraphData,
+      title:title,
+    };
+    return new FakeParagraphImpl(paragraphDataWithOutput);
+  }
+
+  withConfig(config: ConfigPayload): FakeParagraph {
+    const paragraphDataWithOutput = {
+      ...this._rawParagraphData,
+      config:config,
     };
     return new FakeParagraphImpl(paragraphDataWithOutput);
   }
