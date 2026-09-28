@@ -44,8 +44,10 @@
  * a licensee so wish it.
  */
 import {NotebookPayload} from './notebookPayload';
+import {FakeParagraph} from '../paragraph/fakeParagraph';
 
 export interface FakeNotebook {
   toPayload(): NotebookPayload;
   withName(name: string): FakeNotebook;
+  withParagraphs(fakeParagraphs: FakeParagraph[]): FakeNotebook;
 }

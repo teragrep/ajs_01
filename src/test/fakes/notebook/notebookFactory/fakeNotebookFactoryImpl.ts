@@ -62,11 +62,9 @@ export class FakeNotebookFactoryImpl implements FakeNotebookFactory {
     for(let i= 0; i < count; i++){
       const fakeParagraphs = [
         this._fakeParagraphFactory.fakeSparkParagraph(),
-        this._fakeParagraphFactory.fakeParagraphs(3)
+        ...this._fakeParagraphFactory.fakeParagraphs(3)
       ];
-      fakeNotebooks.push(new FakeNotebookImpl(
-        {paragraphs:fakeParagraphs}
-      ));
+      fakeNotebooks.push(new FakeNotebookImpl().withParagraphs(fakeParagraphs));
     }
     return fakeNotebooks;
   }

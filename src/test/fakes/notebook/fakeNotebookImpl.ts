@@ -51,14 +51,22 @@ import {FakeIdImpl} from '../id/fakeIdImpl';
 import {ParagraphPayload} from '../paragraph/paragraphPayload';
 import {FakeParagraphFactory} from '../paragraph/paragraphFactory/fakeParagraphFactory';
 import {FakeParagraphFactoryImpl} from '../paragraph/paragraphFactory/fakeParagraphFactoryImpl';
+import { FakeParagraph } from '../paragraph/fakeParagraph';
 
 export class FakeNotebookImpl implements FakeNotebook {
-  private readonly _notebookData:WebSocketPayload;
-  private readonly _fakeParagraphFactory:FakeParagraphFactory;
+  private readonly _notebookData: WebSocketPayload;
+  private readonly _fakeParagraphFactory: FakeParagraphFactory;
 
-  constructor(notebookData:object = {}) {
+  constructor(notebookData: object = {}) {
     this._notebookData = new WebSocketPayloadImpl(notebookData);
     this._fakeParagraphFactory = new FakeParagraphFactoryImpl();
+  }
+
+  withParagraphs(fakeParagraphs: FakeParagraph[]): FakeNotebook {
+    return new FakeNotebookImpl({
+      ...this._notebookData,
+      paragraphs: fakeParagraphs.map(fakeParagraph => fakeParagraph.toPayload()),
+    });
   }
 
   withName(name: string): FakeNotebook {
