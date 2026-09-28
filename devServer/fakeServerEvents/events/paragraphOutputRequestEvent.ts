@@ -81,15 +81,15 @@ export default class ParagraphOutputRequestEvent implements FakeServerEvent {
     const noteId = messageData.stringProperty('noteId');
     const paragraphId = messageData.stringProperty('paragraphId');
     const requestOptions = messageData.objectPropertyAsPayload('requestOptions');
-    const graphType = requestOptions.stringProperty('graphType');
     if(outputType === OutputType.dataTables){
       paragraphOutputResponse = this.dataTablesParagraphOutputResponse(requestOptions, paragraphId, noteId);
     }
     else if(outputType === OutputType.uPlot){
+      const graphType = requestOptions.stringProperty('graphType');
       paragraphOutputResponse = this.uPlotParagraphOutputResponse(graphType, paragraphId, noteId);
     }
     else{
-      paragraphOutputResponse = this.notImplementedResultResponse(graphType, paragraphId, noteId);
+      paragraphOutputResponse = this.notImplementedResultResponse(outputType, paragraphId, noteId);
     }
     this._webSocket.send(paragraphOutputResponse.toJson());
   }

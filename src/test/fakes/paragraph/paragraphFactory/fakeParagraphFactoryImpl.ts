@@ -50,6 +50,7 @@ import {FakeParagraphImpl} from '../fakeParagraphImpl';
 import {FakeParagraph} from '../fakeParagraph';
 import {FakeParagraphFactory} from './fakeParagraphFactory';
 import {OutputPayload} from '../../output/outputPayload';
+import {FakeIdImpl} from '../../id/fakeIdImpl';
 
 export class FakeParagraphFactoryImpl implements FakeParagraphFactory {
   private readonly _dataTablesDataFactory: DataTablesDataFactory;
@@ -72,7 +73,10 @@ export class FakeParagraphFactoryImpl implements FakeParagraphFactory {
     for(let i= 0; i < count; ++i){
       fakeParagraphs.push(new FakeParagraphImpl());
     }
-    return fakeParagraphs.map(fakeParagraph => this.addFakeOutput(fakeParagraph));
+    return fakeParagraphs.map(fakeParagraph => {
+      const randomText = new FakeIdImpl().id();
+      return this.addFakeOutput(fakeParagraph).withText(randomText);
+    });
   }
 
   private addFakeOutput(fakeParagraph:FakeParagraph):FakeParagraph {
