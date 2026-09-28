@@ -53,7 +53,7 @@ import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
 import {existsSync, mkdirSync} from 'fs';
 import FileServiceImpl from './services/fileService/fileServiceImpl';
 import NoteServiceImpl from './services/noteService/noteServiceImpl';
-import NoteFactory from './data/note/noteFactory';
+import {FakeNotebookFactoryImpl} from '../src/test/fakes/notebook/notebookFactory/fakeNotebookFactoryImpl';
 
 const app = express();
 app.use(express.json());
@@ -80,10 +80,11 @@ const fileService = new FileServiceImpl(basePath);
 if(!existsSync(basePath)){
   mkdirSync(basePath);
   const noteService = new NoteServiceImpl(fileService);
-  const noteFactory = new NoteFactory();
-  const notes = noteFactory.generatedNotes();
-  notes.map((note) => {
-    noteService.add(note, note.id);
+  const fakeNotebookCount = 3;
+  const fakeNotebookFactory = new FakeNotebookFactoryImpl();
+  const fakeNotebooks = fakeNotebookFactory.fakeNotebooks(fakeNotebookCount);
+  fakeNotebooks.map(fakeNotebook => {
+    noteService.add(fakeNotebook.toPayload());
   });
 }
 

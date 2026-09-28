@@ -43,9 +43,42 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import ParagraphImpl from './paragraphImpl';
+import {FakeNotebook} from './fakeNotebook';
+import {NotebookPayload} from './notebookPayload';
+import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketPayload';
+import {FakeIdImpl} from '../id/fakeIdImpl';
+import {ParagraphPayload} from '../paragraph/paragraphPayload';
+import {FakeParagraphFactory} from '../paragraph/paragraphFactory/fakeParagraphFactory';
+import FakeParagraphFactoryImpl from '../paragraph/paragraphFactory/fakeParagraphFactoryImpl';
 
+export class FakeNotebookImpl implements FakeNotebook {
+  private readonly _notebookData:WebSocketPayload;
+  private readonly _fakeParagraphFactory:FakeParagraphFactory;
 
-const text = '%spark.conf';
-const title  = 'hideMeSparkPinger';
-export const SparkPara = new ParagraphImpl('FINISHED', undefined, text, title);
+  constructor(notebookData:object = {}) {
+    this._notebookData = new WebSocketPayloadImpl(notebookData);
+    this._fakeParagraphFactory = new FakeParagraphFactoryImpl();
+  }
+
+  toPayload(): NotebookPayload {
+    const id = this._notebookData.propertyExists('id') ? this._notebookData.stringProperty('id') : new FakeIdImpl().id();
+    const name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
+    const path = `/${name}`;
+    const config = {
+      isZeppelinNotebookCronEnable: true,
+    };
+    const paragraphs = this._notebookData.propertyExists('paragraphs')
+      ?
+      this._notebookData.arrayProperty<ParagraphPayload>('paragraphs')
+      :
+      this._fakeParagraphFactory.fakeParagraphs(1).map(fakeParagraph => fakeParagraph.toPayload());
+    return {
+      id: id,
+      name: name,
+      path: path,
+      config: config,
+      paragraphs: paragraphs
+    };
+  }
+}

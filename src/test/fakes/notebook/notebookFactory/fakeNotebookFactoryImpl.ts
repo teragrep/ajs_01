@@ -43,24 +43,21 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {SparkPara} from '../paragraph/sparkPara';
-import {NotebookDTO} from './notebookDTO';
-import {ParagraphDTO} from '../paragraph/paragraphDTO';
+import {FakeNotebook} from '../fakeNotebook';
+import {FakeNotebookFactory} from './fakeNotebookFactory';
+import {FakeParagraphFactory} from '../../paragraph/paragraphFactory/fakeParagraphFactory';
+import {FakeNotebookImpl} from '../fakeNotebookImpl';
 
-export default class NotebookImpl implements NotebookDTO {
-  readonly config = {
-    isZeppelinNotebookCronEnable: true,
-  };
-  readonly defaultInterpreterGroup = 'spark';
-  id: string;
-  name: string;
-  path: string;
-  paragraphs: ParagraphDTO[];
+export class FakeNotebookFactoryImpl implements FakeNotebookFactory {
+  private readonly _fakeParagraphFactory: FakeParagraphFactory;
 
-  constructor(name: string, paragraphs?: ParagraphDTO[], id: string = Math.random().toString(36).slice(2, 8)) {
-    this.id = id;
-    this.name = name;
-    this.path = `/${this.name}`;
-    this.paragraphs = paragraphs ?? [SparkPara];
+  fakeNotebooks(count:number):FakeNotebook[]{
+    const fakeNotebooks: FakeNotebook[] = [];
+    for(let i= 0; i < count; i++){
+      fakeNotebooks.push(new FakeNotebookImpl(
+        {paragraphs:this._fakeParagraphFactory.fakeParagraphs(3)}
+      ));
+    }
+    return fakeNotebooks;
   }
 }

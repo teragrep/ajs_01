@@ -43,38 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import {NotebookPayload} from './notebookPayload';
 
-
-export interface ParagraphDTO {
-  dateCreated: number;
-  dateFinished: number;
-  dateStarted: number;
-  dateUpdated: number;
-  id: string;
-  jobName: string;
-  progress:number;
-  progressUpdateIntervalMs:number;
-  output?: object;
-  status: string;
-  text: string;
-  title: string;
-  user: string;
-  settings:{
-    params:object,
-    forms:object
-  }
-  config:{
-    lineNumbers: boolean,
-    editorSetting: {
-      language: string,
-      editOnDblClick: boolean,
-      completionKey: string,
-      completionSupport: boolean
-    },
-    colWidth: number,
-    editorMode: string,
-    fontSize: number,
-    title: boolean,
-    enabled: boolean
-  }
+export interface FakeNotebook {
+  toPayload(): NotebookPayload;
 }

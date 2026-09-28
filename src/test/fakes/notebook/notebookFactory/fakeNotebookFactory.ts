@@ -43,13 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphDTO} from '../paragraph/paragraphDTO';
+import {FakeNotebook} from '../fakeNotebook';
 
-export interface NotebookDTO {
-  id: string;
-  name:string;
-  path:string;
-  config: object;
-  defaultInterpreterGroup:string;
-  paragraphs: ParagraphDTO[];
+export interface FakeNotebookFactory {
+  fakeNotebooks(count:number):FakeNotebook[];
 }

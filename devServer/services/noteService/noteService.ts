@@ -43,12 +43,11 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-
-import {NotebookDTO} from '../../data/note/notebookDTO';
+import {NotebookPayload} from '../../../src/test/fakes/notebook/notebookPayload';
 
 export interface NoteService {
-  all(): NotebookDTO[];
-  find(id:string): NotebookDTO;
-  add(object:NotebookDTO, id:string): void;
-  update(object:NotebookDTO, id:string): void;
+  all(): NotebookPayload[];
+  find(id:string): NotebookPayload;
+  add(notebook:NotebookPayload): void;
+  update(notebook:NotebookPayload): void;
 }

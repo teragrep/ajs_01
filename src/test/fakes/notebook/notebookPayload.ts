@@ -43,48 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import { ParagraphDTO } from './paragraphDTO';
+import {ParagraphPayload} from '../paragraph/paragraphPayload';
 
-
-export default class ParagraphImpl implements ParagraphDTO {
-  readonly id: string;
-  user: string;
-  status: string;
-  dateCreated = Date.now();
-  dateFinished = Date.now();
-  dateStarted = Date.now();
-  dateUpdated = Date.now();
-  jobName = 'generated-job-id';
-  progressUpdateIntervalMs = 500;
-  progress = 100;
-  text: string;
-  title: string;
-  output: object;
-  settings = {
-    params: {},
-    forms: {}
-  };
-  readonly config = {
-    lineNumbers: true,
-    editorSetting: {
-      language: 'dpl',
-      editOnDblClick: false,
-      completionKey: 'TAB',
-      completionSupport: true
-    },
-    colWidth: 12.0,
-    editorMode: 'ace/mode/dpl',
-    fontSize: 9.0,
-    title: true,
-    results: {},
-    enabled: true
-  };
-
-  constructor(status: string, output?: object, text?: string, title?: string, id = 'p'.concat(Math.random().toString(36).slice(2, 12))) {
-    this.id = id;
-    this.status = status;
-    this.text = text;
-    this.title = title;
-    this.output = output;
-  }
+export interface NotebookPayload {
+  id: string;
+  name:string;
+  path:string;
+  config: object;
+  paragraphs: ParagraphPayload[];
 }

@@ -44,8 +44,8 @@
  * a licensee so wish it.
  */
 import FileServiceImpl from '../fileService/fileServiceImpl';
-import {NotebookDTO} from '../../data/note/notebookDTO';
 import {NoteService} from './noteService';
+import {NotebookPayload} from '../../../src/test/fakes/notebook/notebookPayload';
 
 export default class NoteServiceImpl implements NoteService{
   private readonly _fileService: FileServiceImpl;
@@ -55,22 +55,24 @@ export default class NoteServiceImpl implements NoteService{
     this._fileService = fileService;
   }
 
-  all(): NotebookDTO[]{
-    return this._fileService.readAll<NotebookDTO>();
+  all(): NotebookPayload[]{
+    return this._fileService.readAll<NotebookPayload>();
   }
 
-  find(notebookId:string): NotebookDTO{
-    const notebook = this._fileService.read<NotebookDTO>(notebookId);
+  find(notebookId:string): NotebookPayload{
+    const notebook = this._fileService.read<NotebookPayload>(notebookId);
     this._lastNoteId = notebookId;
     return notebook;
   }
 
-  add(notebook:NotebookDTO, id:string){
-    this._fileService.write<NotebookDTO>(notebook, id, false);
+  add(notebook:NotebookPayload){
+    const fileName = notebook.id;
+    this._fileService.write(notebook, fileName, false);
   }
 
-  update(notebook:NotebookDTO, id:string){
-    this._fileService.write<NotebookDTO>(notebook, id, true);
+  update(notebook:NotebookPayload){
+    const fileName = notebook.id;
+    this._fileService.write(notebook, fileName, true);
   }
 
   lastNoteId(){
