@@ -48,7 +48,7 @@ import {FakeServerEvent} from '../fakeServerEvent';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {
   ParagraphAddedServerResponse
-} from '../../../src/test/fakes/serverWebSocketResponses/paragraphAdded/paragraphAddedServerResponse';
+} from '../../../src/test/fakes/webSocketServerResponses/paragraphAdded/paragraphAddedServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
 import {FakeParagraphImpl} from '../../../src/test/fakes/paragraph/fakeParagraphImpl';
 

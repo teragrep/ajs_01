@@ -45,22 +45,22 @@
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
 
-export class CompletionListResponse implements WebSocketServerResponse {
-  private readonly _completions: {name:string, value:unknown}[];
+export class InterpreterErrorServerResponse implements WebSocketServerResponse {
+  private readonly _errorMessage:string;
 
-  constructor(completions: {name:string, value:unknown}[]) {
-    this._completions = completions;
+  constructor(errorMessage:string) {
+    this._errorMessage = errorMessage;
   }
 
   toJson(): string {
-    return JSON.stringify(this._completions);
+    return JSON.stringify(this.toObject());
   }
 
-  toObject(): { op: string; data: object } {
+  toObject(): {op:string, data:object} {
     return {
-      op: 'COMPLETION_LIST',
-      data: {
-        completions: this._completions
+      op:'INTERPRETER_ERROR',
+      data:{
+        message:this._errorMessage
       }
     };
   }

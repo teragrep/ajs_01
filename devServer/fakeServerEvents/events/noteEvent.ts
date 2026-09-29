@@ -46,7 +46,7 @@
 import {WebSocket} from 'ws';
 import {FakeServerEvent} from '../fakeServerEvent';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
-import {NoteServerResponse} from '../../../src/test/fakes/serverWebSocketResponses/note/noteServerResponse';
+import {NoteServerResponse} from '../../../src/test/fakes/webSocketServerResponses/note/noteServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
 import {FakeNotebookImpl} from '../../../src/test/fakes/notebook/fakeNotebookImpl';
 

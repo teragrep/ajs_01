@@ -48,8 +48,8 @@ import {FakeServerEvent} from '../fakeServerEvent';
 import {OutputType} from '../../../src/app/objects/output/outputType';
 import {
   ParagraphOutputServerResponse
-} from '../../../src/test/fakes/serverWebSocketResponses/paragraphOutput/paragraphOutputServerResponse';
-import {WebSocketServerResponse} from '../../../src/test/fakes/serverWebSocketResponses/webSocketServerResponse';
+} from '../../../src/test/fakes/webSocketServerResponses/paragraphOutput/paragraphOutputServerResponse';
+import {WebSocketServerResponse} from '../../../src/test/fakes/webSocketServerResponses/webSocketServerResponse';
 import { Message } from '../../../src/app/objects/message/message';
 import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';

@@ -49,11 +49,11 @@ import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {OutputType} from '../../../src/app/objects/output/outputType';
 import {
   ParagraphServerResponse
-} from '../../../src/test/fakes/serverWebSocketResponses/paragraph/paragraphServerResponse';
-import {ProgressServerResponse} from '../../../src/test/fakes/serverWebSocketResponses/progress/progressServerResponse';
+} from '../../../src/test/fakes/webSocketServerResponses/paragraph/paragraphServerResponse';
+import {ProgressServerResponse} from '../../../src/test/fakes/webSocketServerResponses/progress/progressServerResponse';
 import {
   ParagraphOutputServerResponse
-} from '../../../src/test/fakes/serverWebSocketResponses/paragraphOutput/paragraphOutputServerResponse';
+} from '../../../src/test/fakes/webSocketServerResponses/paragraphOutput/paragraphOutputServerResponse';
 import { Message } from '../../../src/app/objects/message/message';
 import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';

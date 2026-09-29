@@ -45,7 +45,7 @@
  */
 import {WebSocket} from 'ws';
 import {FakeServerEvent} from '../fakeServerEvent';
-import {CompletionListResponse} from '../../../src/test/fakes/serverWebSocketResponses/completionList/completionListResponse';
+import {CompletionListResponse} from '../../../src/test/fakes/webSocketServerResponses/completionList/completionListResponse';
 
 export default class CompletionListEvent implements FakeServerEvent{
   private readonly _webSocket:WebSocket;

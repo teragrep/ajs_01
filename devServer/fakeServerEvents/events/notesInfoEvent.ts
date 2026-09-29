@@ -46,7 +46,7 @@
 import {WebSocket} from 'ws';
 import {FakeServerEvent} from '../fakeServerEvent';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
-import {NotesInfoServerResponse} from '../../../src/test/fakes/serverWebSocketResponses/notesInfo/notesInfoServerResponse';
+import {NotesInfoServerResponse} from '../../../src/test/fakes/webSocketServerResponses/notesInfo/notesInfoServerResponse';
 
 export default class NotesInfoEvent implements FakeServerEvent{
   private readonly  _webSocket: WebSocket;
