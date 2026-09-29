@@ -49,17 +49,17 @@ import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSoc
 import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketPayload';
 import {FakeIdImpl} from '../id/fakeIdImpl';
 import {ParagraphPayload} from '../paragraph/paragraphPayload';
-import {FakeParagraphFactory} from '../paragraph/paragraphFactory/fakeParagraphFactory';
-import {FakeParagraphFactoryImpl} from '../paragraph/paragraphFactory/fakeParagraphFactoryImpl';
 import { FakeParagraph } from '../paragraph/fakeParagraph';
 
 export class FakeNotebookImpl implements FakeNotebook {
   private readonly _notebookData: WebSocketPayload;
-  private readonly _fakeParagraphFactory: FakeParagraphFactory;
+  private readonly _id:string;
+  private readonly _name:string;
 
   constructor(notebookData: object = {}) {
     this._notebookData = new WebSocketPayloadImpl(notebookData);
-    this._fakeParagraphFactory = new FakeParagraphFactoryImpl();
+    this._id = this._notebookData.propertyExists('id') ? this._notebookData.stringProperty('id') : new FakeIdImpl().id();
+    this._name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
   }
 
   withParagraphs(fakeParagraphs: FakeParagraph[]): FakeNotebook {
@@ -77,9 +77,7 @@ export class FakeNotebookImpl implements FakeNotebook {
   }
 
   toPayload(): NotebookPayload {
-    const id = this._notebookData.propertyExists('id') ? this._notebookData.stringProperty('id') : new FakeIdImpl().id();
-    const name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
-    const path = this._notebookData.propertyExists('path') ? this._notebookData.stringProperty('path') : `/${name}`;
+    const path = this._notebookData.propertyExists('path') ? this._notebookData.stringProperty('path') : `/${this._name}`;
     const config = this._notebookData.propertyExists('config') ? this._notebookData.objectProperty('config') : {isZeppelinNotebookCronEnable: true};
     let paragraphs:ParagraphPayload[];
     if(this._notebookData.propertyExists('paragraphs')){
@@ -89,8 +87,8 @@ export class FakeNotebookImpl implements FakeNotebook {
       paragraphs = [];
     }
     return {
-      id: id,
-      name: name,
+      id: this._id,
+      name: this._name,
       path: path,
       config: config,
       paragraphs: paragraphs

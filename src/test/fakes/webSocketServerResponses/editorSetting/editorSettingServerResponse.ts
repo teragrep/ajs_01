@@ -43,37 +43,35 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
-import {CompletionListServerResponse} from '../../../src/test/fakes/webSocketServerResponses/completionList/completionListServerResponse';
+import {WebSocketServerResponse} from '../webSocketServerResponse';
 
-export default class CompletionListEvent implements FakeServerEvent{
-  private readonly _webSocket:WebSocket;
-  private readonly _eventId:string;
+type EditorSettings = {
+  language:string,
+  editorOnDblClick: boolean,
+  completionKey: string,
+  completionSupport: boolean,
+};
 
-  constructor(webSocket:WebSocket) {
-    this._webSocket = webSocket;
-    this._eventId = 'COMPLETION';
+export class EditorSettingServerResponse implements WebSocketServerResponse {
+  private readonly _editorSettings: EditorSettings;
+  private readonly _paragraphId:string;
+
+  constructor(editorSettings: EditorSettings, paragraphId:string) {
+    this._editorSettings = editorSettings;
+    this._paragraphId = paragraphId;
   }
 
-  eventId(): string {
-    return this._eventId;
+  toJson(): string {
+    return JSON.stringify(this.toObject());
   }
 
-  handle(): void {
-    const completions = [
-      {
-        name: 'fakeCompletion1',
-        value: 'fakeCompletion1'
-      },
-      {
-        name: 'fakeCompletion2',
-        value: 'fakeCompletion2'
-      },
-    ];
-    const completionListResponse = new CompletionListServerResponse(completions);
-    this._webSocket.send(completionListResponse.toJson());
+  toObject(): { op: string; data: object } {
+    return {
+      op: 'EDITOR_SETTING',
+      data: {
+        editor:this._editorSettings,
+        paragraphId:this._paragraphId,
+      }
+    };
   }
 }
-
-

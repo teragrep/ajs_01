@@ -42,38 +42,35 @@
  * To the extent this program is licensed as part of the Commercial versions of
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
+ *
  */
-import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
-import {CompletionListServerResponse} from '../../../src/test/fakes/webSocketServerResponses/completionList/completionListServerResponse';
+import {EditorSettingServerResponse} from './editorSettingServerResponse';
 
-export default class CompletionListEvent implements FakeServerEvent{
-  private readonly _webSocket:WebSocket;
-  private readonly _eventId:string;
+describe('EditorSetting websocket server response unit test', () => {
+  const editorSettings = {
+    language: 'language',
+    editorOnDblClick:true,
+    completionKey: 'completionKey',
+    completionSupport:true
+  };
+  const paragraphId = 'paragraphId';
 
-  constructor(webSocket:WebSocket) {
-    this._webSocket = webSocket;
-    this._eventId = 'COMPLETION';
-  }
+  const editorSettingResponse = new EditorSettingServerResponse(editorSettings, paragraphId);
 
-  eventId(): string {
-    return this._eventId;
-  }
+  const expectedObject = {
+    op:'EDITOR_SETTING',
+    data:{
+      editor: editorSettings,
+      paragraphId: paragraphId,
+    }
+  };
 
-  handle(): void {
-    const completions = [
-      {
-        name: 'fakeCompletion1',
-        value: 'fakeCompletion1'
-      },
-      {
-        name: 'fakeCompletion2',
-        value: 'fakeCompletion2'
-      },
-    ];
-    const completionListResponse = new CompletionListServerResponse(completions);
-    this._webSocket.send(completionListResponse.toJson());
-  }
-}
+  it('Should have object', () => {
+    expect(editorSettingResponse.toObject()).toEqual(expectedObject);
+  });
 
-
+  it('Should have json', () => {
+    const expectedJson = JSON.stringify(expectedObject);
+    expect(editorSettingResponse.toJson()).toEqual(expectedJson);
+  });
+});

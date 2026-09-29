@@ -42,38 +42,26 @@
  * To the extent this program is licensed as part of the Commercial versions of
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
+ *
  */
-import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
-import {CompletionListServerResponse} from '../../../src/test/fakes/webSocketServerResponses/completionList/completionListServerResponse';
+import {InterpreterErrorServerResponse} from './interpreterErrorServerResponse';
 
-export default class CompletionListEvent implements FakeServerEvent{
-  private readonly _webSocket:WebSocket;
-  private readonly _eventId:string;
+describe('InterpreterError websocket server response unit test', () => {
+  const errorMessage = 'error';
+  const interPreterErrorServerResponse = new InterpreterErrorServerResponse(errorMessage);
+  const expectedObject = {
+    op:'INTERPRETER_ERROR',
+    data:{
+      message:errorMessage,
+    }
+  };
 
-  constructor(webSocket:WebSocket) {
-    this._webSocket = webSocket;
-    this._eventId = 'COMPLETION';
-  }
+  it('Should have object', () => {
+    expect(interPreterErrorServerResponse.toObject()).toEqual(expectedObject);
+  });
 
-  eventId(): string {
-    return this._eventId;
-  }
-
-  handle(): void {
-    const completions = [
-      {
-        name: 'fakeCompletion1',
-        value: 'fakeCompletion1'
-      },
-      {
-        name: 'fakeCompletion2',
-        value: 'fakeCompletion2'
-      },
-    ];
-    const completionListResponse = new CompletionListServerResponse(completions);
-    this._webSocket.send(completionListResponse.toJson());
-  }
-}
-
-
+  it('Should have json', () => {
+    const expectedJson = JSON.stringify(expectedObject);
+    expect(interPreterErrorServerResponse.toJson()).toEqual(expectedJson);
+  });
+});

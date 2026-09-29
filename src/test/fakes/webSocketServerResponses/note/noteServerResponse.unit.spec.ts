@@ -42,26 +42,25 @@
  * To the extent this program is licensed as part of the Commercial versions of
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
+ *
  */
-import {WebSocketServerResponse} from '../webSocketServerResponse';
+import {FakeNotebookImpl} from '../../notebook/fakeNotebookImpl';
+import {NoteServerResponse} from './noteServerResponse';
 
-export class CompletionListResponse implements WebSocketServerResponse {
-  private readonly _completions: {name:string, value:unknown}[];
+describe('Note server response unit test', () => {
+  const notebook = new FakeNotebookImpl();
+  const noteServerResponse = new NoteServerResponse(notebook);
+  const expectedObject = {
+    op:'NOTE',
+    data:notebook.toPayload()
+  };
 
-  constructor(completions: {name:string, value:unknown}[]) {
-    this._completions = completions;
-  }
+  it('Should have object', () => {
+    expect(noteServerResponse.toObject()).toEqual(expectedObject);
+  });
 
-  toJson(): string {
-    return JSON.stringify(this.toObject());
-  }
-
-  toObject(): { op: string; data: object } {
-    return {
-      op: 'COMPLETION_LIST',
-      data: {
-        completions: this._completions
-      }
-    };
-  }
-}
+  it('Should have json', () => {
+    const expectedJson = JSON.stringify(expectedObject);
+    expect(noteServerResponse.toJson()).toEqual(expectedJson);
+  });
+});

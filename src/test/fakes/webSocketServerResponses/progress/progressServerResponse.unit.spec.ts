@@ -43,35 +43,27 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketServerResponse} from '../webSocketServerResponse';
+import {ProgressServerResponse} from './progressServerResponse';
 
-type EditorSettings = {
-  language:string,
-  editorOnDblClick: boolean,
-  completionKey: string,
-  completionSupport: boolean,
-};
+describe('ProgressServerResponse unit test', () => {
+  const progressValue = 40;
+  const paragraphId = 'paragraphId';
+  const progressServerResponse = new ProgressServerResponse(progressValue,paragraphId);
 
-export class EditorSettingResponse implements WebSocketServerResponse {
-  private readonly _editorSettings: EditorSettings;
-  private readonly _paragraphId:string;
+  const expectedObject = {
+    op:'PROGRESS',
+    data:{
+      progress:progressValue,
+      id:paragraphId,
+    }
+  };
 
-  constructor(editorSettings: EditorSettings, paragraphId:string) {
-    this._editorSettings = editorSettings;
-    this._paragraphId = paragraphId;
-  }
+  it('Should have object', () => {
+    expect(progressServerResponse.toObject()).toEqual(expectedObject);
+  });
 
-  toJson(): string {
-    return JSON.stringify(this.toObject());
-  }
-
-  toObject(): { op: string; data: object } {
-    return {
-      op: 'EDITOR_SETTING',
-      data: {
-        editor:this._editorSettings,
-        paragraphId:this._paragraphId,
-      }
-    };
-  }
-}
+  it('Should have json', () => {
+    const expectedJson = JSON.stringify(expectedObject);
+    expect(progressServerResponse.toJson()).toEqual(expectedJson);
+  });
+});

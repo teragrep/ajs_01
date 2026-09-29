@@ -42,38 +42,25 @@
  * To the extent this program is licensed as part of the Commercial versions of
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
+ *
  */
-import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
-import {CompletionListServerResponse} from '../../../src/test/fakes/webSocketServerResponses/completionList/completionListServerResponse';
+import {FakeNotebookImpl} from '../../notebook/fakeNotebookImpl';
+import {NewNoteServerResponse} from './newNoteServerResponse';
 
-export default class CompletionListEvent implements FakeServerEvent{
-  private readonly _webSocket:WebSocket;
-  private readonly _eventId:string;
+describe('New note server response unit test', () => {
+  const notebook = new FakeNotebookImpl();
+  const newNoteServerResponse = new NewNoteServerResponse(notebook);
+  const expectedObject = {
+    op:'NEW_NOTE',
+    data:notebook.toPayload()
+  };
 
-  constructor(webSocket:WebSocket) {
-    this._webSocket = webSocket;
-    this._eventId = 'COMPLETION';
-  }
+  it('Should have object', () => {
+    expect(newNoteServerResponse.toObject()).toEqual(expectedObject);
+  });
 
-  eventId(): string {
-    return this._eventId;
-  }
-
-  handle(): void {
-    const completions = [
-      {
-        name: 'fakeCompletion1',
-        value: 'fakeCompletion1'
-      },
-      {
-        name: 'fakeCompletion2',
-        value: 'fakeCompletion2'
-      },
-    ];
-    const completionListResponse = new CompletionListServerResponse(completions);
-    this._webSocket.send(completionListResponse.toJson());
-  }
-}
-
-
+  it('Should have json', () => {
+    const expectedJson = JSON.stringify(expectedObject);
+    expect(newNoteServerResponse.toJson()).toEqual(expectedJson);
+  });
+});

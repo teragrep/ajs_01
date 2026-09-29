@@ -43,37 +43,34 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
-import {CompletionListServerResponse} from '../../../src/test/fakes/webSocketServerResponses/completionList/completionListServerResponse';
+import {OutputPayload} from '../../output/outputPayload';
+import {ParagraphOutputServerResponse} from './paragraphOutputServerResponse';
 
-export default class CompletionListEvent implements FakeServerEvent{
-  private readonly _webSocket:WebSocket;
-  private readonly _eventId:string;
+describe('Paragraph output server response', () => {
+  const noteId = 'noteId';
+  const paragraphId = 'paragraphId';
+  const outputPayload:OutputPayload = {
+    type:'type',
+    data:{},
+    isAggregated:false
+  };
+  const paragraphOutputServerResponse = new ParagraphOutputServerResponse(paragraphId, noteId, outputPayload);
 
-  constructor(webSocket:WebSocket) {
-    this._webSocket = webSocket;
-    this._eventId = 'COMPLETION';
-  }
+  const expectedObject = {
+    op:'PARAGRAPH_OUTPUT',
+    data:{
+      output: outputPayload,
+      paragraphId:paragraphId,
+      noteId:noteId,
+    }
+  };
 
-  eventId(): string {
-    return this._eventId;
-  }
+  it('Should have object', () => {
+    expect(paragraphOutputServerResponse.toObject()).toEqual(expectedObject);
+  });
 
-  handle(): void {
-    const completions = [
-      {
-        name: 'fakeCompletion1',
-        value: 'fakeCompletion1'
-      },
-      {
-        name: 'fakeCompletion2',
-        value: 'fakeCompletion2'
-      },
-    ];
-    const completionListResponse = new CompletionListServerResponse(completions);
-    this._webSocket.send(completionListResponse.toJson());
-  }
-}
-
-
+  it('Should have json', () => {
+    const expectedJson = JSON.stringify(expectedObject);
+    expect(paragraphOutputServerResponse.toJson()).toEqual(expectedJson);
+  });
+});

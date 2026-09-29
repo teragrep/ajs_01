@@ -55,18 +55,19 @@ import {FakeConfigImpl} from './config/fakeConfigImpl';
 export class FakeParagraphImpl implements FakeParagraph {
   private readonly _paragraphData: WebSocketPayload;
   private readonly _rawParagraphData: object;
+  private readonly _id:string;
   private readonly _dateNow:number;
   private readonly _defaultConfig: ConfigPayload;
 
   constructor(paragraphData: object = {}) {
     this._paragraphData = new WebSocketPayloadImpl(paragraphData);
     this._rawParagraphData = paragraphData;
+    this._id = this._paragraphData.propertyExists('id') ? this._paragraphData.stringProperty('id') : new FakeIdImpl().id();
     this._dateNow = Date.now();
     this._defaultConfig = new FakeConfigImpl().toConfigPayload();
   }
 
   toPayload(): ParagraphPayload {
-    const paragraphId =  this._paragraphData.propertyExists('id') ? this._paragraphData.stringProperty('id') : new FakeIdImpl().id();
     const status = this._paragraphData.propertyExists('status') ? this._paragraphData.stringProperty('status') : '';
     const text = this._paragraphData.propertyExists('text') ? this._paragraphData.stringProperty('text') : '';
     const title = this._paragraphData.propertyExists('title') ? this._paragraphData.stringProperty('title') : '';
@@ -83,7 +84,7 @@ export class FakeParagraphImpl implements FakeParagraph {
       dateFinished: this._dateNow,
       dateStarted: this._dateNow,
       dateUpdated: this._dateNow,
-      id: paragraphId,
+      id: this._id,
       jobName: 'jobName',
       progress: progress,
       settings: {forms: undefined, params: undefined},
