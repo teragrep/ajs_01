@@ -44,49 +44,6 @@ require('./interpreter/interpreter.html');
 require('./jobmanager/job/job.html');
 require('./jobmanager/jobmanager.html');
 require('./notebook/shortcut.html');
-//refactoring
-require('./notebook/paragraph/result/commonServices/vizRegister.service');
-require('./notebook/paragraph/result/commonServices/pivotTransformation.service');
-require('./notebook/paragraph/result/commonServices/columnselectorTransformation.service');
-require('./notebook/paragraph/result/commonServices/tableParser.service');
-require('./notebook/paragraph/result/commonServices/networkParser.service');
-require('./notebook/paragraph/result/result.controller');
-require('./notebook/paragraph/result/result.html');
-require('./notebook/paragraph/result/barchart/barchart.html');
-require('./notebook/paragraph/result/result-chart-selector.html');
-require('./notebook/paragraph/result/barchart/barchart.service');
-require('./notebook/paragraph/result/barchart/barchart.controller');
-require('./notebook/paragraph/result/piechart/piechart.service');
-require('./notebook/paragraph/result/piechart/piechart.controller');
-require('./notebook/paragraph/result/piechart/piechart.html');
-require('./notebook/paragraph/result/linechart/linechart.service');
-require('./notebook/paragraph/result/linechart/linechart.controller');
-require('./notebook/paragraph/result/linechart/linechart.html');
-require('./notebook/paragraph/result/areachart/areachart.service');
-require('./notebook/paragraph/result/areachart/areachart.controller');
-require('./notebook/paragraph/result/areachart/areachart.html');
-require('./notebook/paragraph/result/scatterchart/scatterchart.service');
-require('./notebook/paragraph/result/scatterchart/scatterchart.controller');
-require('./notebook/paragraph/result/scatterchart/scatterchart.html');
-require('./notebook/paragraph/result/network/network.service');
-require('./notebook/paragraph/result/network/network.controller');
-require('./notebook/paragraph/result/network/network.html');
-require('./notebook/paragraph/result/html/html.service');
-require('./notebook/paragraph/result/html/html.controller');
-require('./notebook/paragraph/result/html/html.html');
-require('./notebook/paragraph/result/table/table.service');
-require('./notebook/paragraph/result/table/table.controller');
-require('./notebook/paragraph/result/table/table.html');
-require('./notebook/paragraph/result/text/text.service');
-require('./notebook/paragraph/result/text/text.controller');
-require('./notebook/paragraph/result/text/text.html');
-require('./notebook/paragraph/result/angular/angular.service');
-require('./notebook/paragraph/result/angular/angular.controller');
-require('./notebook/paragraph/result/angular/angular.html');
-require('./notebook/paragraph/result/jsonTable/jsonTable.service');
-require('./notebook/paragraph/result/jsonTable/jsonTable.controller');
-require('./notebook/paragraph/result/jsonTable/jsonTable.html');
-
 
 require('./notebook/paragraph/DPL-Log.html');
 require('./notebook/paragraph/paragraph-control.html');
@@ -96,7 +53,6 @@ require('./notebook/revisions-comparator/revisions-comparator.html');
 require('./notebook/notebook-actionBar.html');
 require('./notebook/notebook.html');
 require('./notebook/paragraph-link.html');
-require('./notebook/paragraph/result/visualization-displayXAxis.html');
 
 import './app';
 import './app.controller';
@@ -104,14 +60,6 @@ import './home/home.controller';
 import './notebook/notebook.controller';
 
 import './ui/angularJs/angularPlugin.ajs';
-
-import './notebook/paragraph/result/baseClasses/visualization';
-import './notebook/paragraph/result/baseClasses/visualization-nvd3chart';
-import './notebook/paragraph/result/barchart/visualization-barchart';
-import './notebook/paragraph/result/piechart/visualization-piechart';
-import './notebook/paragraph/result/areachart/visualization-areachart';
-import './notebook/paragraph/result/linechart/visualization-linechart';
-import './notebook/paragraph/result/scatterchart/visualization-scatterchart';
 
 import './jobmanager/jobManager.component';
 import './cluster/cluster.controller';

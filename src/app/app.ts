@@ -47,25 +47,6 @@ const requiredModules = [
   'zeppelinWebApp.paragraphLink',
   'zeppelinWebApp.saveAs',
 
-  //refactor
-  'zeppelinWebApp.vizRegister',
-  'zeppelinWebApp.vizBarchart', //new viz goes here. Need some automatic upload
-  'zeppelinWebApp.vizPiechart',
-  'zeppelinWebApp.vizLinechart',
-  'zeppelinWebApp.vizAreachart',
-  'zeppelinWebApp.vizScatterchart',
-  'zeppelinWebApp.vizNetwork',
-  'zeppelinWebApp.vizHTML',
-  'zeppelinWebApp.vizTable',
-  'zeppelinWebApp.vizJsonTable',
-  'zeppelinWebApp.vizText',
-  'zeppelinWebApp.vizAngular',
-  'zeppelinWebApp.newResult',
-  'zeppelinWebApp.pivotTransformation',
-  'zeppelinWebApp.columnselectorTransformation',
-  'zeppelinWebApp.tableParser',
-  'zeppelinWebApp.networkParser',
-
   //components
   'zeppelinWebApp.comArrayOrdering',
   'zeppelinWebApp.comBaseURL',
