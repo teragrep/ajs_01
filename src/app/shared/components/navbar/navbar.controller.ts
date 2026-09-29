@@ -274,6 +274,7 @@ function NavCtrl($scope,
   }
 
   function enableDarkMode() {
+    $scope.isDarkMode = true;
 
     $( 'body' ).addClass( 'dark-mode' );
     vm.checkValue = true;
@@ -281,10 +282,13 @@ function NavCtrl($scope,
   }
 
   function disableDarkMode() {
+    $scope.isDarkMode = false;
 
     $( 'body' ).removeClass( 'dark-mode' );
     vm.checkValue = false;
     $cookies.put('darkMode', '0', {samesite : 'strict'});
   }
+
+  $scope.isDarkMode = $cookies.get('darkMode') === '1';
 
 }
