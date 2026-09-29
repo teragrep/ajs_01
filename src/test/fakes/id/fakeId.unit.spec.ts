@@ -43,24 +43,14 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from '../output/outputPayload';
+import {FakeId} from './fakeId';
+import {FakeIdImpl} from './fakeIdImpl';
 
-export interface ParagraphPayload {
-  dateCreated: number;
-  dateFinished: number;
-  dateStarted: number;
-  dateUpdated: number;
-  id: string;
-  jobName: string;
-  progress:number;
-  output?: OutputPayload;
-  status: string;
-  text: string;
-  title: string;
-  user: string;
-  settings:{
-    params:object,
-    forms:object
-  }
-  config:object
-}
+describe('FakeId unit test', () => {
+  const fakeId: FakeId = new FakeIdImpl();
+
+  it('Should have Id', () => {
+    expect(fakeId.id()).toBeTypeOf('string');
+    expect(fakeId.id()).toHaveLength(10);
+  });
+});

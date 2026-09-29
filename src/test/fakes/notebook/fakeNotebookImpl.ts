@@ -79,14 +79,14 @@ export class FakeNotebookImpl implements FakeNotebook {
   toPayload(): NotebookPayload {
     const id = this._notebookData.propertyExists('id') ? this._notebookData.stringProperty('id') : new FakeIdImpl().id();
     const name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
-    const path = `/${name}`;
-    const config = {isZeppelinNotebookCronEnable: true};
+    const path = this._notebookData.propertyExists('path') ? this._notebookData.stringProperty('path') : `/${name}`;
+    const config = this._notebookData.propertyExists('config') ? this._notebookData.objectProperty('config') : {isZeppelinNotebookCronEnable: true};
     let paragraphs:ParagraphPayload[];
     if(this._notebookData.propertyExists('paragraphs')){
       paragraphs = this._notebookData.arrayProperty<ParagraphPayload>('paragraphs');
     }
     else{
-      paragraphs = this._fakeParagraphFactory.fakeParagraphs(1).map(fakeParagraph => fakeParagraph.toPayload());
+      paragraphs = [];
     }
     return {
       id: id,

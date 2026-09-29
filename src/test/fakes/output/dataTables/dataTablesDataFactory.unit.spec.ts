@@ -43,24 +43,31 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from '../output/outputPayload';
+import {DataTablesDataFactory} from './dataTablesDataFactory';
+import {DataTablesDataFactoryImpl} from './dataTablesDataFactoryImpl';
 
-export interface ParagraphPayload {
-  dateCreated: number;
-  dateFinished: number;
-  dateStarted: number;
-  dateUpdated: number;
-  id: string;
-  jobName: string;
-  progress:number;
-  output?: OutputPayload;
-  status: string;
-  text: string;
-  title: string;
-  user: string;
-  settings:{
-    params:object,
-    forms:object
-  }
-  config:object
-}
+describe('DataTablesDataFactory unit test', () => {
+  const dataTablesDataFactory: DataTablesDataFactory = new DataTablesDataFactoryImpl();
+
+  it('Should yield raw data', () => {
+    const rowCount = 3;
+    const rawData = dataTablesDataFactory.rawData(rowCount);
+    expect(rawData).toHaveLength(3);
+  });
+
+  it('Should paginate raw data', () => {
+    const rowCount = 10;
+    const rawData = dataTablesDataFactory.rawData(rowCount);
+    const start = 5;
+    const length = 3;
+    const draw = 1;
+    const paginatedData = dataTablesDataFactory.paginatedData(rawData, start, length, draw);
+    const expectedData = {
+      data: rawData.slice(start, start+length),
+      recordsTotal: rowCount,
+      recordsFiltered: rowCount,
+      draw:draw
+    };
+    expect(paginatedData).toEqual(expectedData);
+  });
+});

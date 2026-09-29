@@ -43,54 +43,64 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from './outputPayload';
-import uPlot from 'uplot';
-import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 import {FakeOutputPayloadFactory} from './fakeOutputPayloadFactory';
+import {FakeOutputPayloadFactoryImpl} from './fakeOutputPayloadFactoryImpl';
+import uPlot from 'uplot';
 import {OutputType} from '../../../app/objects/output/outputType';
+import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 
-export class FakeOutputPayloadFactoryImpl implements FakeOutputPayloadFactory {
-  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData): OutputPayload {
-    const headers = Object.keys(dataTablesData.data[0]);
-    const options = {
-      headers:headers,
+describe('FakeOutputPayloadFactory unit test', () => {
+  const fakeOutputPayloadFactory: FakeOutputPayloadFactory = new FakeOutputPayloadFactoryImpl();
+
+  it('Should have uPlotOutputPayload', () => {
+    const uPlotData: uPlot.AlignedData = [[1,2,3], [1,2,3]];
+    const graphType = 'graphType';
+    const uPlotOutputPayload = fakeOutputPayloadFactory.uPlotOutputPayload(uPlotData, graphType);
+    const expectedOutputPayload = {
+      data:uPlotData,
+      type:OutputType.uPlot,
+      isAggregated: true,
+      options:{
+        labels:['Moment 1', 'Moment 2', 'Moment 3'],
+        series:['Series 1'],
+        xAxisLabel:'xAxisLabel',
+        graphType:graphType,
+      }
     };
-    return {
+    expect(uPlotOutputPayload).toEqual(expectedOutputPayload);
+  });
+
+  it('Should have dataTablesOutputPayload', () => {
+    const rawData= [
+      {test1:'test1', test2:'test2', test3:'test3'}
+    ];
+    const dataTablesData: PaginatedDataTablesData = {
+      data: rawData,
+      draw: 1,
+      recordsFiltered: 1,
+      recordsTotal: 1
+    };
+    const dataTablesOutputPayload = fakeOutputPayloadFactory.dataTablesOutputPayload(dataTablesData);
+    const expectedOptions= {
+      headers:['test1', 'test2', 'test3'],
+    };
+    const expectedOutputPayload = {
       type: OutputType.dataTables,
       data: dataTablesData,
-      options: options,
+      options: expectedOptions,
       isAggregated: true,
     };
-  }
+    expect(dataTablesOutputPayload).toEqual(expectedOutputPayload);
+  });
 
-  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload {
-    const seriesLength = uPlotData[0].length;
-    const seriesCount = uPlotData.length - 1;
-    const labels = Array.from(Array(seriesLength).keys()).map((seriesIndex) => `Moment ${seriesIndex + 1}`);
-    const seriesNames = [];
-    for(let i=0; i< seriesCount; i++) {
-      seriesNames.push(`Series ${i + 1}`);
-    }
-    const xAxisLabel = 'xAxisLabel';
-    const outputOptions = {
-      labels: labels,
-      series: seriesNames,
-      xAxisLabel: xAxisLabel,
-      graphType: graphType,
-    };
-    return {
-      type: OutputType.uPlot,
-      data: uPlotData,
-      isAggregated: true,
-      options: outputOptions
-    };
-  }
-
-  textOutputPayload(textData: string): OutputPayload {
-    return {
-      type: OutputType.text,
-      data: textData,
+  it('Should have textOutputPayload', () => {
+    const textData = 'text data output';
+    const textOutputPayload = fakeOutputPayloadFactory.textOutputPayload(textData);
+    const expectedOutputPayload = {
+      type:OutputType.text,
+      data:textData,
       isAggregated: false,
     };
-  }
-}
+    expect(textOutputPayload).toEqual(expectedOutputPayload);
+  });
+});

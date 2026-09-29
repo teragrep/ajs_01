@@ -43,24 +43,14 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from '../output/outputPayload';
+import {FakeNotebookFactory} from './fakeNotebookFactory';
+import {FakeNotebookFactoryImpl} from './fakeNotebookFactoryImpl';
 
-export interface ParagraphPayload {
-  dateCreated: number;
-  dateFinished: number;
-  dateStarted: number;
-  dateUpdated: number;
-  id: string;
-  jobName: string;
-  progress:number;
-  output?: OutputPayload;
-  status: string;
-  text: string;
-  title: string;
-  user: string;
-  settings:{
-    params:object,
-    forms:object
-  }
-  config:object
-}
+describe('FakeNotebookFactory unit test', () => {
+  const fakeNotebookFactory:FakeNotebookFactory = new FakeNotebookFactoryImpl();
+
+  it('Should generate fake notebooks', () => {
+    const generatedNotebooks = fakeNotebookFactory.fakeNotebooks(4);
+    expect(generatedNotebooks).toHaveLength(4);
+  });
+});

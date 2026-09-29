@@ -43,24 +43,23 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from '../output/outputPayload';
+import {uPlotDataFactory} from './uPlotDataFactory';
+import {uPlotDataFactoryImpl} from './uPlotDataFactoryImpl';
 
-export interface ParagraphPayload {
-  dateCreated: number;
-  dateFinished: number;
-  dateStarted: number;
-  dateUpdated: number;
-  id: string;
-  jobName: string;
-  progress:number;
-  output?: OutputPayload;
-  status: string;
-  text: string;
-  title: string;
-  user: string;
-  settings:{
-    params:object,
-    forms:object
-  }
-  config:object
-}
+describe('uPlotDataFactory unit test', () => {
+  const uPlotDataFactory:uPlotDataFactory = new uPlotDataFactoryImpl();
+
+  it('Should yield uPlotAlignedData', () => {
+    const seriesCount = 5;
+    const seriesLength = 10;
+    const uPlotAlignedData = uPlotDataFactory.uPlotAlignedData(seriesCount, seriesLength);
+    const expectedXAxis = [0,1,2,3,4,5,6,7,8,9];
+    expect(uPlotAlignedData).toHaveLength(6);
+    expect(uPlotAlignedData[0]).toEqual(expectedXAxis);
+    expect(uPlotAlignedData[1]).toHaveLength(10);
+    expect(uPlotAlignedData[2]).toHaveLength(10);
+    expect(uPlotAlignedData[3]).toHaveLength(10);
+    expect(uPlotAlignedData[4]).toHaveLength(10);
+    expect(uPlotAlignedData[5]).toHaveLength(10);
+  });
+});

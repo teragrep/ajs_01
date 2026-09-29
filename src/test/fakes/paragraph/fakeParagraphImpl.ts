@@ -70,12 +70,10 @@ export class FakeParagraphImpl implements FakeParagraph {
     const status = this._paragraphData.propertyExists('status') ? this._paragraphData.stringProperty('status') : '';
     const text = this._paragraphData.propertyExists('text') ? this._paragraphData.stringProperty('text') : '';
     const title = this._paragraphData.propertyExists('title') ? this._paragraphData.stringProperty('title') : '';
-    let config:ConfigPayload;
+    const progress = this._paragraphData.propertyExists('progress') ? this._paragraphData.numberProperty('progress') : 0;
+    let config:object;
     if(this._paragraphData.propertyExists('config')){
-      config = {
-        ...this._defaultConfig,
-        ...this._paragraphData.objectProperty('config')
-      };
+      config = this._paragraphData.objectProperty('config');
     }
     else{
       config = this._defaultConfig;
@@ -87,7 +85,7 @@ export class FakeParagraphImpl implements FakeParagraph {
       dateUpdated: this._dateNow,
       id: paragraphId,
       jobName: 'jobName',
-      progress: 0,
+      progress: progress,
       settings: {forms: undefined, params: undefined},
       status: status,
       text: text,

@@ -43,24 +43,23 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from '../output/outputPayload';
+import {FakeParagraphFactoryImpl} from './fakeParagraphFactoryImpl';
+import {FakeParagraphFactory} from './fakeParagraphFactory';
 
-export interface ParagraphPayload {
-  dateCreated: number;
-  dateFinished: number;
-  dateStarted: number;
-  dateUpdated: number;
-  id: string;
-  jobName: string;
-  progress:number;
-  output?: OutputPayload;
-  status: string;
-  text: string;
-  title: string;
-  user: string;
-  settings:{
-    params:object,
-    forms:object
-  }
-  config:object
-}
+describe('FakeParagraphFactory unit test', () => {
+  const fakeParagraphFactory:FakeParagraphFactory = new FakeParagraphFactoryImpl();
+
+  it('Should yield fake paragraphs', () => {
+    const count = 3;
+    const fakeParagraphs = fakeParagraphFactory.fakeParagraphs(count);
+    expect(fakeParagraphs).toHaveLength(3);
+    expect(fakeParagraphs[0].toPayload().output).toBeDefined();
+    expect(fakeParagraphs[1].toPayload().output).toBeDefined();
+    expect(fakeParagraphs[2].toPayload().output).toBeDefined();
+  });
+
+  it('Should have fake SparkParagraph', () => {
+    const fakeSparkParagraph = fakeParagraphFactory.fakeSparkParagraph();
+    expect(fakeSparkParagraph).toBeDefined();
+  });
+});
