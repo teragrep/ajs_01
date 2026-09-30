@@ -47,12 +47,13 @@ import {ParagraphPayload} from './paragraphPayload';
 import {OutputPayload} from '../output/outputPayload';
 import {ConfigPayload} from './config/configPayload';
 
-export interface FakeParagraph {
+export interface ParagraphPayloadFactory {
   toPayload():ParagraphPayload;
-  withOutput(output:OutputPayload):FakeParagraph;
-  withText(text:string):FakeParagraph;
-  withStatus(status:string):FakeParagraph;
-  withTitle(title:string):FakeParagraph;
-  withConfig(config:ConfigPayload):FakeParagraph;
-  withProgress(progress:number):FakeParagraph;
+  toSparkParagraphPayload():ParagraphPayload;
+  withOutput(output:OutputPayload):ParagraphPayloadFactory;
+  withText(text:string):ParagraphPayloadFactory;
+  withStatus(status:string):ParagraphPayloadFactory;
+  withTitle(title:string):ParagraphPayloadFactory;
+  withConfig(config:ConfigPayload):ParagraphPayloadFactory;
+  withProgress(progress:number):ParagraphPayloadFactory;
 }

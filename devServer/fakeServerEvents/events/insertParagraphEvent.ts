@@ -50,7 +50,7 @@ import {
   ParagraphAddedServerResponse
 } from '../../../src/test/fakes/webSocketServerResponses/paragraphAdded/paragraphAddedServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
-import {FakeParagraphImpl} from '../../../src/test/fakes/paragraph/fakeParagraphImpl';
+import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
 
 export default class InsertParagraphEvent implements FakeServerEvent{
   private readonly  _webSocket: WebSocket;
@@ -70,7 +70,7 @@ export default class InsertParagraphEvent implements FakeServerEvent{
   handle(requestMessage: Message):void {
     const noteId = this._noteService.lastNoteId();
     const notebook = this._noteService.find(noteId);
-    const paragraph = new FakeParagraphImpl();
+    const paragraph = new ParagraphPayloadFactoryImpl();
     const index = requestMessage.dataAsWebSocketPayload().numberProperty('index');
     notebook.paragraphs.splice(index, 0, paragraph.toPayload());
     this._noteService.update(notebook);

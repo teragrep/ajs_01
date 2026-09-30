@@ -57,8 +57,8 @@ import {
 import { Message } from '../../../src/app/objects/message/message';
 import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
-import {FakeParagraphImpl} from '../../../src/test/fakes/paragraph/fakeParagraphImpl';
-import {FakeParagraph} from '../../../src/test/fakes/paragraph/fakeParagraph';
+import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
+import {ParagraphPayloadFactory} from '../../../src/test/fakes/paragraph/paragraphPayloadFactory';
 import {FakeOutputPayloadFactory} from '../../../src/test/fakes/output/fakeOutputPayloadFactory';
 import {FakeOutputPayloadFactoryImpl} from '../../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
 
@@ -87,7 +87,7 @@ export default class RunParagraphEvent implements FakeServerEvent {
     const title = requestMessage.data()['title'];
     const text = requestMessageData.stringProperty('paragraph');
     const messageQueue: string[] = [];
-    const executedParagraph = new FakeParagraphImpl({id:paragraphId}).withStatus('PENDING').withTitle(title).withText(text);
+    const executedParagraph = new ParagraphPayloadFactoryImpl({id:paragraphId}).withStatus('PENDING').withTitle(title).withText(text);
     messageQueue.push(new ParagraphServerResponse(
       executedParagraph
     ).toJson());
@@ -133,7 +133,7 @@ export default class RunParagraphEvent implements FakeServerEvent {
     }
   }
 
-  private updateNotebook(paragraph: FakeParagraph){
+  private updateNotebook(paragraph: ParagraphPayloadFactory){
     const noteId = this._noteService.lastNoteId();
     const notebook = this._noteService.find(noteId);
     const paragraphPayload = paragraph.toPayload();

@@ -44,12 +44,12 @@
  * a licensee so wish it.
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
-import {FakeParagraph} from '../../paragraph/fakeParagraph';
+import {ParagraphPayloadFactory} from '../../paragraph/paragraphPayloadFactory';
 
 export class ParagraphServerResponse implements WebSocketServerResponse {
-  private readonly _paragraph:FakeParagraph;
+  private readonly _paragraph:ParagraphPayloadFactory;
 
-  constructor(paragraph:FakeParagraph) {
+  constructor(paragraph:ParagraphPayloadFactory) {
     this._paragraph = paragraph;
   }
 

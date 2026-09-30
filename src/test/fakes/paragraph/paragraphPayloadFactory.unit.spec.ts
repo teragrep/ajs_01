@@ -43,13 +43,13 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeParagraph} from './fakeParagraph';
-import {FakeParagraphImpl} from './fakeParagraphImpl';
+import {ParagraphPayloadFactory} from './paragraphPayloadFactory';
+import {ParagraphPayloadFactoryImpl} from './paragraphPayloadFactoryImpl';
 import {FakeConfigImpl} from './config/fakeConfigImpl';
 import {OutputPayload} from '../output/outputPayload';
 
-describe('FakeParagraph unit test', () => {
-  let fakeParagraph: FakeParagraph;
+describe('ParagraphPayloadFactory unit test', () => {
+  let paragraphPayloadFactory: ParagraphPayloadFactory;
   const output:OutputPayload  = {
     type:'type',
     data:{},
@@ -65,9 +65,9 @@ describe('FakeParagraph unit test', () => {
   };
 
   it('Should have default payload', () => {
-    fakeParagraph = new FakeParagraphImpl();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl();
     const expectedConfig = new FakeConfigImpl().toConfigPayload();
-    const payload = fakeParagraph.toPayload();
+    const payload = paragraphPayloadFactory.toPayload();
     expect(payload.id).toBeDefined();
     expect(payload.text).toEqual('');
     expect(payload.status).toEqual('');
@@ -88,8 +88,8 @@ describe('FakeParagraph unit test', () => {
       output:output,
       config:config
     };
-    fakeParagraph = new FakeParagraphImpl(payload);
-    const paragraphPayload = fakeParagraph.toPayload();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl(payload);
+    const paragraphPayload = paragraphPayloadFactory.toPayload();
     expect(paragraphPayload.id).toEqual(id);
     expect(paragraphPayload.text).toEqual(text);
     expect(paragraphPayload.status).toEqual(status);
@@ -100,38 +100,44 @@ describe('FakeParagraph unit test', () => {
   });
 
   it('Should have payload with output', () => {
-    fakeParagraph = new FakeParagraphImpl({output:output});
-    const paragraphPayload = fakeParagraph.toPayload();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl({output:output});
+    const paragraphPayload = paragraphPayloadFactory.toPayload();
     expect(paragraphPayload.output).toEqual(output);
   });
 
+  it('Should have spark paragraph payload', () => {
+    const sparkParagraphPayload = paragraphPayloadFactory.toSparkParagraphPayload();
+    expect(sparkParagraphPayload.title).toEqual('hideMeSparkPinger');
+    expect(sparkParagraphPayload.text).toEqual('%spark.conf');
+  });
+
   it('Should have payload with text', () => {
-    fakeParagraph = new FakeParagraphImpl({text:text});
-    const paragraphPayload = fakeParagraph.toPayload();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl({text:text});
+    const paragraphPayload = paragraphPayloadFactory.toPayload();
     expect(paragraphPayload.text).toEqual(text);
   });
 
   it('Should have payload with status', () => {
-    fakeParagraph = new FakeParagraphImpl({status:status});
-    const paragraphPayload = fakeParagraph.toPayload();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl({status:status});
+    const paragraphPayload = paragraphPayloadFactory.toPayload();
     expect(paragraphPayload.status).toEqual(status);
   });
 
   it('Should have payload with title', () => {
-    fakeParagraph = new FakeParagraphImpl({title:title});
-    const paragraphPayload = fakeParagraph.toPayload();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl({title:title});
+    const paragraphPayload = paragraphPayloadFactory.toPayload();
     expect(paragraphPayload.title).toEqual(title);
   });
 
   it('Should have payload with config', () => {
-    fakeParagraph = new FakeParagraphImpl({config:config});
-    const paragraphPayload = fakeParagraph.toPayload();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl({config:config});
+    const paragraphPayload = paragraphPayloadFactory.toPayload();
     expect(paragraphPayload.config).toEqual(config);
   });
 
   it('Should have payload with progress', () => {
-    fakeParagraph = new FakeParagraphImpl({progress:progress});
-    const paragraphPayload = fakeParagraph.toPayload();
+    paragraphPayloadFactory = new ParagraphPayloadFactoryImpl({progress:progress});
+    const paragraphPayload = paragraphPayloadFactory.toPayload();
     expect(paragraphPayload.progress).toEqual(progress);
   });
 });

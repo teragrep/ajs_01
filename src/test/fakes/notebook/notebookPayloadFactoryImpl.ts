@@ -43,15 +43,15 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeNotebook} from './fakeNotebook';
+import {NotebookPayloadFactory} from './notebookPayloadFactory';
 import {NotebookPayload} from './notebookPayload';
 import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketPayload';
 import {FakeIdImpl} from '../id/fakeIdImpl';
 import {ParagraphPayload} from '../paragraph/paragraphPayload';
-import { FakeParagraph } from '../paragraph/fakeParagraph';
+import { ParagraphPayloadFactory } from '../paragraph/paragraphPayloadFactory';
 
-export class FakeNotebookImpl implements FakeNotebook {
+export class NotebookPayloadFactoryImpl implements NotebookPayloadFactory {
   private readonly _notebookData: WebSocketPayload;
   private readonly _id:string;
   private readonly _name:string;
@@ -62,15 +62,15 @@ export class FakeNotebookImpl implements FakeNotebook {
     this._name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
   }
 
-  withParagraphs(fakeParagraphs: FakeParagraph[]): FakeNotebook {
-    return new FakeNotebookImpl({
+  withParagraphs(fakeParagraphs: ParagraphPayloadFactory[]): NotebookPayloadFactory {
+    return new NotebookPayloadFactoryImpl({
       ...this._notebookData,
       paragraphs: fakeParagraphs.map(fakeParagraph => fakeParagraph.toPayload()),
     });
   }
 
-  withName(name: string): FakeNotebook {
-    return new FakeNotebookImpl({
+  withName(name: string): NotebookPayloadFactory {
+    return new NotebookPayloadFactoryImpl({
       ...this._notebookData,
       name: name,
     });

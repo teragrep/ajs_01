@@ -44,11 +44,11 @@
  * a licensee so wish it.
  *
  */
-import {FakeNotebookImpl} from '../../notebook/fakeNotebookImpl';
+import {NotebookPayloadFactoryImpl} from '../../notebook/notebookPayloadFactoryImpl';
 import {NewNoteServerResponse} from './newNoteServerResponse';
 
 describe('New note server response unit test', () => {
-  const notebook = new FakeNotebookImpl();
+  const notebook = new NotebookPayloadFactoryImpl();
   const newNoteServerResponse = new NewNoteServerResponse(notebook);
   const expectedObject = {
     op:'NEW_NOTE',

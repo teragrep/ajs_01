@@ -43,12 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeNotebook} from './fakeNotebook';
-import {FakeNotebookImpl} from './fakeNotebookImpl';
-import {FakeParagraphImpl} from '../paragraph/fakeParagraphImpl';
+import {NotebookPayloadFactory} from './notebookPayloadFactory';
+import {NotebookPayloadFactoryImpl} from './notebookPayloadFactoryImpl';
+import {ParagraphPayloadFactoryImpl} from '../paragraph/paragraphPayloadFactoryImpl';
 
 describe('FakeNotebook unit test', () => {
-  let fakeNotebook: FakeNotebook;
+  let fakeNotebook: NotebookPayloadFactory;
 
   const paragraphs = [
     {id:'paragraph1'},
@@ -57,7 +57,7 @@ describe('FakeNotebook unit test', () => {
   const name = 'notebookName';
 
   it('Should have default payload', () => {
-    fakeNotebook = new FakeNotebookImpl();
+    fakeNotebook = new NotebookPayloadFactoryImpl();
     const notebookPayload = fakeNotebook.toPayload();
     const notebookId = notebookPayload.id;
     const notebookName = notebookPayload.name;
@@ -87,7 +87,7 @@ describe('FakeNotebook unit test', () => {
       config: config,
       paragraphs: paragraphs
     };
-    fakeNotebook = new FakeNotebookImpl(payload);
+    fakeNotebook = new NotebookPayloadFactoryImpl(payload);
     const notebookPayload = fakeNotebook.toPayload();
     const notebookId = notebookPayload.id;
     const notebookName = notebookPayload.name;
@@ -102,15 +102,15 @@ describe('FakeNotebook unit test', () => {
   });
 
   it('Should have payload with paragraphs', () => {
-    const fakeParagraphs = [new FakeParagraphImpl(), new FakeParagraphImpl()];
-    fakeNotebook = new FakeNotebookImpl().withParagraphs(fakeParagraphs);
+    const fakeParagraphs = [new ParagraphPayloadFactoryImpl(), new ParagraphPayloadFactoryImpl()];
+    fakeNotebook = new NotebookPayloadFactoryImpl().withParagraphs(fakeParagraphs);
     const notebookPayload = fakeNotebook.toPayload();
     const notebookParagraphs = notebookPayload.paragraphs;
     expect(notebookParagraphs).toHaveLength(2);
   });
 
   it('Should have payload with name', () => {
-    fakeNotebook = new FakeNotebookImpl().withName(name);
+    fakeNotebook = new NotebookPayloadFactoryImpl().withName(name);
     const notebookPayload = fakeNotebook.toPayload();
     const notebookName = notebookPayload.name;
     expect(notebookName).toEqual(name);

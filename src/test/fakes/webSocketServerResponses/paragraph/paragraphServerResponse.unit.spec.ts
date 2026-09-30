@@ -44,10 +44,10 @@
  * a licensee so wish it.
  */
 import {ParagraphServerResponse} from './paragraphServerResponse';
-import {FakeParagraphImpl} from '../../paragraph/fakeParagraphImpl';
+import {ParagraphPayloadFactoryImpl} from '../../paragraph/paragraphPayloadFactoryImpl';
 
 describe('Paragraph server response unit test', () => {
-  const paragraph = new FakeParagraphImpl();
+  const paragraph = new ParagraphPayloadFactoryImpl();
   const paragraphServerResponse = new ParagraphServerResponse(paragraph);
 
   const expectedObject = {

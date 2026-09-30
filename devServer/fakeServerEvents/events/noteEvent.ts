@@ -48,7 +48,7 @@ import {FakeServerEvent} from '../fakeServerEvent';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {NoteServerResponse} from '../../../src/test/fakes/webSocketServerResponses/note/noteServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
-import {FakeNotebookImpl} from '../../../src/test/fakes/notebook/fakeNotebookImpl';
+import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
 
 export default class NoteEvent implements FakeServerEvent {
   private readonly  _webSocket: WebSocket;
@@ -68,7 +68,7 @@ export default class NoteEvent implements FakeServerEvent {
   handle(requestMessage: Message):void {
     const noteId = requestMessage.dataAsWebSocketPayload().stringProperty('id');
     const note = this._noteService.find(noteId);
-    const noteResponse = new NoteServerResponse(new FakeNotebookImpl(note));
+    const noteResponse = new NoteServerResponse(new NotebookPayloadFactoryImpl(note));
     this._webSocket.send(noteResponse.toJson());
   }
 }

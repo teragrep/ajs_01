@@ -44,10 +44,10 @@
  * a licensee so wish it.
  */
 import {NotebookPayload} from './notebookPayload';
-import {FakeParagraph} from '../paragraph/fakeParagraph';
+import {ParagraphPayloadFactory} from '../paragraph/paragraphPayloadFactory';
 
-export interface FakeNotebook {
+export interface NotebookPayloadFactory {
   toPayload(): NotebookPayload;
-  withName(name: string): FakeNotebook;
-  withParagraphs(fakeParagraphs: FakeParagraph[]): FakeNotebook;
+  withName(name: string): NotebookPayloadFactory;
+  withParagraphs(fakeParagraphs: ParagraphPayloadFactory[]): NotebookPayloadFactory;
 }

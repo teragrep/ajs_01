@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeParagraph} from './fakeParagraph';
+import {ParagraphPayloadFactory} from './paragraphPayloadFactory';
 import {ParagraphPayload} from './paragraphPayload';
 import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketPayload';
 import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSocketPayloadImpl';
@@ -52,7 +52,7 @@ import {ConfigPayload} from './config/configPayload';
 import {FakeIdImpl} from '../id/fakeIdImpl';
 import {FakeConfigImpl} from './config/fakeConfigImpl';
 
-export class FakeParagraphImpl implements FakeParagraph {
+export class ParagraphPayloadFactoryImpl implements ParagraphPayloadFactory {
   private readonly _paragraphData: WebSocketPayload;
   private readonly _rawParagraphData: object;
   private readonly _id:string;
@@ -65,6 +65,10 @@ export class FakeParagraphImpl implements FakeParagraph {
     this._id = this._paragraphData.propertyExists('id') ? this._paragraphData.stringProperty('id') : new FakeIdImpl().id();
     this._dateNow = Date.now();
     this._defaultConfig = new FakeConfigImpl().toConfigPayload();
+  }
+
+  toSparkParagraphPayload(): ParagraphPayload {
+    return this.withText('%spark.conf').withTitle('hideMeSparkPinger').toPayload();
   }
 
   toPayload(): ParagraphPayload {
@@ -113,51 +117,51 @@ export class FakeParagraphImpl implements FakeParagraph {
     return outputPayload;
   }
 
-  withProgress(progress: number): FakeParagraph {
+  withProgress(progress: number): ParagraphPayloadFactory {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,
       progress:progress,
     };
-    return new FakeParagraphImpl(paragraphDataWithOutput);
+    return new ParagraphPayloadFactoryImpl(paragraphDataWithOutput);
   }
 
-  withOutput(output:OutputPayload): FakeParagraph {
+  withOutput(output:OutputPayload): ParagraphPayloadFactory {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,
       output:output,
     };
-    return new FakeParagraphImpl(paragraphDataWithOutput);
+    return new ParagraphPayloadFactoryImpl(paragraphDataWithOutput);
   }
 
-  withText(text:string): FakeParagraph {
+  withText(text:string): ParagraphPayloadFactory {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,
       text:text,
     };
-    return new FakeParagraphImpl(paragraphDataWithOutput);
+    return new ParagraphPayloadFactoryImpl(paragraphDataWithOutput);
   }
 
-  withStatus(status: string): FakeParagraph {
+  withStatus(status: string): ParagraphPayloadFactory {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,
       status:status,
     };
-    return new FakeParagraphImpl(paragraphDataWithOutput);
+    return new ParagraphPayloadFactoryImpl(paragraphDataWithOutput);
   }
 
-  withTitle(title: string): FakeParagraph {
+  withTitle(title: string): ParagraphPayloadFactory {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,
       title:title,
     };
-    return new FakeParagraphImpl(paragraphDataWithOutput);
+    return new ParagraphPayloadFactoryImpl(paragraphDataWithOutput);
   }
 
-  withConfig(config: ConfigPayload): FakeParagraph {
+  withConfig(config: ConfigPayload): ParagraphPayloadFactory {
     const paragraphDataWithOutput = {
       ...this._rawParagraphData,
       config:config,
     };
-    return new FakeParagraphImpl(paragraphDataWithOutput);
+    return new ParagraphPayloadFactoryImpl(paragraphDataWithOutput);
   }
 }
