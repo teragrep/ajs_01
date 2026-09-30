@@ -43,11 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotebookPayload} from './notebookPayload';
-import {ParagraphPayload} from '../paragraph/paragraphPayload';
-
-export interface NotebookPayloadFactory {
-  toPayload(): NotebookPayload;
-  withName(name: string): NotebookPayloadFactory;
-  withParagraphs(paragraphPayloads: ParagraphPayload[]): NotebookPayloadFactory;
+export interface AppDataSeeder {
+  seedFakes(path:string):void;
 }

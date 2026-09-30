@@ -62,10 +62,10 @@ export class NotebookPayloadFactoryImpl implements NotebookPayloadFactory {
     this._name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
   }
 
-  withParagraphs(fakeParagraphs: ParagraphPayloadFactory[]): NotebookPayloadFactory {
+  withParagraphs(paragraphPayloads: ParagraphPayload[]): NotebookPayloadFactory {
     return new NotebookPayloadFactoryImpl({
       ...this._notebookData,
-      paragraphs: fakeParagraphs.map(fakeParagraph => fakeParagraph.toPayload()),
+      paragraphs: paragraphPayloads,
     });
   }
 

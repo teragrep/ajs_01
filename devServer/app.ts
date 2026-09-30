@@ -53,7 +53,13 @@ import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
 import {existsSync, mkdirSync} from 'fs';
 import FileServiceImpl from './services/fileService/fileServiceImpl';
 import NoteServiceImpl from './services/noteService/noteServiceImpl';
-import {FakeNotebookFactoryImpl} from '../src/test/fakes/notebook/notebookFactory/fakeNotebookFactoryImpl';
+import {NotebookPayload} from '../src/test/fakes/notebook/notebookPayload';
+import {NotebookPayloadFactory} from '../src/test/fakes/notebook/notebookPayloadFactory';
+import {NotebookPayloadFactoryImpl} from '../src/test/fakes/notebook/notebookPayloadFactoryImpl';
+import {ParagraphPayload} from '../src/test/fakes/paragraph/paragraphPayload';
+import {ParagraphPayloadFactory} from '../src/test/fakes/paragraph/paragraphPayloadFactory';
+import {AppDataSeeder} from './appDataSeeder/appDataSeeder';
+import {AppDataSeederImpl} from './appDataSeeder/appDataSeederImpl';
 
 const app = express();
 app.use(express.json());
@@ -77,16 +83,9 @@ app.use(express.static(PUBLIC_PATH));
 //Seed fake data
 const basePath = './devServer/temp';
 const fileService = new FileServiceImpl(basePath);
-if(!existsSync(basePath)){
-  mkdirSync(basePath);
-  const noteService = new NoteServiceImpl(fileService);
-  const fakeNotebookCount = 3;
-  const fakeNotebookFactory = new FakeNotebookFactoryImpl();
-  const fakeNotebooks = fakeNotebookFactory.fakeNotebooks(fakeNotebookCount);
-  fakeNotebooks.map(fakeNotebook => {
-    noteService.add(fakeNotebook.toPayload());
-  });
-}
+const noteService = new NoteServiceImpl(fileService);
+const appDataSeeder:AppDataSeeder = new AppDataSeederImpl(noteService);
+appDataSeeder.seedFakes(basePath);
 
 new WebSocketServer(fileService);
 

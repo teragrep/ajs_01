@@ -48,20 +48,20 @@ import {FakeServerEvent} from '../fakeServerEvent';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {NewNoteServerResponse} from '../../../src/test/fakes/webSocketServerResponses/newNote/newNoteServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
-import {FakeNotebookFactory} from '../../../src/test/fakes/notebook/notebookFactory/fakeNotebookFactory';
-import {FakeNotebookFactoryImpl} from '../../../src/test/fakes/notebook/notebookFactory/fakeNotebookFactoryImpl';
+import {NotebookPayloadFactory} from '../../../src/test/fakes/notebook/notebookPayloadFactory';
+import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
 
 export default class NewNoteEvent implements FakeServerEvent{
   private readonly  _webSocket: WebSocket;
   private readonly _eventId: string;
   private readonly _noteService: NoteServiceImpl;
-  private readonly _fakeNotebookFactory:FakeNotebookFactory;
+  private readonly _notebookPayloadFactory:NotebookPayloadFactory;
 
   constructor(webSocket:WebSocket, noteService: NoteServiceImpl) {
     this._webSocket = webSocket;
     this._noteService = noteService;
     this._eventId = 'NEW_NOTE';
-    this._fakeNotebookFactory = new FakeNotebookFactoryImpl();
+    this._notebookPayloadFactory = new NotebookPayloadFactoryImpl();
   }
 
   eventId(): string {
@@ -70,9 +70,9 @@ export default class NewNoteEvent implements FakeServerEvent{
 
   handle(requestMessage: Message):void {
     const name = requestMessage.dataAsWebSocketPayload().stringProperty('name');
-    const notebook = this._fakeNotebookFactory.fakeNotebooks(1)[0].withName(name);
-    this._noteService.add(notebook.toPayload());
-    const newNoteResponse = new NewNoteServerResponse(notebook);
+    const notebookPayload = this._notebookPayloadFactory.withName(name).toPayload();
+    this._noteService.add(notebookPayload);
+    const newNoteResponse = new NewNoteServerResponse(notebookPayload);
     this._webSocket.send(newNoteResponse.toJson());
   }
 }
