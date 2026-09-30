@@ -48,11 +48,11 @@ import {NotebookPayloadFactoryImpl} from '../../notebook/notebookPayloadFactoryI
 import {NewNoteServerResponse} from './newNoteServerResponse';
 
 describe('New note server response unit test', () => {
-  const notebook = new NotebookPayloadFactoryImpl();
-  const newNoteServerResponse = new NewNoteServerResponse(notebook);
+  const notebookPayloadFactory = new NotebookPayloadFactoryImpl();
+  const newNoteServerResponse = new NewNoteServerResponse(notebookPayloadFactory.toPayload());
   const expectedObject = {
     op:'NEW_NOTE',
-    data:notebook.toPayload()
+    data:notebookPayloadFactory.toPayload()
   };
 
   it('Should have object', () => {
