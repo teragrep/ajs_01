@@ -101,7 +101,6 @@ export default class RunParagraphEvent implements FakeServerEvent {
     }
     const rowCount = 1000;
     const rawData = this._dataTablesDataFactory.rawData(rowCount);
-    const outputOptions = {headers:Object.keys(rawData[0])};
     const draws = 5;
     const noteId = this._noteService.lastNoteId();
     const startIndex = 0;
@@ -120,9 +119,7 @@ export default class RunParagraphEvent implements FakeServerEvent {
     const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, finalOutput);
     messageQueue.push(paragraphOutputResponse.toJson());
     messageQueue.push(new ParagraphServerResponse(
-      executedParagraph.withStatus('FINISHED').withProgress(100).withOutput(
-        {data: finalOutput, options: outputOptions, type:OutputType.dataTables, isAggregated:true}
-      )
+      executedParagraph.withStatus('FINISHED').withProgress(100).withOutput(finalOutput)
     ).toJson());
     this.updateNotebook(executedParagraph);
     for(let i = 0; i < messageQueue.length; i++) {
