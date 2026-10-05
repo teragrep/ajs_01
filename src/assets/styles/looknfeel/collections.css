@@ -43,6 +43,27 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+
+/* Box */
+
+.box {
+  border-style: solid;
+  min-height: 20px;
+  padding: var(--p-8) var(--p-7);
+  margin-bottom: var(--m-6);
+  background: var(--grey-000);
+  border-color: var(--grey-300);
+  border-width: 1px 1px 2px;
+  border-radius: 20px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.dark-mode .box {
+  background: var(--dm-grey-700);
+  border-color: var(--dm-grey-700);
+}
+
 /* settings&collections header */
 
 .settings-header {
@@ -84,7 +105,7 @@
       border-radius: 0;
     }
   }
-  .control {
+  .paragraph-control {
     color: var(--grey-700);
     font-size: 12px;
   }
@@ -93,7 +114,7 @@
 .dark-mode .job {
   background: var(--dm-grey-700);
   box-shadow: 0 2px 4px var(--dm-grey-900);
-  .control {
+  .paragraph-control {
     color: var(--dm-grey-300);
   }
 }
@@ -291,7 +312,7 @@
   node Controls CSS
 */
 
-.node .runControl {
+.node .run-control {
   font-size: 1px;
   color: #AAAAAA;
   height:4px;
@@ -305,7 +326,7 @@
   }
 }
 
-.node .control {
+.node .paragraph-control {
   background: rgba(255,255,255,0.85);
   float: right;
   color: #999;
