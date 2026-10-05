@@ -51,7 +51,7 @@
   font: 500 16px 'Roboto', sans-serif;
   &.btn-small,
   &.btn-sm {
-    padding: 3px 10px;
+    padding: var(--p-1) var(--p-3);
     font-size: 14px;
   }
   &.btn-dropdown {

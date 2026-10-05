@@ -46,17 +46,11 @@
 
  @media print {
 
-   body {
-     padding-top: 0;
-   }
+   body { padding-top: 0; }
 
-   .navbar-fixed-top {
-      display: none !important;
-   }
+   .navbar-fixed-top { display: none !important; }
 
-   .note-action {
-      position: initial;
-   }
+   .note-action { position: initial; }
 
    .note-action .btn-group,
    .note-action .label-btn,
@@ -64,16 +58,10 @@
       display: none !important;
    }
 
-   .control span[class^="icon-"] {
+   .paragraph-control span[class^="icon-"] {
       display: none;
    }
 
-   .notebookContent {
-     padding-top: 0;
-   }
-
-   .new-paragraph {
-      display: none;
-   }
+   .new-paragraph { display: none; }
 
  }

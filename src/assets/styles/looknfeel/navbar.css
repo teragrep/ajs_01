@@ -51,7 +51,7 @@
   height: var(--navbar-height);
   .navbar-collapse {
     @media only screen and (max-width: 991px) {
-      padding: 20px 0;
+      padding: var(--p-6) 0;
       border-top: 1px solid var(--primary-600);
     }
   }
@@ -150,7 +150,7 @@
       display: inline-block;
       text-align: center;
       color: var(--primary-700);
-      margin-right: 5px;
+      margin-right: var(--p-2);
       @media only screen and (max-width: 992px) {
         color: var(--primary-300);
       }
@@ -162,9 +162,9 @@
     @media only screen and (max-width: 992px) {
       max-height: calc(100vh - 250px);
       .notebook-list-item {
-        padding: 5px;
+        padding: var(--p-2);
         border-radius: 20px;
-        margin: 5px 15px;
+        margin: var(--p-2) var(--p-5);
         background: var(--primary-800);
       }
     }
@@ -173,13 +173,13 @@
     }
     .form-control-search {
       position: absolute;
-      margin: 11px 0 0 12px;
+      margin: var(--p-4) 0 0 var(--p-4);
       font-size: 13px;
       line-height: 1;
       color: var(--grey-600);
     }
     .note-name-query {
-      padding: 6px 6px 4px 32px;
+      padding: var(--p-2) var(--p-2) var(--p-1) var(--p-7);
       font-size: 14px;
       border: 1px solid var(--grey-400) !important;
     }
