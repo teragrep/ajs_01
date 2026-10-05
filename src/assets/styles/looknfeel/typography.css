@@ -47,9 +47,7 @@
 a {
   color: var(--primary-700);
   text-decoration: none;
-  &:hover {
-    color: var(--primary-900);
-  }
+  &:hover { color: var(--primary-900); }
   .out-link {
     font-size: 10px;
     color: var(--primary-400) !important;
@@ -58,12 +56,8 @@ a {
 
 .dark-mode a {
   color: var(--tertiary-200);
-  &:hover {
-    color: var(--tertiary-300);
-  }
-  .out-link {
-    color: var(--tertiary-400) !important;
-  }
+  &:hover { color: var(--tertiary-300); }
+  .out-link { color: var(--tertiary-400) !important; }
 }
 
 code {
@@ -76,14 +70,6 @@ code {
   background: var(--dm-grey-500);
 }
 
-.dark-mode text {
-  fill: white;
-}
-
-.dark-mode .nv-legend-text {
-  fill: white;
-}
-
 hr {
   color: var(--grey-300);
   opacity: 1;
@@ -93,32 +79,32 @@ hr {
   color: var(--dm-grey-500);
 }
 
-.text-muted {
-  color: var(--grey-700) !important;
-}
+.text-muted { color: var(--grey-700) !important; }
 
 .dark-mode .text-muted {
   color: var(--dm-grey-200) !important;
 }
 
-.fs-6 {
-  font-size: 1rem !important;
-}
+.fs-6 { font-size: 1rem !important; }
 
-.password {
-  font-size: 10px;
-}
+.password { font-size: 10px; }
 
 /* Titles */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Roboto', sans-serif;
   font-weight: bold;
   text-transform: uppercase;
   color: var(--grey-900);
-  margin-top: 24px;
-  margin-bottom: 10px;
-  .fas, .far {
+  margin-top: var(--m-6);
+  margin-bottom: var(--m-4);
+  .fas,
+  .far {
     vertical-align: middle;
   }
 }
@@ -131,7 +117,12 @@ h5 {font-size: 18px;}
 h6 {font-size: 16px;}
 
 .dark-mode {
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: var(--dm-grey-100);
   }
 }
@@ -145,10 +136,15 @@ div > :first-child {
 .markdown-body {
   font: 16px var(--font-body-text) !important;
   color: var(--grey-800) !important;
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Roboto', sans-serif !important;
-    margin-top: 24px;
-    margin-bottom: 10px;
+    margin-top: var(--m-6);
+    margin-bottom: var(--m-4);
     color: var(--grey-900);
   }
   h1 {
@@ -170,8 +166,8 @@ div > :first-child {
     background: var(--grey-300) !important;
   }
   blockquote {
-    margin: 10px 0 !important;
-    padding: 10px 15px !important;
+    margin: var(--m-4) 0 !important;
+    padding: var(--p-4) var(--p-5) !important;
     border-left: 5px solid var(--secondary-300) !important;
     font-family: var(--font-body-text);
     font-style: italic;
@@ -179,19 +175,20 @@ div > :first-child {
     background: white;
     color: var(--grey-700) !important;
   }
-  li {
-    padding-left: 10px;
-  }
+  li { padding-left: var(--p-4); }
 }
 
 .dark-mode .markdown-body {
   color: var(--dm-grey-200) !important;
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: var(--dm-grey-100);
   }
-  code {
-    background: var(--dm-grey-500) !important;
-  }
+  code { background: var(--dm-grey-500) !important; }
   blockquote {
     color: var(--dm-grey-300) !important;
     background: var(--dm-grey-700);
@@ -200,7 +197,8 @@ div > :first-child {
 
 /* status colors */
 
-.status-ready, .status-finished {
+.status-ready,
+.status-finished {
   color: var(--tertiary-400);
 }
 
@@ -224,11 +222,13 @@ div > :first-child {
   color: var(--dm-grey-300);
 }
 
-.status-running, .status-waiting {
+.status-running,
+.status-waiting {
   color: var(--primary-700);
 }
 
-.dark-mode .status-running, .status-waiting {
+.dark-mode .status-running,
+.dark-mode .status-waiting {
   color: var(--primary-400);
 }
 
@@ -266,7 +266,7 @@ div > :first-child {
     color: var(--primary-600);
     border: 1px solid var(--grey-400);
     background-color: var(--grey-000);
-    padding: .375rem .75rem;
+    padding: var(--p-2) var(--p-4);
     display: block;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
   }
