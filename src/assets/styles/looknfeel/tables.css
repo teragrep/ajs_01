@@ -47,7 +47,8 @@
 table {
   border-collapse: collapse !important;
   box-sizing: border-box !important;
-  tbody tr, thead tr {
+  tbody tr,
+  thead tr {
     background: var(--grey-000) !important;
   }
 }
@@ -57,7 +58,12 @@ table {
   background: var(--dm-grey-700) !important;
 }
 
-thead, tbody, tfoot, tr, td, th {
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
   border-color: var(--grey-300);
 }
 
@@ -81,7 +87,7 @@ thead, tbody, tfoot, tr, td, th {
   > thead > tr > td,
   > tbody > tr > td,
   > tfoot > tr > td {
-    padding: 10px 15px !important;
+    padding: var(--p-4) var(--p-5) !important;
   }
   > :not(:first-child) {
     border-top: 2px solid var(--grey-400);
@@ -202,28 +208,3 @@ table.dataTable tr.dtrg-group th {
 .dark-mode div.dt-scroll-body {
   --bs-border-color: var(--dm-grey-500);
 }
-
-/*
-.table-bordered,
-.table-bordered > tbody > tr > td,
-.table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > td,
-.table-bordered > tfoot > tr > th,
-.table-bordered > thead > tr > td,
-.table-bordered > thead > tr > th {
-  border: 1px solid #CBD5E0 !important;
-}
-
-.dark-mode .table-bordered,
-.dark-mode .table-bordered > tbody > tr > td,
-.dark-mode .table-bordered > tbody > tr > th,
-.dark-mode .table-bordered > tfoot > tr > td,
-.dark-mode .table-bordered > tfoot > tr > th,
-.dark-mode .table-bordered > thead > tr > td,
-.dark-mode .table-bordered > thead > tr > th {
-  border: 1px solid var(--dm-grey-500) !important;
-}
-
-.dark-mode table.dataTable tbody tr {
-  background: transparent;
-}*/
