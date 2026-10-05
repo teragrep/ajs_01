@@ -393,7 +393,7 @@
     cursor: pointer;
   }
   .shortcut-icon {
-    padding-right: 7px;
+    padding-right: var(--p-3);
     float: left;
   }
   .shortcut-keys {
@@ -446,8 +446,8 @@
   color: var(--grey-700);
   border-left: 5px solid var(--primary-300);
   border-radius: 4px;
-  padding: 5px 10px;
-  margin-bottom: 15px;
+  padding: var(--p-2) var(--p-4);
+  margin-bottom: var(--m-5);
 }
 
 .dark-mode .timeset-info {
@@ -556,7 +556,7 @@ table.dataTable .timestamp-table {
       width: 100%;
       display: flex;
       align-items: center;
-      padding-top: 10px;
+      padding-top: var(--p-4);
       input {
         width: inherit;
       }
