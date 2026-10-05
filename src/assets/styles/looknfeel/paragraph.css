@@ -161,37 +161,6 @@
   background-color: var(--secondary-500);
 }
 
-/* Paragraph as Iframe CSS */
-
-.paragraph-iframe {
-  padding: 0;
-  .paragraph-control { display: none; }
-  table {
-    margin-bottom: 0;
-  }
-  .editor {
-    width: 100%;
-    border-left: 4px solid var(--grey-500);
-    background: rgba(255, 255, 255, 0.9);
-  }
-  .text {
-    white-space: pre;
-    display: block !important;
-    unicode-bidi: embed;
-    margin: 0 10px 5px !important;
-    font-size: 12px !important;
-    line-height: 1.42857143 !important;
-    word-break: break-all !important;
-    word-wrap: break-word !important;
-    font-family: 'Roboto Mono', monospace;
-  }
-  .title {
-    font-weight: bold;
-    font-size: 20px !important;
-    color: var(--primary-900);
-  }
-}
-
 /* Paragraph Controls */
 
 .paragraph .run-control {
