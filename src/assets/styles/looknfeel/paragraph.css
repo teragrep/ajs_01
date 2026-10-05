@@ -517,7 +517,7 @@
   margin-left: -1.25rem;
   margin-right: -1.25rem;
   margin-bottom: -1rem;
-  padding: 1rem 0.45rem;
+  padding: var(--p-5) var(--p-3);
   text-align: right;
 }
 

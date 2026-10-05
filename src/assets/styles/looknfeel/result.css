@@ -52,7 +52,7 @@
   ol,
   ul,
   dl {
-    padding-left: 20px;
+    padding-left: var(--p-6);
   }
   img {
     max-width: 100%;
@@ -72,11 +72,11 @@
     border: none !important;
     font-weight: bold;
     text-align: left !important;
-    padding: 10px 15px !important;
+    padding: var(--p-4) var(--p-5) !important;
   }
   td {
     border: none !important;
-    padding: 10px 15px !important
+    padding: var(--p-4) var(--p-5) !important;
   }
   tbody tr {
     border-bottom: 1px solid var(--grey-300);
