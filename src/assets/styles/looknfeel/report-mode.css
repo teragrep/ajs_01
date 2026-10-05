@@ -68,7 +68,7 @@
   .paragraph {
     min-height: 32px;
     padding: 0 0 10px;
-    .control {
+    .paragraph-control {
       display: none !important;
     }
   }

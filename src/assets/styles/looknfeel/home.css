@@ -264,24 +264,4 @@
   color: var(--dm-grey-300) !important;
 }
 
-/* Box */
-
-.box {
-  border-style: solid;
-  min-height: 20px;
-  padding: var(--p-8) var(--p-7);
-  margin-bottom: var(--m-6);
-  background: var(--grey-000);
-  border-color: var(--grey-300);
-  border-width: 1px 1px 2px;
-  border-radius: 20px;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.dark-mode .box {
-  background: var(--dm-grey-700);
-  border-color: var(--dm-grey-700);
-}
-
 
