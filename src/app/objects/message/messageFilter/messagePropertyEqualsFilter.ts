@@ -58,9 +58,12 @@ export class MessagePropertyEqualsFilter implements MessageFilter {
 
   filterMessage(message: Message): Message {
     const property = message.data()[this._propertyName];
-    let filteredMessage = message;
+    let filteredMessage:Message;
     if(property && property !== this._propertyValue){
       filteredMessage = new MessageStub();
+    }
+    else{
+      filteredMessage = message;
     }
     return filteredMessage;
   }
