@@ -51,7 +51,7 @@ import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl'
 describe('PropertyDecoratedMessage unit test', () => {
   const propertyName = 'propertyName';
   const propertyValue = 'propertyValue';
-  let propertyDecoratedMessage: Omit<Message, 'dataAsWebSocketPayload'> ;
+  let propertyDecoratedMessage: Message;
   const operation = 'op';
 
   it('Should decorate data', () => {
@@ -66,6 +66,7 @@ describe('PropertyDecoratedMessage unit test', () => {
       [propertyName]:propertyValue
     };
     expect(propertyDecoratedMessage.data()).toEqual(expectedData);
+    expect(propertyDecoratedMessage.dataAsWebSocketPayload().stringProperty(propertyName)).toEqual(propertyValue);
     expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 

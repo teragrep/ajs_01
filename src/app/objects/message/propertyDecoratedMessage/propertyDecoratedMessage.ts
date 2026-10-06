@@ -43,17 +43,27 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import { WebSocketPayload } from '../../webSocketPayload/webSocketPayload';
 import {Message} from '../message';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-export class PropertyDecoratedMessage implements Omit<Message, 'dataAsWebSocketPayload'> {
-  private readonly _message:Message;
+export class PropertyDecoratedMessage implements Message {
+  private readonly _message: Message;
   private readonly _propertyName: string;
   private readonly _propertyValue: unknown;
 
-  constructor(message:Message, propertyName: string, propertyValue: unknown) {
+  constructor(message: Message, propertyName: string, propertyValue: unknown) {
     this._message = message;
     this._propertyName = propertyName;
     this._propertyValue = propertyValue;
+  }
+
+  dataAsWebSocketPayload(): WebSocketPayload {
+    return new WebSocketPayloadImpl(this.data());
+  }
+
+  isStub(): boolean {
+    return this._message.isStub();
   }
 
   data(): object {
