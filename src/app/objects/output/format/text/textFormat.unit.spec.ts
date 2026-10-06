@@ -68,27 +68,29 @@ describe('TextFormat unit test', () => {
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
+    const textData = 'test';
     beforeEach(() => {
       outputResponse = {
         op:'PARAGRAPH_OUTPUT',
         data:{
           output:{
             type:OutputType.text,
-            data:'',
+            data:textData,
           }
         }
       };
       textFormat.response(outputResponse);
     });
 
-    it('Should have OutputView', () => {
+    it('Should have RenderNode', () => {
       const textFormatPrinted = textFormat.print()();
       expect(textFormatPrinted.isStub()).toBe(false);
+      expect(textFormatPrinted.inputs()()['textOutput']).toEqual(textData);
     });
 
-    it('Should not have componentView after output type change', () => {
+    it('Should have RenderNodeStub', () => {
       outputResponse.data.output.type = '';
       textFormat.response(outputResponse);
       const textFormatPrinted = textFormat.print()();

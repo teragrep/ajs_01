@@ -83,7 +83,7 @@ describe('DataTablesFormat unit test', () => {
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
     beforeEach(() => {
       outputResponse = {
@@ -99,9 +99,10 @@ describe('DataTablesFormat unit test', () => {
       dataTablesFormat.response(outputResponse);
     });
 
-    it('Should have componentView', () => {
+    it('Should have RenderNode', () => {
       const dataTablesFormatPrinted = dataTablesFormat.print()();
       expect(dataTablesFormatPrinted.isStub()).toBe(false);
+      expect(dataTablesFormat.print()().inputs()()['dataTablesPlugin']).toBeDefined();
     });
 
     it('Should respond plugin on consequential output responses', () => {
@@ -113,7 +114,7 @@ describe('DataTablesFormat unit test', () => {
       expect(spy).toHaveBeenCalledTimes(3);
     });
 
-    it('Should not have component view after output type change', () => {
+    it('Should have RenderNode stub', () => {
       outputResponse.data.output.type = '';
       dataTablesFormat.response(outputResponse);
       const dataTablesFormatPrinted = dataTablesFormat.print()();

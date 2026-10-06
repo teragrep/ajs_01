@@ -68,27 +68,29 @@ describe('HTMLFormat unit test', () => {
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
+    const htmlTemplate = '<div>test</div>';
     beforeEach(() => {
       outputResponse = {
         op:'PARAGRAPH_OUTPUT',
         data:{
           output:{
             type:OutputType.html,
-            data:'',
+            data:htmlTemplate,
           }
         }
       };
       htmlFormat.response(outputResponse);
     });
 
-    it('Should have componentView', () => {
+    it('Should have RenderNode', () => {
       const htmlFormatPrinted = htmlFormat.print()();
       expect(htmlFormatPrinted.isStub()).toBe(false);
+      expect(htmlFormatPrinted.inputs()()['htmlTemplate']).toEqual(htmlTemplate);
     });
 
-    it('Should not have componentView after output type change', () => {
+    it('Should have RenderNode stub', () => {
       outputResponse.data.output.type = '';
       htmlFormat.response(outputResponse);
       const htmlFormatPrinted = htmlFormat.print()();

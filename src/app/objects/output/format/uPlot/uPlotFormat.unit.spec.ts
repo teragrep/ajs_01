@@ -82,20 +82,22 @@ describe('uPlotFormat unit test', () => {
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
+    const graphType = 'graphType';
+    const uPlotData = [[1,2,3],[1,2,3]];
     beforeEach(() => {
       outputResponse = {
         op:'PARAGRAPH_OUTPUT',
         data:{
           output:{
             type:OutputType.uPlot,
-            data:{},
+            data:uPlotData,
             options:{
               labels:[],
               series:[],
               xAxisLabel:'',
-              graphType:''
+              graphType:graphType,
             }
           }
         }
@@ -103,12 +105,16 @@ describe('uPlotFormat unit test', () => {
       uPlotFormat.response(outputResponse);
     });
 
-    it('Should have componentView', () => {
+    it('Should have RenderNode', () => {
       const uPlotFormatPrinted = uPlotFormat.print()();
+      const inputs = uPlotFormatPrinted.inputs()();
       expect(uPlotFormatPrinted.isStub()).toBe(false);
+      expect(inputs['graphType']).toEqual(graphType);
+      expect(inputs['basicOptions']).toBeDefined();
+      expect(inputs['uPlotData']).toEqual(uPlotData);
     });
 
-    it('Should not have component view after output type change', () => {
+    it('Should have RenderNode stub', () => {
       outputResponse.data.output.type = '';
       uPlotFormat.response(outputResponse);
       const uPlotFormatPrinted = uPlotFormat.print()();
