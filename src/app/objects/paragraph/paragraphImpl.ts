@@ -105,7 +105,7 @@ export class ParagraphImpl implements Paragraph {
 
   response(json: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const filteredMessage = this._paragraphIdFilter.filteredMessage(message);
+    const filteredMessage = this._paragraphIdFilter.filterMessage(message);
     if(!filteredMessage.isStub()) {
       this._outputContainer.response({
         op:filteredMessage.operation(),

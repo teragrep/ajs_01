@@ -99,7 +99,7 @@ export class NotebookImpl implements Notebook {
 
   response(json: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const filteredMessage = this._noteIdFilter.filteredMessage(message);
+    const filteredMessage = this._noteIdFilter.filterMessage(message);
     if(!filteredMessage.isStub()){
       this._paragraphCollection.response({
         op:filteredMessage.operation(),

@@ -44,8 +44,7 @@
  * a licensee so wish it.
  */
 import {Message} from '../message';
-import {FilteredMessage} from '../propertyFilteredMessage/filteredMessage';
 
 export interface MessageFilter {
-  filteredMessage(message:Message): FilteredMessage;
+  filterMessage(message:Message): Message;
 }

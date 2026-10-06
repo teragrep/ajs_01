@@ -61,7 +61,7 @@ describe('MessagePropertyFilter unit test', () => {
         [propertyName]:propertyValue
       }
     }));
-    const filteredMessage = messagePropertyFilter.filteredMessage(messageWithFilteredProperty);
+    const filteredMessage = messagePropertyFilter.filterMessage(messageWithFilteredProperty);
     expect(filteredMessage.isStub()).toBe(false);
   });
 
@@ -70,7 +70,7 @@ describe('MessagePropertyFilter unit test', () => {
       op:'',
       data:{}
     }));
-    const filteredMessage = messagePropertyFilter.filteredMessage(messageWithoutFilteredProperty);
+    const filteredMessage = messagePropertyFilter.filterMessage(messageWithoutFilteredProperty);
     expect(filteredMessage.isStub()).toBe(false);
   });
 
@@ -81,7 +81,7 @@ describe('MessagePropertyFilter unit test', () => {
         [propertyName]:'wrongValue'
       }
     }));
-    const filteredMessage = messagePropertyFilter.filteredMessage(messageWithNotEqualPropertyValue);
+    const filteredMessage = messagePropertyFilter.filterMessage(messageWithNotEqualPropertyValue);
     expect(filteredMessage.isStub()).toBe(true);
   });
 });

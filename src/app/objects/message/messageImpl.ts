@@ -65,4 +65,8 @@ export class MessageImpl implements Message{
   operation(): string {
     return this._webSocketPayload.stringProperty('op');
   }
+
+  isStub(): boolean {
+    return false;
+  }
 }

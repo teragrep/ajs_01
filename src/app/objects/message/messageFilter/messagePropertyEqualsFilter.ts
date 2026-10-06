@@ -45,9 +45,7 @@
  */
 import {MessageFilter} from './messageFilter';
 import {Message} from '../message';
-import {FilteredMessage} from '../propertyFilteredMessage/filteredMessage';
-import {FilteredMessageStub} from '../propertyFilteredMessage/filteredMessageStub';
-import {FilteredMessageImpl} from '../propertyFilteredMessage/filteredMessageImpl';
+import {MessageStub} from '../messageStub';
 
 export class MessagePropertyEqualsFilter implements MessageFilter {
   private readonly _propertyName: string;
@@ -58,15 +56,12 @@ export class MessagePropertyEqualsFilter implements MessageFilter {
     this._propertyValue = propertyValue;
   }
 
-  filteredMessage(message: Message): FilteredMessage {
-    let stubableMessage: FilteredMessage;
+  filterMessage(message: Message): Message {
     const property = message.data()[this._propertyName];
+    let filteredMessage = message;
     if(property && property !== this._propertyValue){
-      stubableMessage = new FilteredMessageStub();
+      filteredMessage = new MessageStub();
     }
-    else{
-      stubableMessage = new FilteredMessageImpl(message);
-    }
-    return stubableMessage;
+    return filteredMessage;
   }
 }
