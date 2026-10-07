@@ -58,6 +58,7 @@ export class LineSeries implements GraphSeries {
       label: label,
       stroke: rgbColor.toString(),
       width: 2,
+      spanGaps:true
     };
   }
 }

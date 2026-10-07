@@ -59,6 +59,7 @@ export class AreaSeries implements GraphSeries {
       stroke: rgbColor.toString(),
       width: 2,
       fill: rgbColor.toString(0.3),
+      spanGaps:true
     };
   }
 }
