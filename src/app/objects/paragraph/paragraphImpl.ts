@@ -56,7 +56,7 @@ import {ComponentView} from '../rendering/componentView/componentView';
 import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
 import {MessageImpl} from '../message/messageImpl';
-import {PropertyDecoratedMessage} from '../message/propertyDecoratedMessage/propertyDecoratedMessage';
+import {MessageWithField} from '../message/messageWithField/messageWithField';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;
@@ -96,7 +96,7 @@ export class ParagraphImpl implements Paragraph {
 
   request(json: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const paragraphIdDecoratedMessage = new PropertyDecoratedMessage(message, 'paragraphId', this.id());
+    const paragraphIdDecoratedMessage = new MessageWithField(message, 'paragraphId', this.id());
     this._channel.request({
       op:paragraphIdDecoratedMessage.operation(),
       data:paragraphIdDecoratedMessage.data()

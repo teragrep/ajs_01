@@ -43,43 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {PropertyDecoratedMessage} from './propertyDecoratedMessage';
+import {MessageWithField} from './messageWithField';
 import {MessageImpl} from '../messageImpl';
 import {Message} from '../message';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-describe('PropertyDecoratedMessage unit test', () => {
+describe('MessageWithField unit test', () => {
   const propertyName = 'propertyName';
   const propertyValue = 'propertyValue';
   let propertyDecoratedMessage: Message;
   const operation = 'op';
 
-  it('Should decorate data', () => {
-    const messageWithPropertyToDecorate = new MessageImpl(new WebSocketPayloadImpl({
+  it('Should decorate message', () => {
+    const messageToDecorate = new MessageImpl(new WebSocketPayloadImpl({
       op:operation,
-      data:{
-        [propertyName]:''
-      }
+      data:{}
     }));
-    propertyDecoratedMessage = new PropertyDecoratedMessage(messageWithPropertyToDecorate, propertyName, propertyValue);
+    propertyDecoratedMessage = new MessageWithField(messageToDecorate, propertyName, propertyValue);
     const expectedData = {
       [propertyName]:propertyValue
     };
     expect(propertyDecoratedMessage.data()).toEqual(expectedData);
     expect(propertyDecoratedMessage.dataAsWebSocketPayload().stringProperty(propertyName)).toEqual(propertyValue);
-    expect(propertyDecoratedMessage.operation()).toEqual(operation);
-  });
-
-  it('Should not decorate message', () => {
-    const messageData ={
-      test:'test'
-    };
-    const messageWithoutPropertyToDecorate = new MessageImpl(new WebSocketPayloadImpl({
-      op:'op',
-      data:messageData
-    }));
-    propertyDecoratedMessage = new PropertyDecoratedMessage(messageWithoutPropertyToDecorate, propertyName, propertyValue);
-    expect(propertyDecoratedMessage.data()).toEqual(messageData);
     expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 });

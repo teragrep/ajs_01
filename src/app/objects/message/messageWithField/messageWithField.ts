@@ -47,15 +47,15 @@ import { WebSocketPayload } from '../../webSocketPayload/webSocketPayload';
 import {Message} from '../message';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-export class PropertyDecoratedMessage implements Message {
+export class MessageWithField implements Message {
   private readonly _message: Message;
-  private readonly _propertyName: string;
-  private readonly _propertyValue: unknown;
+  private readonly _fieldName: string;
+  private readonly _fieldValue: unknown;
 
-  constructor(message: Message, propertyName: string, propertyValue: unknown) {
+  constructor(message: Message, fieldName: string, fieldValue: unknown) {
     this._message = message;
-    this._propertyName = propertyName;
-    this._propertyValue = propertyValue;
+    this._fieldName = fieldName;
+    this._fieldValue = fieldValue;
   }
 
   dataAsWebSocketPayload(): WebSocketPayload {
@@ -68,9 +68,7 @@ export class PropertyDecoratedMessage implements Message {
 
   data(): object {
     const messageData= this._message.data();
-    if(this._propertyName in messageData){
-      messageData[this._propertyName] = this._propertyValue;
-    }
+    messageData[this._fieldName] = this._fieldValue;
     return messageData;
   }
 

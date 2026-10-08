@@ -54,7 +54,7 @@ import {RenderNode} from '../rendering/renderNode/renderNode';
 import {ComponentView} from '../rendering/componentView/componentView';
 import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {MessageFilter} from '../message/messageFilter/messageFilter';
-import {PropertyDecoratedMessage} from '../message/propertyDecoratedMessage/propertyDecoratedMessage';
+import {MessageWithField} from '../message/messageWithField/messageWithField';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
 import {MessageImpl} from '../message/messageImpl';
 
@@ -90,7 +90,7 @@ export class NotebookImpl implements Notebook {
 
   request(json: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const noteIdDecoratedMessage = new PropertyDecoratedMessage(message, 'noteId', this.id());
+    const noteIdDecoratedMessage = new MessageWithField(message, 'noteId', this.id());
     this._channel.request({
       op:noteIdDecoratedMessage.operation(),
       data:noteIdDecoratedMessage.data()
