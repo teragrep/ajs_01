@@ -45,7 +45,7 @@
  */
 import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
 import {ComponentFixture} from '@angular/core/testing';
-import {RenderNodeHostView} from './renderNodeHostView';
+import {RenderNodeRootView} from './renderNodeRootView';
 import {render} from '@testing-library/angular';
 import {By} from '@angular/platform-browser';
 import {RenderNodeStub} from '../../../objects/rendering/renderNode/renderNodeStub';
@@ -53,13 +53,13 @@ import {FakeRenderNode} from '../../../../test/fakes/fakeRenderNode';
 import {FakeComponentRegistryProvider} from '../../../../test/fakes/fakeComponentRegistryProvider';
 import {FakeComponent} from '../../../../test/fakes/fakeComponent';
 
-describe('RenderNodeHostView integration test', () => {
+describe('RenderNodeRootView integration test', () => {
   let renderNode:RenderNode;
-  let fixture: ComponentFixture<RenderNodeHostView>;
+  let fixture: ComponentFixture<RenderNodeRootView>;
 
   beforeEach(async () => {
     renderNode = new FakeRenderNode();
-    const renderResult = await render(RenderNodeHostView, {
+    const renderResult = await render(RenderNodeRootView, {
       inputs:{
         renderNode: renderNode
       },

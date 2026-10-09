@@ -45,12 +45,12 @@
  */
 import {Component, input} from '@angular/core';
 import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
-import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
+import {RenderNodeRootView} from '../renderNodeRoot/renderNodeRootView';
 
 @Component({
   selector: 'paragraph-collection',
   imports: [
-    RenderNodeHostView
+    RenderNodeRootView
   ],
   template: `
     @for(paragraph of paragraphs(); track $index){

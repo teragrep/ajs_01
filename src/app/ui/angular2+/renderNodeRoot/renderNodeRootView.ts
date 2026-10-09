@@ -65,7 +65,7 @@ import {NgComponentOutlet} from '@angular/common';
     }
   `
 })
-export class RenderNodeHostView {
+export class RenderNodeRootView {
   renderNode = input.required<RenderNode>();
   containerId = input<string>('');
 

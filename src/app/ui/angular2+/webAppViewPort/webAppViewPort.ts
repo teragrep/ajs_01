@@ -45,12 +45,12 @@
  */
 import {Component, computed, input} from '@angular/core';
 import {webAppRoot} from '../../../objects/webAppRoot/webAppRootImpl';
-import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
+import {RenderNodeRootView} from '../renderNodeRoot/renderNodeRootView';
 
 @Component({
   selector: 'web-app-view-port',
   imports: [
-    RenderNodeHostView
+    RenderNodeRootView
   ],
   template: `
     <render-node-host [renderNode]="renderNode()" [containerId]="containerId()"></render-node-host>

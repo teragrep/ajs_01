@@ -46,12 +46,12 @@
 import {Component, input, Signal} from '@angular/core';
 import {NgComponentOutlet} from '@angular/common';
 import {RenderNode} from '../../../../objects/rendering/renderNode/renderNode';
-import {RenderNodeHostView} from '../../renderNodeHost/renderNodeHostView';
+import {RenderNodeRootView} from '../../renderNodeRoot/renderNodeRootView';
 
 @Component({
   selector: 'output-switcher',
   imports: [
-    RenderNodeHostView
+    RenderNodeRootView
   ],
   template: `
     @if (outputIsSwitchable()) {
