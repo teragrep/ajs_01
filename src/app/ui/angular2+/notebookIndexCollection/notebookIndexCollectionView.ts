@@ -48,15 +48,17 @@ import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
 import {RenderNodeRootView} from '../renderNodeRoot/renderNodeRootView';
 
 @Component({
-  selector: 'notebook-collection',
+  selector: 'notebook-index-collection',
   imports: [
     RenderNodeRootView
   ],
   template: `
-    <render-node-host [renderNode]="currentNotebook()" [containerId]="containerId()"></render-node-host>
+    @for(notebookIndex of notebookIndices(); track $index){
+      <render-node-host [renderNode]="notebookIndex" [containerId]="containerId()"></render-node-host>
+    }
   `
 })
-export class NotebookCollectionView {
-  currentNotebook = input.required<RenderNode>();
+export class NotebookIndexCollectionView {
+  notebookIndices = input.required<RenderNode[]>();
   containerId = input.required<string>();
 }
