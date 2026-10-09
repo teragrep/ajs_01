@@ -45,36 +45,39 @@
  */
 import {Paragraph} from './paragraph';
 import {Channel} from '../channel/channel';
-import {OutputContainer} from '../output/container/outputContainer';
-import {OutputContainerImpl} from '../output/container/outputContainerImpl';
+import {Output} from '../output/output';
+import {OutputImpl} from '../output/outputImpl';
 import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
 import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
-import {computed, Signal} from '@angular/core';
+import {signal, Signal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
-import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
-import {ComponentView} from '../rendering/componentView/componentView';
 import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
+import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
 import {MessageImpl} from '../message/messageImpl';
 import {MessageWithField} from '../message/messageWithField/messageWithField';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;
-  private readonly _outputContainer: OutputContainer;
+  private readonly _output: Output;
   private readonly _paragraph: WebSocketPayload;
-  private readonly _componentView: ComponentView;
+  private readonly _renderNode: Signal<RenderNode>;
   private readonly _paragraphIdFilter: MessagePropertyEqualsFilter;
 
   constructor(channel: Channel, paragraph: object) {
     this._channel = channel;
     this._paragraph = new WebSocketPayloadImpl(paragraph);
-    this._outputContainer = this.initializedOutputContainer(paragraph);
-    this._componentView = new ComponentViewStub();
+    this._output = this.initializedOutput(paragraph);
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, signal({
+      output:this._output.print()(),
+      paragraphId:this.id()
+    })));
     this._paragraphIdFilter = new MessagePropertyEqualsFilter('paragraphId', this.id());
   }
 
-  private initializedOutputContainer(paragraph: object): OutputContainer {
-    const outputContainer = new OutputContainerImpl(this, this.id());
+  private initializedOutput(paragraph: object): Output {
+    const outputContainer = new OutputImpl(this);
     const paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraph);
     const paragraphOutputMessage = paragraphOutputMessageFactory.paragraphOutputMessage();
     if(!paragraphOutputMessage.isStub()){
@@ -84,10 +87,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      children:computed(() => [this._outputContainer.print()()]),
-      componentView: this._componentView
-    }));
+    return this._renderNode;
   }
 
   id(): string {
@@ -107,7 +107,7 @@ export class ParagraphImpl implements Paragraph {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
     const filteredMessage = this._paragraphIdFilter.filterMessage(message);
     if(!filteredMessage.isStub()) {
-      this._outputContainer.response({
+      this._output.response({
         op:filteredMessage.operation(),
         data:filteredMessage.data()
       });

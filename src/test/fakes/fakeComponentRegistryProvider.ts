@@ -43,7 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../channel/channel';
-import {Printable} from '../../rendering/printable/printable';
+import {FakeComponent} from './fakeComponent';
+import {FakeComponentRegistry} from './fakeComponentRegistry';
+import {COMPONENT_REGISTRY} from '../../app/ui/angular2+/componentRegistry/componentRegistry';
 
-export interface OutputContainer extends Channel, Printable{}
+export const FakeComponentRegistryProvider = {provide: COMPONENT_REGISTRY, useValue:new Map([[FakeComponentRegistry.FAKE_COMPONENT, FakeComponent]])};

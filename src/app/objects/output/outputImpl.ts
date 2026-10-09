@@ -43,36 +43,40 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../channel/channel';
-import {OutputFormat} from '../format/outputFormat';
-import {computed, Signal} from '@angular/core';
-import {RenderNode} from '../../rendering/renderNode/renderNode';
-import {DataTablesFormatImpl} from '../format/dataTables/dataTablesFormatImpl';
-import {HTMLFormat} from '../format/html/htmlFormat';
-import {UPlotFormatImpl} from '../format/uPlot/uPlotFormatImpl';
-import {TextFormat} from '../format/text/textFormat';
-import {AngularFormatImpl} from '../format/angular/angularFormatImpl';
-import {OutputSwitcherImpl} from '../switcher/outputSwitcherImpl';
-import {OutputSwitcher} from '../switcher/outputSwitcher';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../message/messageImpl';
+import {Output} from './output';
+import {computed, signal, Signal} from '@angular/core';
+import {RenderNode} from '../rendering/renderNode/renderNode';
+import {Channel} from '../channel/channel';
+import {InterpreterErrorListenerImpl} from '../interpreterErrorListener/interpreterErrorListenerImpl';
+import {InterpreterErrorListener} from '../interpreterErrorListener/interpreterErrorListener';
+import {OutputFormat} from './format/outputFormat';
+import {OutputSwitcher} from './switcher/outputSwitcher';
 import {ParagraphOutputRequest} from './paragraphOutputRequest/paragraphOutputRequest';
-import {ParagraphOutputRequestImpl} from './paragraphOutputRequest/paragraphOutputRequestImpl';
-import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
+import {DataTablesFormatImpl} from './format/dataTables/dataTablesFormatImpl';
+import {HTMLFormat} from './format/html/htmlFormat';
+import {UPlotFormatImpl} from './format/uPlot/uPlotFormatImpl';
+import {TextFormat} from './format/text/textFormat';
+import {AngularFormatImpl} from './format/angular/angularFormatImpl';
+import {OutputSwitcherImpl} from './switcher/outputSwitcherImpl';
 import {ParagraphOutputRequestStub} from './paragraphOutputRequest/paragraphOutputRequestStub';
-import {ComponentViewStub} from '../../rendering/componentView/componentViewStub';
-import {ComponentView} from '../../rendering/componentView/componentView';
-import {OutputFormats} from './outputFormats';
+import {MessageImpl} from '../message/messageImpl';
+import {ParagraphOutputRequestImpl} from './paragraphOutputRequest/paragraphOutputRequestImpl';
+import {ParagraphOutputMessageImpl} from '../message/paragraphOutputMessage/paragraphOutputMessageImpl';
+import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
+import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 
-export class OutputFormatsImpl implements OutputFormats {
-  private readonly _channel: Channel;
+export class OutputImpl implements Output {
+  private readonly _channel:Channel;
+  private readonly _interpreterErrorListener:InterpreterErrorListener;
   private readonly _outputFormats: OutputFormat[];
   private readonly _outputSwitcher:OutputSwitcher;
   private _previousParagraphOutputRequest: ParagraphOutputRequest;
-  private readonly _componentView:ComponentView;
+  private readonly _renderNode: Signal<RenderNode>;
 
-  constructor(channel: Channel) {
+  constructor(channel:Channel) {
     this._channel = channel;
+    this._interpreterErrorListener = new InterpreterErrorListenerImpl();
     this._outputFormats = [
       new DataTablesFormatImpl(this),
       new HTMLFormat(),
@@ -83,22 +87,15 @@ export class OutputFormatsImpl implements OutputFormats {
     const buttons = this._outputFormats.map(format => format.switcherButtons());
     this._outputSwitcher = new OutputSwitcherImpl(buttons.flat());
     this._previousParagraphOutputRequest = new ParagraphOutputRequestStub();
-    this._componentView = new ComponentViewStub();
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_VIEW, computed(() => ({
+      interpreterErrorListener: this._interpreterErrorListener.print()(),
+      outputSwitcher: this._outputSwitcher.print()(),
+      outputFormats: this._outputFormats.map(outputFormat => outputFormat.print()()),
+    }))));
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView,
-      children: computed(() => {
-        const renderableList: RenderNode[] = [
-          this._outputSwitcher.print()()
-        ];
-        this._outputFormats.forEach(outputFormat => {
-          renderableList.push(outputFormat.print()());
-        });
-        return renderableList;
-      }),
-    }));
+    return this._renderNode;
   }
 
   request(json: object) {
@@ -116,10 +113,11 @@ export class OutputFormatsImpl implements OutputFormats {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(!this._previousParagraphOutputRequest.isStub() && paragraphOutputMessage.type() !== this._previousParagraphOutputRequest.type()){
         this._channel.request(this._previousParagraphOutputRequest.request());
-        return;
       }
-      this._outputFormats.forEach(format => format.response(json));
-      this._outputSwitcher.response(json);
+      else{
+        this._outputFormats.forEach(format => format.response(json));
+        this._outputSwitcher.response(json);
+      }
     }
   }
 }

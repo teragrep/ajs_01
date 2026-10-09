@@ -45,15 +45,15 @@
  */
 import {Component, computed, input} from '@angular/core';
 import {webAppRoot} from '../../../objects/webAppRoot/webAppRootImpl';
-import {RecursiveComponentDraw} from '../recursiveComponentDraw/recursiveComponentDraw';
+import {RenderNodeRootView} from '../renderNodeRoot/renderNodeRootView';
 
 @Component({
   selector: 'web-app-view-port',
   imports: [
-    RecursiveComponentDraw
+    RenderNodeRootView
   ],
   template: `
-    <recursive-component-draw [renderNode]="renderNode()" [containerId]="containerId()"></recursive-component-draw>
+    <render-node-host [renderNode]="renderNode()" [containerId]="containerId()"></render-node-host>
   `
 })
 export class WebAppViewPort {

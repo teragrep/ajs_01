@@ -43,39 +43,18 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputContainer} from './outputContainer';
-import {Channel} from '../../channel/channel';
-import {FakeChannel} from '../../channel/fakeChannel';
-import {OutputContainerImpl} from './outputContainerImpl';
-
-describe('OutputContainer', () => {
-  let channel:Channel;
-  let outputContainer:OutputContainer;
-
-  beforeEach(() => {
-    channel = new FakeChannel();
-    outputContainer = new OutputContainerImpl(channel, 'paragraphId');
-  });
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(outputContainer).toBeInstanceOf(OutputContainerImpl);
-    });
-
-    it('Should print', () => {
-      const outputContainerPrinted = outputContainer.print()();
-      expect(outputContainerPrinted.children()).toHaveLength(2);
-      expect(outputContainerPrinted.componentView.isStub()).toBe(true);
-      expect(outputContainerPrinted.paragraphId).toEqual('paragraphId');
-    });
-  });
-
-  describe('Request', () => {
-    it('Should request channel', () => {
-      const channelSpy = vi.spyOn(channel, 'request');
-      const request = {test:'test'};
-      outputContainer.request(request);
-      expect(channelSpy).toHaveBeenCalledExactlyOnceWith(request);
-    });
-  });
-});
+export enum RegisteredComponents {
+  INTERPRETER_ERROR_VIEW ='INTERPRETER_ERROR_VIEW',
+  ANGULAR_OUTPUT_VIEW = 'ANGULAR_OUTPUT_VIEW',
+  DATATABLES_OUTPUT_VIEW = 'DATATABLES_OUTPUT_VIEW',
+  HTML_OUTPUT_VIEW = 'HTML_OUTPUT_VIEW',
+  TEXT_OUTPUT_VIEW = 'TEXT_OUTPUT_VIEW',
+  UPLOT_OUTPUT_VIEW = 'UPLOT_OUTPUT_VIEW',
+  OUTPUT_SWITCHER_VIEW = 'OUTPUT_SWITCHER_VIEW',
+  OUTPUT_SWITCHER_BUTTON_VIEW = 'OUTPUT_SWITCHER_BUTTON_VIEW',
+  NOTEBOOK_COLLECTION_VIEW = 'NOTEBOOK_COLLECTION_VIEW',
+  NOTEBOOK_VIEW = 'NOTEBOOK_VIEW',
+  PARAGRAPH_COLLECTION_VIEW = 'PARAGRAPH_COLLECTION_VIEW',
+  PARAGRAPH_VIEW = 'PARAGRAPH_VIEW',
+  OUTPUT_VIEW = 'OUTPUT_VIEW',
+}

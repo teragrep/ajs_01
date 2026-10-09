@@ -43,10 +43,20 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import Stubable from '../../../shared/interfaces/stubable';
-import {Signal} from '@angular/core';
+import {Component, input} from '@angular/core';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {RenderNodeRootView} from '../renderNodeRoot/renderNodeRootView';
 
-export interface ComponentView extends Stubable{
-  component(): new () => unknown;
-  inputs():Signal<Record<string, unknown>>;
+@Component({
+  selector: 'notebook',
+  imports: [
+    RenderNodeRootView
+  ],
+  template: `
+    <render-node-host [renderNode]="paragraphCollection()" [containerId]="containerId()"></render-node-host>
+  `
+})
+export class NotebookView {
+  paragraphCollection = input.required<RenderNode>();
+  containerId = input.required<string>();
 }

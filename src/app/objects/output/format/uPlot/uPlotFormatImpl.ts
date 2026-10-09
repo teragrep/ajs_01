@@ -47,25 +47,24 @@ import {uPlotSwitcherButton} from './switcherButton/uPlotSwitcherButton';
 import {GraphType} from './graphType';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 import {OutputType} from '../../outputType';
-import {computed, signal, Signal, WritableSignal} from '@angular/core';
+import {signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
 import {Channel} from '../../../channel/channel';
 import {MessageImpl} from '../../../message/messageImpl';
 import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
-import {ComponentView} from '../../../rendering/componentView/componentView';
-import {ComponentViewStub} from '../../../rendering/componentView/componentViewStub';
-import {ComponentViewImpl} from '../../../rendering/componentView/componentViewImpl';
-import {UPlotOutputView} from '../../../../ui/angular2+/output/outputViews/uPlotOutputView/uPlotOutputView';
 import {Printable} from '../../../rendering/printable/printable';
 import {UPlotFormat} from './uPlotFormat';
 import uPlot from 'uplot';
 import {BasicOptionsImpl} from './uPlotPlugin/configuration/options/basicOptionsImpl';
+import {RenderNodeStub} from '../../../rendering/renderNode/renderNodeStub';
+import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
 
 export class UPlotFormatImpl implements UPlotFormat {
   private readonly _channel: Channel;
   private readonly _switcherButtons: Printable[];
-  private readonly _componentViewStub: ComponentView;
-  private readonly _componentView: WritableSignal<ComponentView>;
+  private readonly _renderNode: WritableSignal<RenderNode>;
+  private readonly _renderNodeStub: RenderNode;
 
   constructor(channel: Channel) {
     this._channel = channel;
@@ -75,8 +74,8 @@ export class UPlotFormatImpl implements UPlotFormat {
       new uPlotSwitcherButton(this,'Bar Chart', 'fas fa-chart-bar', GraphType.bar),
       new uPlotSwitcherButton(this,'Scatter Chart', 'cf cf-scatter-chart', GraphType.scatter),
     ];
-    this._componentViewStub = new ComponentViewStub();
-    this._componentView = signal(this._componentViewStub);
+    this._renderNodeStub = new RenderNodeStub();
+    this._renderNode = signal(this._renderNodeStub);
   }
 
   request(json: object): void {
@@ -88,7 +87,7 @@ export class UPlotFormatImpl implements UPlotFormat {
     if(message.operation() === 'PARAGRAPH_OUTPUT') {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.uPlot){
-        this._componentView.set(this._componentViewStub);
+        this._renderNode.set(this._renderNodeStub);
       }
       else{
         const uPlotData:uPlot.AlignedData = paragraphOutputMessage.outputData('object') as uPlot.AlignedData;
@@ -98,16 +97,13 @@ export class UPlotFormatImpl implements UPlotFormat {
         const xAxisLabel = safeOutputOptions.stringProperty('xAxisLabel');
         const graphType = safeOutputOptions.stringProperty('graphType');
         const basicOptions = new BasicOptionsImpl(labels, series, xAxisLabel, graphType);
-        this._componentView.set(new ComponentViewImpl(UPlotOutputView, signal({graphType: graphType, basicOptions: basicOptions, uPlotData: uPlotData})));
+        this._renderNode.set(new RenderNodeImpl(RegisteredComponents.UPLOT_OUTPUT_VIEW, signal({graphType: graphType, basicOptions: basicOptions, uPlotData: uPlotData})));
       }
     }
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView(),
-      children: computed(() => [])
-    }));
+    return this._renderNode;
   }
 
   switcherButtons(): Signal<RenderNode>[] {

@@ -43,24 +43,26 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ComponentView} from './componentView';
-import {Signal} from '@angular/core';
+import {ParagraphOutputRequest} from './paragraphOutputRequest';
+import {Message} from '../../message/message';
+import {TypedMessage} from '../../message/typedMessage/typedMessage';
 
-export class ComponentViewImpl implements ComponentView {
-  private readonly _component:new () => unknown;
-  private readonly _inputs: Signal<Record<string, unknown>>;
+export class ParagraphOutputRequestImpl implements ParagraphOutputRequest {
+  private readonly _message:Message;
 
-  constructor(component: new () => unknown, inputs: Signal<Record<string, unknown>>) {
-    this._component = component;
-    this._inputs = inputs;
+  constructor(message:Message) {
+    this._message = new TypedMessage('PARAGRAPH_OUTPUT_REQUEST', message);
   }
 
-  component(): new () => unknown{
-    return this._component;
+  request(): object {
+    return {
+      op:this._message.operation(),
+      data:this._message.data(),
+    };
   }
 
-  inputs(): Signal<Record<string, unknown>> {
-   return this._inputs;
+  type(): string {
+    return this._message.data()['type'];
   }
 
   isStub(): boolean {

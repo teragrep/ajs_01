@@ -64,36 +64,37 @@ describe('TextFormat unit test', () => {
 
     it('Should print', () => {
       const textFormatPrinted = textFormat.print()();
-      expect(textFormatPrinted.componentView.isStub()).toBe(true);
-      expect(textFormatPrinted.children()).toHaveLength(0);
+      expect(textFormatPrinted.isStub()).toBe(true);
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
+    const textData = 'test';
     beforeEach(() => {
       outputResponse = {
         op:'PARAGRAPH_OUTPUT',
         data:{
           output:{
             type:OutputType.text,
-            data:'',
+            data:textData,
           }
         }
       };
       textFormat.response(outputResponse);
     });
 
-    it('Should have OutputView', () => {
-      const componentView = textFormat.print()().componentView;
-      expect(componentView.isStub()).toBe(false);
-      expect(componentView.inputs()()['textOutput']).toBeDefined();
+    it('Should have RenderNode', () => {
+      const textFormatPrinted = textFormat.print()();
+      expect(textFormatPrinted.isStub()).toBe(false);
+      expect(textFormatPrinted.inputs()()['textOutput']).toEqual(textData);
     });
 
-    it('Should not have componentView after output type change', () => {
+    it('Should have RenderNodeStub', () => {
       outputResponse.data.output.type = '';
       textFormat.response(outputResponse);
-      expect(textFormat.print()().componentView.isStub()).toBe(true);
+      const textFormatPrinted = textFormat.print()();
+      expect(textFormatPrinted.isStub()).toBe(true);
     });
   });
 });

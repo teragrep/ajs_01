@@ -43,21 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DataTableSwitcherButton} from './dataTablesSwitcherButton';
-import {FakeChannel} from '../../../../channel/fakeChannel';
+import {RenderNode} from './renderNode';
+import {RenderNodeImpl} from './renderNodeImpl';
+import {signal} from '@angular/core';
 
-describe('DataTables SwitcherButton unit test', () => {
-  const request = new FakeChannel();
-  const dataTablesSwitcherButton = new DataTableSwitcherButton(request);
+describe('RenderNode unit test', () => {
+  let renderNode: RenderNode;
+  const componentView = 'componentView';
+  const inputs = signal({test:'test'});
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(dataTablesSwitcherButton).toBeDefined();
-    });
+  beforeEach(() => {
+    renderNode = new RenderNodeImpl(componentView, inputs);
+  });
 
-    it('Should print', () => {
-      const dataTableSwitcherButtonPrinted = dataTablesSwitcherButton.print()();
-      expect(dataTableSwitcherButtonPrinted.isStub()).toBe(false);
-    });
+  it('Should not be a stub', () => {
+    expect(renderNode.isStub()).toBe(false);
+  });
+
+  it('Should have componentView', () => {
+    expect(renderNode.componentView()).toEqual(componentView);
+  });
+
+  it('Should have inputs', () => {
+    expect(renderNode.inputs()()).toEqual(inputs());
   });
 });

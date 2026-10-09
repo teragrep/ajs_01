@@ -64,36 +64,37 @@ describe('HTMLFormat unit test', () => {
 
     it('Should print', () => {
       const htmlFormatPrinted = htmlFormat.print()();
-      expect(htmlFormatPrinted.componentView.isStub()).toBe(true);
-      expect(htmlFormatPrinted.children()).toHaveLength(0);
+      expect(htmlFormatPrinted.isStub()).toBe(true);
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
+    const htmlTemplate = '<div>test</div>';
     beforeEach(() => {
       outputResponse = {
         op:'PARAGRAPH_OUTPUT',
         data:{
           output:{
             type:OutputType.html,
-            data:'',
+            data:htmlTemplate,
           }
         }
       };
       htmlFormat.response(outputResponse);
     });
 
-    it('Should have componentView', () => {
-      const componentView = htmlFormat.print()().componentView;
-      expect(componentView.isStub()).toBe(false);
-      expect(componentView.inputs()()['htmlTemplate']).toBeDefined();
+    it('Should have RenderNode', () => {
+      const htmlFormatPrinted = htmlFormat.print()();
+      expect(htmlFormatPrinted.isStub()).toBe(false);
+      expect(htmlFormatPrinted.inputs()()['htmlTemplate']).toEqual(htmlTemplate);
     });
 
-    it('Should not have componentView after output type change', () => {
+    it('Should have RenderNode stub', () => {
       outputResponse.data.output.type = '';
       htmlFormat.response(outputResponse);
-      expect(htmlFormat.print()().componentView.isStub()).toBe(true);
+      const htmlFormatPrinted = htmlFormat.print()();
+      expect(htmlFormatPrinted.isStub()).toBe(true);
     });
   });
 });

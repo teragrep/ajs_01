@@ -66,8 +66,7 @@ describe('AngularFormat unit test', () => {
 
     it('Should print', () => {
       const angularFormatPrinted = angularFormat.print()();
-      expect(angularFormatPrinted.componentView.isStub()).toBe(true);
-      expect(angularFormatPrinted.children()).toHaveLength(0);
+      expect(angularFormatPrinted.isStub()).toBe(true);
     });
   });
 
@@ -83,7 +82,7 @@ describe('AngularFormat unit test', () => {
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
     const template = '<h1>template</h1>';
     beforeEach(() => {
@@ -98,17 +97,21 @@ describe('AngularFormat unit test', () => {
       };
     });
 
-    it('Should have component view', () => {
+    it('Should have RenderNode', () => {
       angularFormat.response(outputResponse);
-      const componentView = angularFormat.print()().componentView;
-      expect(componentView.isStub()).toBe(false);
-      expect(componentView.inputs()()['template']).toEqual(template);
+      const angularFormatPrinted = angularFormat.print()();
+      const inputs = angularFormatPrinted.inputs()();
+      expect(angularFormatPrinted.isStub()).toBe(false);
+      expect(inputs['template']).toEqual(template);
+      expect(inputs['angularObjects']).toBeDefined();
+      expect(inputs['requestable']).toBeDefined();
     });
 
-    it('Should have not have component view after output type change', () => {
+    it('Should have RenderNode stub', () => {
       outputResponse.data.output.type = '';
       angularFormat.response(outputResponse);
-      expect(angularFormat.print()().componentView.isStub()).toBe(true);
+      const angularFormatPrinted = angularFormat.print()();
+      expect(angularFormatPrinted.isStub()).toBe(true);
     });
   });
 });

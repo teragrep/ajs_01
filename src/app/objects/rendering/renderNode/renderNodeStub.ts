@@ -43,21 +43,19 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {DataTableSwitcherButton} from './dataTablesSwitcherButton';
-import {FakeChannel} from '../../../../channel/fakeChannel';
+import {RenderNode} from './renderNode';
+import {Signal} from '@angular/core';
 
-describe('DataTables SwitcherButton unit test', () => {
-  const request = new FakeChannel();
-  const dataTablesSwitcherButton = new DataTableSwitcherButton(request);
+export class RenderNodeStub implements RenderNode {
+  isStub():boolean{
+    return true;
+  }
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(dataTablesSwitcherButton).toBeDefined();
-    });
+  componentView(): string {
+    throw new Error('RenderNodeStub: Method not implemented.');
+  }
 
-    it('Should print', () => {
-      const dataTableSwitcherButtonPrinted = dataTablesSwitcherButton.print()();
-      expect(dataTableSwitcherButtonPrinted.isStub()).toBe(false);
-    });
-  });
-});
+  inputs(): Signal<Record<string, unknown>> {
+    throw new Error('RenderNodeStub: Method not implemented.');
+  }
+}

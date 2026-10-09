@@ -44,10 +44,9 @@
  * a licensee so wish it.
  */
 import {Signal} from '@angular/core';
-import {ComponentView} from '../componentView/componentView';
+import Stubable from '../../../shared/interfaces/stubable';
 
-export interface RenderNode {
-  paragraphId?:string;
-  componentView: ComponentView;
-  children: Signal<RenderNode[]>;
+export interface RenderNode extends Stubable{
+  componentView(): string;
+  inputs(): Signal<Record<string, unknown>>;
 }

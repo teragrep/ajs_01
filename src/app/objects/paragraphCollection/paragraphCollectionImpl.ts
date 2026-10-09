@@ -50,28 +50,29 @@ import {ParagraphCollection} from './paragraphCollection';
 import {ParagraphImpl} from '../paragraph/paragraphImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
-import {ComponentView} from '../rendering/componentView/componentView';
-import {ComponentViewStub} from '../rendering/componentView/componentViewStub';
 import {ParagraphMessageImpl} from '../message/paragraphMessage/paragraphMessageImpl';
 import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 import {MessageImpl} from '../message/messageImpl';
 import {ParagraphAddedMessageImpl} from '../message/paragraphAddedMessage/paragraphAddedMessageImpl';
 import {ParagraphRemovedMessageImpl} from '../message/paragraphRemovedMessage/paragraphRemovedMessageImpl';
 import {Message} from '../message/message';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 
 export class ParagraphCollectionImpl implements ParagraphCollection {
   private readonly _channel: Channel;
   private readonly _paragraphs: WritableSignal<Map<string,  Paragraph>>;
   private readonly _decoratorParagraphs:Map<string,  object>;
-  private readonly _componentView: ComponentView;
+  private readonly _renderNode: Signal<RenderNode>;
   private readonly _responseEvents:Map<string, (message:Message) => void>;
-
 
   constructor(channel: Channel, initialParagraphData: object[]) {
     this._channel = channel;
     this._paragraphs = this.initializedParagraphs(initialParagraphData);
     this._decoratorParagraphs = this.initializedDecoratorParagraphs(initialParagraphData);
-    this._componentView = new ComponentViewStub();
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_COLLECTION_VIEW, computed(() => ({
+      paragraphs: Array.from(this._paragraphs().values()).map(paragraph => paragraph.print()()),
+    }))));
     this._responseEvents = new Map([
       ['PARAGRAPH', (message) => this.paragraphResponse(message)],
       ['PARAGRAPH_ADDED', (message) => this.paragraphAddedResponse(message)],
@@ -137,20 +138,13 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
       const paragraph = new ParagraphImpl(this, paragraphData);
       paragraphMap.set(paragraph.id(), paragraph);
     });
-    return signal(paragraphMap);
+    return signal(paragraphMap, {
+      equal: () => false
+    });
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: this._componentView,
-      children: computed(() => {
-        const children:RenderNode[] = [];
-        this._paragraphs().forEach(paragraph => {
-          children.push(paragraph.print()());
-        });
-        return children;
-      }),
-    }));
+    return this._renderNode;
   }
 
   request(json: object): void {

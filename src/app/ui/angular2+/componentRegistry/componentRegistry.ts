@@ -43,41 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Component, computed, input} from '@angular/core';
-import {NgComponentOutlet} from '@angular/common';
-import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import { Type, InjectionToken } from '@angular/core';
 
-
-@Component({
-  selector: 'recursive-component-draw',
-  imports: [
-    NgComponentOutlet
-  ],
-  template: `
-    @if(!componentView().isStub()){
-      <ng-container
-        *ngComponentOutlet="component(); inputs: inputs()">
-      </ng-container>
-    }
-    @for (child of renderNode().children(); track $index) {
-      @if(child.paragraphId === undefined || child.paragraphId === this.containerId()){
-        <recursive-component-draw [renderNode]="child" [containerId]="containerId()"></recursive-component-draw>
-      }
-    }
-  `
-})
-export class RecursiveComponentDraw {
-  renderNode = input.required<RenderNode>();
-  containerId = input.required<string>();
-  protected componentView = computed(() => this.renderNode().componentView);
-  protected component = computed(() => {
-    if(!this.componentView().isStub()){
-      return this.componentView().component();
-    }
-  });
-  protected inputs = computed(() => {
-    if(!this.componentView().isStub()){
-      return this.componentView().inputs()();
-    }
-  });
-}
+export const COMPONENT_REGISTRY = new InjectionToken<Map<string, Type<unknown>>>('Component Registry');

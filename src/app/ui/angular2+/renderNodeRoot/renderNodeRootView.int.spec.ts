@@ -43,47 +43,40 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphOutputRequest} from './paragraphOutputRequest';
-import {ParagraphOutputRequestImpl} from './paragraphOutputRequestImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../../message/messageImpl';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {ComponentFixture} from '@angular/core/testing';
+import {RenderNodeRootView} from './renderNodeRootView';
+import {render} from '@testing-library/angular';
+import {By} from '@angular/platform-browser';
+import {RenderNodeStub} from '../../../objects/rendering/renderNode/renderNodeStub';
+import {FakeRenderNode} from '../../../../test/fakes/fakeRenderNode';
+import {FakeComponentRegistryProvider} from '../../../../test/fakes/fakeComponentRegistryProvider';
+import {FakeComponent} from '../../../../test/fakes/fakeComponent';
 
-describe('Paragraph Output Request unit test', () => {
-  const paragraphOutputRequestData = {
-    op:'PARAGRAPH_OUTPUT_REQUEST',
-    data:{
-      type:'type'
-    }
-  };
-  let paragraphOutputRequest: ParagraphOutputRequest;
-  beforeEach(() => {
-    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
+describe('RenderNodeRootView integration test', () => {
+  let renderNode:RenderNode;
+  let fixture: ComponentFixture<RenderNodeRootView>;
+
+  beforeEach(async () => {
+    renderNode = new FakeRenderNode();
+    const renderResult = await render(RenderNodeRootView, {
+      inputs:{
+        renderNode: renderNode
+      },
+      providers:[
+        FakeComponentRegistryProvider
+      ]
+    });
+    fixture = renderResult.fixture;
   });
 
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(paragraphOutputRequest).toBeDefined();
-    });
-
-    it('Should not be stub', () => {
-      expect(paragraphOutputRequest.isStub()).toBe(false);
-    });
-
-    it('Should have type', () => {
-      expect(paragraphOutputRequest.type()).toEqual(paragraphOutputRequestData.data.type);
-    });
-
-    it('Should have request', () => {
-      expect(paragraphOutputRequest.request()).toEqual(paragraphOutputRequestData);
-    });
+  it('Should render Fake component', () => {
+    expect(fixture.debugElement.query(By.directive(FakeComponent))).toBeDefined();
   });
 
-  describe('Validation', () => {
-    it('Should throw if operation is not "PARAGRAPH_OUTPUT_REQUEST"', () => {
-      paragraphOutputRequestData.op = '';
-      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
-      expect(() => paragraphOutputRequest.type()).toThrow();
-    });
+  it('Should not render when renderNode is stub', () => {
+    fixture.componentRef.setInput('renderNode', new RenderNodeStub());
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.directive(FakeComponent))).toBeNull();
   });
 });

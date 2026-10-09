@@ -43,31 +43,48 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ComponentViewImpl} from './componentViewImpl';
-import {signal} from '@angular/core';
+import {
+  Component, computed,
+  inject,
+  input,
+  Type,
+} from '@angular/core';
+import {COMPONENT_REGISTRY} from '../componentRegistry/componentRegistry';
+import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
+import {NgComponentOutlet} from '@angular/common';
 
-describe('ComponentView unit test', () => {
-  class component {
-    someMethod():void{}
-  }
-  const inputs = signal({input1:'val1', input2:123, input3: {nested: 'nested'}});
-  const componentView = new ComponentViewImpl(component, inputs);
+@Component({
+  selector: 'render-node-host',
+  imports: [
+    NgComponentOutlet
+  ],
+  template: `
+    @if(!renderNode().isStub()){
+      @let component = componentReference(renderNode().componentView());
+      <ng-container *ngComponentOutlet="component; inputs: componentInputs();"></ng-container>
+    }
+  `
+})
+export class RenderNodeRootView {
+  renderNode = input.required<RenderNode>();
+  containerId = input<string>('');
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(componentView).toBeDefined();
-    });
-
-    it('Should not be stub', () => {
-      expect(componentView.isStub()).toBe(false);
-    });
-
-    it('Should component', () => {
-      expect(componentView.component()).toBeTypeOf(typeof component);
-    });
-
-    it('Should have inputs', () => {
-      expect(componentView.inputs()()).toEqual(inputs());
-    });
+  protected componentInputs = computed(() => {
+    let componentInputs = {};
+    if(!this.renderNode().isStub()){
+      componentInputs = {
+        ...this.renderNode().inputs()(),
+      };
+      if(this.containerId() !== ''){
+        componentInputs['containerId'] = this.containerId();
+      }
+    }
+    return componentInputs;
   });
-});
+
+  private readonly componentRegistry = inject(COMPONENT_REGISTRY);
+
+  protected componentReference(componentId:string):Type<unknown>{
+    return this.componentRegistry.get(componentId);
+  }
+}

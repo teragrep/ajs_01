@@ -69,8 +69,7 @@ describe('DataTablesFormat unit test', () => {
 
     it('Should print', () => {
       const dataTablesFormatPrinted = dataTablesFormat.print()();
-      expect(dataTablesFormatPrinted.componentView.isStub()).toBe(true);
-      expect(dataTablesFormatPrinted.children()).toHaveLength(0);
+      expect(dataTablesFormatPrinted.isStub()).toBe(true);
     });
   });
 
@@ -84,7 +83,7 @@ describe('DataTablesFormat unit test', () => {
     });
   });
 
-  describe('ComponentView updates', () => {
+  describe('Output updates', () => {
     let outputResponse;
     beforeEach(() => {
       outputResponse = {
@@ -100,14 +99,14 @@ describe('DataTablesFormat unit test', () => {
       dataTablesFormat.response(outputResponse);
     });
 
-    it('Should have componentView', () => {
-      const componentView = dataTablesFormat.print()().componentView;
-      expect(componentView.isStub()).toBe(false);
-      expect(componentView.inputs()()['dataTablesPlugin']).toBeDefined();
+    it('Should have RenderNode', () => {
+      const dataTablesFormatPrinted = dataTablesFormat.print()();
+      expect(dataTablesFormatPrinted.isStub()).toBe(false);
+      expect(dataTablesFormat.print()().inputs()()['dataTablesPlugin']).toBeDefined();
     });
 
     it('Should respond plugin on consequential output responses', () => {
-      const plugin = dataTablesFormat.print()().componentView.inputs()()['dataTablesPlugin'] as Channel;
+      const plugin = dataTablesFormat.print()().inputs()()['dataTablesPlugin'] as Channel;
       const spy = vi.spyOn(plugin, 'response');
       dataTablesFormat.response(outputResponse);
       dataTablesFormat.response(outputResponse);
@@ -115,11 +114,11 @@ describe('DataTablesFormat unit test', () => {
       expect(spy).toHaveBeenCalledTimes(3);
     });
 
-    it('Should not have component view after output type change', () => {
+    it('Should have RenderNode stub', () => {
       outputResponse.data.output.type = '';
       dataTablesFormat.response(outputResponse);
-      const componentView = dataTablesFormat.print()().componentView;
-      expect(componentView.isStub()).toBe(true);
+      const dataTablesFormatPrinted = dataTablesFormat.print()();
+      expect(dataTablesFormatPrinted.isStub()).toBe(true);
     });
   });
 });

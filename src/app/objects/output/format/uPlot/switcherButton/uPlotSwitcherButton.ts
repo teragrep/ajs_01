@@ -45,36 +45,27 @@
  */
 import {OutputType} from '../../../outputType';
 import {Printable} from '../../../../rendering/printable/printable';
-import {computed, Signal} from '@angular/core';
+import {signal, Signal} from '@angular/core';
 import { RenderNode } from '../../../../rendering/renderNode/renderNode';
-import {ComponentViewImpl} from '../../../../rendering/componentView/componentViewImpl';
-import {OutputSwitcherButtonView} from '../../../../../ui/angular2+/output/switcher/switcherButton/outputSwitcherButtonView';
+import {RenderNodeImpl} from '../../../../rendering/renderNode/renderNodeImpl';
+import {RegisteredComponents} from '../../../../../ui/angular2+/componentRegistry/registeredComponents';
 import {Requestable} from '../../../../channel/requestable';
 
 export class uPlotSwitcherButton implements Printable {
-  private readonly _request: Requestable;
-  private readonly _title: string;
-  private readonly _icon: string;
   private readonly _graphType: string;
+  private readonly _renderNode: Signal<RenderNode>;
 
-  constructor(request: Requestable, title: string, icon: string, graphType: string) {
-    this._request = request;
-    this._title = title;
-    this._icon = icon;
+  constructor(requestable: Requestable, title: string, icon: string, graphType: string) {
     this._graphType = graphType;
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_SWITCHER_BUTTON_VIEW, signal({
+      requestFormatSwitch: () => requestable.request(this.outputSwitchRequestData()),
+      title:title,
+      icon:icon,
+    })));
   }
 
   print(): Signal<RenderNode> {
-    return computed(() => ({
-      componentView: new ComponentViewImpl(OutputSwitcherButtonView, computed(() => ({
-        title: this._title,
-        icon: this._icon,
-        requestFormatSwitch:() => {
-          this._request.request(this.outputSwitchRequestData());
-        }
-      }))),
-      children:computed(() => [])
-    }));
+    return this._renderNode;
   }
 
   private outputSwitchRequestData():object {
