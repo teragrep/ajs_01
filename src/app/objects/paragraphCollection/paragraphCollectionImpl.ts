@@ -45,7 +45,6 @@
  */
 import {Channel} from '../channel/channel';
 import {Paragraph} from '../paragraph/paragraph';
-import {RunParagraphRequest} from './runParagraphRequest/runParagraphRequest';
 import {ParagraphCollection} from './paragraphCollection';
 import {ParagraphImpl} from '../paragraph/paragraphImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
@@ -80,9 +79,10 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     ]);
   }
 
-  private runParagraphRequest(json:object):void {
-    const runParagraphRequest = new RunParagraphRequest(this._channel, this._decoratorParagraphs);
-    runParagraphRequest.request(json);
+  private executeParagraphRequest(message:Message):void {
+    const executableParagraphId = message.dataAsWebSocketPayload().stringProperty('paragraphId');
+    const executableParagraph = this._paragraphs().get(executableParagraphId);
+    executableParagraph.runParagraph();
   }
 
   private paragraphResponse(message:Message):void{
@@ -149,8 +149,8 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
 
   request(json: object): void {
     const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'RUN_PARAGRAPH') {
-      this.runParagraphRequest(json);
+    if(message.operation() === 'EXECUTE_PARAGRAPH') {
+      this.executeParagraphRequest(message);
     }
     else{
       this._channel.request(json);

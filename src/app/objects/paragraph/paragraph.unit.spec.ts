@@ -93,23 +93,36 @@ describe('Paragraph', () => {
     });
   });
 
-  describe('Request', () => {
-    it('Should decorate request with paragraphId', () => {
-      const request = {
-        op:'',
-        data:{
-          paragraphId:''
-        }
-      };
-      const expectedRequest = {
-        op:'',
-        data:{
-          paragraphId:paragraphId
-        }
-      };
-      const spy = vi.spyOn(channel, 'request');
-      paragraph.request(request);
-      expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
-    });
+  it('RunParagraph should create expected request', () => {
+    const expectedRequest = {
+      op:'RUN_PARAGRAPH',
+      data:{
+        id: paragraphId,
+        paragraph: paragraphText,
+        config: paragraphConfig,
+        params: paragraphParams,
+      }
+    };
+    const spy = vi.spyOn(channel, 'request');
+    paragraph.runParagraph();
+    expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
+  });
+
+  it('Should decorate request with paragraphId', () => {
+    const request = {
+      op:'',
+      data:{
+        paragraphId:''
+      }
+    };
+    const expectedRequest = {
+      op:'',
+      data:{
+        paragraphId:paragraphId
+      }
+    };
+    const spy = vi.spyOn(channel, 'request');
+    paragraph.request(request);
+    expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
   });
 });

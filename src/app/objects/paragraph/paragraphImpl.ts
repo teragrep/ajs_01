@@ -76,6 +76,19 @@ export class ParagraphImpl implements Paragraph {
     this._paragraphIdFilter = new MessagePropertyEqualsFilter('paragraphId', this.id());
   }
 
+  runParagraph(): void {
+    const runParagraphRequest = {
+      op:'RUN_PARAGRAPH',
+      data: {
+        id: this.id(),
+        paragraph: this._paragraph.stringProperty('text'),
+        config: this._paragraph.objectProperty('config'),
+        params: this._paragraph.objectPropertyAsPayload('settings').objectProperty('params'),
+      },
+    };
+    this._channel.request(runParagraphRequest);
+  }
+
   private initializedOutput(paragraph: object): Output {
     const outputContainer = new OutputImpl(this);
     const paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraph);

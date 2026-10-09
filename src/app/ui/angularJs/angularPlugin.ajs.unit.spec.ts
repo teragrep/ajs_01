@@ -44,8 +44,10 @@
  * a licensee so wish it.
  */
 import {AngularPluginAjs} from './angularPlugin.ajs';
-import {FakeChannel} from '../../objects/channel/fakeChannel';
 import {AngularObjectImpl} from '../../objects/angularObject/angularObjectImpl';
+import {Requestable} from '../../objects/channel/requestable';
+import {Mock} from 'vitest';
+import {FakeChannel} from '../../objects/channel/fakeChannel';
 
 describe('AngularPluginAjs', () => {
   const $element = [
@@ -58,6 +60,7 @@ describe('AngularPluginAjs', () => {
   let watchSpy;
   let watchCollectionSpy;
   let $scope;
+  let requestable:Requestable;
 
   let angularPluginAjs: AngularPluginAjs;
   beforeEach(() => {
@@ -69,6 +72,8 @@ describe('AngularPluginAjs', () => {
       $watchCollection: watchCollectionSpy,
     };
     angularPluginAjs = new AngularPluginAjs($compile,$scope,$element);
+    requestable = new FakeChannel();
+    angularPluginAjs.requestable = requestable;
   });
 
   describe('Birth', () => {
@@ -108,6 +113,61 @@ describe('AngularPluginAjs', () => {
 
     it('Should have compiled', () => {
       expect($compile).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('z-functions' , () => {
+    let requestableSpy:Mock;
+    const paragraphId = 'paragraphId';
+    const name = 'name';
+
+    beforeEach(() => {
+      requestableSpy = vi.spyOn(requestable, 'request');
+    });
+
+    it('Should have z-functions', () => {
+      expect(angularPluginAjs.$scope['z']['runParagraph']).toBeDefined();
+      expect(angularPluginAjs.$scope['z']['angularBind']).toBeDefined();
+      expect(angularPluginAjs.$scope['z']['angularUnbind']).toBeDefined();
+    });
+
+    it('runParagraph should create new request', () => {
+      angularPluginAjs.$scope['z']['runParagraph'](paragraphId);
+      const expectedRequest = {
+        op: 'EXECUTE_PARAGRAPH',
+        data: {
+          paragraphId: paragraphId,
+        },
+      };
+      expect(requestableSpy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
+    });
+
+    it('angularBind should create new request', () => {
+      const value = 'value';
+      angularPluginAjs.$scope['z']['angularBind'](name, value, paragraphId);
+      const expectedRequest = {
+        op: 'ANGULAR_OBJECT_CLIENT_BIND',
+        data: {
+          noteId: '',
+          name: name,
+          value: value,
+          paragraphId: paragraphId
+        },
+      };
+      expect(requestableSpy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
+    });
+
+    it('angularUnbind should create new request', () => {
+      angularPluginAjs.$scope['z']['angularUnbind'](name, paragraphId);
+      const expectedRequest = {
+        op: 'ANGULAR_OBJECT_CLIENT_UNBIND',
+        data: {
+          noteId: '',
+          name: name,
+          paragraphId: paragraphId
+        },
+      };
+      expect(requestableSpy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
     });
   });
 });
