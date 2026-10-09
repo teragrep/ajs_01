@@ -83,7 +83,7 @@ describe('ParagraphCollection unit test', () => {
       expect(requestSpy).toHaveBeenCalledExactlyOnceWith(request);
     });
 
-    it('Should decorate RUN_PARAGRAPH request', () => {
+    it('Should delegate EXECUTE_PARAGRAPH request', () => {
       const paragraphId = 'para1';
       const paragraphText = 'paragraph text';
       const paragraphConfig = {test1:'test1'};
@@ -94,17 +94,14 @@ describe('ParagraphCollection unit test', () => {
         config:paragraphConfig,
         settings:paragraphSettings,
       }]);
-      const runParagraphRequest = {
-        op:'RUN_PARAGRAPH',
+      const executeParagraphRequest = {
+        op:'EXECUTE_PARAGRAPH',
         data:{
-          id:paragraphId,
-          paragraph:'',
-          config:{},
-          params:{}
+          paragraphId:paragraphId,
         }
       };
       const spy = vi.spyOn(channel, 'request');
-      paragraphCollection.request(runParagraphRequest);
+      paragraphCollection.request(executeParagraphRequest);
       const expectedRequest = {
         op:'RUN_PARAGRAPH',
         data:{
