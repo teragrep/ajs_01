@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 import {ParagraphAddedMessageImpl} from './paragraphAddedMessageImpl';
 import {ParagraphAddedMessage} from './paragraphAddedMessage';

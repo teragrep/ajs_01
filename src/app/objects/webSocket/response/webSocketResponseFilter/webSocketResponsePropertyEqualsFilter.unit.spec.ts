@@ -47,7 +47,7 @@
 import {WebSocketResponseFilter} from './webSocketResponseFilter';
 import {WebSocketResponsePropertyEqualsFilter} from './webSocketResponsePropertyEqualsFilter';
 import {WebSocketResponseImpl} from '../webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('WebSocketResponsePropertyEqualsFilter unit test', () => {
   const propertyName = 'propertyName';

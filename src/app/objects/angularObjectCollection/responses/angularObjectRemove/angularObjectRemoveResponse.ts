@@ -46,7 +46,7 @@
 import {Respondable} from '../../../channel/respondable';
 import {AngularObject} from '../../../angularObject/angularObject';
 import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../../webSocket/webSocketPayload/webSocketPayloadImpl';
 
 export class AngularObjectRemoveResponse implements Respondable {
   private readonly _angularObjects: AngularObject[];

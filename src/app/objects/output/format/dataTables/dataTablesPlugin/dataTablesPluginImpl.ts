@@ -48,7 +48,7 @@ import 'datatables.net-buttons-bs5';
 import {Channel} from '../../../../channel/channel';
 import {DataTablesAjaxImpl} from './ajax/dataTablesAjaxImpl';
 import {DataTablesAjax} from './ajax/dataTablesAjax';
-import {WebSocketPayloadImpl} from '../../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {DataTablesPlugin} from './dataTablesPlugin';
 
 export class DataTablesPluginImpl implements DataTablesPlugin {

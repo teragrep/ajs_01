@@ -45,8 +45,8 @@
  */
 import {AngularObject} from './angularObject';
 import {Channel} from '../channel/channel';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
-import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
 
 export class AngularObjectImpl implements AngularObject{
   private readonly _channel:Channel;

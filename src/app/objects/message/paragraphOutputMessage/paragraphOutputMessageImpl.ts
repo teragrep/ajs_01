@@ -45,7 +45,7 @@
  */
 import {ParagraphOutputMessage} from './paragraphOutputMessage';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
+import {WebSocketPayload} from '../../webSocket/webSocketPayload/webSocketPayload';
 import { StubableObject } from '../../stubableObject/stubableObject';
 import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
 import {StubableObjectImpl} from '../../stubableObject/stubableObjectImpl';

@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocketRequestWithField} from './webSocketRequestWithField';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {WebSocketRequestImpl} from '../webSocketRequestImpl';
 import {WebSocketRequest} from '../webSocketRequest';
 

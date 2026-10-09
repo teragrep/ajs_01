@@ -46,7 +46,7 @@
 import {ParagraphMessage} from './paragraphMessage';
 import {ParagraphMessageImpl} from './paragraphMessageImpl';
 import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 
 describe('ParagraphMessage unit test', () => {

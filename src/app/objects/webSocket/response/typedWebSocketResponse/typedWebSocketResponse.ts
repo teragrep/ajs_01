@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocketResponse} from '../webSocketResponse';
-import {WebSocketPayload} from '../../../webSocketPayload/webSocketPayload';
+import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 
 export class TypedWebSocketResponse implements WebSocketResponse {
   private readonly _type:string;

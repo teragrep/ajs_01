@@ -44,8 +44,8 @@
  * a licensee so wish it.
  */
 import {WebSocketResponse} from './webSocketResponse';
-import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 
 export class WebSocketResponseImpl implements WebSocketResponse{
   private readonly _webSocketPayload:WebSocketPayload;

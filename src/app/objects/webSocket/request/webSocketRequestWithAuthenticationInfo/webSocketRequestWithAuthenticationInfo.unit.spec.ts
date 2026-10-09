@@ -48,7 +48,7 @@ import {Authentication} from '../../../../shared/objects/security/authentication
 import {AuthenticationStub} from '../../../../shared/objects/security/authenticationStub';
 import {Ticket} from '../../../../shared/types/securityTicket';
 import {AuthenticationImpl} from '../../../../shared/objects/security/authenticationImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {WebSocketRequest} from '../webSocketRequest';
 import {WebSocketRequestImpl} from '../webSocketRequestImpl';
 import {WebSocketRequestWithAuthenticationInfo} from './webSocketRequestwithAuthenticationInfo';
