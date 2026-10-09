@@ -43,27 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {signal, Signal} from '@angular/core';
-import {RenderNode} from '../../rendering/renderNode/renderNode';
-import {WebSocketPayload} from '../../webSocket/webSocketPayload/webSocketPayload';
-import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
-import {NotebookIndex} from './notebookIndex';
-import {RenderNodeStub} from '../../rendering/renderNode/renderNodeStub';
+import {Printable} from '../rendering/printable/printable';
+import {Notebook} from '../notebook/notebook';
 
-export class NotebookIndexImpl implements NotebookIndex {
-  private readonly _notebookIndexData:WebSocketPayload;
-  private readonly _renderNode: Signal<RenderNode>;
-
-  constructor(notebookIndexData:object) {
-    this._notebookIndexData = new WebSocketPayloadImpl(notebookIndexData);
-    this._renderNode = signal(new RenderNodeStub());
-  }
-
-  id():string {
-    return this._notebookIndexData.stringProperty('id');
-  }
-
-  print(): Signal<RenderNode> {
-    return this._renderNode;
-  }
+export interface NotebookIndex extends Printable{
+  id():string;
+  renderNotebook(notebook:Notebook):void;
 }
