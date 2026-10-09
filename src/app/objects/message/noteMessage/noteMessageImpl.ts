@@ -47,13 +47,13 @@ import {NoteMessage} from './noteMessage';
 import {Notebook} from '../../notebook/notebook';
 import {Channel} from '../../channel/channel';
 import {TypedMessage} from '../typedMessage/typedMessage';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {NotebookImpl} from '../../notebook/notebookImpl';
 
 export class NoteMessageImpl implements NoteMessage{
-  private readonly _message:Message;
+  private readonly _message:WebSocketResponse;
 
-  constructor(message:Message) {
+  constructor(message:WebSocketResponse) {
     this._message = new TypedMessage('NOTE', message);
   }
 

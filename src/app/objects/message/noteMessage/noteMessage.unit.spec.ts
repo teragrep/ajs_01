@@ -44,9 +44,9 @@
  * a licensee so wish it.
  */
 import {NoteMessage} from './noteMessage';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../messageImpl';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {NoteMessageImpl} from './noteMessageImpl';
 import {FakeChannel} from '../../channel/fakeChannel';
 import {Channel} from '../../channel/channel';
@@ -60,12 +60,12 @@ describe('Note message unit test', () => {
       paragraphs:[]
     }
   };
-  let message:Message;
+  let message:WebSocketResponse;
   let noteMessage:NoteMessage;
 
   beforeEach(() => {
     channel = new FakeChannel();
-    message = new MessageImpl(new WebSocketPayloadImpl(messageData));
+    message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
     noteMessage = new NoteMessageImpl(message);
   });
 
@@ -82,7 +82,7 @@ describe('Note message unit test', () => {
   describe('Validation', () => {
     it('Should throw if message operation is not "NOTE"', () => {
       messageData.op = '';
-      message = new MessageImpl(new WebSocketPayloadImpl(messageData));
+      message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
       noteMessage = new NoteMessageImpl(message);
       expect(() => noteMessage.notebook(channel)).toThrow();
     });

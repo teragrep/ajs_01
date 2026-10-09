@@ -43,14 +43,14 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 
-export class TypedMessage implements Message {
+export class TypedMessage implements WebSocketResponse {
   private readonly _type:string;
-  private readonly _message:Message;
+  private readonly _message:WebSocketResponse;
 
-  constructor(type:string, message:Message) {
+  constructor(type:string, message:WebSocketResponse) {
     this._type = type;
     this._message = message;
   }

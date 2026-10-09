@@ -46,7 +46,7 @@
 import {Respondable} from '../../../channel/respondable';
 import {AngularObject} from '../../../angularObject/angularObject';
 import {Channel} from '../../../channel/channel';
-import {MessageImpl} from '../../../message/messageImpl';
+import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 import {AngularObjectImpl} from '../../../angularObject/angularObjectImpl';
 
@@ -60,7 +60,7 @@ export class AngularObjectUpdateResponse implements Respondable {
   }
 
   response(data: object) {
-    const message = new MessageImpl(new WebSocketPayloadImpl(data));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'ANGULAR_OBJECT_UPDATE'){
       const angularObjectUpdateData = new WebSocketPayloadImpl(message.data());
       const angularObjectData:object = angularObjectUpdateData.objectProperty('angularObject');

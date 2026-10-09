@@ -55,7 +55,7 @@ import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
-import {MessageImpl} from '../message/messageImpl';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {MessageWithField} from '../message/messageWithField/messageWithField';
 
 export class ParagraphImpl implements Paragraph {
@@ -108,7 +108,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const paragraphIdDecoratedMessage = new MessageWithField(message, 'paragraphId', this.id());
     this._channel.request({
       op:paragraphIdDecoratedMessage.operation(),
@@ -117,7 +117,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const filteredMessage = this._paragraphIdFilter.filterMessage(message);
     if(!filteredMessage.isStub()) {
       this._output.response({

@@ -48,7 +48,7 @@ import {AngularObjectCollection} from '../../../angularObjectCollection/angularO
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../../rendering/renderNode/renderNode';
 import {AngularObjectCollectionImpl} from '../../../angularObjectCollection/angularObjectCollectionImpl';
-import {MessageImpl} from '../../../message/messageImpl';
+import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {OutputType} from '../../outputType';
@@ -75,7 +75,7 @@ export class AngularFormatImpl implements AngularFormat {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.angular){

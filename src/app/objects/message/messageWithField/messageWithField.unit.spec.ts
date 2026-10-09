@@ -44,18 +44,18 @@
  * a licensee so wish it.
  */
 import {MessageWithField} from './messageWithField';
-import {MessageImpl} from '../messageImpl';
-import {Message} from '../message';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('MessageWithField unit test', () => {
   const propertyName = 'propertyName';
   const propertyValue = 'propertyValue';
-  let propertyDecoratedMessage: Message;
+  let propertyDecoratedMessage: WebSocketResponse;
   const operation = 'op';
 
   it('Should decorate message', () => {
-    const messageToDecorate = new MessageImpl(new WebSocketPayloadImpl({
+    const messageToDecorate = new WebSocketResponseImpl(new WebSocketPayloadImpl({
       op:operation,
       data:{}
     }));

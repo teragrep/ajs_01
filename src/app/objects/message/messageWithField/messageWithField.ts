@@ -44,15 +44,15 @@
  * a licensee so wish it.
  */
 import { WebSocketPayload } from '../../webSocketPayload/webSocketPayload';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-export class MessageWithField implements Message {
-  private readonly _message: Message;
+export class MessageWithField implements WebSocketResponse {
+  private readonly _message: WebSocketResponse;
   private readonly _fieldName: string;
   private readonly _fieldValue: unknown;
 
-  constructor(message: Message, fieldName: string, fieldValue: unknown) {
+  constructor(message: WebSocketResponse, fieldName: string, fieldValue: unknown) {
     this._message = message;
     this._fieldName = fieldName;
     this._fieldValue = fieldValue;

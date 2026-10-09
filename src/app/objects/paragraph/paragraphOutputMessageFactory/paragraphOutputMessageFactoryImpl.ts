@@ -49,7 +49,7 @@ import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {ParagraphOutputMessageStub} from '../../message/paragraphOutputMessage/paragraphOutputMessageStub';
 import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
-import {MessageImpl} from '../../message/messageImpl';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 
 export class ParagraphOutputMessageFactoryImpl implements ParagraphOutputMessageFactory {
   private readonly _paragraph: WebSocketPayload;
@@ -74,7 +74,7 @@ export class ParagraphOutputMessageFactoryImpl implements ParagraphOutputMessage
             output: paragraphOutput,
           }
         };
-        paragraphOutputMessage = new ParagraphOutputMessageImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
+        paragraphOutputMessage = new ParagraphOutputMessageImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(paragraphOutputMessageData)));
       }
     }
     else {

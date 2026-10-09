@@ -46,7 +46,7 @@
 import {ParagraphOutputRequest} from './paragraphOutputRequest';
 import {ParagraphOutputRequestImpl} from './paragraphOutputRequestImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../message/messageImpl';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 
 describe('Paragraph Output Request unit test', () => {
   const paragraphOutputRequestData = {
@@ -57,7 +57,7 @@ describe('Paragraph Output Request unit test', () => {
   };
   let paragraphOutputRequest: ParagraphOutputRequest;
   beforeEach(() => {
-    paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
+    paragraphOutputRequest = new ParagraphOutputRequestImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
   });
 
 
@@ -82,7 +82,7 @@ describe('Paragraph Output Request unit test', () => {
   describe('Validation', () => {
     it('Should throw if operation is not "PARAGRAPH_OUTPUT_REQUEST"', () => {
       paragraphOutputRequestData.op = '';
-      paragraphOutputRequest = new ParagraphOutputRequestImpl(new MessageImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
+      paragraphOutputRequest = new ParagraphOutputRequestImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(paragraphOutputRequestData)));
       expect(() => paragraphOutputRequest.type()).toThrow();
     });
   });

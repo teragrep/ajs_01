@@ -44,8 +44,8 @@
  * a licensee so wish it.
  */
 import {MessageFilter} from './messageFilter';
-import {Message} from '../message';
-import {MessageStub} from '../messageStub';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
+import {WebSocketResponseStub} from '../../webSocket/response/webSocketResponseStub';
 
 export class MessagePropertyEqualsFilter implements MessageFilter {
   private readonly _propertyName: string;
@@ -56,11 +56,11 @@ export class MessagePropertyEqualsFilter implements MessageFilter {
     this._propertyValue = propertyValue;
   }
 
-  filterMessage(message: Message): Message {
+  filterMessage(message: WebSocketResponse): WebSocketResponse {
     const property = message.data()[this._propertyName];
-    let filteredMessage:Message;
+    let filteredMessage:WebSocketResponse;
     if(property && property !== this._propertyValue){
-      filteredMessage = new MessageStub();
+      filteredMessage = new WebSocketResponseStub();
     }
     else{
       filteredMessage = message;

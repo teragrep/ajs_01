@@ -51,10 +51,10 @@ import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ParagraphMessageImpl} from '../message/paragraphMessage/paragraphMessageImpl';
 import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../message/messageImpl';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {ParagraphAddedMessageImpl} from '../message/paragraphAddedMessage/paragraphAddedMessageImpl';
 import {ParagraphRemovedMessageImpl} from '../message/paragraphRemovedMessage/paragraphRemovedMessageImpl';
-import {Message} from '../message/message';
+import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 
@@ -62,7 +62,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   private readonly _channel: Channel;
   private readonly _paragraphs: WritableSignal<Map<string,  Paragraph>>;
   private readonly _renderNode: Signal<RenderNode>;
-  private readonly _responseEvents:Map<string, (message:Message) => void>;
+  private readonly _responseEvents:Map<string, (message:WebSocketResponse) => void>;
 
   constructor(channel: Channel, initialParagraphData: object[]) {
     this._channel = channel;
@@ -77,13 +77,13 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     ]);
   }
 
-  private executeParagraphRequest(message:Message):void {
+  private executeParagraphRequest(message:WebSocketResponse):void {
     const executableParagraphId = message.dataAsWebSocketPayload().stringProperty('paragraphId');
     const executableParagraph = this._paragraphs().get(executableParagraphId);
     executableParagraph.run();
   }
 
-  private paragraphResponse(message:Message):void{
+  private paragraphResponse(message:WebSocketResponse):void{
     const paragraphMessage = new ParagraphMessageImpl(message);
     const paragraph = paragraphMessage.paragraph(this);
     this._paragraphs.update(paragraphs => {
@@ -92,7 +92,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     });
   }
 
-  private paragraphAddedResponse(message:Message):void{
+  private paragraphAddedResponse(message:WebSocketResponse):void{
     const paragraphAddedMessage = new ParagraphAddedMessageImpl(message);
     const index = paragraphAddedMessage.index();
     const paragraph = paragraphAddedMessage.paragraph(this);
@@ -103,7 +103,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     });
   }
 
-  private paragraphRemovedResponse(message:Message):void{
+  private paragraphRemovedResponse(message:WebSocketResponse):void{
     const paragraphRemovedMessage = new ParagraphRemovedMessageImpl(message);
     const paragraphId = paragraphRemovedMessage.paragraphId();
     this._paragraphs.update(paragraphs => {
@@ -128,7 +128,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'EXECUTE_PARAGRAPH') {
       this.executeParagraphRequest(message);
     }
@@ -138,7 +138,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const eventName = message.operation();
     if(this._responseEvents.has(eventName)){
       const eventCallback = this._responseEvents.get(eventName);

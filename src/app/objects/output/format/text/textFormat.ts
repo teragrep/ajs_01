@@ -48,7 +48,7 @@ import {OutputType} from '../../outputType';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 import {signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
-import {MessageImpl} from '../../../message/messageImpl';
+import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';
 import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
 import {RenderNodeStub} from '../../../rendering/renderNode/renderNodeStub';
@@ -64,7 +64,7 @@ export class TextFormat implements OutputFormat {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT'){
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.text) {

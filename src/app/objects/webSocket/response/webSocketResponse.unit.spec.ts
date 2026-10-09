@@ -43,11 +43,39 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
-import Stubable from '../../shared/interfaces/stubable';
+import {WebSocketResponse} from './webSocketResponse';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketResponseImpl} from './webSocketResponseImpl';
 
-export interface Message extends Stubable{
-  dataAsWebSocketPayload():WebSocketPayload;
-  data():object;
-  operation():string;
-}
+describe('WebSocketResponse unit test', () => {
+  const json = {
+    op:'operation',
+    data:{
+      test:'test'
+    }
+  };
+  let webSocketResponse:WebSocketResponse;
+
+  describe('Birth', () => {
+    beforeEach(() => {
+      webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    });
+
+    it('Should not be stub', () => {
+      expect(webSocketResponse.isStub()).toBe(false);
+    });
+
+    it('Should have operation', () => {
+      expect(webSocketResponse.operation()).toEqual(json.op);
+    });
+
+    it('Should have data', () => {
+      expect(webSocketResponse.data()).toEqual(json.data);
+    });
+
+    it('Should have data as WebSocketPayload', () => {
+      const expected = new WebSocketPayloadImpl(json.data);
+      expect(webSocketResponse.dataAsWebSocketPayload()).toEqual(expected);
+    });
+  });
+});

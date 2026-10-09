@@ -46,14 +46,14 @@
 import {ParagraphAddedMessage} from './paragraphAddedMessage';
 import {Channel} from '../../channel/channel';
 import {Paragraph} from '../../paragraph/paragraph';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {TypedMessage} from '../typedMessage/typedMessage';
 import {ParagraphImpl} from '../../paragraph/paragraphImpl';
 
 export class ParagraphAddedMessageImpl implements ParagraphAddedMessage {
-  private readonly _message:Message;
+  private readonly _message:WebSocketResponse;
 
-  constructor(message:Message) {
+  constructor(message:WebSocketResponse) {
     this._message = new TypedMessage('PARAGRAPH_ADDED', message);
   }
 

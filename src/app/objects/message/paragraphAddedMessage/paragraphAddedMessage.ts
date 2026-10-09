@@ -45,9 +45,9 @@
  */
 import {Paragraph} from '../../paragraph/paragraph';
 import {Channel} from '../../channel/channel';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 
-export interface ParagraphAddedMessage extends Pick<Message, 'data'>{
+export interface ParagraphAddedMessage extends Pick<WebSocketResponse, 'data'>{
   paragraph(channel:Channel):Paragraph;
   index():number;
 }
