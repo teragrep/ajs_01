@@ -45,13 +45,13 @@
  */
 import {ParagraphOutputRequest} from './paragraphOutputRequest';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {TypedMessage} from '../../message/typedMessage/typedMessage';
+import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
 
 export class ParagraphOutputRequestImpl implements ParagraphOutputRequest {
   private readonly _message:WebSocketResponse;
 
   constructor(message:WebSocketResponse) {
-    this._message = new TypedMessage('PARAGRAPH_OUTPUT_REQUEST', message);
+    this._message = new TypedWebSocketResponse('PARAGRAPH_OUTPUT_REQUEST', message);
   }
 
   request(): object {

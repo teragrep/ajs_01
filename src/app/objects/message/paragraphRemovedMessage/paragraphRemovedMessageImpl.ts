@@ -45,13 +45,13 @@
  */
 import {ParagraphRemovedMessage} from './paragraphRemovedMessage';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {TypedMessage} from '../typedMessage/typedMessage';
+import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
 
 export class ParagraphRemovedMessageImpl implements ParagraphRemovedMessage {
   private readonly _message:WebSocketResponse;
 
   constructor(message:WebSocketResponse) {
-    this._message = new TypedMessage('PARAGRAPH_REMOVED', message);
+    this._message = new TypedWebSocketResponse('PARAGRAPH_REMOVED', message);
   }
 
   paragraphId(): string {

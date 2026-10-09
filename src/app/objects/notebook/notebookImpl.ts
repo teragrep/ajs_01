@@ -51,9 +51,9 @@ import {ParagraphCollectionImpl} from '../paragraphCollection/paragraphCollectio
 import {ParagraphCollection} from '../paragraphCollection/paragraphCollection';
 import {signal, Signal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
-import {MessageFilter} from '../message/messageFilter/messageFilter';
+import {WebSocketResponseFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponseFilter';
 import {MessageWithField} from '../message/messageWithField/messageWithField';
-import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
+import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponsePropertyEqualsFilter';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
@@ -63,13 +63,13 @@ export class NotebookImpl implements Notebook {
   private readonly _notebook: WebSocketPayload;
   private readonly _paragraphCollection: ParagraphCollection;
   private readonly _renderNode: Signal<RenderNode>;
-  private readonly _noteIdFilter:MessageFilter;
+  private readonly _noteIdFilter:WebSocketResponseFilter;
 
   constructor(channel: Channel, notebook: object) {
     this._channel = channel;
     this._notebook = new WebSocketPayloadImpl(notebook);
     this._paragraphCollection = new ParagraphCollectionImpl(this, this._notebook.arrayProperty('paragraphs'));
-    this._noteIdFilter = new MessagePropertyEqualsFilter('noteId', this.id());
+    this._noteIdFilter = new WebSocketResponsePropertyEqualsFilter('noteId', this.id());
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.NOTEBOOK_VIEW, signal({
       paragraphCollection: this._paragraphCollection.print()()
     })));

@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {ParagraphMessage} from './paragraphMessage';
-import {TypedMessage} from '../typedMessage/typedMessage';
+import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
 import {Channel} from '../../channel/channel';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {Paragraph} from '../../paragraph/paragraph';
@@ -54,7 +54,7 @@ export class ParagraphMessageImpl implements ParagraphMessage {
   private readonly _message:WebSocketResponse;
 
   constructor(message:WebSocketResponse) {
-    this._message = new TypedMessage('PARAGRAPH', message);
+    this._message = new TypedWebSocketResponse('PARAGRAPH', message);
   }
 
   data(): object {

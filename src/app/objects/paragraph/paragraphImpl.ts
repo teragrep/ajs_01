@@ -54,7 +54,7 @@ import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
-import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
+import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponsePropertyEqualsFilter';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {MessageWithField} from '../message/messageWithField/messageWithField';
 
@@ -63,7 +63,7 @@ export class ParagraphImpl implements Paragraph {
   private readonly _output: Output;
   private readonly _paragraph: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
-  private readonly _paragraphIdFilter: MessagePropertyEqualsFilter;
+  private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
 
   constructor(channel: Channel, paragraph: object) {
     this._channel = channel;
@@ -73,7 +73,7 @@ export class ParagraphImpl implements Paragraph {
       output:this._output.print()(),
       paragraphId:this.id()
     })));
-    this._paragraphIdFilter = new MessagePropertyEqualsFilter('paragraphId', this.id());
+    this._paragraphIdFilter = new WebSocketResponsePropertyEqualsFilter('paragraphId', this.id());
   }
 
   run(): void {

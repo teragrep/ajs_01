@@ -43,14 +43,40 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import {WebSocketResponse} from '../webSocketResponse';
+import {WebSocketPayload} from '../../../webSocketPayload/webSocketPayload';
 
-export interface MessageWithAuthenticationInfo {
-  print(): {
-    op: string,
-    data: object,
-    ticket:string,
-    principal:string,
-    roles:string,
-    msgId:string
-  };
+export class TypedWebSocketResponse implements WebSocketResponse {
+  private readonly _type:string;
+  private readonly _message:WebSocketResponse;
+
+  constructor(type:string, message:WebSocketResponse) {
+    this._type = type;
+    this._message = message;
+  }
+
+  dataAsWebSocketPayload(): WebSocketPayload {
+    this.validateType();
+    return this._message.dataAsWebSocketPayload();
+  }
+
+  data(): object {
+    this.validateType();
+    return this._message.data();
+  }
+
+  operation(): string {
+    this.validateType();
+    return this._message.operation();
+  }
+
+  isStub(): boolean {
+    return this._message.isStub();
+  }
+
+  private validateType():void{
+    if(this._type !== this._message.operation()){
+      throw new RangeError(`Expected type to be "${this._type}". Received type: "${this._message.operation()}".`);
+    }
+  }
 }

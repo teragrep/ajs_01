@@ -43,11 +43,11 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {MessageWithAuthenticationInfo} from './messageWithAuthenticationInfo';
-import {Authentication} from '../../../shared/objects/security/authentication';
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
+import {WebSocketResponseWithAuthenticationInfo} from './webSocketResponseWithAuthenticationInfo';
+import {Authentication} from '../../../../shared/objects/security/authentication';
+import {WebSocketResponse} from '../webSocketResponse';
 
-export class MessageWithAuthenticationInfoImpl implements MessageWithAuthenticationInfo {
+export class WebSocketResponseWithAuthenticationInfoImpl implements WebSocketResponseWithAuthenticationInfo {
   private readonly _message: WebSocketResponse;
   private readonly _authentication:Authentication;
   private readonly _messageId:string;

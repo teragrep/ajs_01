@@ -43,8 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
+import {WebSocketResponse} from '../webSocketResponse';
 
-export interface MessageFilter {
+export interface WebSocketResponseFilter {
   filterMessage(message:WebSocketResponse): WebSocketResponse;
 }
