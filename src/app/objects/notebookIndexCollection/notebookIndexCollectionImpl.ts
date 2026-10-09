@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotebookCollection} from './notebookCollection';
+import {NotebookIndexCollection} from './notebookIndexCollection';
 import {Notebook} from '../notebook/notebook';
 import {Channel} from '../channel/channel';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
@@ -59,7 +59,7 @@ import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registe
 import {RenderNodeStub} from '../rendering/renderNode/renderNodeStub';
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
 
-export class NotebookCollectionImpl implements NotebookCollection{
+export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
   private readonly _channel:Channel;
   private readonly _responseEvents: Map<string, (message:WebSocketResponse) =>void>;
   private readonly _notebookIndices: WritableSignal<Map<string, NotebookIndex>>;
@@ -77,6 +77,20 @@ export class NotebookCollectionImpl implements NotebookCollection{
       ['NOTES_INFO', (message) => this.notesInfoResponse(message)],
       ['NOTE', (message) => this.noteResponse(message)],
     ]);
+  }
+
+  addNotebookIndex(notebookIndex: NotebookIndex): void {
+    this._notebookIndices.update(notebookIndices => {
+      notebookIndices.set(notebookIndex.id(), notebookIndex);
+      return notebookIndices;
+    });
+  }
+
+  removeAllNotebookIndices(): void {
+    this._notebookIndices.update(notebookIndices  => {
+      notebookIndices.clear();
+      return notebookIndices;
+    });
   }
 
   private notesInfoResponse(message:WebSocketResponse):void{
