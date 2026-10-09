@@ -43,36 +43,13 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import { WebSocketPayload } from '../../webSocketPayload/webSocketPayload';
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketRequest} from '../webSocketRequest';
 
-export class MessageWithField implements WebSocketResponse {
-  private readonly _message: WebSocketResponse;
-  private readonly _fieldName: string;
-  private readonly _fieldValue: unknown;
-
-  constructor(message: WebSocketResponse, fieldName: string, fieldValue: unknown) {
-    this._message = message;
-    this._fieldName = fieldName;
-    this._fieldValue = fieldValue;
-  }
-
-  dataAsWebSocketPayload(): WebSocketPayload {
-    return new WebSocketPayloadImpl(this.data());
-  }
-
-  isStub(): boolean {
-    return this._message.isStub();
-  }
-
-  data(): object {
-    const messageData= this._message.data();
-    messageData[this._fieldName] = this._fieldValue;
-    return messageData;
-  }
-
-  operation(): string {
-    return this._message.operation();
+export interface WebSocketRequestWithAuthenticationInfo extends WebSocketRequest{
+  authenticationInfo():{
+    ticket:string,
+    principal:string,
+    roles:string,
+    msgId:string
   }
 }

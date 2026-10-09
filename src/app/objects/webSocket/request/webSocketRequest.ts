@@ -43,36 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketResponseWithAuthenticationInfo} from './webSocketResponseWithAuthenticationInfo';
-import {Authentication} from '../../../../shared/objects/security/authentication';
-import {WebSocketResponse} from '../webSocketResponse';
-
-export class WebSocketResponseWithAuthenticationInfoImpl implements WebSocketResponseWithAuthenticationInfo {
-  private readonly _message: WebSocketResponse;
-  private readonly _authentication:Authentication;
-  private readonly _messageId:string;
-
-  constructor(message: WebSocketResponse, authentication:Authentication, messageId:string) {
-    this._message = message;
-    this._authentication = authentication;
-    this._messageId = messageId;
-  }
-
-  print(): { op: string, data: object, ticket:string, principal:string, roles:string, msgId:string }{
-    let authenticationInfo = {
-      principal: '',
-      ticket: '',
-      roles: '',
-    };
-    if(!this._authentication.isStub()){
-      const {screenUsername, ...ticket } = this._authentication.ticket();
-      authenticationInfo = ticket;
-    }
-    return {
-      op: this._message.operation(),
-      data: this._message.data(),
-      ...authenticationInfo,
-      msgId: this._messageId,
-    };
-  }
+export interface WebSocketRequest {
+  operation():string;
+  data():object;
 }

@@ -43,14 +43,21 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import {WebSocketRequest} from './webSocketRequest';
+import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 
-export interface WebSocketResponseWithAuthenticationInfo {
-  print(): {
-    op: string,
-    data: object,
-    ticket:string,
-    principal:string,
-    roles:string,
-    msgId:string
-  };
+export class WebSocketRequestImpl implements WebSocketRequest {
+  private readonly _webSocketPayload:WebSocketPayload;
+
+  constructor(webSocketPayload:WebSocketPayload) {
+    this._webSocketPayload = webSocketPayload;
+  }
+
+  data(): object {
+    return this._webSocketPayload.objectProperty('data');
+  }
+
+  operation(): string {
+    return this._webSocketPayload.stringProperty('op');
+  }
 }
