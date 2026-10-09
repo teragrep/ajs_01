@@ -43,28 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketServer as wss} from 'ws';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import {FakeServerEventDispatcherImpl} from './fakeServerEventDispatcher/fakeServerEventDispatcherImpl';
+import {WebSocket} from 'ws';
+import {FakeServerEvent} from '../fakeServerEvent';
+import { Message } from '../../../src/app/objects/message/message';
 
-export default class WebSocketServer {
-  private readonly _server: wss;
+export default class PingEvent implements FakeServerEvent {
+  private readonly _webSocket: WebSocket;
+  private readonly _eventId: string;
 
-  constructor(fileService: FileServiceImpl) {
-    const port = process.env.WEBSOCKET_PORT || 8081;
-    this._server = new wss({ port: Number(port) });
-    this.configureWss(fileService);
+  constructor(webSocket: WebSocket) {
+    this._webSocket = webSocket;
+    this._eventId = 'PING';
   }
 
-  private configureWss(fileService: FileServiceImpl): void {
-    this._server.on('connection', (client) => {
-      const fakeServerEventDispatcher = new FakeServerEventDispatcherImpl(client, fileService);
-      console.debug('Client connected');
-      client.on('message', function message(data) {
-        const receivedJson = data.toString();
-        console.debug('Received message', receivedJson);
-        fakeServerEventDispatcher.resolveServerEvent(JSON.parse(receivedJson));
-      });
-    });
+  eventId(): string {
+    return this._eventId;
   }
-};
+
+  handle(requestMessage: Message): void {
+    const pongMessage = {
+      op:'PONG',
+      data: {},
+    };
+    this._webSocket.send(JSON.stringify(pongMessage));
+  }
+}

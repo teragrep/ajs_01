@@ -43,28 +43,34 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketServer as wss} from 'ws';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import {FakeServerEventDispatcherImpl} from './fakeServerEventDispatcher/fakeServerEventDispatcherImpl';
+import {WebSocket} from 'ws';
+import {FakeServerEvent} from '../fakeServerEvent';
+import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
+import {NotesInfoServerResponse} from '../../../src/test/fakes/webSocketServerResponses/notesInfo/notesInfoServerResponse';
 
-export default class WebSocketServer {
-  private readonly _server: wss;
+export default class NotesInfoEvent implements FakeServerEvent{
+  private readonly  _webSocket: WebSocket;
+  private readonly _eventId: string;
+  private readonly _noteService: NoteServiceImpl;
 
-  constructor(fileService: FileServiceImpl) {
-    const port = process.env.WEBSOCKET_PORT || 8081;
-    this._server = new wss({ port: Number(port) });
-    this.configureWss(fileService);
+  constructor(webSocket:WebSocket, noteService: NoteServiceImpl) {
+    this._webSocket = webSocket;
+    this._noteService = noteService;
+    this._eventId = 'LIST_NOTES';
   }
 
-  private configureWss(fileService: FileServiceImpl): void {
-    this._server.on('connection', (client) => {
-      const fakeServerEventDispatcher = new FakeServerEventDispatcherImpl(client, fileService);
-      console.debug('Client connected');
-      client.on('message', function message(data) {
-        const receivedJson = data.toString();
-        console.debug('Received message', receivedJson);
-        fakeServerEventDispatcher.resolveServerEvent(JSON.parse(receivedJson));
-      });
-    });
+  eventId(): string {
+    return this._eventId;
   }
-};
+
+  handle():void {
+    const notes = this._noteService.all();
+    const data:{id:string, isTrash:boolean, name:string, path:string }[] = [];
+    for (const note of notes){
+      const info = {id:note.id, isTrash:false, name:note.name, path:note.path };
+      data.push(info);
+    }
+    const notesInfoResponse = new NotesInfoServerResponse(data);
+    this._webSocket.send(notesInfoResponse.toJson());
+  }
+}

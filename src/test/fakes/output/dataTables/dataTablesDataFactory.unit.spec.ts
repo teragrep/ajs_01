@@ -43,50 +43,31 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import express from 'express';
-import session from 'express-session';
-import path from 'path';
-import WebSocketServer from './webSocketServer';
-import RouterFactory from './api/routerFactory';
-import {FakeUsers} from './api/user/fakeUsers';
-import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
-import {existsSync, mkdirSync} from 'fs';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import NoteServiceImpl from './services/noteService/noteServiceImpl';
-import {NotebookPayload} from '../src/test/fakes/notebook/notebookPayload';
-import {NotebookPayloadFactory} from '../src/test/fakes/notebook/notebookPayloadFactory';
-import {NotebookPayloadFactoryImpl} from '../src/test/fakes/notebook/notebookPayloadFactoryImpl';
-import {ParagraphPayload} from '../src/test/fakes/paragraph/paragraphPayload';
-import {ParagraphPayloadFactory} from '../src/test/fakes/paragraph/paragraphPayloadFactory';
-import {AppDataSeeder} from './appDataSeeder/appDataSeeder';
-import {AppDataSeederImpl} from './appDataSeeder/appDataSeederImpl';
+import {DataTablesDataFactory} from './dataTablesDataFactory';
+import {DataTablesDataFactoryImpl} from './dataTablesDataFactoryImpl';
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const PUBLIC_PATH = path.join(__dirname, 'dist');
+describe('DataTablesDataFactory unit test', () => {
+  const dataTablesDataFactory: DataTablesDataFactory = new DataTablesDataFactoryImpl();
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_PATH, 'index.html'));
+  it('Should yield raw data', () => {
+    const rowCount = 3;
+    const rawData = dataTablesDataFactory.rawData(rowCount);
+    expect(rawData).toHaveLength(3);
+  });
+
+  it('Should paginate raw data', () => {
+    const rowCount = 10;
+    const rawData = dataTablesDataFactory.rawData(rowCount);
+    const start = 5;
+    const length = 3;
+    const draw = 1;
+    const paginatedData = dataTablesDataFactory.paginatedData(rawData, start, length, draw);
+    const expectedData = {
+      data: rawData.slice(start, start+length),
+      recordsTotal: rowCount,
+      recordsFiltered: rowCount,
+      draw:draw
+    };
+    expect(paginatedData).toEqual(expectedData);
+  });
 });
-
-//Initialize session
-const sessionConfig = session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }});
-app.use(sessionConfig);
-
-//Initialize router and authentication
-const security = new SecurityManagerImpl(FakeUsers);
-const router = new RouterFactory(security);
-app.use(router.initialized());
-app.use(express.static(PUBLIC_PATH));
-
-//Seed fake data
-const basePath = './devServer/temp';
-const fileService = new FileServiceImpl(basePath);
-const noteService = new NoteServiceImpl(fileService);
-const appDataSeeder:AppDataSeeder = new AppDataSeederImpl(noteService);
-appDataSeeder.seedFakes(basePath);
-
-new WebSocketServer(fileService);
-
-export default app;

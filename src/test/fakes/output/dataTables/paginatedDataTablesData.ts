@@ -43,28 +43,9 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketServer as wss} from 'ws';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import {FakeServerEventDispatcherImpl} from './fakeServerEventDispatcher/fakeServerEventDispatcherImpl';
-
-export default class WebSocketServer {
-  private readonly _server: wss;
-
-  constructor(fileService: FileServiceImpl) {
-    const port = process.env.WEBSOCKET_PORT || 8081;
-    this._server = new wss({ port: Number(port) });
-    this.configureWss(fileService);
-  }
-
-  private configureWss(fileService: FileServiceImpl): void {
-    this._server.on('connection', (client) => {
-      const fakeServerEventDispatcher = new FakeServerEventDispatcherImpl(client, fileService);
-      console.debug('Client connected');
-      client.on('message', function message(data) {
-        const receivedJson = data.toString();
-        console.debug('Received message', receivedJson);
-        fakeServerEventDispatcher.resolveServerEvent(JSON.parse(receivedJson));
-      });
-    });
-  }
-};
+export interface PaginatedDataTablesData {
+  data: object[];
+  recordsTotal: number;
+  recordsFiltered: number;
+  draw: number
+}

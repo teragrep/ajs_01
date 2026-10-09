@@ -43,28 +43,19 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketServer as wss} from 'ws';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import {FakeServerEventDispatcherImpl} from './fakeServerEventDispatcher/fakeServerEventDispatcherImpl';
+import {FakeConfig} from './fakeConfig';
+import {ConfigPayload} from './configPayload';
 
-export default class WebSocketServer {
-  private readonly _server: wss;
-
-  constructor(fileService: FileServiceImpl) {
-    const port = process.env.WEBSOCKET_PORT || 8081;
-    this._server = new wss({ port: Number(port) });
-    this.configureWss(fileService);
+export class FakeConfigImpl implements FakeConfig {
+  toConfigPayload(): ConfigPayload {
+    return {
+      colWidth: 12,
+      editorMode: 'ace/mode/dpl',
+      editorSetting: {completionSupport: true, editOnDblClick: false, language: ''},
+      enabled: true,
+      fontSize: 12,
+      lineNumbers: true,
+      title: true
+    };
   }
-
-  private configureWss(fileService: FileServiceImpl): void {
-    this._server.on('connection', (client) => {
-      const fakeServerEventDispatcher = new FakeServerEventDispatcherImpl(client, fileService);
-      console.debug('Client connected');
-      client.on('message', function message(data) {
-        const receivedJson = data.toString();
-        console.debug('Received message', receivedJson);
-        fakeServerEventDispatcher.resolveServerEvent(JSON.parse(receivedJson));
-      });
-    });
-  }
-};
+}

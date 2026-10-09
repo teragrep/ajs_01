@@ -43,50 +43,39 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import express from 'express';
-import session from 'express-session';
-import path from 'path';
-import WebSocketServer from './webSocketServer';
-import RouterFactory from './api/routerFactory';
-import {FakeUsers} from './api/user/fakeUsers';
-import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
-import {existsSync, mkdirSync} from 'fs';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import NoteServiceImpl from './services/noteService/noteServiceImpl';
-import {NotebookPayload} from '../src/test/fakes/notebook/notebookPayload';
-import {NotebookPayloadFactory} from '../src/test/fakes/notebook/notebookPayloadFactory';
-import {NotebookPayloadFactoryImpl} from '../src/test/fakes/notebook/notebookPayloadFactoryImpl';
-import {ParagraphPayload} from '../src/test/fakes/paragraph/paragraphPayload';
-import {ParagraphPayloadFactory} from '../src/test/fakes/paragraph/paragraphPayloadFactory';
-import {AppDataSeeder} from './appDataSeeder/appDataSeeder';
-import {AppDataSeederImpl} from './appDataSeeder/appDataSeederImpl';
+import FileServiceImpl from '../fileService/fileServiceImpl';
+import {NoteService} from './noteService';
+import {NotebookPayload} from '../../../src/test/fakes/notebook/notebookPayload';
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const PUBLIC_PATH = path.join(__dirname, 'dist');
+export default class NoteServiceImpl implements NoteService{
+  private readonly _fileService: FileServiceImpl;
+  private _lastNoteId: string;
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_PATH, 'index.html'));
-});
+  constructor(fileService: FileServiceImpl) {
+    this._fileService = fileService;
+  }
 
-//Initialize session
-const sessionConfig = session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }});
-app.use(sessionConfig);
+  all(): NotebookPayload[]{
+    return this._fileService.readAll<NotebookPayload>();
+  }
 
-//Initialize router and authentication
-const security = new SecurityManagerImpl(FakeUsers);
-const router = new RouterFactory(security);
-app.use(router.initialized());
-app.use(express.static(PUBLIC_PATH));
+  find(notebookId:string): NotebookPayload{
+    const notebook = this._fileService.read<NotebookPayload>(notebookId);
+    this._lastNoteId = notebookId;
+    return notebook;
+  }
 
-//Seed fake data
-const basePath = './devServer/temp';
-const fileService = new FileServiceImpl(basePath);
-const noteService = new NoteServiceImpl(fileService);
-const appDataSeeder:AppDataSeeder = new AppDataSeederImpl(noteService);
-appDataSeeder.seedFakes(basePath);
+  add(notebook:NotebookPayload){
+    const fileName = notebook.id;
+    this._fileService.write(notebook, fileName, false);
+  }
 
-new WebSocketServer(fileService);
+  update(notebook:NotebookPayload){
+    const fileName = notebook.id;
+    this._fileService.write(notebook, fileName, true);
+  }
 
-export default app;
+  lastNoteId(){
+    return this._lastNoteId;
+  }
+}

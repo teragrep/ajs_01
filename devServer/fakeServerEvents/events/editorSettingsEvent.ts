@@ -43,50 +43,58 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import express from 'express';
-import session from 'express-session';
-import path from 'path';
-import WebSocketServer from './webSocketServer';
-import RouterFactory from './api/routerFactory';
-import {FakeUsers} from './api/user/fakeUsers';
-import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
-import {existsSync, mkdirSync} from 'fs';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import NoteServiceImpl from './services/noteService/noteServiceImpl';
-import {NotebookPayload} from '../src/test/fakes/notebook/notebookPayload';
-import {NotebookPayloadFactory} from '../src/test/fakes/notebook/notebookPayloadFactory';
-import {NotebookPayloadFactoryImpl} from '../src/test/fakes/notebook/notebookPayloadFactoryImpl';
-import {ParagraphPayload} from '../src/test/fakes/paragraph/paragraphPayload';
-import {ParagraphPayloadFactory} from '../src/test/fakes/paragraph/paragraphPayloadFactory';
-import {AppDataSeeder} from './appDataSeeder/appDataSeeder';
-import {AppDataSeederImpl} from './appDataSeeder/appDataSeederImpl';
+import {FakeServerEvent} from '../fakeServerEvent';
+import {WebSocket} from 'ws';
+import {
+  EditorSettingServerResponse
+} from '../../../src/test/fakes/webSocketServerResponses/editorSetting/editorSettingServerResponse';
+import {Message} from '../../../src/app/objects/message/message';
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const PUBLIC_PATH = path.join(__dirname, 'dist');
+export default class EditorSettingsEvent implements FakeServerEvent {
+  private readonly _webSocket: WebSocket;
+  private readonly _eventId: string;
+  private readonly _supportedLanguages: string[];
+  private readonly _defaultLanguage: string;
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_PATH, 'index.html'));
-});
+  constructor(webSocket: WebSocket) {
+    this._webSocket = webSocket;
+    this._eventId = 'EDITOR_SETTING';
+    this._supportedLanguages = ['text', 'sql', 'scala', 'python'];
+    this._defaultLanguage = this._supportedLanguages[0];
+  }
 
-//Initialize session
-const sessionConfig = session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }});
-app.use(sessionConfig);
+  eventId(): string {
+    return this._eventId;
+  }
 
-//Initialize router and authentication
-const security = new SecurityManagerImpl(FakeUsers);
-const router = new RouterFactory(security);
-app.use(router.initialized());
-app.use(express.static(PUBLIC_PATH));
+  handle(requestMessage: Message): void {
+    const paragraphText = requestMessage.dataAsWebSocketPayload().stringProperty('paragraphText');
+    const language = this.parseLanguage(paragraphText);
+    const editorSettings = {
+      language:language,
+      editorOnDblClick: false,
+      completionKey: '',
+      completionSupport: true,
+    };
+    const paragraphId = requestMessage.dataAsWebSocketPayload().stringProperty('paragraphId');
+    const editorSettingResponse = new EditorSettingServerResponse(editorSettings, paragraphId);
+    this._webSocket.send(editorSettingResponse.toJson());
+  }
 
-//Seed fake data
-const basePath = './devServer/temp';
-const fileService = new FileServiceImpl(basePath);
-const noteService = new NoteServiceImpl(fileService);
-const appDataSeeder:AppDataSeeder = new AppDataSeederImpl(noteService);
-appDataSeeder.seedFakes(basePath);
-
-new WebSocketServer(fileService);
-
-export default app;
+  private parseLanguage(text:string):string{
+    let found = this._defaultLanguage;
+    try{
+      this._supportedLanguages.some(lan => {
+        const searchedText = '%'+lan;
+        if(text.search(searchedText) === 0) {
+          found = lan;
+          return true;
+        }
+      });
+    }
+    catch(err) {
+      console.error(`Parsing language failed: ${err}`);
+    }
+    return found;
+  }
+}

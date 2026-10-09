@@ -43,7 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Stubable} from '../../interfaces/common';
+
+import Stubable from '../../../src/app/shared/interfaces/stubable';
 
 export interface User extends Stubable {
   credentialsMatch(username:string, password:string): boolean;

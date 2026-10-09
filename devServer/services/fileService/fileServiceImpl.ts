@@ -43,50 +43,59 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import express from 'express';
-import session from 'express-session';
+import {readFileSync, readdirSync, writeFileSync, unlinkSync, existsSync} from 'fs';
 import path from 'path';
-import WebSocketServer from './webSocketServer';
-import RouterFactory from './api/routerFactory';
-import {FakeUsers} from './api/user/fakeUsers';
-import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
-import {existsSync, mkdirSync} from 'fs';
-import FileServiceImpl from './services/fileService/fileServiceImpl';
-import NoteServiceImpl from './services/noteService/noteServiceImpl';
-import {NotebookPayload} from '../src/test/fakes/notebook/notebookPayload';
-import {NotebookPayloadFactory} from '../src/test/fakes/notebook/notebookPayloadFactory';
-import {NotebookPayloadFactoryImpl} from '../src/test/fakes/notebook/notebookPayloadFactoryImpl';
-import {ParagraphPayload} from '../src/test/fakes/paragraph/paragraphPayload';
-import {ParagraphPayloadFactory} from '../src/test/fakes/paragraph/paragraphPayloadFactory';
-import {AppDataSeeder} from './appDataSeeder/appDataSeeder';
-import {AppDataSeederImpl} from './appDataSeeder/appDataSeederImpl';
+import {FileService} from './fileService';
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const PUBLIC_PATH = path.join(__dirname, 'dist');
+export default class FileServiceImpl implements FileService{
+  private readonly _path:string;
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_PATH, 'index.html'));
-});
+  constructor(filePath:string) {
+    this._path = filePath;
+  }
 
-//Initialize session
-const sessionConfig = session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }});
-app.use(sessionConfig);
+  write<T>(data: T, fileName: string, overwrite:boolean) {
+    const filePath = path.join(this._path, fileName);
+    this.checkPath(filePath, overwrite);
+    writeFileSync(filePath, JSON.stringify(data));
+    if(overwrite) {
+      console.info(`Updated file: ${filePath.toString()}`);
+    }
+    else{
+      console.info(`Created file: ${filePath.toString()}`);
+    }
+  }
 
-//Initialize router and authentication
-const security = new SecurityManagerImpl(FakeUsers);
-const router = new RouterFactory(security);
-app.use(router.initialized());
-app.use(express.static(PUBLIC_PATH));
+  read<T>(fileName: string): T{
+    const filePath = path.join(this._path, fileName);
+    this.checkPath(filePath, true);
+    return JSON.parse(readFileSync(filePath, 'utf8').toString());
+  }
 
-//Seed fake data
-const basePath = './devServer/temp';
-const fileService = new FileServiceImpl(basePath);
-const noteService = new NoteServiceImpl(fileService);
-const appDataSeeder:AppDataSeeder = new AppDataSeederImpl(noteService);
-appDataSeeder.seedFakes(basePath);
+  readAll<T>(): T[]{
+    const filePath = path.join(this._path);
+    this.checkPath(filePath, true);
+    const files = readdirSync(filePath);
+    return files.map(f => this.read(f));
+  }
 
-new WebSocketServer(fileService);
+  delete(fileName: string) {
+    const filePath = path.join(this._path, fileName);
+    this.checkPath(filePath, true);
+    unlinkSync(filePath);
+    console.info(`Deleted file: ${filePath.toString()}`);
+  }
 
-export default app;
+  private checkPath(path:string, shouldExist: boolean){
+    const pathExists = existsSync(path);
+    if(pathExists && !shouldExist){
+      console.error(`File ${path} already exists.`);
+      throw new Error(`File ${path} already exists.`);
+    }
+    if(!pathExists && shouldExist){
+      console.error(`File ${path} doesn't exists.`);
+      throw new Error(`File ${path} doesn't exists.`);
+    }
+  }
+}
+
