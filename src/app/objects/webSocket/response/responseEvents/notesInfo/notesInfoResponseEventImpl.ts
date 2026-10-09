@@ -43,46 +43,25 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
-import {NotesInfoMessage} from './notesInfoMessage';
-import {NotesInfoMessageImpl} from './notesInfoMessageImpl';
+import {NotesInfoResponseEvent} from './notesInfoResponseEvent';
+import {NotebookIndexCollection} from '../../../../notebookIndexCollection/notebookIndexCollection';
+import {WebSocketResponse} from '../../webSocketResponse';
+import {TypedWebSocketResponse} from '../../typedWebSocketResponse/typedWebSocketResponse';
+import {NotebookIndexImpl} from '../../../../notebookIndex/notebookIndexImpl';
 
-describe('NotesInfoMessage unit test', () => {
-  const messageData ={
-    op:'NOTES_INFO',
-    data:{
-      notes:[{id:'notebook1'}, {id:'notebook2'}]
-    }
-  };
-  let message:WebSocketResponse;
-  let notesInfoMessage:NotesInfoMessage;
+export class NotesInfoResponseEventImpl implements NotesInfoResponseEvent {
+  private readonly _webSocketResponse:WebSocketResponse;
 
-  beforeEach(() => {
-    message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
-    notesInfoMessage = new NotesInfoMessageImpl(message);
-  });
+  constructor(message:WebSocketResponse) {
+    this._webSocketResponse = new TypedWebSocketResponse('NOTES_INFO', message);
+  }
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(notesInfoMessage).toBeDefined();
+  updateNotebookIndices(notebookIndexCollection: NotebookIndexCollection): void {
+    notebookIndexCollection.clear();
+    const notebookIndicesPayload = this._webSocketResponse.dataAsWebSocketPayload().arrayProperty<object>('notes');
+    notebookIndicesPayload.forEach(notebookIndexPayload => {
+      const notebookIndex = new NotebookIndexImpl(notebookIndexCollection, notebookIndexPayload);
+      notebookIndexCollection.addOrUpdate(notebookIndex);
     });
-
-    it('Should have notebookIndices', () => {
-      const notebookIndices = notesInfoMessage.notebookIndices();
-      expect(notebookIndices).toHaveLength(2);
-      expect(notebookIndices.get(messageData.data.notes[0].id)).toBeDefined();
-      expect(notebookIndices.get(messageData.data.notes[1].id)).toBeDefined();
-    });
-  });
-
-  describe('Validation', () => {
-    it('Should throw if message operation is not "NOTES_INFO"', () => {
-      messageData.op = '';
-      message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
-      notesInfoMessage = new NotesInfoMessageImpl(message);
-      expect(() => notesInfoMessage.notebookIndices()).toThrow();
-    });
-  });
-});
+  }
+}

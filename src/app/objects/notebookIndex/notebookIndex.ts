@@ -45,8 +45,9 @@
  */
 import {Printable} from '../rendering/printable/printable';
 import {Notebook} from '../notebook/notebook';
+import {Channel} from '../channel/channel';
 
-export interface NotebookIndex extends Printable{
+export interface NotebookIndex extends Printable, Channel{
   id():string;
   renderNotebook(notebook:Notebook):void;
 }
