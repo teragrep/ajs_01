@@ -45,18 +45,20 @@
  */
 import {Component, input} from '@angular/core';
 import {RenderNode} from '../../../objects/rendering/renderNode/renderNode';
-import {RenderNodeHostView} from '../renderNodeHost/renderNodeHostView';
+import {RenderNodeRootView} from '../renderNodeRoot/renderNodeRootView';
 
 @Component({
   selector: 'notebook-index',
-  imports: [RenderNodeHostView],
+  imports: [
+    RenderNodeRootView
+  ],
   template: `
-    @if(!currentNotebook().isStub()){
-      <render-node-host [renderNode]="currentNotebook()" [containerId]="containerId()"></render-node-host>
+    @if (!notebook().isStub()) {
+      <render-node-host [renderNode]="notebook()" [containerId]="containerId()"></render-node-host>
     }
   `
 })
 export class NotebookIndexView {
-  currentNotebook = input.required<RenderNode>();
+  notebook = input.required<RenderNode>();
   containerId = input.required<string>();
 }

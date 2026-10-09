@@ -43,33 +43,24 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotebookIndexCollectionImpl} from '../../../../notebookIndexCollection/notebookIndexCollectionImpl';
-import {FakeChannel} from '../../../../channel/fakeChannel';
-import {NotesInfoResponseEvent} from './notesInfoResponseEvent';
-import {NotesInfoResponseEventImpl} from './notesInfoResponseEventImpl';
-import {WebSocketResponseImpl} from '../../webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {NoteResponseEvent} from './noteResponseEvent';
+import {NotebookIndex} from '../../../notebookIndex/notebookIndex';
+import {WebSocketResponse} from '../../response/webSocketResponse';
+import {TypedWebSocketResponse} from '../../response/typedWebSocketResponse/typedWebSocketResponse';
+import {NotebookImpl} from '../../../notebook/notebookImpl';
 
-describe('NotesInfoResponse unit test', () => {
-  const notebookIndexCollection = new NotebookIndexCollectionImpl(new FakeChannel());
-  const notebookIndices = [
-    {id:'notebook1'},
-    {id:'notebook2'},
-    {id:'notebook3'},
-  ];
-  const notesInfoResponseEvent: NotesInfoResponseEvent = new NotesInfoResponseEventImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl({
-    op:'NOTES_INFO',
-    data:{
-      notes:notebookIndices
+export class NoteResponseEventImpl implements NoteResponseEvent {
+  private readonly _webSocketResponse:WebSocketResponse;
+
+  constructor(webSocketResponse:WebSocketResponse) {
+    this._webSocketResponse = new TypedWebSocketResponse('NOTE', webSocketResponse);
+  }
+
+  renderNotebook(notebookIndex: NotebookIndex): void {
+    const receivedNotebookId = this._webSocketResponse.dataAsWebSocketPayload().stringProperty('id');
+    if(receivedNotebookId === notebookIndex.id()){
+      const notebook = new NotebookImpl(notebookIndex, this._webSocketResponse.data());
+      notebookIndex.renderNotebook(notebook);
     }
-  })));
-
-  it('Should update notebook indices', () => {
-    const notebookCollectionPrinted = notebookIndexCollection.print()();
-    const notebookCollectionIndicesBeforeMessage = notebookCollectionPrinted.inputs()()['notebookIndices'];
-    notesInfoResponseEvent.updateNotebookIndices(notebookIndexCollection);
-    const notebookCollectionIndicesAfterMessage = notebookCollectionPrinted.inputs()()['notebookIndices'];
-    expect(notebookCollectionIndicesBeforeMessage).toEqual([]);
-    expect(notebookCollectionIndicesAfterMessage).toHaveLength(3);
-  });
-});
+  }
+}

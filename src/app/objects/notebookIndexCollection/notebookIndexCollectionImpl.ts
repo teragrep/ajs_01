@@ -53,11 +53,11 @@ import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPaylo
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
-import {NotesInfoResponseEventImpl} from '../webSocket/response/responseEvents/notesInfo/notesInfoResponseEventImpl';
+import {NotesInfoResponseEventImpl} from '../webSocket/responseEvents/notesInfo/notesInfoResponseEventImpl';
 
 export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
   private readonly _channel:Channel;
-  private readonly _responseEvents: Map<string, (message:WebSocketResponse) =>void>;
+  private readonly _responseEvents: Map<string, (webSocketResponse:WebSocketResponse) =>void>;
   private readonly _notebookIndices: WritableSignal<Map<string, NotebookIndex>>;
   private readonly _renderNode:Signal<RenderNode>;
 
@@ -68,7 +68,7 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
       notebookIndices: Array.from(this._notebookIndices())
     }))));
     this._responseEvents = new Map([
-      ['NOTES_INFO', (message) => this.notesInfoResponseEvent(message)],
+      ['NOTES_INFO', (webSocketResponse) => this.notesInfoResponseEvent(webSocketResponse)],
     ]);
   }
 
@@ -86,8 +86,8 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
     });
   }
 
-  private notesInfoResponseEvent(message:WebSocketResponse):void{
-    const notesInfoResponseEvent = new NotesInfoResponseEventImpl(message);
+  private notesInfoResponseEvent(webSocketResponse:WebSocketResponse):void{
+    const notesInfoResponseEvent = new NotesInfoResponseEventImpl(webSocketResponse);
     notesInfoResponseEvent.updateNotebookIndices(this);
   }
 

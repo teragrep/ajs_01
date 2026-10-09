@@ -43,21 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NoteMessage} from './noteMessage';
-import {Notebook} from '../../notebook/notebook';
-import {Channel} from '../../channel/channel';
-import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {NotebookImpl} from '../../notebook/notebookImpl';
+import {NotebookIndex} from '../../../notebookIndex/notebookIndex';
 
-export class NoteMessageImpl implements NoteMessage{
-  private readonly _message:WebSocketResponse;
-
-  constructor(message:WebSocketResponse) {
-    this._message = new TypedWebSocketResponse('NOTE', message);
-  }
-
-  notebook(channel: Channel): Notebook {
-    return new NotebookImpl(channel, this._message.data());
-  }
+export interface NoteResponseEvent {
+  renderNotebook(notebookIndex:NotebookIndex):void;
 }

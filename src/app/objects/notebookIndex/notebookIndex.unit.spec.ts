@@ -45,24 +45,76 @@
  */
 import {NotebookIndex} from './notebookIndex';
 import {NotebookIndexImpl} from './notebookIndexImpl';
+import {Channel} from '../channel/channel';
+import {RenderNode} from '../rendering/renderNode/renderNode';
+import {NotebookImpl} from '../notebook/notebookImpl';
+import {FakeChannel} from '../channel/fakeChannel';
 
 describe('NotebookIndex', () => {
   let notebookIndex: NotebookIndex;
+  let channel:Channel;
+  const fakeMessage = {
+    op:'test',
+    data:{}
+  };
+  const notebookId = 'notebookId';
+  const notebookIndexData ={
+    id:notebookId
+  };
+
   beforeEach(() => {
-    notebookIndex = new NotebookIndexImpl({id: 'notebook'});
+    channel = new FakeChannel();
+    notebookIndex = new NotebookIndexImpl(channel, notebookIndexData);
   });
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(notebookIndex).toBeDefined();
+  it('Should have id', () => {
+    expect(notebookIndex.id()).toEqual(notebookId);
+  });
+
+  it('Should print', () => {
+    const printed = notebookIndex.print()();
+    const inputs = printed.inputs()();
+    expect(printed.isStub()).toBe(false);
+    expect((inputs['notebook'] as RenderNode).isStub()).toBe(true);
+  });
+
+  it('Should request channel', () => {
+    const channelSpy = vi.spyOn(channel, 'request');
+    notebookIndex.request(fakeMessage);
+    expect(channelSpy).toHaveBeenCalledExactlyOnceWith(fakeMessage);
+  });
+
+  it('Should render notebook', () => {
+    const notebook = new NotebookImpl(channel, {id:notebookId, paragraphs:[]});
+    notebookIndex.renderNotebook(notebook);
+    const printed = notebookIndex.print()();
+    const inputs = printed.inputs()();
+    expect((inputs['notebook'] as RenderNode).isStub()).toBe(false);
+  });
+
+  it('Should throw if notebookId is wrong', () => {
+    const wrongNotebookId = 'wrongNotebookId';
+    const notebook = new NotebookImpl(channel, {id:wrongNotebookId, paragraphs:[]});
+    expect(() => notebookIndex.renderNotebook(notebook)).toThrow();
+  });
+
+  describe('Responses', () => {
+    it('Should render note after NOTE response', () => {
+      notebookIndex.response({
+        op:'NOTE',
+        data:{id:notebookId, paragraphs:[]}
+      });
+      const printed = notebookIndex.print()();
+      const inputs = printed.inputs()();
+      expect((inputs['notebook'] as RenderNode).isStub()).toBe(false);
     });
 
-    it('Should have id', () => {
-      expect(notebookIndex.id()).toEqual('notebook');
-    });
-
-    it('Should print', () => {
-      expect(notebookIndex.print()()).toBeDefined();
+    it('Should respond note', () => {
+      const notebook = new NotebookImpl(channel, {id:notebookId, paragraphs:[]});
+      notebookIndex.renderNotebook(notebook);
+      const notebookSpy = vi.spyOn(notebook, 'response');
+      notebookIndex.response(fakeMessage);
+      expect(notebookSpy).toHaveBeenCalledExactlyOnceWith(fakeMessage);
     });
   });
 });
