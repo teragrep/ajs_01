@@ -61,8 +61,8 @@ describe('Message', () => {
       message = new MessageImpl(new WebSocketPayloadImpl(json));
     });
 
-    it('Should have been initialized', () => {
-      expect(message).toBeInstanceOf(MessageImpl);
+    it('Should not be stub', () => {
+      expect(message.isStub()).toBe(false);
     });
 
     it('Should have operation', () => {

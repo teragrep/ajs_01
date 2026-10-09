@@ -43,7 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Respondable} from '../../channel/respondable';
-import {Register} from '../register';
+import {MessageFilter} from './messageFilter';
+import {Message} from '../message';
+import {MessageStub} from '../messageStub';
 
-export interface ResponseRegister extends Respondable, Register {}
+export class MessagePropertyEqualsFilter implements MessageFilter {
+  private readonly _propertyName: string;
+  private readonly _propertyValue: unknown;
+
+  constructor(propertyName: string, propertyValue: unknown) {
+    this._propertyName = propertyName;
+    this._propertyValue = propertyValue;
+  }
+
+  filterMessage(message: Message): Message {
+    const property = message.data()[this._propertyName];
+    let filteredMessage:Message;
+    if(property && property !== this._propertyValue){
+      filteredMessage = new MessageStub();
+    }
+    else{
+      filteredMessage = message;
+    }
+    return filteredMessage;
+  }
+}

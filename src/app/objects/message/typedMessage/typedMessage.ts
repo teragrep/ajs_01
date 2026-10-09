@@ -70,6 +70,10 @@ export class TypedMessage implements Message {
     return this._message.operation();
   }
 
+  isStub(): boolean {
+    return this._message.isStub();
+  }
+
   private validateType():void{
     if(this._type !== this._message.operation()){
       throw new RangeError(`Expected type to be "${this._type}". Received type: "${this._message.operation()}".`);

@@ -43,33 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {RequestRegister} from '../requestRegister';
-import {MessageImpl} from '../../../message/messageImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {Message} from '../message';
 
-export class RequestRegisterWithPropertyDecorator implements RequestRegister {
-  private readonly _requestRegister:RequestRegister;
-  private readonly _property: { name:string, value:unknown };
-
-  constructor(requestRegister:RequestRegister, property: { name:string, value:unknown }) {
-    this._requestRegister = requestRegister;
-    this._property = property;
-  }
-
-  register(operation: string, callback: (json: object) => void): void {
-    this._requestRegister.register(operation, callback);
-  }
-
-  request(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const messageData = new WebSocketPayloadImpl(message.data());
-    const requestMessage = {
-      op:message.operation(),
-      data:message.data()
-    };
-    if(messageData.propertyExists(this._property.name)){
-      requestMessage.data[this._property.name] = this._property.value;
-    }
-    this._requestRegister.request(requestMessage);
-  }
+export interface MessageFilter {
+  filterMessage(message:Message): Message;
 }

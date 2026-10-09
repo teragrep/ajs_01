@@ -43,45 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {RequestRegisterWithPropertyDecorator} from './requestRegisterWithPropertyDecorator';
-import {RequestRegister} from '../requestRegister';
-import {Channel} from '../../../channel/channel';
-import {FakeChannel} from '../../../channel/fakeChannel';
-import {RequestRegisterImpl} from '../requestRegisterImpl';
+import {MessageWithField} from './messageWithField';
+import {MessageImpl} from '../messageImpl';
+import {Message} from '../message';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-describe('RequestRegisterWithPropertyDecorator unit test', () => {
-  let channel: Channel;
-  let requestRegister: RequestRegister;
-  let requestRegisterWithPropertyDecorator: RequestRegister;
+describe('MessageWithField unit test', () => {
+  const propertyName = 'propertyName';
+  const propertyValue = 'propertyValue';
+  let propertyDecoratedMessage: Message;
+  const operation = 'op';
 
-  beforeEach(() => {
-    channel = new FakeChannel();
-    requestRegister = new RequestRegisterImpl(channel);
-    requestRegisterWithPropertyDecorator = new RequestRegisterWithPropertyDecorator(requestRegister, {name:'propertyName', value: 'propertyValue'});
-  });
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(requestRegisterWithPropertyDecorator).toBeDefined();
-    });
-  });
-
-  describe('Request decoration', () => {
-    it('Should decorate property', () => {
-      const request = {
-        op:'',
-        data:{
-          propertyName:''
-        }
-      };
-      const spy = vi.spyOn(channel, 'request');
-      requestRegisterWithPropertyDecorator.request(request);
-      expect(spy).toHaveBeenCalledExactlyOnceWith({
-        op:'',
-        data:{
-          propertyName:'propertyValue'
-        }
-      });
-    });
+  it('Should decorate message', () => {
+    const messageToDecorate = new MessageImpl(new WebSocketPayloadImpl({
+      op:operation,
+      data:{}
+    }));
+    propertyDecoratedMessage = new MessageWithField(messageToDecorate, propertyName, propertyValue);
+    const expectedData = {
+      [propertyName]:propertyValue
+    };
+    expect(propertyDecoratedMessage.data()).toEqual(expectedData);
+    expect(propertyDecoratedMessage.dataAsWebSocketPayload().stringProperty(propertyName)).toEqual(propertyValue);
+    expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 });

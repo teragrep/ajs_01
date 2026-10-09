@@ -43,62 +43,36 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ResponseRegister} from '../responseRegister';
-import {ResponseRegisterImpl} from '../responseRegisterImpl';
-import {ResponseRegisterWithPropertyFilter} from './responseRegisterWithPropertyFilter';
-import {Mock} from 'vitest';
+import { WebSocketPayload } from '../../webSocketPayload/webSocketPayload';
+import {Message} from '../message';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-describe('ResponseRegisterWithPropertyFilter unit test', () => {
-  let responseRegister: ResponseRegister;
-  let responseRegisterWithPropertyFilter: ResponseRegister;
-  const value = 'someValue';
-  const property = {name: 'keyForSomeValue', type: 'string'};
-  let callback: Mock;
-  const operation = 'op';
+export class MessageWithField implements Message {
+  private readonly _message: Message;
+  private readonly _fieldName: string;
+  private readonly _fieldValue: unknown;
 
-  beforeEach(() => {
-    callback  = vi.fn();
-    responseRegister = new ResponseRegisterImpl();
-    responseRegisterWithPropertyFilter = new ResponseRegisterWithPropertyFilter(responseRegister, property, value);
-    responseRegisterWithPropertyFilter.register(operation, (data) => callback(data));
-  });
+  constructor(message: Message, fieldName: string, fieldValue: unknown) {
+    this._message = message;
+    this._fieldName = fieldName;
+    this._fieldValue = fieldValue;
+  }
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(responseRegisterWithPropertyFilter).toBeDefined();
-    });
-  });
+  dataAsWebSocketPayload(): WebSocketPayload {
+    return new WebSocketPayloadImpl(this.data());
+  }
 
-  describe('Filtering', () => {
-    it('Should execute callback if property exists and value matches.', () => {
-      const response = {
-        op:'op',
-        data:{
-          keyForSomeValue:'someValue'
-        }
-      };
-      responseRegisterWithPropertyFilter.response(response);
-      expect(callback).toHaveBeenCalledExactlyOnceWith(response);
-    });
+  isStub(): boolean {
+    return this._message.isStub();
+  }
 
-    it('Should execute callback if property does not exist', () => {
-      const response = {
-        op:'op',
-        data:{}
-      };
-      responseRegisterWithPropertyFilter.response(response);
-      expect(callback).toHaveBeenCalledExactlyOnceWith(response);
-    });
+  data(): object {
+    const messageData= this._message.data();
+    messageData[this._fieldName] = this._fieldValue;
+    return messageData;
+  }
 
-    it('Should not execute callback if property exists and value does not match', () => {
-      const response = {
-        op:'op',
-        data:{
-          keyForSomeValue:'wrongValue'
-        }
-      };
-      responseRegisterWithPropertyFilter.response(response);
-      expect(callback).toHaveBeenCalledTimes(0);
-    });
-  });
-});
+  operation(): string {
+    return this._message.operation();
+  }
+}

@@ -43,26 +43,45 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ResponseRegister} from './responseRegister';
+
+import {MessageFilter} from './messageFilter';
+import {MessagePropertyEqualsFilter} from './messagePropertyEqualsFilter';
+import {MessageImpl} from '../messageImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../message/messageImpl';
 
-export class ResponseRegisterImpl implements ResponseRegister {
-  private readonly _subscribers: Map<string, (json:object) => void>;
+describe('MessagePropertyFilter unit test', () => {
+  const propertyName = 'propertyName';
+  const propertyValue = 'propertyValue';
+  const messagePropertyFilter: MessageFilter = new MessagePropertyEqualsFilter(propertyName, propertyValue);
 
-  constructor(){
-    this._subscribers = new Map();
-  }
+  it('Should return message', () => {
+    const messageWithFilteredProperty = new MessageImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{
+        [propertyName]:propertyValue
+      }
+    }));
+    const filteredMessage = messagePropertyFilter.filterMessage(messageWithFilteredProperty);
+    expect(filteredMessage.isStub()).toBe(false);
+  });
 
-  register(operation:string, callback: (json:object) => void): void {
-    this._subscribers.set(operation, callback);
-  }
+  it('Should return message', () => {
+    const messageWithoutFilteredProperty = new MessageImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{}
+    }));
+    const filteredMessage = messagePropertyFilter.filterMessage(messageWithoutFilteredProperty);
+    expect(filteredMessage.isStub()).toBe(false);
+  });
 
-  response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const subscription = this._subscribers.get(message.operation());
-    if(subscription){
-      subscription(json);
-    }
-  }
-}
+  it('Should return message stub', () => {
+    const messageWithNotEqualPropertyValue = new MessageImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{
+        [propertyName]:'wrongValue'
+      }
+    }));
+    const filteredMessage = messagePropertyFilter.filterMessage(messageWithNotEqualPropertyValue);
+    expect(filteredMessage.isStub()).toBe(true);
+  });
+});
