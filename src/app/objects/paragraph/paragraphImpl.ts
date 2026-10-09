@@ -56,7 +56,7 @@ import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponsePropertyEqualsFilter';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
-import {MessageWithField} from '../message/messageWithField/messageWithField';
+import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _channel: Channel;
@@ -109,7 +109,7 @@ export class ParagraphImpl implements Paragraph {
 
   request(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const paragraphIdDecoratedMessage = new MessageWithField(message, 'paragraphId', this.id());
+    const paragraphIdDecoratedMessage = new WebSocketRequestWithField(message, 'paragraphId', this.id());
     this._channel.request({
       op:paragraphIdDecoratedMessage.operation(),
       data:paragraphIdDecoratedMessage.data()

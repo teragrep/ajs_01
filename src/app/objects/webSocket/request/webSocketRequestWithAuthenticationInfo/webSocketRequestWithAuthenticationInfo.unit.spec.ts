@@ -43,29 +43,22 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketResponseWithAuthenticationInfo} from './webSocketResponseWithAuthenticationInfo';
-import {WebSocketResponseWithAuthenticationInfoImpl} from './webSocketResponseWithAuthenticationInfoImpl';
+import {WebSocketRequestWithAuthenticationInfoImpl} from './webSocketRequestWithAuthenticationInfoImpl';
 import {Authentication} from '../../../../shared/objects/security/authentication';
 import {AuthenticationStub} from '../../../../shared/objects/security/authenticationStub';
 import {Ticket} from '../../../../shared/types/securityTicket';
 import {AuthenticationImpl} from '../../../../shared/objects/security/authenticationImpl';
-import {WebSocketResponse} from '../webSocketResponse';
-import {WebSocketResponseImpl} from '../webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketRequest} from '../webSocketRequest';
+import {WebSocketRequestImpl} from '../webSocketRequestImpl';
+import {WebSocketRequestWithAuthenticationInfo} from './webSocketRequestwithAuthenticationInfo';
 
 describe('WebSocketResponseWithAuthenticationInfo unit test', () => {
   const messageId = 'messageId';
   let authentication: Authentication;
   let messageData:{op:string, data:object};
-  let message: WebSocketResponse;
-  let webSocketResponseWithAuthenticationInfo: WebSocketResponseWithAuthenticationInfo;
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      webSocketResponseWithAuthenticationInfo = new WebSocketResponseWithAuthenticationInfoImpl(message, authentication, messageId);
-      expect(webSocketResponseWithAuthenticationInfo).toBeInstanceOf(WebSocketResponseWithAuthenticationInfoImpl);
-    });
-  });
+  let webSocketRequest: WebSocketRequest;
+  let webSocketRequestWithAuthenticationInfo: WebSocketRequestWithAuthenticationInfo;
 
   describe('Decoration with authentication info', () => {
     beforeEach(() => {
@@ -73,19 +66,19 @@ describe('WebSocketResponseWithAuthenticationInfo unit test', () => {
         op: '',
         data: {}
       };
-      message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
+      webSocketRequest = new WebSocketRequestImpl(new WebSocketPayloadImpl(messageData));
     });
-    it('Decorates with stub authentication', () => {
-      const expectedMessage = {
-        ...messageData,
+
+    it('Should have authenticationInfo', () => {
+      const expectedAuthenticationInfo = {
         ticket:'',
         principal:'',
         roles:'',
         msgId:messageId
       };
       authentication = new AuthenticationStub();
-      webSocketResponseWithAuthenticationInfo = new WebSocketResponseWithAuthenticationInfoImpl(message, authentication, messageId);
-      expect(webSocketResponseWithAuthenticationInfo.print()).toEqual(expectedMessage);
+      webSocketRequestWithAuthenticationInfo = new WebSocketRequestWithAuthenticationInfoImpl(webSocketRequest, authentication, messageId);
+      expect(webSocketRequestWithAuthenticationInfo.authenticationInfo()).toEqual(expectedAuthenticationInfo);
     });
 
     it('Decorates with real authentication', () => {
@@ -94,14 +87,25 @@ describe('WebSocketResponseWithAuthenticationInfo unit test', () => {
         roles: '[role1,role2]',
         ticket: 'ticket'
       };
-      const expectedMessage = {
-        ...messageData,
+      const expectedAuthenticationInfo = {
         ...ticket,
         msgId:messageId
       };
       authentication = new AuthenticationImpl(ticket);
-      webSocketResponseWithAuthenticationInfo = new WebSocketResponseWithAuthenticationInfoImpl(message, authentication, messageId);
-      expect(webSocketResponseWithAuthenticationInfo.print()).toEqual(expectedMessage);
+      webSocketRequestWithAuthenticationInfo = new WebSocketRequestWithAuthenticationInfoImpl(webSocketRequest, authentication, messageId);
+      expect(webSocketRequestWithAuthenticationInfo.authenticationInfo()).toEqual(expectedAuthenticationInfo);
+    });
+
+    it('Should have operation', () => {
+      authentication = new AuthenticationStub();
+      webSocketRequestWithAuthenticationInfo = new WebSocketRequestWithAuthenticationInfoImpl(webSocketRequest, authentication, messageId);
+      expect(webSocketRequestWithAuthenticationInfo.operation()).toEqual(webSocketRequest.operation());
+    });
+
+    it('Should have data', () => {
+      authentication = new AuthenticationStub();
+      webSocketRequestWithAuthenticationInfo = new WebSocketRequestWithAuthenticationInfoImpl(webSocketRequest, authentication, messageId);
+      expect(webSocketRequestWithAuthenticationInfo.data()).toEqual(webSocketRequest.data());
     });
   });
 });

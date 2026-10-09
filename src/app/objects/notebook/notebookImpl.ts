@@ -52,7 +52,7 @@ import {ParagraphCollection} from '../paragraphCollection/paragraphCollection';
 import {signal, Signal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
 import {WebSocketResponseFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponseFilter';
-import {MessageWithField} from '../message/messageWithField/messageWithField';
+import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
 import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponsePropertyEqualsFilter';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
@@ -85,7 +85,7 @@ export class NotebookImpl implements Notebook {
 
   request(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const noteIdDecoratedMessage = new MessageWithField(message, 'noteId', this.id());
+    const noteIdDecoratedMessage = new WebSocketRequestWithField(message, 'noteId', this.id());
     this._channel.request({
       op:noteIdDecoratedMessage.operation(),
       data:noteIdDecoratedMessage.data()

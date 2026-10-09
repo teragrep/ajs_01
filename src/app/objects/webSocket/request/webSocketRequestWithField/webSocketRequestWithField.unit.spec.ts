@@ -43,28 +43,34 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {MessageWithField} from './messageWithField';
-import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketRequestWithField} from './webSocketRequestWithField';
+import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketRequestImpl} from '../webSocketRequestImpl';
+import {WebSocketRequest} from '../webSocketRequest';
 
 describe('MessageWithField unit test', () => {
   const propertyName = 'propertyName';
   const propertyValue = 'propertyValue';
-  let propertyDecoratedMessage: WebSocketResponse;
+  let propertyDecoratedMessage: WebSocketRequest;
   const operation = 'op';
+  let requestToDecorate:WebSocketRequest;
 
-  it('Should decorate message', () => {
-    const messageToDecorate = new WebSocketResponseImpl(new WebSocketPayloadImpl({
+  beforeEach(() => {
+    requestToDecorate = new WebSocketRequestImpl(new WebSocketPayloadImpl({
       op:operation,
       data:{}
     }));
-    propertyDecoratedMessage = new MessageWithField(messageToDecorate, propertyName, propertyValue);
+    propertyDecoratedMessage = new WebSocketRequestWithField(requestToDecorate, propertyName, propertyValue);
+  });
+
+  it('Should decorate data', () => {
     const expectedData = {
       [propertyName]:propertyValue
     };
     expect(propertyDecoratedMessage.data()).toEqual(expectedData);
-    expect(propertyDecoratedMessage.dataAsWebSocketPayload().stringProperty(propertyName)).toEqual(propertyValue);
+  });
+
+  it('Should have operation', () => {
     expect(propertyDecoratedMessage.operation()).toEqual(operation);
   });
 });
