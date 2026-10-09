@@ -47,53 +47,82 @@ import {Channel} from '../channel/channel';
 import {NotebookIndexCollection} from './notebookIndexCollection';
 import {FakeChannel} from '../channel/fakeChannel';
 import {NotebookIndexCollectionImpl} from './notebookIndexCollectionImpl';
-import Stubable from '../../shared/interfaces/stubable';
+import {NotebookIndexImpl} from '../notebookIndex/notebookIndexImpl';
 
-describe('NotebookCollection', () => {
+describe('NotebookIndexCollection unit test', () => {
   let channel: Channel;
-  let notebookCollection: NotebookIndexCollection;
+  let notebookIndexCollection: NotebookIndexCollection;
 
   beforeEach(() => {
     channel = new FakeChannel();
-    notebookCollection = new NotebookIndexCollectionImpl(channel);
+    notebookIndexCollection = new NotebookIndexCollectionImpl(channel);
   });
 
-  describe('Birth', () => {
-    it('Should have been initialized', () =>{
-      expect(notebookCollection).toBeInstanceOf(NotebookIndexCollectionImpl);
-    });
-
-    it('Should print', () => {
-      const notebookCollectionPrinted = notebookCollection.print()();
-      expect(notebookCollectionPrinted.isStub()).toBe(false);
-      expect((notebookCollectionPrinted.inputs()()['currentNotebook'] as Stubable).isStub()).toBe(true);
-    });
+  it('Should print', () => {
+    const notebookCollectionPrinted = notebookIndexCollection.print()();
+    expect(notebookCollectionPrinted.isStub()).toBe(false);
+    expect(notebookCollectionPrinted.inputs()()['notebookIndices']).toEqual([]);
   });
 
-  describe('Request', () => {
-    it('Should request channel', () => {
-      const channelSpy = vi.spyOn(channel, 'request');
-      const request = {
-        op:'test',
-        data:{}
-      };
-      notebookCollection.request(request);
-      expect(channelSpy).toHaveBeenCalledExactlyOnceWith(request);
-    });
+  it('Should request channel', () => {
+    const channelSpy = vi.spyOn(channel, 'request');
+    const request = {
+      op:'test',
+      data:{}
+    };
+    notebookIndexCollection.request(request);
+    expect(channelSpy).toHaveBeenCalledExactlyOnceWith(request);
   });
 
-  describe('NOTE response behavior', () => {
-    it('Should have add child to printed collection after note response', () => {
-      const response = {
-        op:'NOTE',
-        data:{
-          id:'note',
-          paragraphs:[]
-        }
-      };
-      notebookCollection.response(response);
-      const notebookCollectionPrinted = notebookCollection.print()();
-      expect((notebookCollectionPrinted.inputs()()['currentNotebook'] as Stubable).isStub()).toBe(false);
-    });
+  it('Should add notebookIndex', () => {
+    const notebookIndex = new NotebookIndexImpl(channel, {id:'notebookId'});
+    notebookIndexCollection.addOrUpdate(notebookIndex);
+    const notebookCollectionPrinted = notebookIndexCollection.print()();
+    expect(notebookCollectionPrinted.inputs()()['notebookIndices']).toHaveLength(1);
+  });
+
+  it('Should remove all NotebookIndices', () => {
+    notebookIndexCollection.addOrUpdate(new NotebookIndexImpl(channel, {id:'notebookId1'}));
+    notebookIndexCollection.addOrUpdate(new NotebookIndexImpl(channel, {id:'notebookId2'}));
+    notebookIndexCollection.addOrUpdate(new NotebookIndexImpl(channel, {id:'notebookId3'}));
+    const notebookCollectionPrinted = notebookIndexCollection.print()();
+    const notebookIndicesInitially = notebookCollectionPrinted.inputs()()['notebookIndices'];
+    notebookIndexCollection.clear();
+    const notebookIndicesAfterRemove = notebookCollectionPrinted.inputs()()['notebookIndices'];
+    expect(notebookIndicesInitially).toHaveLength(3);
+    expect(notebookIndicesAfterRemove).toEqual([]);
+  });
+
+  it('Should update NotebookIndices on NOTES_INFO response', () => {
+    const notesInfoResponse = {
+      op:'NOTES_INFO',
+      data:{
+        notes:[
+          {id:'notebookId1'},
+          {id:'notebookId2'},
+          {id:'notebookId3'},
+        ]
+      }
+    };
+    notebookIndexCollection.response(notesInfoResponse);
+    const notebookCollectionPrinted = notebookIndexCollection.print()();
+    const notebookIndicesAfterResponse = notebookCollectionPrinted.inputs()()['notebookIndices'];
+    expect(notebookIndicesAfterResponse).toHaveLength(3);
+  });
+
+  it('Should respond to notebookIndices', () => {
+    const notebookIndex1 = new NotebookIndexImpl(channel, {id:'notebookId1'});
+    const notebookIndex2 = new NotebookIndexImpl(channel, {id:'notebookId2'});
+    notebookIndexCollection.addOrUpdate(notebookIndex1);
+    notebookIndexCollection.addOrUpdate(notebookIndex2);
+    const notebookIndex1Spy = vi.spyOn(notebookIndex1, 'response');
+    const notebookIndex2Spy = vi.spyOn(notebookIndex2, 'response');
+    const response = {
+      op:'test',
+      data:{}
+    };
+    notebookIndexCollection.response(response);
+    expect(notebookIndex1Spy).toHaveBeenCalledExactlyOnceWith(response);
+    expect(notebookIndex2Spy).toHaveBeenCalledExactlyOnceWith(response);
   });
 });
