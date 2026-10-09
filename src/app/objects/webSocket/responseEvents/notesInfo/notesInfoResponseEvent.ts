@@ -43,25 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotesInfoResponseEvent} from './notesInfoResponseEvent';
-import {NotebookIndexCollection} from '../../../../notebookIndexCollection/notebookIndexCollection';
-import {WebSocketResponse} from '../../webSocketResponse';
-import {TypedWebSocketResponse} from '../../typedWebSocketResponse/typedWebSocketResponse';
-import {NotebookIndexImpl} from '../../../../notebookIndex/notebookIndexImpl';
+import {NotebookIndexCollection} from '../../../notebookIndexCollection/notebookIndexCollection';
 
-export class NotesInfoResponseEventImpl implements NotesInfoResponseEvent {
-  private readonly _webSocketResponse:WebSocketResponse;
-
-  constructor(message:WebSocketResponse) {
-    this._webSocketResponse = new TypedWebSocketResponse('NOTES_INFO', message);
-  }
-
-  updateNotebookIndices(notebookIndexCollection: NotebookIndexCollection): void {
-    notebookIndexCollection.clear();
-    const notebookIndicesPayload = this._webSocketResponse.dataAsWebSocketPayload().arrayProperty<object>('notes');
-    notebookIndicesPayload.forEach(notebookIndexPayload => {
-      const notebookIndex = new NotebookIndexImpl(notebookIndexCollection, notebookIndexPayload);
-      notebookIndexCollection.addOrUpdate(notebookIndex);
-    });
-  }
+export interface NotesInfoResponseEvent {
+  updateNotebookIndices(notebookCollection:NotebookIndexCollection):void;
 }

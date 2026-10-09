@@ -54,19 +54,22 @@ import {NotebookStub} from '../notebook/notebookStub';
 import {Channel} from '../channel/channel';
 import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
+import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
+import {NoteResponseEventImpl} from '../webSocket/responseEvents/note/noteResponseEventImpl';
 
 export class NotebookIndexImpl implements NotebookIndex {
   private readonly _channel: Channel;
   private readonly _notebookIndexData:WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
-  private readonly _notebookToRender: WritableSignal<Notebook>;
+  private readonly _notebook: WritableSignal<Notebook>;
 
   constructor(channel: Channel, notebookIndexData:object) {
     this._channel = channel;
     this._notebookIndexData = new WebSocketPayloadImpl(notebookIndexData);
-    this._notebookToRender = signal(new NotebookStub());
+    this._notebook = signal(new NotebookStub());
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.NOTEBOOK_INDEX_VIEW, computed(() => ({
-      currentNotebook: this._notebookToRender().isStub() ? new RenderNodeStub() : this._notebookToRender().print()()
+      notebook: this._notebook().isStub() ? new RenderNodeStub() : this._notebook().print()()
     }))));
   }
 
@@ -75,8 +78,12 @@ export class NotebookIndexImpl implements NotebookIndex {
   }
 
   response(json: object): void {
-    if(!this._notebookToRender().isStub()){
-      this._notebookToRender().response(json);
+    const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    if(webSocketResponse.operation() === 'NOTE'){
+      this.noteResponseEvent(webSocketResponse);
+    }
+    else if(!this._notebook().isStub()){
+      this._notebook().response(json);
     }
   }
 
@@ -85,7 +92,7 @@ export class NotebookIndexImpl implements NotebookIndex {
     if(notebook.id() !== this.id()){
       throw new Error(`Notebook with id "${notebookId}" does not belong to this index.`);
     }
-    this._notebookToRender.set(notebook);
+    this._notebook.set(notebook);
   }
 
   id():string {
@@ -94,5 +101,10 @@ export class NotebookIndexImpl implements NotebookIndex {
 
   print(): Signal<RenderNode> {
     return this._renderNode;
+  }
+
+  private noteResponseEvent(webSocketResponse: WebSocketResponse): void {
+    const noteResponseEvent = new NoteResponseEventImpl(webSocketResponse);
+    noteResponseEvent.renderNotebook(this);
   }
 }

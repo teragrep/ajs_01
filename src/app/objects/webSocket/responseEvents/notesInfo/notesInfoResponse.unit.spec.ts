@@ -43,8 +43,33 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotebookIndexCollection} from '../../../../notebookIndexCollection/notebookIndexCollection';
+import {NotebookIndexCollectionImpl} from '../../../notebookIndexCollection/notebookIndexCollectionImpl';
+import {FakeChannel} from '../../../channel/fakeChannel';
+import {NotesInfoResponseEvent} from './notesInfoResponseEvent';
+import {NotesInfoResponseEventImpl} from './notesInfoResponseEventImpl';
+import {WebSocketResponseImpl} from '../../response/webSocketResponseImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-export interface NotesInfoResponseEvent {
-  updateNotebookIndices(notebookCollection:NotebookIndexCollection):void;
-}
+describe('NotesInfoResponse unit test', () => {
+  const notebookIndexCollection = new NotebookIndexCollectionImpl(new FakeChannel());
+  const notebookIndices = [
+    {id:'notebook1'},
+    {id:'notebook2'},
+    {id:'notebook3'},
+  ];
+  const notesInfoResponseEvent: NotesInfoResponseEvent = new NotesInfoResponseEventImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl({
+    op:'NOTES_INFO',
+    data:{
+      notes:notebookIndices
+    }
+  })));
+
+  it('Should update notebook indices', () => {
+    const notebookCollectionPrinted = notebookIndexCollection.print()();
+    const notebookCollectionIndicesBeforeMessage = notebookCollectionPrinted.inputs()()['notebookIndices'];
+    notesInfoResponseEvent.updateNotebookIndices(notebookIndexCollection);
+    const notebookCollectionIndicesAfterMessage = notebookCollectionPrinted.inputs()()['notebookIndices'];
+    expect(notebookCollectionIndicesBeforeMessage).toEqual([]);
+    expect(notebookCollectionIndicesAfterMessage).toHaveLength(3);
+  });
+});
