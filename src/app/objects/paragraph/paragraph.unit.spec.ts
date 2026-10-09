@@ -104,7 +104,7 @@ describe('Paragraph', () => {
       }
     };
     const spy = vi.spyOn(channel, 'request');
-    paragraph.runParagraph();
+    paragraph.run();
     expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
   });
 

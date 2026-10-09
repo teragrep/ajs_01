@@ -80,7 +80,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   private executeParagraphRequest(message:Message):void {
     const executableParagraphId = message.dataAsWebSocketPayload().stringProperty('paragraphId');
     const executableParagraph = this._paragraphs().get(executableParagraphId);
-    executableParagraph.runParagraph();
+    executableParagraph.run();
   }
 
   private paragraphResponse(message:Message):void{

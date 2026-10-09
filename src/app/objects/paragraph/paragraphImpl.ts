@@ -76,7 +76,7 @@ export class ParagraphImpl implements Paragraph {
     this._paragraphIdFilter = new MessagePropertyEqualsFilter('paragraphId', this.id());
   }
 
-  runParagraph(): void {
+  run(): void {
     const runParagraphRequest = {
       op:'RUN_PARAGRAPH',
       data: {
