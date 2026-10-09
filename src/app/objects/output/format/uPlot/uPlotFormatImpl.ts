@@ -50,7 +50,7 @@ import {OutputType} from '../../outputType';
 import {signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
 import {Channel} from '../../../channel/channel';
-import {MessageImpl} from '../../../message/messageImpl';
+import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';
 import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {Printable} from '../../../rendering/printable/printable';
 import {UPlotFormat} from './uPlotFormat';
@@ -83,7 +83,7 @@ export class UPlotFormatImpl implements UPlotFormat {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     if(message.operation() === 'PARAGRAPH_OUTPUT') {
       const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
       if(paragraphOutputMessage.type() !== OutputType.uPlot){

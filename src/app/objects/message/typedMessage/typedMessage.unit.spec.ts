@@ -44,8 +44,8 @@
  * a licensee so wish it.
  */
 import {TypedMessage} from './typedMessage';
-import {Message} from '../message';
-import {MessageImpl} from '../messageImpl';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('TypedMessage unit test', () => {
@@ -54,10 +54,10 @@ describe('TypedMessage unit test', () => {
     op:type,
     data:{}
   };
-  let message:Message;
-  let typedMessage: Message;
+  let message:WebSocketResponse;
+  let typedMessage: WebSocketResponse;
   beforeEach(() => {
-    message = new MessageImpl(new WebSocketPayloadImpl(json));
+    message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     typedMessage = new TypedMessage(type, message);
   });
 

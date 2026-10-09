@@ -45,7 +45,7 @@
  */
 import {Respondable} from '../../../channel/respondable';
 import {AngularObject} from '../../../angularObject/angularObject';
-import {MessageImpl} from '../../../message/messageImpl';
+import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 
 export class AngularObjectRemoveResponse implements Respondable {
@@ -56,7 +56,7 @@ export class AngularObjectRemoveResponse implements Respondable {
   }
 
   response(data: object) {
-    const message = new MessageImpl(new WebSocketPayloadImpl(data));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'ANGULAR_OBJECT_REMOVE'){
       const angularObjectRemoveData = new WebSocketPayloadImpl(message.data());
       const objectToRemoveName:string = angularObjectRemoveData.stringProperty('name');

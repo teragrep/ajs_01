@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {MessageImpl} from '../messageImpl';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 import {ParagraphRemovedMessage} from './paragraphRemovedMessage';
@@ -59,7 +59,7 @@ describe('ParagraphAddedMessage unit test', () => {
   let paragraphRemovedMessage: ParagraphRemovedMessage;
 
   beforeEach(() => {
-    paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
+    paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData)));
   });
 
   describe('Birth', () => {
@@ -75,7 +75,7 @@ describe('ParagraphAddedMessage unit test', () => {
   describe('Validation', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
-      paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
+      paragraphRemovedMessage = new ParagraphRemovedMessageImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData)));
       expect(() => paragraphRemovedMessage.paragraphId()).toThrow();
     });
   });

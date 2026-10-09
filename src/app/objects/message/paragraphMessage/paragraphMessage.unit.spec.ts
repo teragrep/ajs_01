@@ -45,7 +45,7 @@
  */
 import {ParagraphMessage} from './paragraphMessage';
 import {ParagraphMessageImpl} from './paragraphMessageImpl';
-import {MessageImpl} from '../messageImpl';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 
@@ -60,7 +60,7 @@ describe('ParagraphMessage unit test', () => {
   let paragraphMessage: ParagraphMessage;
 
   beforeEach(() => {
-    paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
+    paragraphMessage = new ParagraphMessageImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData)));
   });
 
   describe('Birth', () => {
@@ -80,7 +80,7 @@ describe('ParagraphMessage unit test', () => {
   describe('Validation', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
-      paragraphMessage = new ParagraphMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
+      paragraphMessage = new ParagraphMessageImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData)));
       expect(() => paragraphMessage.paragraph(channel)).toThrow();
       expect(() => paragraphMessage.data()).toThrow();
     });

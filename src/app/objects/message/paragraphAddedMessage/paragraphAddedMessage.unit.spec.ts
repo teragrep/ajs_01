@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {MessageImpl} from '../messageImpl';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {Channel} from '../../channel/channel';
 import {ParagraphAddedMessageImpl} from './paragraphAddedMessageImpl';
@@ -63,7 +63,7 @@ describe('ParagraphAddedMessage unit test', () => {
   let paragraphAddedMessage: ParagraphAddedMessage;
 
   beforeEach(() => {
-    paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
+    paragraphAddedMessage = new ParagraphAddedMessageImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData)));
   });
 
   describe('Birth', () => {
@@ -87,7 +87,7 @@ describe('ParagraphAddedMessage unit test', () => {
   describe('Validation', () => {
     it('Should throw error if message is not "PARAGRAPH"', () => {
       messageData.op = '';
-      paragraphAddedMessage = new ParagraphAddedMessageImpl(new MessageImpl(new WebSocketPayloadImpl(messageData)));
+      paragraphAddedMessage = new ParagraphAddedMessageImpl(new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData)));
       expect(() => paragraphAddedMessage.data()).toThrow();
       expect(() => paragraphAddedMessage.paragraph(channel)).toThrow();
       expect(() => paragraphAddedMessage.index()).toThrow();

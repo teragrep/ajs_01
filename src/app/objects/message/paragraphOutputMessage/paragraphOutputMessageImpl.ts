@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {ParagraphOutputMessage} from './paragraphOutputMessage';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
 import { StubableObject } from '../../stubableObject/stubableObject';
 import {TypedMessage} from '../typedMessage/typedMessage';
@@ -52,9 +52,9 @@ import {StubableObjectImpl} from '../../stubableObject/stubableObjectImpl';
 import {StubableObjectStub} from '../../stubableObject/stubableObjectStub';
 
 export class ParagraphOutputMessageImpl implements ParagraphOutputMessage {
-  private readonly _message: Message;
+  private readonly _message: WebSocketResponse;
 
-  constructor(message: Message) {
+  constructor(message: WebSocketResponse) {
     this._message = new TypedMessage('PARAGRAPH_OUTPUT', message);
   }
   print():{op:string,data:object}{

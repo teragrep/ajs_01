@@ -51,17 +51,17 @@ import {RenderNode} from '../rendering/renderNode/renderNode';
 import {NotebookIndex} from './notebookIndex/notebookIndex';
 import {NotebookStub} from '../notebook/notebookStub';
 import {NoteMessageImpl} from '../message/noteMessage/noteMessageImpl';
-import {MessageImpl} from '../message/messageImpl';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 import {NotesInfoMessageImpl} from '../message/notesInfoMessage/notesInfoMessageImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {RenderNodeStub} from '../rendering/renderNode/renderNodeStub';
-import {Message} from '../message/message';
+import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
 
 export class NotebookCollectionImpl implements NotebookCollection{
   private readonly _channel:Channel;
-  private readonly _responseEvents: Map<string, (message:Message) =>void>;
+  private readonly _responseEvents: Map<string, (message:WebSocketResponse) =>void>;
   private readonly _notebookIndices: WritableSignal<Map<string, NotebookIndex>>;
   private readonly _currentNotebook: WritableSignal<Notebook>;
   private readonly _renderNode:Signal<RenderNode>;
@@ -79,11 +79,11 @@ export class NotebookCollectionImpl implements NotebookCollection{
     ]);
   }
 
-  private notesInfoResponse(message:Message):void{
+  private notesInfoResponse(message:WebSocketResponse):void{
     this._notebookIndices.set(new NotesInfoMessageImpl(message).notebookIndices());
   }
 
-  private noteResponse(message:Message):void{
+  private noteResponse(message:WebSocketResponse):void{
     this._currentNotebook.set(new NoteMessageImpl(message).notebook(this));
   }
 
@@ -96,7 +96,7 @@ export class NotebookCollectionImpl implements NotebookCollection{
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const eventName = message.operation();
     if(this._responseEvents.has(eventName)){
       const eventCallback = this._responseEvents.get(eventName);

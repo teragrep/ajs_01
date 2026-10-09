@@ -44,13 +44,13 @@
  * a licensee so wish it.
  */
 import {ParagraphRemovedMessage} from './paragraphRemovedMessage';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {TypedMessage} from '../typedMessage/typedMessage';
 
 export class ParagraphRemovedMessageImpl implements ParagraphRemovedMessage {
-  private readonly _message:Message;
+  private readonly _message:WebSocketResponse;
 
-  constructor(message:Message) {
+  constructor(message:WebSocketResponse) {
     this._message = new TypedMessage('PARAGRAPH_REMOVED', message);
   }
 

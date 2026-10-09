@@ -43,8 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Message} from '../message';
-import {MessageImpl} from '../messageImpl';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 import {NotesInfoMessage} from './notesInfoMessage';
 import {NotesInfoMessageImpl} from './notesInfoMessageImpl';
@@ -56,11 +56,11 @@ describe('NotesInfoMessage unit test', () => {
       notes:[{id:'notebook1'}, {id:'notebook2'}]
     }
   };
-  let message:Message;
+  let message:WebSocketResponse;
   let notesInfoMessage:NotesInfoMessage;
 
   beforeEach(() => {
-    message = new MessageImpl(new WebSocketPayloadImpl(messageData));
+    message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
     notesInfoMessage = new NotesInfoMessageImpl(message);
   });
 
@@ -80,7 +80,7 @@ describe('NotesInfoMessage unit test', () => {
   describe('Validation', () => {
     it('Should throw if message operation is not "NOTES_INFO"', () => {
       messageData.op = '';
-      message = new MessageImpl(new WebSocketPayloadImpl(messageData));
+      message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
       notesInfoMessage = new NotesInfoMessageImpl(message);
       expect(() => notesInfoMessage.notebookIndices()).toThrow();
     });

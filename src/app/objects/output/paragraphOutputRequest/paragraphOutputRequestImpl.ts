@@ -44,13 +44,13 @@
  * a licensee so wish it.
  */
 import {ParagraphOutputRequest} from './paragraphOutputRequest';
-import {Message} from '../../message/message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {TypedMessage} from '../../message/typedMessage/typedMessage';
 
 export class ParagraphOutputRequestImpl implements ParagraphOutputRequest {
-  private readonly _message:Message;
+  private readonly _message:WebSocketResponse;
 
-  constructor(message:Message) {
+  constructor(message:WebSocketResponse) {
     this._message = new TypedMessage('PARAGRAPH_OUTPUT_REQUEST', message);
   }
 

@@ -43,23 +43,30 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Message} from './message';
-import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
+import {WebSocketResponse} from './webSocketResponse';
+import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-export class MessageStub implements Message{
-  isStub(): boolean {
-    return true;
+export class WebSocketResponseImpl implements WebSocketResponse{
+  private readonly _webSocketPayload:WebSocketPayload;
+
+  constructor(webSocketPayload:WebSocketPayload) {
+    this._webSocketPayload = webSocketPayload;
   }
 
   dataAsWebSocketPayload(): WebSocketPayload {
-    throw new Error('MessageStub: Method not implemented');
+    return new WebSocketPayloadImpl(this.data());
   }
 
   data(): object {
-    throw new Error('MessageStub: Method not implemented');
+    return this._webSocketPayload.objectProperty('data');
   }
 
   operation(): string {
-    throw new Error('MessageStub: Method not implemented');
+    return this._webSocketPayload.stringProperty('op');
+  }
+
+  isStub(): boolean {
+    return false;
   }
 }

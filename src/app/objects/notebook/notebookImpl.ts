@@ -54,7 +54,7 @@ import {RenderNode} from '../rendering/renderNode/renderNode';
 import {MessageFilter} from '../message/messageFilter/messageFilter';
 import {MessageWithField} from '../message/messageWithField/messageWithField';
 import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
-import {MessageImpl} from '../message/messageImpl';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 
@@ -84,7 +84,7 @@ export class NotebookImpl implements Notebook {
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const noteIdDecoratedMessage = new MessageWithField(message, 'noteId', this.id());
     this._channel.request({
       op:noteIdDecoratedMessage.operation(),
@@ -93,7 +93,7 @@ export class NotebookImpl implements Notebook {
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const filteredMessage = this._noteIdFilter.filterMessage(message);
     if(!filteredMessage.isStub()){
       this._paragraphCollection.response({

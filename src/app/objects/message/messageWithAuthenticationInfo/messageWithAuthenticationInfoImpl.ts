@@ -45,14 +45,14 @@
  */
 import {MessageWithAuthenticationInfo} from './messageWithAuthenticationInfo';
 import {Authentication} from '../../../shared/objects/security/authentication';
-import {Message} from '../message';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 
 export class MessageWithAuthenticationInfoImpl implements MessageWithAuthenticationInfo {
-  private readonly _message: Message;
+  private readonly _message: WebSocketResponse;
   private readonly _authentication:Authentication;
   private readonly _messageId:string;
 
-  constructor(message: Message, authentication:Authentication, messageId:string) {
+  constructor(message: WebSocketResponse, authentication:Authentication, messageId:string) {
     this._message = message;
     this._authentication = authentication;
     this._messageId = messageId;

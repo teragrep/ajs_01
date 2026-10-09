@@ -49,15 +49,15 @@ import {Authentication} from '../../../shared/objects/security/authentication';
 import {AuthenticationStub} from '../../../shared/objects/security/authenticationStub';
 import {Ticket} from '../../../shared/types/securityTicket';
 import {AuthenticationImpl} from '../../../shared/objects/security/authenticationImpl';
-import {Message} from '../message';
-import {MessageImpl} from '../messageImpl';
+import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
+import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('DecoratedMessage', () => {
   const messageId = 'messageId';
   let authentication: Authentication;
   let messageData:{op:string, data:object};
-  let message: Message;
+  let message: WebSocketResponse;
   let messageWithAuthenticationInfo: MessageWithAuthenticationInfo;
 
   describe('Birth', () => {
@@ -73,7 +73,7 @@ describe('DecoratedMessage', () => {
         op: '',
         data: {}
       };
-      message = new MessageImpl(new WebSocketPayloadImpl(messageData));
+      message = new WebSocketResponseImpl(new WebSocketPayloadImpl(messageData));
     });
     it('Decorates with stub authentication', () => {
       const expectedMessage = {
