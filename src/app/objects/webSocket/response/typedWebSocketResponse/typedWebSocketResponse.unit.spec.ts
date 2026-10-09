@@ -43,28 +43,49 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {MessageFilter} from './messageFilter';
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketResponseStub} from '../../webSocket/response/webSocketResponseStub';
+import {TypedWebSocketResponse} from './typedWebSocketResponse';
+import {WebSocketResponse} from '../webSocketResponse';
+import {WebSocketResponseImpl} from '../webSocketResponseImpl';
+import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 
-export class MessagePropertyEqualsFilter implements MessageFilter {
-  private readonly _propertyName: string;
-  private readonly _propertyValue: unknown;
+describe('TypedWebSocketResponse unit test', () => {
+  const type = 'type';
+  const json = {
+    op:type,
+    data:{}
+  };
+  let webSocketResponse:WebSocketResponse;
+  let typedWebSocketResponse: WebSocketResponse;
+  beforeEach(() => {
+    webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    typedWebSocketResponse = new TypedWebSocketResponse(type, webSocketResponse);
+  });
 
-  constructor(propertyName: string, propertyValue: unknown) {
-    this._propertyName = propertyName;
-    this._propertyValue = propertyValue;
-  }
+  describe('Birth', () => {
+    it('Should be initialized', () => {
+      expect(typedWebSocketResponse).toBeDefined();
+    });
 
-  filterMessage(message: WebSocketResponse): WebSocketResponse {
-    const property = message.data()[this._propertyName];
-    let filteredMessage:WebSocketResponse;
-    if(property && property !== this._propertyValue){
-      filteredMessage = new WebSocketResponseStub();
-    }
-    else{
-      filteredMessage = message;
-    }
-    return filteredMessage;
-  }
-}
+    it('Should have data', () => {
+      expect(typedWebSocketResponse.data()).toEqual(json.data);
+    });
+
+    it('Should have data as WebSocketPayload', () => {
+      const expected = new WebSocketPayloadImpl(json.data);
+      expect(typedWebSocketResponse.dataAsWebSocketPayload()).toEqual(expected);
+    });
+
+    it('Should have operation', () => {
+      expect(typedWebSocketResponse.operation()).toEqual(json.op);
+    });
+  });
+
+  describe('Type validation', () => {
+    it('Should throw error if type is wrong', () => {
+      typedWebSocketResponse = new TypedWebSocketResponse('wrongType', webSocketResponse);
+      expect(() => typedWebSocketResponse.data()).toThrow();
+      expect(() => typedWebSocketResponse.dataAsWebSocketPayload()).toThrow();
+      expect(() => typedWebSocketResponse.operation()).toThrow();
+    });
+  });
+});

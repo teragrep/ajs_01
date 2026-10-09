@@ -44,44 +44,13 @@
  * a licensee so wish it.
  */
 
-import {MessageFilter} from './messageFilter';
-import {MessagePropertyEqualsFilter} from './messagePropertyEqualsFilter';
-import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-
-describe('MessagePropertyFilter unit test', () => {
-  const propertyName = 'propertyName';
-  const propertyValue = 'propertyValue';
-  const messagePropertyFilter: MessageFilter = new MessagePropertyEqualsFilter(propertyName, propertyValue);
-
-  it('Should return message', () => {
-    const messageWithFilteredProperty = new WebSocketResponseImpl(new WebSocketPayloadImpl({
-      op:'',
-      data:{
-        [propertyName]:propertyValue
-      }
-    }));
-    const filteredMessage = messagePropertyFilter.filterMessage(messageWithFilteredProperty);
-    expect(filteredMessage.isStub()).toBe(false);
-  });
-
-  it('Should return message', () => {
-    const messageWithoutFilteredProperty = new WebSocketResponseImpl(new WebSocketPayloadImpl({
-      op:'',
-      data:{}
-    }));
-    const filteredMessage = messagePropertyFilter.filterMessage(messageWithoutFilteredProperty);
-    expect(filteredMessage.isStub()).toBe(false);
-  });
-
-  it('Should return message stub', () => {
-    const messageWithNotEqualPropertyValue = new WebSocketResponseImpl(new WebSocketPayloadImpl({
-      op:'',
-      data:{
-        [propertyName]:'wrongValue'
-      }
-    }));
-    const filteredMessage = messagePropertyFilter.filterMessage(messageWithNotEqualPropertyValue);
-    expect(filteredMessage.isStub()).toBe(true);
-  });
-});
+export interface WebSocketResponseWithAuthenticationInfo {
+  print(): {
+    op: string,
+    data: object,
+    ticket:string,
+    principal:string,
+    roles:string,
+    msgId:string
+  };
+}

@@ -46,14 +46,14 @@
 import {NotesInfoMessage} from './notesInfoMessage';
 import {NotebookIndex} from '../../notebookCollection/notebookIndex/notebookIndex';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {TypedMessage} from '../typedMessage/typedMessage';
+import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
 import {NotebookIndexImpl} from '../../notebookCollection/notebookIndex/notebookIndexImpl';
 
 export class NotesInfoMessageImpl implements NotesInfoMessage {
   private readonly _message:WebSocketResponse;
 
   constructor(message:WebSocketResponse) {
-    this._message = new TypedMessage('NOTES_INFO', message);
+    this._message = new TypedWebSocketResponse('NOTES_INFO', message);
   }
 
   notebookIndices(): Map<string, NotebookIndex> {

@@ -43,49 +43,45 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {TypedMessage} from './typedMessage';
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
-describe('TypedMessage unit test', () => {
-  const type = 'type';
-  const json = {
-    op:type,
-    data:{}
-  };
-  let message:WebSocketResponse;
-  let typedMessage: WebSocketResponse;
-  beforeEach(() => {
-    message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    typedMessage = new TypedMessage(type, message);
+import {WebSocketResponseFilter} from './webSocketResponseFilter';
+import {WebSocketResponsePropertyEqualsFilter} from './webSocketResponsePropertyEqualsFilter';
+import {WebSocketResponseImpl} from '../webSocketResponseImpl';
+import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+
+describe('WebSocketResponsePropertyEqualsFilter unit test', () => {
+  const propertyName = 'propertyName';
+  const propertyValue = 'propertyValue';
+  const webSocketResponsePropertyEqualsFilter: WebSocketResponseFilter = new WebSocketResponsePropertyEqualsFilter(propertyName, propertyValue);
+
+  it('Should return message', () => {
+    const messageWithFilteredProperty = new WebSocketResponseImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{
+        [propertyName]:propertyValue
+      }
+    }));
+    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterMessage(messageWithFilteredProperty);
+    expect(filteredMessage.isStub()).toBe(false);
   });
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(typedMessage).toBeDefined();
-    });
-
-    it('Should have data', () => {
-      expect(typedMessage.data()).toEqual(json.data);
-    });
-
-    it('Should have data as WebSocketPayload', () => {
-      const expected = new WebSocketPayloadImpl(json.data);
-      expect(typedMessage.dataAsWebSocketPayload()).toEqual(expected);
-    });
-
-    it('Should have operation', () => {
-      expect(typedMessage.operation()).toEqual(json.op);
-    });
+  it('Should return message', () => {
+    const messageWithoutFilteredProperty = new WebSocketResponseImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{}
+    }));
+    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterMessage(messageWithoutFilteredProperty);
+    expect(filteredMessage.isStub()).toBe(false);
   });
 
-  describe('Type validation', () => {
-    it('Should throw error if type is wrong', () => {
-      typedMessage = new TypedMessage('wrongType', message);
-      expect(() => typedMessage.data()).toThrow();
-      expect(() => typedMessage.dataAsWebSocketPayload()).toThrow();
-      expect(() => typedMessage.operation()).toThrow();
-    });
+  it('Should return message stub', () => {
+    const messageWithNotEqualPropertyValue = new WebSocketResponseImpl(new WebSocketPayloadImpl({
+      op:'',
+      data:{
+        [propertyName]:'wrongValue'
+      }
+    }));
+    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterMessage(messageWithNotEqualPropertyValue);
+    expect(filteredMessage.isStub()).toBe(true);
   });
 });

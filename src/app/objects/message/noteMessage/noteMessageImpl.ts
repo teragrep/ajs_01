@@ -46,7 +46,7 @@
 import {NoteMessage} from './noteMessage';
 import {Notebook} from '../../notebook/notebook';
 import {Channel} from '../../channel/channel';
-import {TypedMessage} from '../typedMessage/typedMessage';
+import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {NotebookImpl} from '../../notebook/notebookImpl';
 
@@ -54,7 +54,7 @@ export class NoteMessageImpl implements NoteMessage{
   private readonly _message:WebSocketResponse;
 
   constructor(message:WebSocketResponse) {
-    this._message = new TypedMessage('NOTE', message);
+    this._message = new TypedWebSocketResponse('NOTE', message);
   }
 
   notebook(channel: Channel): Notebook {

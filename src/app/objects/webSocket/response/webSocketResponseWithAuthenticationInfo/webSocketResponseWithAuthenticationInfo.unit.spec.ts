@@ -43,27 +43,27 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {MessageWithAuthenticationInfo} from './messageWithAuthenticationInfo';
-import {MessageWithAuthenticationInfoImpl} from './messageWithAuthenticationInfoImpl';
-import {Authentication} from '../../../shared/objects/security/authentication';
-import {AuthenticationStub} from '../../../shared/objects/security/authenticationStub';
-import {Ticket} from '../../../shared/types/securityTicket';
-import {AuthenticationImpl} from '../../../shared/objects/security/authenticationImpl';
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketResponseWithAuthenticationInfo} from './webSocketResponseWithAuthenticationInfo';
+import {WebSocketResponseWithAuthenticationInfoImpl} from './webSocketResponseWithAuthenticationInfoImpl';
+import {Authentication} from '../../../../shared/objects/security/authentication';
+import {AuthenticationStub} from '../../../../shared/objects/security/authenticationStub';
+import {Ticket} from '../../../../shared/types/securityTicket';
+import {AuthenticationImpl} from '../../../../shared/objects/security/authenticationImpl';
+import {WebSocketResponse} from '../webSocketResponse';
+import {WebSocketResponseImpl} from '../webSocketResponseImpl';
+import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
 
-describe('DecoratedMessage', () => {
+describe('WebSocketResponseWithAuthenticationInfo unit test', () => {
   const messageId = 'messageId';
   let authentication: Authentication;
   let messageData:{op:string, data:object};
   let message: WebSocketResponse;
-  let messageWithAuthenticationInfo: MessageWithAuthenticationInfo;
+  let webSocketResponseWithAuthenticationInfo: WebSocketResponseWithAuthenticationInfo;
 
   describe('Birth', () => {
     it('Should be initialized', () => {
-      messageWithAuthenticationInfo = new MessageWithAuthenticationInfoImpl(message, authentication, messageId);
-      expect(messageWithAuthenticationInfo).toBeInstanceOf(MessageWithAuthenticationInfoImpl);
+      webSocketResponseWithAuthenticationInfo = new WebSocketResponseWithAuthenticationInfoImpl(message, authentication, messageId);
+      expect(webSocketResponseWithAuthenticationInfo).toBeInstanceOf(WebSocketResponseWithAuthenticationInfoImpl);
     });
   });
 
@@ -84,8 +84,8 @@ describe('DecoratedMessage', () => {
         msgId:messageId
       };
       authentication = new AuthenticationStub();
-      messageWithAuthenticationInfo = new MessageWithAuthenticationInfoImpl(message, authentication, messageId);
-      expect(messageWithAuthenticationInfo.print()).toEqual(expectedMessage);
+      webSocketResponseWithAuthenticationInfo = new WebSocketResponseWithAuthenticationInfoImpl(message, authentication, messageId);
+      expect(webSocketResponseWithAuthenticationInfo.print()).toEqual(expectedMessage);
     });
 
     it('Decorates with real authentication', () => {
@@ -100,8 +100,8 @@ describe('DecoratedMessage', () => {
         msgId:messageId
       };
       authentication = new AuthenticationImpl(ticket);
-      messageWithAuthenticationInfo = new MessageWithAuthenticationInfoImpl(message, authentication, messageId);
-      expect(messageWithAuthenticationInfo.print()).toEqual(expectedMessage);
+      webSocketResponseWithAuthenticationInfo = new WebSocketResponseWithAuthenticationInfoImpl(message, authentication, messageId);
+      expect(webSocketResponseWithAuthenticationInfo.print()).toEqual(expectedMessage);
     });
   });
 });

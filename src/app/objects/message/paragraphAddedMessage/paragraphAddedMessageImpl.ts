@@ -47,14 +47,14 @@ import {ParagraphAddedMessage} from './paragraphAddedMessage';
 import {Channel} from '../../channel/channel';
 import {Paragraph} from '../../paragraph/paragraph';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {TypedMessage} from '../typedMessage/typedMessage';
+import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
 import {ParagraphImpl} from '../../paragraph/paragraphImpl';
 
 export class ParagraphAddedMessageImpl implements ParagraphAddedMessage {
   private readonly _message:WebSocketResponse;
 
   constructor(message:WebSocketResponse) {
-    this._message = new TypedMessage('PARAGRAPH_ADDED', message);
+    this._message = new TypedWebSocketResponse('PARAGRAPH_ADDED', message);
   }
 
   paragraph(channel: Channel): Paragraph {

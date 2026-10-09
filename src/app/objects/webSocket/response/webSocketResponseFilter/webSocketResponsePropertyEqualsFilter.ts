@@ -43,40 +43,28 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
+import {WebSocketResponseFilter} from './webSocketResponseFilter';
+import {WebSocketResponse} from '../webSocketResponse';
+import {WebSocketResponseStub} from '../webSocketResponseStub';
 
-export class TypedMessage implements WebSocketResponse {
-  private readonly _type:string;
-  private readonly _message:WebSocketResponse;
+export class WebSocketResponsePropertyEqualsFilter implements WebSocketResponseFilter {
+  private readonly _propertyName: string;
+  private readonly _propertyValue: unknown;
 
-  constructor(type:string, message:WebSocketResponse) {
-    this._type = type;
-    this._message = message;
+  constructor(propertyName: string, propertyValue: unknown) {
+    this._propertyName = propertyName;
+    this._propertyValue = propertyValue;
   }
 
-  dataAsWebSocketPayload(): WebSocketPayload {
-    this.validateType();
-    return this._message.dataAsWebSocketPayload();
-  }
-
-  data(): object {
-    this.validateType();
-    return this._message.data();
-  }
-
-  operation(): string {
-    this.validateType();
-    return this._message.operation();
-  }
-
-  isStub(): boolean {
-    return this._message.isStub();
-  }
-
-  private validateType():void{
-    if(this._type !== this._message.operation()){
-      throw new RangeError(`Expected type to be "${this._type}". Received type: "${this._message.operation()}".`);
+  filterMessage(message: WebSocketResponse): WebSocketResponse {
+    const property = message.data()[this._propertyName];
+    let filteredMessage:WebSocketResponse;
+    if(property && property !== this._propertyValue){
+      filteredMessage = new WebSocketResponseStub();
     }
+    else{
+      filteredMessage = message;
+    }
+    return filteredMessage;
   }
 }
