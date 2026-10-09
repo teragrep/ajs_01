@@ -44,61 +44,51 @@
  * a licensee so wish it.
  */
 import {NotebookIndexCollection} from './notebookIndexCollection';
-import {Notebook} from '../notebook/notebook';
 import {Channel} from '../channel/channel';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
 import {NotebookIndex} from '../notebookIndex/notebookIndex';
-import {NotebookStub} from '../notebook/notebookStub';
-import {NoteMessageImpl} from '../message/noteMessage/noteMessageImpl';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
-import {NotesInfoMessageImpl} from '../message/notesInfoMessage/notesInfoMessageImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
-import {RenderNodeStub} from '../rendering/renderNode/renderNodeStub';
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
+import {NotesInfoResponseEventImpl} from '../webSocket/response/responseEvents/notesInfo/notesInfoResponseEventImpl';
 
 export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
   private readonly _channel:Channel;
   private readonly _responseEvents: Map<string, (message:WebSocketResponse) =>void>;
   private readonly _notebookIndices: WritableSignal<Map<string, NotebookIndex>>;
-  private readonly _currentNotebook: WritableSignal<Notebook>;
   private readonly _renderNode:Signal<RenderNode>;
 
   constructor(channel:Channel) {
     this._channel = channel;
-    this._notebookIndices = signal(new Map());
-    this._currentNotebook = signal(new NotebookStub());
+    this._notebookIndices = signal(new Map(), {equal:() => false});
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.NOTEBOOK_COLLECTION_VIEW, computed(() => ({
-      currentNotebook: this._currentNotebook().isStub() ? new RenderNodeStub() : this._currentNotebook().print()()
+      notebookIndices: Array.from(this._notebookIndices())
     }))));
     this._responseEvents = new Map([
-      ['NOTES_INFO', (message) => this.notesInfoResponse(message)],
-      ['NOTE', (message) => this.noteResponse(message)],
+      ['NOTES_INFO', (message) => this.notesInfoResponseEvent(message)],
     ]);
   }
 
-  addNotebookIndex(notebookIndex: NotebookIndex): void {
+  addOrUpdate(notebookIndex: NotebookIndex): void {
     this._notebookIndices.update(notebookIndices => {
       notebookIndices.set(notebookIndex.id(), notebookIndex);
       return notebookIndices;
     });
   }
 
-  removeAllNotebookIndices(): void {
+  clear(): void {
     this._notebookIndices.update(notebookIndices  => {
       notebookIndices.clear();
       return notebookIndices;
     });
   }
 
-  private notesInfoResponse(message:WebSocketResponse):void{
-    this._notebookIndices.set(new NotesInfoMessageImpl(message).notebookIndices());
-  }
-
-  private noteResponse(message:WebSocketResponse):void{
-    this._currentNotebook.set(new NoteMessageImpl(message).notebook(this));
+  private notesInfoResponseEvent(message:WebSocketResponse):void{
+    const notesInfoResponseEvent = new NotesInfoResponseEventImpl(message);
+    notesInfoResponseEvent.updateNotebookIndices(this);
   }
 
   print(): Signal<RenderNode> {
@@ -116,8 +106,8 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
       const eventCallback = this._responseEvents.get(eventName);
       eventCallback(message);
     }
-    else if(!this._currentNotebook().isStub()){
-      this._currentNotebook().response(json);
+    else{
+      this._notebookIndices().forEach(notebookIndex => notebookIndex.response(json));
     }
   }
 }
