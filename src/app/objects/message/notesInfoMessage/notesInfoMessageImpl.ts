@@ -44,10 +44,10 @@
  * a licensee so wish it.
  */
 import {NotesInfoMessage} from './notesInfoMessage';
-import {NotebookIndex} from '../../notebookIndexCollection/notebookIndex/notebookIndex';
+import {NotebookIndex} from '../../notebookIndex/notebookIndex';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {TypedWebSocketResponse} from '../../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
-import {NotebookIndexImpl} from '../../notebookIndexCollection/notebookIndex/notebookIndexImpl';
+import {NotebookIndexImpl} from '../../notebookIndex/notebookIndexImpl';
 
 export class NotesInfoMessageImpl implements NotesInfoMessage {
   private readonly _message:WebSocketResponse;

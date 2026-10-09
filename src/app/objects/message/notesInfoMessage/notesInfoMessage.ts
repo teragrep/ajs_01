@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotebookIndex} from '../../notebookIndexCollection/notebookIndex/notebookIndex';
+import {NotebookIndex} from '../../notebookIndex/notebookIndex';
 
 export interface NotesInfoMessage{
   notebookIndices(): Map<string, NotebookIndex>;
