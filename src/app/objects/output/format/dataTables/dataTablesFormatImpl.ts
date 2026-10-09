@@ -47,7 +47,7 @@ import {Channel} from '../../../channel/channel';
 import {DataTableSwitcherButton} from './switcherButton/dataTablesSwitcherButton';
 import {OutputType} from '../../outputType';
 import {DataTablesPluginImpl} from './dataTablesPlugin/dataTablesPluginImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../../rendering/renderNode/renderNode';
 import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';

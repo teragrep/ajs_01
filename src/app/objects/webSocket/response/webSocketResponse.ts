@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
+import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
 import Stubable from '../../../shared/interfaces/stubable';
 
 export interface WebSocketResponse extends Stubable{

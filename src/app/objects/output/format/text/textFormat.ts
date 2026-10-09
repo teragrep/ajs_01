@@ -45,7 +45,7 @@
  */
 import {OutputFormat} from '../outputFormat';
 import {OutputType} from '../../outputType';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
 import {WebSocketResponseImpl} from '../../../webSocket/response/webSocketResponseImpl';

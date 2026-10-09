@@ -52,7 +52,7 @@ import {NotebookIndex} from './notebookIndex/notebookIndex';
 import {NotebookStub} from '../notebook/notebookStub';
 import {NoteMessageImpl} from '../message/noteMessage/noteMessageImpl';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {NotesInfoMessageImpl} from '../message/notesInfoMessage/notesInfoMessageImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';

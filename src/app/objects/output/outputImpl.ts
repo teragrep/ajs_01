@@ -64,7 +64,7 @@ import {ParagraphOutputRequestImpl} from './paragraphOutputRequest/paragraphOutp
 import {ParagraphOutputMessageImpl} from '../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 
 export class OutputImpl implements Output {
   private readonly _channel:Channel;

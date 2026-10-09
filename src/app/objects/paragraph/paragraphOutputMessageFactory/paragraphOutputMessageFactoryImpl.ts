@@ -45,8 +45,8 @@
  */
 import {ParagraphOutputMessageFactory} from './paragraphOutputMessageFactory';
 import {ParagraphOutputMessage} from '../../message/paragraphOutputMessage/paragraphOutputMessage';
-import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../../webSocket/webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {ParagraphOutputMessageStub} from '../../message/paragraphOutputMessage/paragraphOutputMessageStub';
 import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';

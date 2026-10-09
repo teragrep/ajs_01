@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocketResponse} from './webSocketResponse';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 import {WebSocketResponseImpl} from './webSocketResponseImpl';
 
 describe('WebSocketResponse unit test', () => {

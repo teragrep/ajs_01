@@ -45,7 +45,7 @@
  */
 import {NoteMessage} from './noteMessage';
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {NoteMessageImpl} from './noteMessageImpl';
 import {FakeChannel} from '../../channel/fakeChannel';

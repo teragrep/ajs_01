@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocketRequest} from './webSocketRequest';
-import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
+import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
 
 export class WebSocketRequestImpl implements WebSocketRequest {
   private readonly _webSocketPayload:WebSocketPayload;

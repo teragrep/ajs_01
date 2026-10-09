@@ -46,7 +46,7 @@
 import {TypedWebSocketResponse} from './typedWebSocketResponse';
 import {WebSocketResponse} from '../webSocketResponse';
 import {WebSocketResponseImpl} from '../webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
 
 describe('TypedWebSocketResponse unit test', () => {
   const type = 'type';

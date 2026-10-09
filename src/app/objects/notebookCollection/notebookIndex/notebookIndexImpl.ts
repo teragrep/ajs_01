@@ -45,8 +45,8 @@
  */
 import {signal, Signal} from '@angular/core';
 import {RenderNode} from '../../rendering/renderNode/renderNode';
-import {WebSocketPayload} from '../../webSocketPayload/webSocketPayload';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../../webSocket/webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {NotebookIndex} from './notebookIndex';
 import {RenderNodeStub} from '../../rendering/renderNode/renderNodeStub';
 

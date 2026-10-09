@@ -47,7 +47,7 @@ import {inject, Injectable} from '@angular/core';
 import {WebSocketService} from './webSocketService';
 import {AuthenticationServiceImpl} from '../../../shared/services/authenticationServiceImpl';
 import {WebSocketRequestWithAuthenticationInfoImpl} from '../request/webSocketRequestWithAuthenticationInfo/webSocketRequestWithAuthenticationInfoImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
 import {WebSocketResponseImpl} from '../response/webSocketResponseImpl';
 
 @Injectable({providedIn: 'root'})

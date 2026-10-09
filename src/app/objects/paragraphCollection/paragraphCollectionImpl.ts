@@ -50,7 +50,7 @@ import {ParagraphImpl} from '../paragraph/paragraphImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {ParagraphMessageImpl} from '../message/paragraphMessage/paragraphMessageImpl';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {ParagraphAddedMessageImpl} from '../message/paragraphAddedMessage/paragraphAddedMessageImpl';
 import {ParagraphRemovedMessageImpl} from '../message/paragraphRemovedMessage/paragraphRemovedMessageImpl';

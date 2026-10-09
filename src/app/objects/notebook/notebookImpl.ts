@@ -45,8 +45,8 @@
  */
 import {Notebook} from './notebook';
 import {Channel} from '../channel/channel';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
-import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
 import {ParagraphCollectionImpl} from '../paragraphCollection/paragraphCollectionImpl';
 import {ParagraphCollection} from '../paragraphCollection/paragraphCollection';
 import {signal, Signal} from '@angular/core';

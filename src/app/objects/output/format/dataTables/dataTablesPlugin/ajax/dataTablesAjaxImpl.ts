@@ -46,7 +46,7 @@
 import {Channel} from '../../../../../channel/channel';
 import {OutputType} from '../../../../outputType';
 import {DataTablesAjax} from './dataTablesAjax';
-import {WebSocketPayloadImpl} from '../../../../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../../../../webSocket/webSocketPayload/webSocketPayloadImpl';
 
 export class DataTablesAjaxImpl implements DataTablesAjax {
   private readonly _channel: Channel;

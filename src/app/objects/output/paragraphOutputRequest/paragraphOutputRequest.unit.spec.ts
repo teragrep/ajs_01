@@ -45,7 +45,7 @@
  */
 import {ParagraphOutputRequest} from './paragraphOutputRequest';
 import {ParagraphOutputRequestImpl} from './paragraphOutputRequestImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 
 describe('Paragraph Output Request unit test', () => {

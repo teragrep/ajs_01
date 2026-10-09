@@ -45,7 +45,7 @@
  */
 import {ParagraphOutputMessage} from './paragraphOutputMessage';
 import {ParagraphOutputMessageImpl} from './paragraphOutputMessageImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 
 describe('ParagraphOutputMessage unit test', () => {

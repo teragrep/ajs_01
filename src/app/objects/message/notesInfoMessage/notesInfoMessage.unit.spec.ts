@@ -45,7 +45,7 @@
  */
 import {WebSocketResponse} from '../../webSocket/response/webSocketResponse';
 import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {NotesInfoMessage} from './notesInfoMessage';
 import {NotesInfoMessageImpl} from './notesInfoMessageImpl';
 
