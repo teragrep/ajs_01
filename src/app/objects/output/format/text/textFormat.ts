@@ -50,18 +50,18 @@ import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
 
 export class TextFormat implements OutputFormat {
-  private readonly _textData: WritableSignal<string>;
+  private readonly _textOutput: WritableSignal<string>;
   private readonly _renderNode: WritableSignal<RenderNode>;
 
   constructor() {
-    this._textData = signal('');
+    this._textOutput = signal('');
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.TEXT_OUTPUT_VIEW, computed(() => ({
-      textData: this._textData(),
+      textOutput: this._textOutput(),
     }))));
   }
 
-  render(textData:string): void {
-    this._textData.set(textData);
+  render(textOutput:string): void {
+    this._textOutput.set(textOutput);
   }
 
   print(): Signal<RenderNode> {

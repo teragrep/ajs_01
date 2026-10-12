@@ -64,7 +64,7 @@ export class AngularFormatImpl implements AngularFormat {
     this._angularTemplate = signal('');
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.ANGULAR_OUTPUT_VIEW, computed(() => ({
       angularTemplate:this._angularTemplate(),
-      angularObjects:this._angularObjectCollection.angularObjects()(),
+      angularObjects:this._angularObjectCollection.angularObjects(),
       requestable:this
     }))));
   }
