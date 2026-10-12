@@ -88,14 +88,6 @@ export class NotebookIndexImpl implements NotebookIndex {
     }
   }
 
-  renderNotebook(notebook: Notebook): void {
-    const notebookId = notebook.id();
-    if(notebook.id() !== this.id()){
-      throw new Error(`Notebook with id "${notebookId}" does not belong to this index.`);
-    }
-    this._notebook.set(notebook);
-  }
-
   id():string {
     return this._notebookIndexData.stringProperty('id');
   }
