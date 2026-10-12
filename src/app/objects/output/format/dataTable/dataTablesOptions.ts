@@ -43,62 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../../../channel/channel';
-import {FakeChannel} from '../../../../channel/fakeChannel';
-import {DataTablesPluginImpl} from './dataTablesPluginImpl';
-import {DataTablesPlugin} from './dataTablesPlugin';
-
-describe('DataTablesOutput', () => {
-  let channel:Channel;
-  let outputData;
-  let outputOptions;
-  let dataTablesPlugin:DataTablesPlugin;
-  const initialData = [
-    {test:'test1'},
-    {test:'test2'},
-    {test:'test3'}
-  ];
-
-  beforeEach(() => {
-    channel = new FakeChannel();
-    outputData = {
-      data:initialData,
-      draw:1,
-      recordsTotal: 3,
-      recordsFiltered: 3,
-    };
-    outputOptions = {
-      headers:['test']
-    };
-    dataTablesPlugin = new DataTablesPluginImpl(channel, outputData, outputOptions);
-  });
-
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(dataTablesPlugin).toBeInstanceOf(DataTablesPluginImpl);
-    });
-
-    it('Should not be a stub', () => {
-      expect(dataTablesPlugin.isStub()).toBe(false);
-    });
-  });
-
-  describe('Request', () => {
-    it('Should send request to channel', () => {
-      const channelSpy = vi.spyOn(channel, 'request');
-      const request = {test: 'test'};
-      expect(channelSpy).toHaveBeenCalledTimes(0);
-      dataTablesPlugin.request(request);
-      expect(channelSpy).toHaveBeenCalledTimes(1);
-      expect(channelSpy).toHaveBeenCalledWith(request);
-    });
-  });
-
-  describe('Initializing table', () => {
-    it('Should return initialized table', () => {
-      const tableElement = document.createElement('table');
-      const table = dataTablesPlugin.initializedTable(tableElement);
-      expect(table).toBeDefined();
-    });
-  });
-});
+export type DataTablesOptions = {
+  headers:string[]
+};

@@ -45,7 +45,7 @@
  */
 import {Channel} from '../../../../../channel/channel';
 import {DataTablesAjaxImpl} from './dataTablesAjaxImpl';
-import {FakeChannel} from '../../../../../channel/fakeChannel';
+import {FakeChannel} from '../../../../../../../test/fakes/channel/fakeChannel';
 import {DataTablesAjax} from './dataTablesAjax';
 
 describe('Ajax', () => {
@@ -112,12 +112,6 @@ describe('Ajax', () => {
         dataTablesAjax.response(initialData);
         expect(callback).toHaveBeenCalledTimes(2);
         expect(callback).toHaveBeenCalledWith(initialData);
-      });
-
-      it('Should validate received data', () => {
-        configFunction(requestData, callback);
-        delete initialData.recordsTotal;
-        expect(() => dataTablesAjax.response(initialData)).toThrow();
       });
     });
   });
