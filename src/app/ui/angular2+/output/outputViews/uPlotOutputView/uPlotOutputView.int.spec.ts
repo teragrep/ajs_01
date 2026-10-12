@@ -46,19 +46,18 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {UPlotOutputView} from './uPlotOutputView';
 import {By} from '@angular/platform-browser';
-import {
-  BasicOptionsImpl
-} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/basicOptionsImpl';
+import {UPlotFormatImpl} from '../../../../../objects/output/format/uPlot/uPlotFormatImpl';
+import {FakeChannel} from '../../../../../../test/fakes/channel/fakeChannel';
 
 describe('UPlotOutputView integration test', () => {
   let fixture: ComponentFixture<UPlotOutputView>;
-  const basicOptions = new BasicOptionsImpl([], [], '', '');
-  const uPlotData = [[1,2],[1,2]];
+  const uPlotFormat = new UPlotFormatImpl(new FakeChannel());
+
   beforeEach(async () => {
     fixture = TestBed.createComponent(UPlotOutputView);
-    fixture.componentRef.setInput('basicOptions', basicOptions);
-    fixture.componentRef.setInput('graphType', '');
-    fixture.componentRef.setInput('uPlotData', uPlotData);
+    const inputs = uPlotFormat.print()().inputs()();
+    fixture.componentRef.setInput('uPlotData', inputs['uPlotData']);
+    fixture.componentRef.setInput('uPlotOptions', inputs['uPlotOptions']);
     await fixture.whenStable();
   });
 

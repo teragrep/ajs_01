@@ -43,9 +43,45 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../../../../channel/channel';
+import {OutputType} from '../../../../outputType';
+import {DataTablesAjax} from './dataTablesAjax';
+import {PaginatedDataTablesData} from '../../paginatedDataTablesData';
+import {Requestable} from '../../../../../channel/requestable';
 
-export interface DataTablesAjax extends Channel {
-  response(dataTablesData:object): void;
-  configFunction(data:object): (data: {draw:number, start:number, length:number}, callback: (data:object) => void) => void;
+export class DataTablesAjaxImpl implements DataTablesAjax {
+  private readonly _requestable: Requestable;
+  private _callback: (json: object) => void;
+
+  constructor(requestable: Requestable) {
+    this._requestable = requestable;
+  }
+
+  request(json: object): void {
+    this._requestable.request(json);
+  }
+
+  response(paginatedDataTablesData: PaginatedDataTablesData): void {
+    if(this._callback) {
+      this._callback(paginatedDataTablesData);
+    }
+  }
+
+  configFunction(paginatedDataTablesData: PaginatedDataTablesData): (data: {draw:number, start:number, length:number}, callback: (data:object) => void) => void {
+    return (data: {draw:number, start:number, length:number}, callback: (data:object) => void) => {
+      this._callback = callback;
+      this._callback(paginatedDataTablesData);
+      if(data.draw > paginatedDataTablesData.draw) {
+        const request = {
+          op:'PARAGRAPH_OUTPUT_REQUEST',
+          data: {
+            paragraphId: '',
+            noteId: '',
+            type: OutputType.dataTables,
+            requestOptions: data
+          }
+        };
+        this.request(request);
+      }
+    };
+  }
 }

@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {DataTableSwitcherButton} from './dataTablesSwitcherButton';
-import {FakeChannel} from '../../../../channel/fakeChannel';
+import {FakeChannel} from '../../../../../../test/fakes/channel/fakeChannel';
 
 describe('DataTables SwitcherButton unit test', () => {
   const request = new FakeChannel();

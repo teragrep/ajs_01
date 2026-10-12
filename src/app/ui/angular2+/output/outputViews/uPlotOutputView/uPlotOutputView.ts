@@ -45,12 +45,8 @@
  */
 import {AfterViewInit, Component, ElementRef, input, OnChanges, OnDestroy, ViewChild} from '@angular/core';
 import uPlot from 'uplot';
-import {BasicOptions} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/basicOptions';
-import {GraphType} from '../../../../../objects/output/format/uPlot/graphType';
-import {BarChartOptionsImpl} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/barChartOptionsImpl';
 import {ResizeListener} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/resizeListener/resizeListener';
 import {ResizeListenerImpl} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/resizeListener/resizeListenerImpl';
-import {UPlotOptions} from '../../../../../objects/output/format/uPlot/uPlotPlugin/configuration/options/uPlotOptions';
 
 @Component({
   selector: 'uPlotOutputView',
@@ -59,9 +55,8 @@ import {UPlotOptions} from '../../../../../objects/output/format/uPlot/uPlotPlug
   `
 })
 export class UPlotOutputView implements AfterViewInit, OnChanges, OnDestroy {
-  graphType = input.required<string>();
-  basicOptions = input.required<BasicOptions>();
   uPlotData = input.required<uPlot.AlignedData>();
+  uPlotOptions = input.required<uPlot.Options>();
   @ViewChild('anchor') anchor: ElementRef;
   private resizeListener:ResizeListener;
   private graph:uPlot;
@@ -84,14 +79,7 @@ export class UPlotOutputView implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private initializeGraph(): void {
-    let uPlotOptions:UPlotOptions;
-    if(this.graphType() === GraphType.bar){
-      uPlotOptions = new BarChartOptionsImpl(this.basicOptions());
-    }
-    else{
-      uPlotOptions = this.basicOptions();
-    }
-    const graph = new uPlot(uPlotOptions.options(), this.uPlotData(), this.anchor.nativeElement);
+    const graph = new uPlot(this.uPlotOptions(), this.uPlotData(), this.anchor.nativeElement);
     this.resizeListener = new ResizeListenerImpl();
     this.resizeListener.registerToWindow(graph);
     this.resizeListener.registerToElement(graph, this.anchor.nativeElement);
