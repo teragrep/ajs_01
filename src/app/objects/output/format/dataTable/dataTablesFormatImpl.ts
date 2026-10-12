@@ -53,6 +53,7 @@ import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/r
 import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
 import {PaginatedDataTablesData} from './paginatedDataTablesData';
 import {DataTablesOptions} from './dataTablesOptions';
+import {Requestable} from '../../../channel/requestable';
 
 export class DataTablesFormatImpl implements DataTablesFormat {
   private readonly _requestable: Requestable;

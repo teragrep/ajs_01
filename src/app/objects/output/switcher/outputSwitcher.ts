@@ -46,8 +46,6 @@
 import {Printable} from '../../rendering/printable/printable';
 
 export interface OutputSwitcher extends Printable{
-  showSwitcher():void;
-  hideSwitcher():void;
   showLoader():void;
   hideLoader():void;
 }

@@ -48,30 +48,19 @@ import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../rendering/renderNode/renderNode';
 import {RenderNodeImpl} from '../../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../../ui/angular2+/componentRegistry/registeredComponents';
-import {RenderNodeStub} from '../../rendering/renderNode/renderNodeStub';
 
 export class OutputSwitcherImpl implements OutputSwitcher {
   private readonly _showLoader:WritableSignal<boolean>;
   private readonly _switcherButtons: RenderNode[];
-  private readonly _renderNodeStub:RenderNode;
   private readonly _renderNode:WritableSignal<RenderNode>;
 
   constructor(switcherButtons: RenderNode[]) {
     this._switcherButtons = switcherButtons;
     this._showLoader = signal(false);
-    this._renderNodeStub = new RenderNodeStub();
-    this._renderNode = signal(this._renderNodeStub);
-  }
-
-  showSwitcher(): void {
-    this._renderNode.set(new RenderNodeImpl(RegisteredComponents.OUTPUT_SWITCHER_VIEW, computed(() => ({
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_SWITCHER_VIEW, computed(() => ({
       switcherButtons: this._switcherButtons,
       showLoader: this._showLoader(),
     }))));
-  }
-
-  hideSwitcher(): void {
-    this._renderNode.set(this._renderNodeStub);
   }
 
   showLoader(): void {
