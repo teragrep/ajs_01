@@ -44,7 +44,6 @@
  * a licensee so wish it.
  */
 import {Paragraph} from './paragraph';
-import {Channel} from '../channel/channel';
 import {Output} from '../output/output';
 import {OutputImpl} from '../output/outputImpl';
 import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
@@ -57,16 +56,17 @@ import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registe
 import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponsePropertyEqualsFilter';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
+import {Requestable} from '../channel/requestable';
 
 export class ParagraphImpl implements Paragraph {
-  private readonly _channel: Channel;
+  private readonly _requestable: Requestable;
   private readonly _output: Output;
   private readonly _paragraph: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
 
-  constructor(channel: Channel, paragraph: object) {
-    this._channel = channel;
+  constructor(requestable: Requestable, paragraph: object) {
+    this._requestable = requestable;
     this._paragraph = new WebSocketPayloadImpl(paragraph);
     this._output = this.initializedOutput(paragraph);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, signal({
@@ -86,7 +86,7 @@ export class ParagraphImpl implements Paragraph {
         params: this._paragraph.objectPropertyAsPayload('settings').objectProperty('params'),
       },
     };
-    this._channel.request(runParagraphRequest);
+    this._requestable.request(runParagraphRequest);
   }
 
   private initializedOutput(paragraph: object): Output {
@@ -110,7 +110,7 @@ export class ParagraphImpl implements Paragraph {
   request(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const paragraphIdDecoratedMessage = new WebSocketRequestWithField(message, 'paragraphId', this.id());
-    this._channel.request({
+    this._requestable.request({
       op:paragraphIdDecoratedMessage.operation(),
       data:paragraphIdDecoratedMessage.data()
     });

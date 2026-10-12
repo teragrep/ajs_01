@@ -43,7 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../channel/channel';
 import {Paragraph} from '../paragraph/paragraph';
 import {ParagraphCollection} from './paragraphCollection';
 import {ParagraphImpl} from '../paragraph/paragraphImpl';
@@ -57,16 +56,17 @@ import {ParagraphRemovedMessageImpl} from '../message/paragraphRemovedMessage/pa
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
+import {Requestable} from '../channel/requestable';
 
 export class ParagraphCollectionImpl implements ParagraphCollection {
-  private readonly _channel: Channel;
+  private readonly _requestable: Requestable;
   private readonly _paragraphs: WritableSignal<Map<string,  Paragraph>>;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _responseEvents:Map<string, (message:WebSocketResponse) => void>;
 
-  constructor(channel: Channel, initialParagraphData: object[]) {
-    this._channel = channel;
-    this._paragraphs = this.initializedParagraphs(initialParagraphData);
+  constructor(requestable: Requestable, paragraphs: object[]) {
+    this._requestable = requestable;
+    this._paragraphs = this.initializedParagraphs(paragraphs);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_COLLECTION_VIEW, computed(() => ({
       paragraphs: Array.from(this._paragraphs().values()).map(paragraph => paragraph.print()()),
     }))));
@@ -75,6 +75,40 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
       ['PARAGRAPH_ADDED', (message) => this.paragraphAddedResponse(message)],
       ['PARAGRAPH_REMOVED', (message) => this.paragraphRemovedResponse(message)],
     ]);
+  }
+
+  add(paragraph:Paragraph, index:number): void {
+    if(index < 0 || index > 0 && index > Array.from(this._paragraphs()).length - 1){
+      throw new Error(`Invalid index "${index}" provided.`);
+    }
+    const paragraphId = paragraph.id();
+    if(this._paragraphs().has(paragraphId)){
+      throw new Error(`Paragraph with id "${paragraphId}" already exists.`);
+    }
+    const paragraphsAsArray = Array.from(this._paragraphs().values());
+    paragraphsAsArray.splice(index, 0, paragraph);
+    this._paragraphs.set(new Map(paragraphsAsArray.map(paragraph => [paragraph.id(), paragraph])));
+  }
+
+  update(paragraph: Paragraph): void {
+    const paragraphId = paragraph.id();
+    if(!this._paragraphs().has(paragraphId)){
+      throw new Error(`Paragraph "${paragraphId}" does not exist.`);
+    }
+    this._paragraphs.update(paragraphs => {
+      paragraphs.set(paragraph.id(), paragraph);
+      return paragraphs;
+    });
+  }
+
+  remove(paragraphId: string): void {
+    if(!this._paragraphs().has(paragraphId)){
+      throw new Error(`Paragraph "${paragraphId}" does not exist.`);
+    }
+    this._paragraphs.update(paragraphs => {
+      paragraphs.delete(paragraphId);
+      return paragraphs;
+    });
   }
 
   private executeParagraphRequest(message:WebSocketResponse):void {
@@ -112,16 +146,6 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     });
   }
 
-  private initializedParagraphs(initialParagraphData: object[]): WritableSignal<Map<string,  Paragraph>> {
-    const paragraphMap = new Map<string, Paragraph>();
-    initialParagraphData.forEach(paragraphData => {
-      const paragraph = new ParagraphImpl(this, paragraphData);
-      paragraphMap.set(paragraph.id(), paragraph);
-    });
-    return signal(paragraphMap, {
-      equal: () => false
-    });
-  }
 
   print(): Signal<RenderNode> {
     return this._renderNode;
@@ -133,7 +157,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
       this.executeParagraphRequest(message);
     }
     else{
-      this._channel.request(json);
+      this._requestable.request(json);
     }
   }
 
@@ -147,5 +171,16 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     else{
       this._paragraphs().forEach(paragraph => paragraph.response(json));
     }
+  }
+
+  private initializedParagraphs(paragraphs: object[]): WritableSignal<Map<string,  Paragraph>> {
+    const paragraphMap = new Map<string, Paragraph>();
+    paragraphs.forEach(paragraphData => {
+      const paragraph = new ParagraphImpl(this, paragraphData);
+      paragraphMap.set(paragraph.id(), paragraph);
+    });
+    return signal(paragraphMap, {
+      equal: () => false
+    });
   }
 }
