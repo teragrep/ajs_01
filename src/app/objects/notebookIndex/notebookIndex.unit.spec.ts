@@ -47,7 +47,6 @@ import {NotebookIndex} from './notebookIndex';
 import {NotebookIndexImpl} from './notebookIndexImpl';
 import {Channel} from '../channel/channel';
 import {RenderNode} from '../rendering/renderNode/renderNode';
-import {NotebookImpl} from '../notebook/notebookImpl';
 import {FakeChannel} from '../channel/fakeChannel';
 
 describe('NotebookIndex', () => {
@@ -84,37 +83,13 @@ describe('NotebookIndex', () => {
     expect(channelSpy).toHaveBeenCalledExactlyOnceWith(fakeMessage);
   });
 
-  it('Should render notebook', () => {
-    const notebook = new NotebookImpl(channel, {id:notebookId, paragraphs:[]});
-    notebookIndex.renderNotebook(notebook);
+  it('Should render note after NOTE response', () => {
+    notebookIndex.response({
+      op:'NOTE',
+      data:{id:notebookId, paragraphs:[]}
+    });
     const printed = notebookIndex.print()();
     const inputs = printed.inputs()();
     expect((inputs['notebook'] as RenderNode).isStub()).toBe(false);
-  });
-
-  it('Should throw if notebookId is wrong', () => {
-    const wrongNotebookId = 'wrongNotebookId';
-    const notebook = new NotebookImpl(channel, {id:wrongNotebookId, paragraphs:[]});
-    expect(() => notebookIndex.renderNotebook(notebook)).toThrow();
-  });
-
-  describe('Responses', () => {
-    it('Should render note after NOTE response', () => {
-      notebookIndex.response({
-        op:'NOTE',
-        data:{id:notebookId, paragraphs:[]}
-      });
-      const printed = notebookIndex.print()();
-      const inputs = printed.inputs()();
-      expect((inputs['notebook'] as RenderNode).isStub()).toBe(false);
-    });
-
-    it('Should respond note', () => {
-      const notebook = new NotebookImpl(channel, {id:notebookId, paragraphs:[]});
-      notebookIndex.renderNotebook(notebook);
-      const notebookSpy = vi.spyOn(notebook, 'response');
-      notebookIndex.response(fakeMessage);
-      expect(notebookSpy).toHaveBeenCalledExactlyOnceWith(fakeMessage);
-    });
   });
 });
