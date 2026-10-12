@@ -43,18 +43,18 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../../../../channel/channel';
 import {DataTablesAjaxImpl} from './dataTablesAjaxImpl';
-import {FakeChannel} from '../../../../../../../test/fakes/channel/fakeChannel';
 import {DataTablesAjax} from './dataTablesAjax';
+import {Requestable} from '../../../../../channel/requestable';
+import {FakeChannel} from '../../../../../channel/fakeChannel';
 
 describe('Ajax', () => {
-  let channel:Channel;
+  let requestable:Requestable;
   let dataTablesAjax:DataTablesAjax;
 
   beforeEach(() => {
-    channel = new FakeChannel();
-    dataTablesAjax = new DataTablesAjaxImpl(channel);
+    requestable = new FakeChannel();
+    dataTablesAjax = new DataTablesAjaxImpl(requestable);
   });
 
   describe('Birth', () => {
@@ -86,9 +86,9 @@ describe('Ajax', () => {
       });
 
       it('Should not send initial request to channel when configFunction evoked', () => {
-        const channelSpy = vi.spyOn(channel, 'request');
+        const requestableSpy = vi.spyOn(requestable, 'request');
         configFunction(requestData, callback);
-        expect(channelSpy).toHaveBeenCalledTimes(0);
+        expect(requestableSpy).toHaveBeenCalledTimes(0);
       });
 
       it('Should evoke callback function when configFunction evoked', () => {

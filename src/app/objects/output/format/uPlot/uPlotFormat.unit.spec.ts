@@ -43,18 +43,18 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {UPlotFormatImpl} from './uPlotFormatImpl';
-import {Channel} from '../../../channel/channel';
-import {FakeChannel} from '../../../../../test/fakes/channel/fakeChannel';
+import {uPlotFormatImpl} from './uPlotFormatImpl';
 import {OutputFormat} from '../outputFormat';
 import uPlot from 'uplot';
+import {Requestable} from '../../../channel/requestable';
+import {FakeChannel} from '../../../channel/fakeChannel';
 
 describe('uPlotFormat unit test', () => {
-  let channel:Channel;
+  let requestable:Requestable;
   let uPlotFormat: OutputFormat;
   beforeEach(() => {
-    channel = new FakeChannel();
-    uPlotFormat = new UPlotFormatImpl(channel);
+    requestable = new FakeChannel();
+    uPlotFormat = new uPlotFormatImpl(requestable);
   });
 
   it('Should print', () => {

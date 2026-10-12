@@ -56,19 +56,20 @@ import {uPlotOptions} from './uPlotOptions';
 import {OutputFormat} from '../outputFormat';
 import {BasicOptionsImpl} from './uPlotPlugin/configuration/options/basicOptionsImpl';
 import {BarChartOptionsImpl} from './uPlotPlugin/configuration/options/barChartOptionsImpl';
+import {Requestable} from '../../../channel/requestable';
 
-export class UPlotFormatImpl implements OutputFormat {
+export class uPlotFormatImpl implements OutputFormat {
   private readonly _switcherButtons: Printable[];
   private readonly _uPlotData: WritableSignal<uPlot.AlignedData>;
   private readonly _uPlotOptions: WritableSignal<uPlot.Options>;
   private readonly _renderNode: WritableSignal<RenderNode>;
 
-  constructor(channel: Channel) {
+  constructor(requestable: Requestable) {
     this._switcherButtons = [
-      new uPlotSwitcherButton(channel, 'Line Chart', 'fas fa-chart-line', GraphType.line),
-      new uPlotSwitcherButton(channel, 'Area Chart', 'fas fa-chart-area', GraphType.area),
-      new uPlotSwitcherButton(channel, 'Bar Chart', 'fas fa-chart-bar', GraphType.bar),
-      new uPlotSwitcherButton(channel, 'Scatter Chart', 'cf cf-scatter-chart', GraphType.scatter),
+      new uPlotSwitcherButton(requestable, 'Line Chart', 'fas fa-chart-line', GraphType.line),
+      new uPlotSwitcherButton(requestable, 'Area Chart', 'fas fa-chart-area', GraphType.area),
+      new uPlotSwitcherButton(requestable, 'Bar Chart', 'fas fa-chart-bar', GraphType.bar),
+      new uPlotSwitcherButton(requestable, 'Scatter Chart', 'cf cf-scatter-chart', GraphType.scatter),
     ];
     this._uPlotData = signal([]);
     this._uPlotOptions = signal({

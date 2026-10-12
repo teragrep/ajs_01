@@ -44,18 +44,18 @@
  * a licensee so wish it.
  */
 import {DataTablesFormatImpl} from './dataTablesFormatImpl';
-import {Channel} from '../../../channel/channel';
-import {FakeChannel} from '../../../../../test/fakes/channel/fakeChannel';
 import {PaginatedDataTablesData} from './paginatedDataTablesData';
 import {DataTablesOptions} from './dataTablesOptions';
+import {FakeChannel} from '../../../channel/fakeChannel';
+import {Requestable} from '../../../channel/requestable';
 
 describe('DataTablesFormat unit test', () => {
-  let channel:Channel;
+  let requestable:Requestable;
   let dataTablesFormat:DataTablesFormatImpl;
 
   beforeEach(() => {
-    channel = new FakeChannel();
-    dataTablesFormat = new DataTablesFormatImpl(channel);
+    requestable = new FakeChannel();
+    dataTablesFormat = new DataTablesFormatImpl(requestable);
   });
 
   it('Should print', () => {
@@ -83,7 +83,7 @@ describe('DataTablesFormat unit test', () => {
   });
 
   it('Should request channel', () => {
-    const channelSpy = vi.spyOn(channel, 'request');
+    const channelSpy = vi.spyOn(requestable, 'request');
     const request = {
       op:'test',
       data:{}
