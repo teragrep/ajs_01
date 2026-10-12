@@ -61,7 +61,7 @@ describe('WebSocketResponsePropertyEqualsFilter unit test', () => {
         [propertyName]:propertyValue
       }
     }));
-    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterMessage(messageWithFilteredProperty);
+    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterResponse(messageWithFilteredProperty);
     expect(filteredMessage.isStub()).toBe(false);
   });
 
@@ -70,7 +70,7 @@ describe('WebSocketResponsePropertyEqualsFilter unit test', () => {
       op:'',
       data:{}
     }));
-    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterMessage(messageWithoutFilteredProperty);
+    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterResponse(messageWithoutFilteredProperty);
     expect(filteredMessage.isStub()).toBe(false);
   });
 
@@ -81,7 +81,7 @@ describe('WebSocketResponsePropertyEqualsFilter unit test', () => {
         [propertyName]:'wrongValue'
       }
     }));
-    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterMessage(messageWithNotEqualPropertyValue);
+    const filteredMessage = webSocketResponsePropertyEqualsFilter.filterResponse(messageWithNotEqualPropertyValue);
     expect(filteredMessage.isStub()).toBe(true);
   });
 });
