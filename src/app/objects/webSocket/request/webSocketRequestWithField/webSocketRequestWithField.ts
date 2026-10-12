@@ -65,4 +65,8 @@ export class WebSocketRequestWithField implements WebSocketRequest {
   operation(): string {
     return this._webSocketRequest.operation();
   }
+
+  isStub(): boolean {
+    return this._webSocketRequest.isStub();
+  }
 }

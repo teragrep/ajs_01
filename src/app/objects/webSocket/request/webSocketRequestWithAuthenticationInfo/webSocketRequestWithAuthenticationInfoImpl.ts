@@ -81,4 +81,8 @@ export class WebSocketRequestWithAuthenticationInfoImpl implements WebSocketRequ
   data(): object {
     return this._webSocketRequest.data();
   }
+
+  isStub(): boolean {
+    return this._webSocketRequest.isStub();
+  }
 }
