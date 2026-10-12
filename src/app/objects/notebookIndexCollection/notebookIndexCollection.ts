@@ -48,6 +48,6 @@ import {Printable} from '../rendering/printable/printable';
 import {NotebookIndex} from '../notebookIndex/notebookIndex';
 
 export interface NotebookIndexCollection extends Channel, Printable{
-  addOrUpdate(notebookIndex:NotebookIndex):void;
+  add(notebookIndex:NotebookIndex):void;
   clear():void;
 }
