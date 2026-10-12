@@ -52,7 +52,7 @@ import {InterpreterErrorListener} from '../interpreterErrorListener/interpreterE
 import {OutputFormat} from './format/outputFormat';
 import {OutputSwitcher} from './switcher/outputSwitcher';
 import {HTMLFormat} from './format/html/htmlFormat';
-import {UPlotFormatImpl} from './format/uPlot/uPlotFormatImpl';
+import {uPlotFormatImpl} from './format/uPlot/uPlotFormatImpl';
 import {TextFormat} from './format/text/textFormat';
 import {AngularFormatImpl} from './format/angular/angularFormatImpl';
 import {OutputSwitcherImpl} from './switcher/outputSwitcherImpl';
@@ -83,7 +83,7 @@ export class OutputImpl implements Output {
     const outputFormatList:[string, OutputFormat][] = [
       [OutputType.dataTables, new DataTablesFormatImpl(this)],
       [OutputType.html, new HTMLFormat()],
-      [OutputType.uPlot, new UPlotFormatImpl(this)],
+      [OutputType.uPlot, new uPlotFormatImpl(this)],
       [OutputType.text, new TextFormat()],
       [OutputType.angular, new AngularFormatImpl(this)],
     ];
