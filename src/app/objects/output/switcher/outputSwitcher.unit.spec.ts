@@ -72,10 +72,10 @@ describe('OutputSwitcher', () => {
   it('Should hide loader', () => {
     outputSwitcher.showLoader();
     const printed = outputSwitcher.print()();
-    const loaderIsVisible = printed.inputs()()['showLoader'];
+    const beforeHide = printed.inputs()()['showLoader'];
     outputSwitcher.hideLoader();
-    const loaderIsHidden = printed.inputs()()['showLoader'];
-    expect(loaderIsVisible).toBe(true);
-    expect(loaderIsHidden).toBe(true);
+    const afterHide = printed.inputs()()['showLoader'];
+    expect(beforeHide).toBe(true);
+    expect(afterHide).toBe(false);
   });
 });
