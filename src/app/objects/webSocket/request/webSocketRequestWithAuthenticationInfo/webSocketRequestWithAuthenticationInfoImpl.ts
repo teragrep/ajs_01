@@ -44,7 +44,6 @@
  * a licensee so wish it.
  */
 import {Authentication} from '../../../../shared/objects/security/authentication';
-import {WebSocketResponse} from '../../response/webSocketResponse';
 import {WebSocketRequestWithAuthenticationInfo} from './webSocketRequestwithAuthenticationInfo';
 import {WebSocketRequest} from '../webSocketRequest';
 

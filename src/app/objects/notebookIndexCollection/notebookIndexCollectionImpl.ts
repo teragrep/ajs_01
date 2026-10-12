@@ -65,7 +65,7 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
     this._channel = channel;
     this._notebookIndices = signal(new Map(), {equal:() => false});
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.NOTEBOOK_INDEX_COLLECTION_VIEW, computed(() => ({
-      notebookIndices: Array.from(this._notebookIndices())
+      notebookIndices: Array.from(this._notebookIndices().values()).map(notebookIndex => notebookIndex.print()())
     }))));
   }
 
