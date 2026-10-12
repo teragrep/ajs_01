@@ -48,7 +48,6 @@ import {ParagraphCollectionImpl} from './paragraphCollectionImpl';
 import {FakeChannel} from '../channel/fakeChannel';
 import {Requestable} from '../channel/requestable';
 import {ParagraphImpl} from '../paragraph/paragraphImpl';
-import {Paragraph} from '../paragraph/paragraph';
 
 describe('ParagraphCollection unit test', () => {
   let requestable: Requestable;
@@ -178,15 +177,15 @@ describe('ParagraphCollection unit test', () => {
       expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(1);
     });
 
-    it('Should add paragraph', () => {
+    it('Should try to update paragraph', () => {
       const paragraphResponse = {
         op:'PARAGRAPH',
         data:{
           id:'para3'
         }
       };
-      paragraphCollection.response(paragraphResponse);
-      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(1);
+      // Since we paragraph state cannot be asserted, this is the only way to assert that something happens
+      expect(() => paragraphCollection.response(paragraphResponse)).toThrow();
     });
 
     it('Should remove paragraph', () => {

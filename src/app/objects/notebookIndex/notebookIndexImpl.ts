@@ -56,7 +56,8 @@ import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPaylo
 import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
-import {NoteResponseEventImpl} from '../webSocket/responseEvents/note/noteResponseEventImpl';
+import {TypedWebSocketResponse} from '../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
+import {NotebookImpl} from '../notebook/notebookImpl';
 
 export class NotebookIndexImpl implements NotebookIndex {
   private readonly _channel: Channel;
@@ -80,7 +81,7 @@ export class NotebookIndexImpl implements NotebookIndex {
   response(json: object): void {
     const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     if(webSocketResponse.operation() === 'NOTE'){
-      this.noteResponseEvent(webSocketResponse);
+      this.handleNoteResponseEvent(webSocketResponse);
     }
     else if(!this._notebook().isStub()){
       this._notebook().response(json);
@@ -103,8 +104,12 @@ export class NotebookIndexImpl implements NotebookIndex {
     return this._renderNode;
   }
 
-  private noteResponseEvent(webSocketResponse: WebSocketResponse): void {
-    const noteResponseEvent = new NoteResponseEventImpl(webSocketResponse);
-    noteResponseEvent.renderNotebook(this);
+  private handleNoteResponseEvent(webSocketResponse: WebSocketResponse): void {
+    const noteResponse = new TypedWebSocketResponse('NOTE', webSocketResponse);
+    const receivedNotebookId = noteResponse.dataAsWebSocketPayload().stringProperty('id');
+    if(receivedNotebookId === this.id()){
+      const notebook = new NotebookImpl(this, noteResponse.data());
+      this._notebook.set(notebook);
+    }
   }
 }
