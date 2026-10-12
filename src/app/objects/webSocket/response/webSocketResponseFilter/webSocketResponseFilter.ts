@@ -46,5 +46,5 @@
 import {WebSocketResponse} from '../webSocketResponse';
 
 export interface WebSocketResponseFilter {
-  filterMessage(message:WebSocketResponse): WebSocketResponse;
+  filterResponse(webSocketResponse:WebSocketResponse): WebSocketResponse;
 }
