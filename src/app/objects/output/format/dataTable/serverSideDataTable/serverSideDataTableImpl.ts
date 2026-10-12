@@ -47,11 +47,11 @@ import DataTable, {Api, Config, ConfigColumnDefs, ConfigColumns} from 'datatable
 import 'datatables.net-buttons-bs5';
 import {DataTablesAjaxImpl} from './ajax/dataTablesAjaxImpl';
 import {DataTablesAjax} from './ajax/dataTablesAjax';
-import {WebSocketPayloadImpl} from '../../../../webSocketPayload/webSocketPayloadImpl';
 import {ServerSideDataTable} from './serverSideDataTable';
 import {Requestable} from '../../../../channel/requestable';
 import {PaginatedDataTablesData} from '../paginatedDataTablesData';
 import {DataTablesOptions} from '../dataTablesOptions';
+import {WebSocketPayloadImpl} from '../../../../webSocket/webSocketPayload/webSocketPayloadImpl';
 
 export class ServerSideDataTableImpl implements ServerSideDataTable {
   private readonly _requestable: Requestable;

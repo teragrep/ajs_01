@@ -66,6 +66,7 @@ import {OutputType} from './outputType';
 import {WebSocketRequestImpl} from '../webSocket/request/webSocketRequestImpl';
 import {WebSocketRequest} from '../webSocket/request/webSocketRequest';
 import {WebSocketRequestStub} from '../webSocket/request/webSocketRequestStub';
+import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
 
 export class OutputImpl implements Output {
   private readonly _channel:Channel;
@@ -114,18 +115,34 @@ export class OutputImpl implements Output {
   response(json: object): void {
     const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     if(webSocketResponse.operation() === 'PARAGRAPH_OUTPUT'){
-      const receivedOutputType = webSocketResponse.dataAsWebSocketPayload().stringProperty('type');
-      const requestedOutputType = new WebSocketPayloadImpl(this._previousParagraphOutputRequest.data()).stringProperty('type');
-      if(!this._previousParagraphOutputRequest.isStub() && receivedOutputType !== requestedOutputType){
+      const receivedOutputType = webSocketResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').stringProperty('type');
+      if(!this._previousParagraphOutputRequest.isStub() && !this.receivedOutputIsValid(webSocketResponse)){
         this._channel.request({
           op:this._previousParagraphOutputRequest.operation(),
           data:this._previousParagraphOutputRequest.data(),
         });
       }
       else{
-        // this._outputFormats.forEach(format => format.response(json));
+        if(!this._outputFormats.has(receivedOutputType)){
+          throw new Error(`OutputFormat "${receivedOutputType}" is not supported.`);
+        }
+        const output =webSocketResponse.dataAsWebSocketPayload().objectProperty('output');
+        const outputData = output['data'];
+        if(!outputData){
+          throw new Error(`Output response data is not defined, output: ${JSON.stringify(output)}`);
+        }
+        const outputOptions = output['options'];
+        const outputFormat = this._outputFormats.get(receivedOutputType);
+        outputFormat.render(outputData, outputOptions);
+        this._output.set(outputFormat.print()());
         this._outputSwitcher.response(json);
       }
     }
+  }
+
+  private receivedOutputIsValid(paragraphOutputResponse:WebSocketResponse):boolean{
+    const receivedOutputType = paragraphOutputResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').stringProperty('type');
+    const requestedOutputType = new WebSocketPayloadImpl(this._previousParagraphOutputRequest.data()).stringProperty('type');
+    return receivedOutputType === requestedOutputType;
   }
 }
