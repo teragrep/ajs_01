@@ -73,12 +73,15 @@ export class OutputImpl implements Output {
   private readonly _interpreterErrorListener:InterpreterErrorListener;
   private readonly _outputFormats: Map<string, OutputFormat>;
   private readonly _outputSwitcher:OutputSwitcher;
+  private readonly _showSwitcher:WritableSignal<boolean>;
   private _previousParagraphOutputRequest: WebSocketRequest;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _output:WritableSignal<RenderNode>;
+  private readonly _renderNodeStub:RenderNode;
 
   constructor(channel:Channel) {
     this._channel = channel;
+    this._renderNodeStub = new RenderNodeStub();
     this._interpreterErrorListener = new InterpreterErrorListenerImpl();
     const outputFormatList:[string, OutputFormat][] = [
       [OutputType.dataTables, new DataTablesFormatImpl(this)],
@@ -89,12 +92,13 @@ export class OutputImpl implements Output {
     ];
     this._outputFormats = new Map(outputFormatList);
     const buttons = Array.from(this._outputFormats.values()).map(format => format.switcherButtons());
+    this._showSwitcher = signal(false);
     this._outputSwitcher = new OutputSwitcherImpl(buttons.flat());
     this._previousParagraphOutputRequest = new WebSocketRequestStub();
     this._output = signal(new RenderNodeStub());
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_VIEW, computed(() => ({
       interpreterErrorListener: this._interpreterErrorListener.print()(),
-      outputSwitcher: this._outputSwitcher.print()(),
+      outputSwitcher: this._showSwitcher() ? this._outputSwitcher.print()() : this._renderNodeStub,
       output: this._output(),
     }))));
   }
@@ -149,10 +153,10 @@ export class OutputImpl implements Output {
   private updateSwitcher(paragraphOutputResponse:WebSocketResponse):void{
     const isAggregated = paragraphOutputResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').booleanProperty('isAggregated');
     if(isAggregated){
-      this._outputSwitcher.showSwitcher();
+      this._showSwitcher.set(true);
     }
     else{
-      this._outputSwitcher.hideSwitcher();
+      this._showSwitcher.set(false);
     }
     this._outputSwitcher.hideLoader();
   }
