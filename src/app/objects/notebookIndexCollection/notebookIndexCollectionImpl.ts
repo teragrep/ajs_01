@@ -53,11 +53,11 @@ import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPaylo
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
-import {NotesInfoResponseEventImpl} from '../webSocket/responseEvents/notesInfo/notesInfoResponseEventImpl';
+import {TypedWebSocketResponse} from '../webSocket/response/typedWebSocketResponse/typedWebSocketResponse';
+import {NotebookIndexImpl} from '../notebookIndex/notebookIndexImpl';
 
 export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
   private readonly _channel:Channel;
-  private readonly _responseEvents: Map<string, (webSocketResponse:WebSocketResponse) =>void>;
   private readonly _notebookIndices: WritableSignal<Map<string, NotebookIndex>>;
   private readonly _renderNode:Signal<RenderNode>;
 
@@ -67,9 +67,6 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.NOTEBOOK_INDEX_COLLECTION_VIEW, computed(() => ({
       notebookIndices: Array.from(this._notebookIndices())
     }))));
-    this._responseEvents = new Map([
-      ['NOTES_INFO', (webSocketResponse) => this.notesInfoResponseEvent(webSocketResponse)],
-    ]);
   }
 
   addOrUpdate(notebookIndex: NotebookIndex): void {
@@ -86,11 +83,6 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
     });
   }
 
-  private notesInfoResponseEvent(webSocketResponse:WebSocketResponse):void{
-    const notesInfoResponseEvent = new NotesInfoResponseEventImpl(webSocketResponse);
-    notesInfoResponseEvent.updateNotebookIndices(this);
-  }
-
   print(): Signal<RenderNode> {
     return this._renderNode;
   }
@@ -100,14 +92,22 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
   }
 
   response(json: object): void {
-    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const eventName = message.operation();
-    if(this._responseEvents.has(eventName)){
-      const eventCallback = this._responseEvents.get(eventName);
-      eventCallback(message);
+    const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    if(webSocketResponse.operation() === 'NOTES_INFO'){
+      this.handleNotesInfoResponse(webSocketResponse);
     }
     else{
       this._notebookIndices().forEach(notebookIndex => notebookIndex.response(json));
     }
+  }
+
+  private handleNotesInfoResponse(webSocketResponse:WebSocketResponse):void{
+    const notesInfoResponse = new TypedWebSocketResponse('NOTES_INFO', webSocketResponse);
+    const notebookIndicesPayload = notesInfoResponse.dataAsWebSocketPayload().arrayProperty<object>('notes');
+    this.clear();
+    notebookIndicesPayload.forEach(notebookIndexPayload => {
+      const notebookIndex = new NotebookIndexImpl(this, notebookIndexPayload);
+      this.addOrUpdate(notebookIndex);
+    });
   }
 }
