@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface WebSocketRequest {
-  operation():string;
-  data():object;
-}
+import {WebSocketMessage} from '../message/webSocketMessage';
+import Stubable from '../../../shared/interfaces/stubable';
+
+export interface WebSocketRequest extends WebSocketMessage, Stubable{}

@@ -60,4 +60,8 @@ export class WebSocketRequestImpl implements WebSocketRequest {
   operation(): string {
     return this._webSocketPayload.stringProperty('op');
   }
+
+  isStub(): boolean {
+    return false;
+  }
 }

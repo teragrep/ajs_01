@@ -43,18 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphOutputRequest} from './paragraphOutputRequest';
-
-export class ParagraphOutputRequestStub implements ParagraphOutputRequest {
-  isStub(): boolean {
-    return true;
-  }
-
-  request(): object {
-    throw new Error('ParagraphOutputRequestStub: Method not implemented.');
-  }
-
-  type(): string {
-    throw new Error('ParagraphOutputRequestStub: Method not implemented.');
-  }
+export interface WebSocketMessage {
+  operation():string;
+  data():object;
 }
