@@ -45,9 +45,8 @@
  */
 import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
 import Stubable from '../../../shared/interfaces/stubable';
+import {WebSocketMessage} from '../message/webSocketMessage';
 
-export interface WebSocketResponse extends Stubable{
+export interface WebSocketResponse extends WebSocketMessage, Stubable{
   dataAsWebSocketPayload():WebSocketPayload;
-  data():object;
-  operation():string;
 }

@@ -43,9 +43,18 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import Stubable from '../../../shared/interfaces/stubable';
+import {WebSocketRequest} from './webSocketRequest';
 
-export interface ParagraphOutputRequest extends Stubable {
-  type():string;
-  request():object;
+export class WebSocketRequestStub implements WebSocketRequest {
+  data(): object {
+    throw new Error('WebSocketRequestStub: Method not implemented');
+  }
+
+  operation(): string {
+    throw new Error('WebSocketRequestStub: Method not implemented');
+  }
+
+  isStub(): boolean {
+    return true;
+  }
 }
