@@ -76,15 +76,21 @@ describe('NotebookIndexCollection unit test', () => {
 
   it('Should add notebookIndex', () => {
     const notebookIndex = new NotebookIndexImpl(channel, {id:'notebookId'});
-    notebookIndexCollection.addOrUpdate(notebookIndex);
+    notebookIndexCollection.add(notebookIndex);
     const notebookCollectionPrinted = notebookIndexCollection.print()();
     expect(notebookCollectionPrinted.inputs()()['notebookIndices']).toHaveLength(1);
   });
 
+  it('Should throw if notebookIndex exists', () => {
+    const notebookIndex = new NotebookIndexImpl(channel, {id:'notebookId'});
+    notebookIndexCollection.add(notebookIndex);
+    expect(() => notebookIndexCollection.add(notebookIndex)).toThrow();
+  });
+
   it('Should remove all NotebookIndices', () => {
-    notebookIndexCollection.addOrUpdate(new NotebookIndexImpl(channel, {id:'notebookId1'}));
-    notebookIndexCollection.addOrUpdate(new NotebookIndexImpl(channel, {id:'notebookId2'}));
-    notebookIndexCollection.addOrUpdate(new NotebookIndexImpl(channel, {id:'notebookId3'}));
+    notebookIndexCollection.add(new NotebookIndexImpl(channel, {id:'notebookId1'}));
+    notebookIndexCollection.add(new NotebookIndexImpl(channel, {id:'notebookId2'}));
+    notebookIndexCollection.add(new NotebookIndexImpl(channel, {id:'notebookId3'}));
     const notebookCollectionPrinted = notebookIndexCollection.print()();
     const notebookIndicesInitially = notebookCollectionPrinted.inputs()()['notebookIndices'];
     notebookIndexCollection.clear();
@@ -113,8 +119,8 @@ describe('NotebookIndexCollection unit test', () => {
   it('Should respond to notebookIndices', () => {
     const notebookIndex1 = new NotebookIndexImpl(channel, {id:'notebookId1'});
     const notebookIndex2 = new NotebookIndexImpl(channel, {id:'notebookId2'});
-    notebookIndexCollection.addOrUpdate(notebookIndex1);
-    notebookIndexCollection.addOrUpdate(notebookIndex2);
+    notebookIndexCollection.add(notebookIndex1);
+    notebookIndexCollection.add(notebookIndex2);
     const notebookIndex1Spy = vi.spyOn(notebookIndex1, 'response');
     const notebookIndex2Spy = vi.spyOn(notebookIndex2, 'response');
     const response = {

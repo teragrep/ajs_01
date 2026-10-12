@@ -69,7 +69,11 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
     }))));
   }
 
-  addOrUpdate(notebookIndex: NotebookIndex): void {
+  add(notebookIndex: NotebookIndex): void {
+    const notebookId = notebookIndex.id();
+    if(this._notebookIndices().has(notebookId)){
+      throw new Error(`NotebookIndex "${notebookId}" already exists.`);
+    }
     this._notebookIndices.update(notebookIndices => {
       notebookIndices.set(notebookIndex.id(), notebookIndex);
       return notebookIndices;
@@ -107,7 +111,7 @@ export class NotebookIndexCollectionImpl implements NotebookIndexCollection{
     this.clear();
     notebookIndicesPayload.forEach(notebookIndexPayload => {
       const notebookIndex = new NotebookIndexImpl(this, notebookIndexPayload);
-      this.addOrUpdate(notebookIndex);
+      this.add(notebookIndex);
     });
   }
 }
