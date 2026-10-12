@@ -45,7 +45,7 @@
  */
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {AngularOutputView} from './angularOutputView';
-import {FakeChannel} from '../../../../../objects/channel/fakeChannel';
+import {FakeChannel} from '../../../../../../test/fakes/channel/fakeChannel';
 import {AngularViewUpgradeModule} from './angularViewUpgradeModule';
 import {Component} from '@angular/core';
 

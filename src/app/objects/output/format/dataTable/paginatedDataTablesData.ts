@@ -43,7 +43,9 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputFormat} from '../outputFormat';
-import {Channel} from '../../../channel/channel';
-
-export interface DataTablesFormat extends OutputFormat, Channel{}
+export type PaginatedDataTablesData = {
+  data: object[],
+  draw:number,
+  recordsFiltered:number,
+  recordsTotal:number,
+};

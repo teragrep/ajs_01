@@ -55,10 +55,10 @@ import {RegisteredComponents} from '../../../ui/angular2+/componentRegistry/regi
 export class OutputSwitcherImpl implements OutputSwitcher {
   private readonly _outputIsSwitchable:WritableSignal<boolean>;
   private readonly _switchIsPending:WritableSignal<boolean>;
-  private readonly _switcherButtons: Signal<RenderNode>[];
+  private readonly _switcherButtons: RenderNode[];
   private readonly _renderNode:Signal<RenderNode>;
 
-  constructor(switcherButtons: Signal<RenderNode>[]) {
+  constructor(switcherButtons: RenderNode[]) {
     this._switcherButtons = switcherButtons;
     this._outputIsSwitchable = signal(false);
     this._switchIsPending = signal(false);

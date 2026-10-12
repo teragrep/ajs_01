@@ -43,60 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Channel} from '../../../../../channel/channel';
-import {OutputType} from '../../../../outputType';
-import {DataTablesAjax} from './dataTablesAjax';
-import {WebSocketPayloadImpl} from '../../../../../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {OutputFormat} from '../outputFormat';
+import {Requestable} from '../../../channel/requestable';
 
-export class DataTablesAjaxImpl implements DataTablesAjax {
-  private readonly _channel: Channel;
-  private _callback: (data: object) => void;
-
-  constructor(channel:Channel) {
-    this._channel = channel;
-  }
-
-  request(data: object): void {
-    this._channel.request(data);
-  }
-
-  response(data: object): void {
-    if(this._callback) {
-      this._callback(this.validatedData(data));
-    }
-  }
-
-  private validatedData(data: object): {draw:number, recordsTotal:number, recordsFiltered:number, data:object} {
-    const safeJson = new WebSocketPayloadImpl(data);
-    const draw:number = safeJson.numberProperty('draw');
-    const recordsTotal:number = safeJson.numberProperty('recordsTotal');
-    const recordsFiltered:number = safeJson.numberProperty('recordsFiltered');
-    const tableData:object = safeJson.objectProperty('data');
-    return {
-      draw:draw,
-      recordsTotal:recordsTotal,
-      recordsFiltered:recordsFiltered,
-      data:tableData
-    };
-  }
-
-  configFunction(initialData: object): (data: {draw:number, start:number, length:number}, callback: (data:object) => void) => void {
-    const validatedData = this.validatedData(initialData);
-    return (data: {draw:number, start:number, length:number}, callback: (data:object) => void) => {
-      this._callback = callback;
-      this._callback(validatedData);
-      if(data.draw > validatedData.draw) {
-        const request = {
-          op:'PARAGRAPH_OUTPUT_REQUEST',
-          data: {
-            paragraphId: '',
-            noteId: '',
-            type: OutputType.dataTables,
-            requestOptions: data
-          }
-        };
-        this.request(request);
-      }
-    };
-  }
-}
+export interface DataTablesFormat extends OutputFormat, Requestable{}
