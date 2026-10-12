@@ -109,20 +109,20 @@ export class ParagraphImpl implements Paragraph {
 
   request(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const paragraphIdDecoratedMessage = new WebSocketRequestWithField(message, 'paragraphId', this.id());
+    const paragraphIdDecoratedWebSocketRequest = new WebSocketRequestWithField(message, 'paragraphId', this.id());
     this._requestable.request({
-      op:paragraphIdDecoratedMessage.operation(),
-      data:paragraphIdDecoratedMessage.data()
+      op:paragraphIdDecoratedWebSocketRequest.operation(),
+      data:paragraphIdDecoratedWebSocketRequest.data()
     });
   }
 
   response(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const filteredMessage = this._paragraphIdFilter.filterMessage(message);
-    if(!filteredMessage.isStub()) {
+    const filteredResponse = this._paragraphIdFilter.filterResponse(message);
+    if(!filteredResponse.isStub()) {
       this._output.response({
-        op:filteredMessage.operation(),
-        data:filteredMessage.data()
+        op:filteredResponse.operation(),
+        data:filteredResponse.data()
       });
     }
   }

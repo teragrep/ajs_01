@@ -56,15 +56,15 @@ export class WebSocketResponsePropertyEqualsFilter implements WebSocketResponseF
     this._propertyValue = propertyValue;
   }
 
-  filterMessage(message: WebSocketResponse): WebSocketResponse {
-    const property = message.data()[this._propertyName];
-    let filteredMessage:WebSocketResponse;
+  filterResponse(webSocketResponse: WebSocketResponse): WebSocketResponse {
+    const property = webSocketResponse.data()[this._propertyName];
+    let filteredWebSocketResponse:WebSocketResponse;
     if(property && property !== this._propertyValue){
-      filteredMessage = new WebSocketResponseStub();
+      filteredWebSocketResponse = new WebSocketResponseStub();
     }
     else{
-      filteredMessage = message;
+      filteredWebSocketResponse = webSocketResponse;
     }
-    return filteredMessage;
+    return filteredWebSocketResponse;
   }
 }

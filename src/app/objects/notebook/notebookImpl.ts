@@ -85,16 +85,16 @@ export class NotebookImpl implements Notebook {
 
   request(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const noteIdDecoratedMessage = new WebSocketRequestWithField(message, 'noteId', this.id());
+    const noteIdDecoratedRequest = new WebSocketRequestWithField(message, 'noteId', this.id());
     this._channel.request({
-      op:noteIdDecoratedMessage.operation(),
-      data:noteIdDecoratedMessage.data()
+      op:noteIdDecoratedRequest.operation(),
+      data:noteIdDecoratedRequest.data()
     });
   }
 
   response(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const filteredMessage = this._noteIdFilter.filterMessage(message);
+    const filteredMessage = this._noteIdFilter.filterResponse(message);
     if(!filteredMessage.isStub()){
       this._paragraphCollection.response({
         op:filteredMessage.operation(),
