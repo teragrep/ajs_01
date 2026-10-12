@@ -44,6 +44,10 @@
  * a licensee so wish it.
  */
 import {Printable} from '../../rendering/printable/printable';
-import {Channel} from '../../channel/channel';
 
-export interface OutputSwitcher extends Channel, Printable{}
+export interface OutputSwitcher extends Printable{
+  showSwitcher():void;
+  hideSwitcher():void;
+  showLoader():void;
+  hideLoader():void;
+}
