@@ -51,29 +51,28 @@ import {InterpreterErrorListenerImpl} from '../interpreterErrorListener/interpre
 import {InterpreterErrorListener} from '../interpreterErrorListener/interpreterErrorListener';
 import {OutputFormat} from './format/outputFormat';
 import {OutputSwitcher} from './switcher/outputSwitcher';
-import {ParagraphOutputRequest} from './paragraphOutputRequest/paragraphOutputRequest';
 import {HTMLFormat} from './format/html/htmlFormat';
 import {UPlotFormatImpl} from './format/uPlot/uPlotFormatImpl';
 import {TextFormat} from './format/text/textFormat';
 import {AngularFormatImpl} from './format/angular/angularFormatImpl';
 import {OutputSwitcherImpl} from './switcher/outputSwitcherImpl';
-import {ParagraphOutputRequestStub} from './paragraphOutputRequest/paragraphOutputRequestStub';
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
-import {ParagraphOutputRequestImpl} from './paragraphOutputRequest/paragraphOutputRequestImpl';
-import {ParagraphOutputMessageImpl} from '../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {DataTablesFormatImpl} from './format/dataTable/dataTablesFormatImpl';
 import {RenderNodeStub} from '../rendering/renderNode/renderNodeStub';
 import {OutputType} from './outputType';
+import {WebSocketRequestImpl} from '../webSocket/request/webSocketRequestImpl';
+import {WebSocketRequest} from '../webSocket/request/webSocketRequest';
+import {WebSocketRequestStub} from '../webSocket/request/webSocketRequestStub';
 
 export class OutputImpl implements Output {
   private readonly _channel:Channel;
   private readonly _interpreterErrorListener:InterpreterErrorListener;
   private readonly _outputFormats: Map<string, OutputFormat>;
   private readonly _outputSwitcher:OutputSwitcher;
-  private _previousParagraphOutputRequest: ParagraphOutputRequest;
+  private _previousParagraphOutputRequest: WebSocketRequest;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _output:WritableSignal<RenderNode>;
 
@@ -87,10 +86,10 @@ export class OutputImpl implements Output {
       [OutputType.text, new TextFormat()],
       [OutputType.angular, new AngularFormatImpl(this)],
     ];
-    this._outputFormats = new Map(outputFormatList); // ts compiler gets confused if initializing directly in the map
+    this._outputFormats = new Map(outputFormatList);
     const buttons = Array.from(this._outputFormats.values()).map(format => format.switcherButtons());
     this._outputSwitcher = new OutputSwitcherImpl(buttons.flat());
-    this._previousParagraphOutputRequest = new ParagraphOutputRequestStub();
+    this._previousParagraphOutputRequest = new WebSocketRequestStub();
     this._output = signal(new RenderNodeStub());
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_VIEW, computed(() => ({
       interpreterErrorListener: this._interpreterErrorListener.print()(),
@@ -104,20 +103,24 @@ export class OutputImpl implements Output {
   }
 
   request(json: object) {
-    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT_REQUEST'){
-      this._previousParagraphOutputRequest = new ParagraphOutputRequestImpl(message);
+    const webSocketRequest = new WebSocketRequestImpl(new WebSocketPayloadImpl(json));
+    if(webSocketRequest.operation() === 'PARAGRAPH_OUTPUT_REQUEST'){
+      this._previousParagraphOutputRequest = webSocketRequest;
       this._outputSwitcher.request(json);
     }
     this._channel.request(json);
   }
 
   response(json: object): void {
-    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT'){
-      const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
-      if(!this._previousParagraphOutputRequest.isStub() && paragraphOutputMessage.type() !== this._previousParagraphOutputRequest.type()){
-        this._channel.request(this._previousParagraphOutputRequest.request());
+    const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    if(webSocketResponse.operation() === 'PARAGRAPH_OUTPUT'){
+      const receivedOutputType = webSocketResponse.dataAsWebSocketPayload().stringProperty('type');
+      const requestedOutputType = new WebSocketPayloadImpl(this._previousParagraphOutputRequest.data()).stringProperty('type');
+      if(!this._previousParagraphOutputRequest.isStub() && receivedOutputType !== requestedOutputType){
+        this._channel.request({
+          op:this._previousParagraphOutputRequest.operation(),
+          data:this._previousParagraphOutputRequest.data(),
+        });
       }
       else{
         // this._outputFormats.forEach(format => format.response(json));
