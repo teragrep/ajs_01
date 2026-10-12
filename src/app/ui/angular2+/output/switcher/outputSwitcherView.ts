@@ -53,20 +53,17 @@ import {RenderNodeRootView} from '../../renderNodeRoot/renderNodeRootView';
     RenderNodeRootView
   ],
   template: `
-    @if (outputIsSwitchable()) {
-      <div class="btn-group" role="group">
-        @for (button of switcherButtons(); track $index) {
-          <render-node-host [renderNode]="button"></render-node-host>
-        }
-      </div>
-      @if (switchIsPending()) {
-        <div class="spinner-border mx-2 text-primary" role="status"></div>
+    <div class="btn-group" role="group">
+      @for (button of switcherButtons(); track $index) {
+        <render-node-host [renderNode]="button"></render-node-host>
       }
+    </div>
+    @if(showLoader()) {
+      <div class="spinner-border mx-2 text-primary" role="status"></div>
     }
   `
 })
 export class OutputSwitcherView {
   switcherButtons = input.required<RenderNode[]>();
-  switchIsPending= input.required<boolean>();
-  outputIsSwitchable= input.required<boolean>();
+  showLoader= input.required<boolean>();
 }

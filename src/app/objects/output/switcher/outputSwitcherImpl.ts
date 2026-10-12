@@ -44,48 +44,45 @@
  * a licensee so wish it.
  */
 import {OutputSwitcher} from './outputSwitcher';
-import {WebSocketPayloadImpl} from '../../webSocket/webSocketPayload/webSocketPayloadImpl';
-import {WebSocketResponseImpl} from '../../webSocket/response/webSocketResponseImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../rendering/renderNode/renderNode';
-import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {RenderNodeImpl} from '../../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../../ui/angular2+/componentRegistry/registeredComponents';
+import {RenderNodeStub} from '../../rendering/renderNode/renderNodeStub';
 
 export class OutputSwitcherImpl implements OutputSwitcher {
-  private readonly _outputIsSwitchable:WritableSignal<boolean>;
-  private readonly _switchIsPending:WritableSignal<boolean>;
+  private readonly _showLoader:WritableSignal<boolean>;
   private readonly _switcherButtons: RenderNode[];
-  private readonly _renderNode:Signal<RenderNode>;
+  private readonly _renderNodeStub:RenderNode;
+  private readonly _renderNode:WritableSignal<RenderNode>;
 
   constructor(switcherButtons: RenderNode[]) {
     this._switcherButtons = switcherButtons;
-    this._outputIsSwitchable = signal(false);
-    this._switchIsPending = signal(false);
-    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_SWITCHER_VIEW, computed(() => ({
+    this._showLoader = signal(false);
+    this._renderNodeStub = new RenderNodeStub();
+    this._renderNode = signal(this._renderNodeStub);
+  }
+
+  showSwitcher(): void {
+    this._renderNode.set(new RenderNodeImpl(RegisteredComponents.OUTPUT_SWITCHER_VIEW, computed(() => ({
       switcherButtons: this._switcherButtons,
-      switchIsPending: this._switchIsPending(),
-      outputIsSwitchable: this._outputIsSwitchable(),
+      showLoader: this._showLoader(),
     }))));
+  }
+
+  hideSwitcher(): void {
+    this._renderNode.set(this._renderNodeStub);
+  }
+
+  showLoader(): void {
+    this._showLoader.set(true);
+  }
+
+  hideLoader(): void {
+    this._showLoader.set(false);
   }
 
   print(): Signal<RenderNode> {
     return this._renderNode;
-  }
-
-  request(json: object) {
-    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT_REQUEST'){
-      this._switchIsPending.set(true);
-    }
-  }
-
-  response(json: object): void {
-    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT'){
-      const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
-      this._outputIsSwitchable.set(paragraphOutputMessage.isAggregated());
-      this._switchIsPending.set(false);
-    }
   }
 }

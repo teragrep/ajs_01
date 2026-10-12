@@ -107,7 +107,7 @@ export class OutputImpl implements Output {
     const webSocketRequest = new WebSocketRequestImpl(new WebSocketPayloadImpl(json));
     if(webSocketRequest.operation() === 'PARAGRAPH_OUTPUT_REQUEST'){
       this._previousParagraphOutputRequest = webSocketRequest;
-      this._outputSwitcher.request(json);
+      this._outputSwitcher.showLoader();
     }
     this._channel.request(json);
   }
@@ -126,7 +126,7 @@ export class OutputImpl implements Output {
         if(!this._outputFormats.has(receivedOutputType)){
           throw new Error(`OutputFormat "${receivedOutputType}" is not supported.`);
         }
-        const output =webSocketResponse.dataAsWebSocketPayload().objectProperty('output');
+        const output = webSocketResponse.dataAsWebSocketPayload().objectProperty('output');
         const outputData = output['data'];
         if(!outputData){
           throw new Error(`Output response data is not defined, output: ${JSON.stringify(output)}`);
@@ -135,7 +135,7 @@ export class OutputImpl implements Output {
         const outputFormat = this._outputFormats.get(receivedOutputType);
         outputFormat.render(outputData, outputOptions);
         this._output.set(outputFormat.print()());
-        this._outputSwitcher.response(json);
+        this.updateSwitcher(webSocketResponse);
       }
     }
   }
@@ -144,5 +144,16 @@ export class OutputImpl implements Output {
     const receivedOutputType = paragraphOutputResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').stringProperty('type');
     const requestedOutputType = new WebSocketPayloadImpl(this._previousParagraphOutputRequest.data()).stringProperty('type');
     return receivedOutputType === requestedOutputType;
+  }
+
+  private updateSwitcher(paragraphOutputResponse:WebSocketResponse):void{
+    const isAggregated = paragraphOutputResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').booleanProperty('isAggregated');
+    if(isAggregated){
+      this._outputSwitcher.showSwitcher();
+    }
+    else{
+      this._outputSwitcher.hideSwitcher();
+    }
+    this._outputSwitcher.hideLoader();
   }
 }
