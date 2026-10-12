@@ -50,7 +50,6 @@ import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
 import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {signal, Signal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
-import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponsePropertyEqualsFilter';
@@ -61,14 +60,14 @@ import {Requestable} from '../channel/requestable';
 export class ParagraphImpl implements Paragraph {
   private readonly _requestable: Requestable;
   private readonly _output: Output;
-  private readonly _paragraph: WebSocketPayload;
+  private readonly _paragraphData: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
 
-  constructor(requestable: Requestable, paragraph: object) {
+  constructor(requestable: Requestable, paragraphData: object) {
     this._requestable = requestable;
-    this._paragraph = new WebSocketPayloadImpl(paragraph);
-    this._output = this.initializedOutput(paragraph);
+    this._paragraphData = new WebSocketPayloadImpl(paragraphData);
+    this._output = this.initializedOutput(this._paragraphData);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, signal({
       output:this._output.print()(),
       paragraphId:this.id()
@@ -81,22 +80,12 @@ export class ParagraphImpl implements Paragraph {
       op:'RUN_PARAGRAPH',
       data: {
         id: this.id(),
-        paragraph: this._paragraph.stringProperty('text'),
-        config: this._paragraph.objectProperty('config'),
-        params: this._paragraph.objectPropertyAsPayload('settings').objectProperty('params'),
+        paragraph: this._paragraphData.stringProperty('text'),
+        config: this._paragraphData.objectProperty('config'),
+        params: this._paragraphData.objectPropertyAsPayload('settings').objectProperty('params'),
       },
     };
     this._requestable.request(runParagraphRequest);
-  }
-
-  private initializedOutput(paragraph: object): Output {
-    const outputContainer = new OutputImpl(this);
-    const paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraph);
-    const paragraphOutputMessage = paragraphOutputMessageFactory.paragraphOutputMessage();
-    if(!paragraphOutputMessage.isStub()){
-      outputContainer.response(paragraphOutputMessage.print());
-    }
-    return outputContainer;
   }
 
   print(): Signal<RenderNode> {
@@ -104,7 +93,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   id(): string {
-    return this._paragraph.stringProperty('id');
+    return this._paragraphData.stringProperty('id');
   }
 
   request(json: object): void {
@@ -124,6 +113,31 @@ export class ParagraphImpl implements Paragraph {
         op:filteredResponse.operation(),
         data:filteredResponse.data()
       });
+    }
+  }
+
+  private initializedOutput(paragraphData: WebSocketPayload): Output {
+    const output = new OutputImpl(this);
+    this.createOutputResponseIfOutputExists(paragraphData, output);
+    return output;
+  }
+
+  private createOutputResponseIfOutputExists(paragraphData: WebSocketPayload, output:Output):void{
+    if (paragraphData.propertyExists('output')) {
+      const paragraphOutput = paragraphData.objectProperty('output');
+      if (paragraphOutput['data'] === undefined || paragraphOutput['type'] === undefined) {
+        console.error(`Output data not processed, format invalid: ${JSON.stringify(paragraphOutput)}`);
+      } else {
+        const paragraphOutputResponse = {
+          op: 'PARAGRAPH_OUTPUT',
+          data: {
+            noteId: '',
+            paragraphId: this.id(),
+            output: paragraphOutput,
+          }
+        };
+        output.response(paragraphOutputResponse);
+      }
     }
   }
 }
