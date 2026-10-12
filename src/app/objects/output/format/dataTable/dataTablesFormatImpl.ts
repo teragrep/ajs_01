@@ -55,14 +55,14 @@ import {PaginatedDataTablesData} from './paginatedDataTablesData';
 import {DataTablesOptions} from './dataTablesOptions';
 
 export class DataTablesFormatImpl implements DataTablesFormat {
-  private readonly _channel: Channel;
+  private readonly _requestable: Requestable;
   private readonly _switcherButton: Printable;
   private readonly _dataTablesData:WritableSignal<PaginatedDataTablesData>;
   private readonly _dataTablesOptions:WritableSignal<DataTablesOptions>;
   private readonly _renderNode: WritableSignal<RenderNode>;
 
-  constructor(channel: Channel) {
-    this._channel = channel;
+  constructor(requestable: Requestable) {
+    this._requestable = requestable;
     this._switcherButton = new DataTableSwitcherButton(this);
     this._dataTablesData = signal({
       data: [],
@@ -90,7 +90,7 @@ export class DataTablesFormatImpl implements DataTablesFormat {
   }
 
   request(data: object): void {
-    this._channel.request(data);
+    this._requestable.request(data);
   }
 
   switcherButtons(): RenderNode[] {

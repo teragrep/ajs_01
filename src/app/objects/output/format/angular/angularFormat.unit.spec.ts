@@ -43,15 +43,16 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeChannel} from '../../../../../test/fakes/channel/fakeChannel';
 import {AngularFormatImpl} from './angularFormatImpl';
+import {Requestable} from '../../../channel/requestable';
+import {FakeChannel} from '../../../channel/fakeChannel';
 
 describe('AngularFormat unit test', () => {
-  const channel = new FakeChannel();
+  const requestable:Requestable = new FakeChannel();
   let angularFormat: AngularFormatImpl;
 
   beforeEach(() => {
-    angularFormat = new AngularFormatImpl(channel);
+    angularFormat = new AngularFormatImpl(requestable);
   });
 
   it('Should print', () => {
@@ -68,13 +69,13 @@ describe('AngularFormat unit test', () => {
   });
 
   it('Should request channel', () => {
-    const channelSpy = vi.spyOn(channel, 'request');
+    const requestableSpy = vi.spyOn(requestable, 'request');
     const request = {
       op:'test',
       data:{}
     };
     angularFormat.request(request);
-    expect(channelSpy).toHaveBeenCalledExactlyOnceWith(request);
+    expect(requestableSpy).toHaveBeenCalledExactlyOnceWith(request);
   });
 
   it('Should render', () => {
