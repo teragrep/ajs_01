@@ -95,7 +95,7 @@ export class AngularObjectCollectionImpl implements AngularObjectCollection {
     }
   }
 
-  print(): Signal<AngularObject[]> {
+  values(): Signal<AngularObject[]> {
     return computed(() => Array.from(this._angularObjects().values()));
   }
 
