@@ -56,7 +56,7 @@ describe('TextFormat unit test', () => {
     const printed = textFormat.print()();
     const inputs = printed.inputs()();
     expect(printed.isStub()).toBe(false);
-    expect(inputs['textData']).toEqual('');
+    expect(inputs['textOutput']).toEqual('');
   });
 
   it('Should not have buttons', () => {
@@ -68,6 +68,6 @@ describe('TextFormat unit test', () => {
     textFormat.render(textData);
     const printed = textFormat.print()();
     const inputs = printed.inputs()();
-    expect(inputs['textData']).toEqual(textData);
+    expect(inputs['textOutput']).toEqual(textData);
   });
 });
