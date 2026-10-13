@@ -46,7 +46,6 @@
 import {Output} from './output';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../rendering/renderNode/renderNode';
-import {Channel} from '../channel/channel';
 import {InterpreterErrorListenerImpl} from '../interpreterErrorListener/interpreterErrorListenerImpl';
 import {InterpreterErrorListener} from '../interpreterErrorListener/interpreterErrorListener';
 import {OutputFormat} from './format/outputFormat';
@@ -67,9 +66,10 @@ import {WebSocketRequestImpl} from '../webSocket/request/webSocketRequestImpl';
 import {WebSocketRequest} from '../webSocket/request/webSocketRequest';
 import {WebSocketRequestStub} from '../webSocket/request/webSocketRequestStub';
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
+import {Requestable} from '../channel/requestable';
 
 export class OutputImpl implements Output {
-  private readonly _channel:Channel;
+  private readonly _requestable:Requestable;
   private readonly _interpreterErrorListener:InterpreterErrorListener;
   private readonly _outputFormats: Map<string, OutputFormat>;
   private readonly _outputSwitcher:OutputSwitcher;
@@ -79,8 +79,8 @@ export class OutputImpl implements Output {
   private readonly _output:WritableSignal<RenderNode>;
   private readonly _renderNodeStub:RenderNode;
 
-  constructor(channel:Channel) {
-    this._channel = channel;
+  constructor(requestable:Requestable) {
+    this._requestable = requestable;
     this._renderNodeStub = new RenderNodeStub();
     this._interpreterErrorListener = new InterpreterErrorListenerImpl();
     const outputFormatList:[string, OutputFormat][] = [
@@ -113,7 +113,7 @@ export class OutputImpl implements Output {
       this._previousParagraphOutputRequest = webSocketRequest;
       this._outputSwitcher.showLoader();
     }
-    this._channel.request(json);
+    this._requestable.request(json);
   }
 
   response(json: object): void {
@@ -121,7 +121,7 @@ export class OutputImpl implements Output {
     if(webSocketResponse.operation() === 'PARAGRAPH_OUTPUT'){
       const receivedOutputType = webSocketResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').stringProperty('type');
       if(!this._previousParagraphOutputRequest.isStub() && !this.receivedOutputIsValid(webSocketResponse)){
-        this._channel.request({
+        this._requestable.request({
           op:this._previousParagraphOutputRequest.operation(),
           data:this._previousParagraphOutputRequest.data(),
         });
@@ -132,7 +132,7 @@ export class OutputImpl implements Output {
         }
         const output = webSocketResponse.dataAsWebSocketPayload().objectProperty('output');
         const outputData = output['data'];
-        if(!outputData){
+        if(!('data' in output)){
           throw new Error(`Output response data is not defined, output: ${JSON.stringify(output)}`);
         }
         const outputOptions = output['options'];
