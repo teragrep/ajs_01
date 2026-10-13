@@ -45,28 +45,28 @@
  */
 import {DataTablesOutputView} from './dataTablesOutputView';
 import {DataTablesFormatImpl} from '../../../../../objects/output/format/dataTable/dataTablesFormatImpl';
-import {FakeChannel} from '../../../../../../test/fakes/channel/fakeChannel';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {DataTablesDataFactoryImpl} from '../../../../../../test/fakes/output/dataTables/dataTablesDataFactoryImpl';
-import {DataTablesDataFactory} from '../../../../../../test/fakes/output/dataTables/dataTablesDataFactory';
+import {FakeChannel} from '../../../../../objects/channel/fakeChannel';
 
 describe('DataTablesOutputView functional test', () => {
   const dataTablesFormat = new DataTablesFormatImpl(new FakeChannel());
   let fixture:ComponentFixture<DataTablesOutputView>;
-  const dataTablesDataFactory:DataTablesDataFactory = new DataTablesDataFactoryImpl();
-  const rowCount = 100;
-  const rawData = dataTablesDataFactory.rawData(rowCount);
-  const start = 0;
-  const length = 10;
-  const draw = 1;
-  const initialData = dataTablesDataFactory.paginatedData(rawData, start, length, draw);
-  const headers = Object.keys(rawData[0]);
+  const initialDataTablesData = {
+    data:[
+      {'col1':1},
+      {'col1':2},
+      {'col1':3}
+    ],
+    recordsTotal:3,
+    recordsFiltered:3,
+    draw:1
+  };
   const dataTablesOptions = {
-    headers:headers
+    headers:['col1']
   };
 
   beforeEach(async () => {
-    dataTablesFormat.render(initialData,dataTablesOptions);
+    dataTablesFormat.render(initialDataTablesData,dataTablesOptions);
     const inputs = dataTablesFormat.print()().inputs()();
     fixture = TestBed.createComponent(DataTablesOutputView);
     fixture.componentRef.setInput('dataTablesData', inputs['dataTablesData']);
@@ -82,19 +82,28 @@ describe('DataTablesOutputView functional test', () => {
   it('Should have rendered initial data', () => {
     const tableBody = fixture.nativeElement.querySelector('tbody');
     const rows = tableBody.querySelectorAll('tr');
-    expect(rows).toHaveLength(10);
+    expect(rows).toHaveLength(3);
   });
 
   it('Should render update', () => {
-    const additionalRowCount = 10;
-    const totalRowCount = length+additionalRowCount;
-    const updatedData = dataTablesDataFactory.paginatedData(rawData, start, totalRowCount, draw+1);
+    const updatedData = {
+      data:[
+        {'col1':1},
+        {'col1':2},
+        {'col1':3},
+        {'col1':4},
+        {'col1':5}
+      ],
+      recordsTotal:5,
+      recordsFiltered:5,
+      draw:2
+    };
     dataTablesFormat.render(updatedData,dataTablesOptions);
     const inputs = dataTablesFormat.print()().inputs()();
     fixture.componentRef.setInput('dataTablesData', inputs['dataTablesData']);
     fixture.detectChanges();
     const tableBody = fixture.nativeElement.querySelector('tbody');
     const rows = tableBody.querySelectorAll('tr');
-    expect(rows).toHaveLength(totalRowCount);
+    expect(rows).toHaveLength(5);
   });
 });
