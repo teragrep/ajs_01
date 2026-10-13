@@ -48,7 +48,7 @@ import {AngularObject} from '../angularObject/angularObject';
 import {Signal} from '@angular/core';
 
 export interface AngularObjectCollection extends Channel{
-  print(): Signal<AngularObject[]>;
+  values(): Signal<AngularObject[]>;
   addOrUpdate(angularObject: AngularObject): void;
   remove(name: string): void;
 }
