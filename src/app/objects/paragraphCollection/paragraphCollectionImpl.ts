@@ -60,7 +60,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   private readonly _requestable: Requestable;
   private readonly _paragraphs: WritableSignal<Map<string,  Paragraph>>;
   private readonly _renderNode: Signal<RenderNode>;
-  private readonly _responseEvents:Map<string, (webSocketResponse:WebSocketResponse) => void>;
+  private readonly _responseEvents:Record<string, (webSocketResponse:WebSocketResponse) => void>;
 
   constructor(requestable: Requestable, paragraphs: object[]) {
     this._requestable = requestable;
@@ -68,11 +68,11 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_COLLECTION_VIEW, computed(() => ({
       paragraphs: Array.from(this._paragraphs().values()).map(paragraph => paragraph.print()()),
     }))));
-    this._responseEvents = new Map([
-      ['PARAGRAPH', (webSocketResponse) => this.handleParagraphResponse(webSocketResponse)],
-      ['PARAGRAPH_ADDED', (webSocketResponse) => this.handleParagraphAddedResponse(webSocketResponse)],
-      ['PARAGRAPH_REMOVED', (webSocketResponse) => this.handleParagraphRemovedResponse(webSocketResponse)],
-    ]);
+    this._responseEvents = {
+      'PARAGRAPH':(webSocketResponse) => this.handleParagraphResponse(webSocketResponse),
+      'PARAGRAPH_ADDED': (webSocketResponse) => this.handleParagraphAddedResponse(webSocketResponse),
+      'PARAGRAPH_REMOVED': (webSocketResponse) => this.handleParagraphRemovedResponse(webSocketResponse)
+    };
   }
 
   add(paragraph:Paragraph, index:number): void {
@@ -127,9 +127,8 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   response(json: object): void {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const eventName = message.operation();
-    if(this._responseEvents.has(eventName)){
-      const eventCallback = this._responseEvents.get(eventName);
-      eventCallback(message);
+    if(eventName in this._responseEvents) {
+      this._responseEvents[eventName](message);
     }
     else{
       this._paragraphs().forEach(paragraph => paragraph.response(json));
