@@ -60,7 +60,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   private readonly _requestable: Requestable;
   private readonly _paragraphs: WritableSignal<Map<string,  Paragraph>>;
   private readonly _renderNode: Signal<RenderNode>;
-  private readonly _responseEvents:Record<string, (webSocketResponse:WebSocketResponse) => void>;
+  private readonly _responseEvents:Readonly<Record<string, (webSocketResponse:WebSocketResponse) => void>>;
 
   constructor(requestable: Requestable, paragraphs: object[]) {
     this._requestable = requestable;
