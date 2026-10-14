@@ -41,18 +41,6 @@ limitations under the License.
          ng-bind-html="paragraph.title || 'Untitled'">
     </div>
   </div>
-  <div class="paragraph-editor"
-       ng-if="!paragraph.config.editorHide && !viewOnly && !asIframe">
-    <editor
-      [editor-id]="paragraph.id"
-      [editor-content]="paragraph.text"
-      [show-gutter]="paragraph.config.lineNumbers"
-      [font-size]="paragraph.config.fontSize"
-      [disable-edit]="paragraph.status == 'RUNNING' || paragraph.status == 'PENDING' || revisionView === true"
-      (changed-content)="updateParagraphText($event)"
-      (on-editor-focus)="focusParagraph($event)">
-    </editor>
-  </div>
   <div ng-include src="'/app/notebook/paragraph/paragraph-progress-bar.html'"></div>
   <div class="paragraph-output" ng-show="!paragraph.config.tableHide">
     <web-app-view-port [container-id]="paragraph.id">
