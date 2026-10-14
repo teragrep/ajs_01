@@ -44,19 +44,20 @@
  * a licensee so wish it.
  */
 import {EditorStateRule} from './editorStateRule';
-import {RawEditorState} from '../../rawEditorState';
 import ace from 'ace-builds';
 
 describe('EditorStateRule unit test', () => {
   const fontSize = 12;
   const textValue = 'some text value';
-  const rawEditorState:RawEditorState = {
-    fontSize: fontSize,
-    textValue: textValue,
-    disableEditor: true,
-    showLineNumbers: false,
+  const paragraphData = {
+    status:'RUNNING',
+    text:textValue,
+    config:{
+      fontSize: fontSize,
+      lineNumbers: false,
+    }
   };
-  const editorStateRule: EditorStateRule = new EditorStateRule(rawEditorState);
+  const editorStateRule: EditorStateRule = new EditorStateRule(paragraphData);
 
   it('Should apply editor state', () => {
     const editor = ace.edit(document.createElement('div'));

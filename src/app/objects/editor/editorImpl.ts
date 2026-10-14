@@ -49,7 +49,6 @@ import {RenderNode} from '../rendering/renderNode/renderNode';
 import {Requestable} from '../channel/requestable';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
-import {RawEditorState} from './rawEditorState';
 import {EditorRule} from './editorRules/editorRule';
 import {AnnotationsRule} from './editorRules/annotationsRule/annotationsRule';
 import {AutoCommitRule} from './editorRules/autoCommitRule/autoCommitRule';
@@ -70,14 +69,14 @@ export class EditorImpl implements Editor {
   private readonly _autoCompleteRule:AutoCompletionsRule;
   private readonly _syntaxLanguageSelectRule:SyntaxLanguageSelectRule;
 
-  constructor(requestable:Requestable, rawEditorState:RawEditorState) {
+  constructor(requestable:Requestable, paragraphData:object) {
     this._requestable = requestable;
     this._autoCompleteRule = new AutoCompletionsRuleImpl(new DplCompleterImpl(this));
     this._syntaxLanguageSelectRule = new SyntaxLanguageSelectRuleImpl(this);
     this._editorRules = [
       new AnnotationsRule(),
       new AutoCommitRule(this),
-      new EditorStateRule(rawEditorState),
+      new EditorStateRule(paragraphData),
       new ExcludedCommandsRule(),
       new HighlightsRule(),
       new KeyBindingsRule(this),

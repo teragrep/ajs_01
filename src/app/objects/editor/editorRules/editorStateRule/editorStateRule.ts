@@ -45,24 +45,28 @@
  */
 import {EditorRule} from '../editorRule';
 import {Ace} from 'ace-builds';
-import {RawEditorState} from '../../rawEditorState';
+import {WebSocketPayloadImpl} from '../../../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../../../webSocket/webSocketPayload/webSocketPayload';
 
 export class EditorStateRule implements EditorRule {
-  private readonly _rawEditorState:RawEditorState;
+  private readonly _paragraphData:WebSocketPayload;
 
-  constructor(rawEditorState:RawEditorState) {
-    this._rawEditorState = rawEditorState;
+  constructor(paragraphData:object) {
+    this._paragraphData = new WebSocketPayloadImpl(paragraphData);
   }
 
   applyTo(editor: Ace.Editor): void {
-    editor.setFontSize(this._rawEditorState.fontSize);
-    editor.setValue(this._rawEditorState.textValue);
+    const config = this._paragraphData.objectPropertyAsPayload('config');
+    const paragraphStatus = this._paragraphData.stringProperty('status');
+    const disableEditor = paragraphStatus === 'PENDING' || paragraphStatus === 'RUNNING';
+    editor.setFontSize(config.numberProperty('fontSize'));
+    editor.setValue(this._paragraphData.stringProperty('text'));
     editor.clearSelection();
-    editor.setReadOnly(this._rawEditorState.disableEditor);
-    if(this._rawEditorState.disableEditor){
+    editor.setReadOnly(disableEditor);
+    if(disableEditor){
       editor.setStyle('paragraph-disable');
     }
-    editor.renderer.setShowGutter(this._rawEditorState.showLineNumbers);
+    editor.renderer.setShowGutter(config.booleanProperty('lineNumbers'));
     editor.setShowFoldWidgets(false);
     editor.getSession().setUseWrapMode(true);
     editor.setOption('maxLines', 30);

@@ -45,23 +45,24 @@
  */
 import {Editor} from './editor';
 import {EditorImpl} from './editorImpl';
-import {RawEditorState} from './rawEditorState';
 import {Requestable} from '../channel/requestable';
 import {FakeChannel} from '../channel/fakeChannel';
 
 describe('Editor unit test', () => {
   let editor: Editor;
   let requestable:Requestable;
-  const rawEditorState:RawEditorState={
-    disableEditor: false,
-    fontSize: 0,
-    showLineNumbers: false,
-    textValue: ''
+  const paragraphData = {
+    status:'',
+    text:'',
+    config:{
+      fontSize: 0,
+      lineNumbers: false,
+    }
   };
 
   beforeEach(() => {
     requestable = new FakeChannel();
-    editor = new EditorImpl(requestable, rawEditorState);
+    editor = new EditorImpl(requestable, paragraphData);
   });
 
   it('Should print', () => {

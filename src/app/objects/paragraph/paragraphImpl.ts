@@ -57,7 +57,6 @@ import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl
 import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
 import {Requestable} from '../channel/requestable';
 import {EditorImpl} from '../editor/editorImpl';
-import {RawEditorState} from '../editor/rawEditorState';
 import {Editor} from '../editor/editor';
 import {WebSocketRequest} from '../webSocket/request/webSocketRequest';
 import {WebSocketRequestImpl} from '../webSocket/request/webSocketRequestImpl';
@@ -75,15 +74,7 @@ export class ParagraphImpl implements Paragraph {
     this._requestable = requestable;
     this._paragraphData = this.initializeParagraphData(paragraphData);
     this._output = this.initializedOutput(this._paragraphData);
-    const config = this._paragraphData.objectPropertyAsPayload('config');
-    const paragraphStatus = this._paragraphData.stringProperty('status');
-    const rawEditorState:RawEditorState = {
-      disableEditor: paragraphStatus === 'PENDING' || paragraphStatus === 'RUNNING',
-      fontSize: config.numberProperty('fontSize'),
-      showLineNumbers: config.booleanProperty('lineNumbers'),
-      textValue: this._paragraphData.stringProperty('text')
-    };
-    this._editor = new EditorImpl(this, rawEditorState);
+    this._editor = new EditorImpl(this, paragraphData);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, signal({
       output:this._output.print()(),
       editor:this._editor.print()(),
