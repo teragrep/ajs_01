@@ -73,7 +73,7 @@ export class ParagraphImpl implements Paragraph {
 
   constructor(requestable: Requestable, paragraphData: object) {
     this._requestable = requestable;
-    this._paragraphData = new WebSocketPayloadImpl(paragraphData);
+    this._paragraphData = this.initializeParagraphData(paragraphData);
     this._output = this.initializedOutput(this._paragraphData);
     const config = this._paragraphData.objectPropertyAsPayload('config');
     const paragraphStatus = this._paragraphData.stringProperty('status');
@@ -182,5 +182,12 @@ export class ParagraphImpl implements Paragraph {
       }
     };
     this._requestable.request(commitParagraphRequest);
+  }
+
+  private initializeParagraphData(paragraphData: object):WebSocketPayload {
+    if(!('title' in paragraphData)) {
+      paragraphData['title'] = '';
+    }
+    return new WebSocketPayloadImpl(paragraphData);
   }
 }
