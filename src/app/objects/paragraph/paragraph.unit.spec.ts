@@ -50,16 +50,22 @@ import {Paragraph} from './paragraph';
 
 describe('Paragraph', () => {
   const paragraphId = 'paragraphId';
+  const paragraphTitle = 'Paragraph Title';
   const paragraphText = 'test';
   const paragraphConfig = {
-    configValue:'config value1'
+    fontSize:12,
+    lineNumbers:true
   };
   const paragraphParams = {
     paramsValue:'params value1'
   };
   let paragraphData: {
+    status:string,
+    title:string,
     config:object,
-    settings:object,
+    settings:{
+      params:object
+    },
     text:string,
     id:string,
   };
@@ -67,6 +73,8 @@ describe('Paragraph', () => {
   let paragraph: Paragraph;
   beforeEach(() => {
     paragraphData = {
+      status:'',
+      title:paragraphTitle,
       config: paragraphConfig,
       settings:{
         params: paragraphParams,
@@ -123,6 +131,53 @@ describe('Paragraph', () => {
     };
     const spy = vi.spyOn(channel, 'request');
     paragraph.request(request);
+    expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
+  });
+
+  it('Should decorate run paragraph request', () => {
+    const runParagraphRequest = {
+      op:'RUN_PARAGRAPH',
+    };
+    const spy = vi.spyOn(channel, 'request');
+    paragraph.request(runParagraphRequest);
+    const expectedRunParagraphRequest = {
+      op:'RUN_PARAGRAPH',
+      data:{
+        id: paragraphId,
+        paragraph: paragraphText,
+        config: paragraphConfig,
+        params: paragraphParams,
+      }
+    };
+    expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRunParagraphRequest);
+  });
+
+  it('Should decorate commit paragraph request', () => {
+    const textValue = 'commit paragraph text value';
+    const commitParagraphRequest = {
+      op:'COMMIT_PARAGRAPH',
+      data:{
+        id: '',
+        noteId: '',
+        title: '',
+        paragraph: textValue,
+        config: '',
+        params: '',
+      }
+    };
+    const spy = vi.spyOn(channel, 'request');
+    paragraph.request(commitParagraphRequest);
+    const expectedRequest = {
+      op:'COMMIT_PARAGRAPH',
+      data:{
+        id: paragraphId,
+        noteId: '',
+        title: paragraphTitle,
+        paragraph: textValue,
+        config: paragraphConfig,
+        params: paragraphParams,
+      }
+    };
     expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
   });
 });

@@ -59,6 +59,8 @@ import {Requestable} from '../channel/requestable';
 import {EditorImpl} from '../editor/editorImpl';
 import {RawEditorState} from '../editor/rawEditorState';
 import {Editor} from '../editor/editor';
+import {WebSocketRequest} from '../webSocket/request/webSocketRequest';
+import {WebSocketRequestImpl} from '../webSocket/request/webSocketRequestImpl';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _requestable: Requestable;
@@ -67,6 +69,7 @@ export class ParagraphImpl implements Paragraph {
   private readonly _paragraphData: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
+  private readonly _requestEvents: Readonly<Record<string, (webSocketRequest:WebSocketRequest) => void>>;
 
   constructor(requestable: Requestable, paragraphData: object) {
     this._requestable = requestable;
@@ -87,6 +90,10 @@ export class ParagraphImpl implements Paragraph {
       paragraphId:this.id()
     })));
     this._paragraphIdFilter = new WebSocketResponsePropertyEqualsFilter('paragraphId', this.id());
+    this._requestEvents = {
+      'COMMIT_PARAGRAPH': (webSocketRequest:WebSocketRequest) => this.handleCommitParagraphRequest(webSocketRequest),
+      'RUN_PARAGRAPH': () => this.run()
+    };
   }
 
   run(): void {
@@ -111,12 +118,18 @@ export class ParagraphImpl implements Paragraph {
   }
 
   request(json: object): void {
-    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const paragraphIdDecoratedWebSocketRequest = new WebSocketRequestWithField(message, 'paragraphId', this.id());
-    this._requestable.request({
-      op:paragraphIdDecoratedWebSocketRequest.operation(),
-      data:paragraphIdDecoratedWebSocketRequest.data()
-    });
+    const webSocketRequest = new WebSocketRequestImpl(new WebSocketPayloadImpl(json));
+    const eventName = webSocketRequest.operation();
+    if(eventName in this._requestEvents) {
+      this._requestEvents[eventName](webSocketRequest);
+    }
+    else{
+      const paragraphIdDecoratedWebSocketRequest = new WebSocketRequestWithField(webSocketRequest, 'paragraphId', this.id());
+      this._requestable.request({
+        op:paragraphIdDecoratedWebSocketRequest.operation(),
+        data:paragraphIdDecoratedWebSocketRequest.data()
+      });
+    }
   }
 
   response(json: object): void {
@@ -155,5 +168,19 @@ export class ParagraphImpl implements Paragraph {
         output.response(paragraphOutputResponse);
       }
     }
+  }
+
+  private handleCommitParagraphRequest(webSocketRequest:WebSocketRequest):void {
+    const commitParagraphRequest = {
+      op:'COMMIT_PARAGRAPH',
+      data:{
+        ...webSocketRequest.data(),
+        id: this.id(),
+        title: this._paragraphData.stringProperty('title'),
+        config: this._paragraphData.objectProperty('config'),
+        params: this._paragraphData.objectPropertyAsPayload('settings').objectProperty('params'),
+      }
+    };
+    this._requestable.request(commitParagraphRequest);
   }
 }
