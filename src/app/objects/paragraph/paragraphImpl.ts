@@ -56,10 +56,14 @@ import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSo
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
 import {Requestable} from '../channel/requestable';
+import {EditorImpl} from '../editor/editorImpl';
+import {RawEditorState} from '../editor/rawEditorState';
+import {Editor} from '../editor/editor';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _requestable: Requestable;
   private readonly _output: Output;
+  private readonly _editor:Editor;
   private readonly _paragraphData: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
@@ -68,8 +72,18 @@ export class ParagraphImpl implements Paragraph {
     this._requestable = requestable;
     this._paragraphData = new WebSocketPayloadImpl(paragraphData);
     this._output = this.initializedOutput(this._paragraphData);
+    const config = this._paragraphData.objectPropertyAsPayload('config');
+    const paragraphStatus = this._paragraphData.stringProperty('status');
+    const rawEditorState:RawEditorState = {
+      disableEditor: paragraphStatus === 'PENDING' || paragraphStatus === 'RUNNING',
+      fontSize: config.numberProperty('fontSize'),
+      showLineNumbers: config.booleanProperty('lineNumbers'),
+      textValue: this._paragraphData.stringProperty('text')
+    };
+    this._editor = new EditorImpl(this, rawEditorState);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, signal({
       output:this._output.print()(),
+      editor:this._editor.print()(),
       paragraphId:this.id()
     })));
     this._paragraphIdFilter = new WebSocketResponsePropertyEqualsFilter('paragraphId', this.id());
@@ -106,13 +120,15 @@ export class ParagraphImpl implements Paragraph {
   }
 
   response(json: object): void {
-    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
-    const filteredResponse = this._paragraphIdFilter.filterResponse(message);
+    const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    const filteredResponse = this._paragraphIdFilter.filterResponse(webSocketResponse);
     if(!filteredResponse.isStub()) {
-      this._output.response({
+      const responseMessage = {
         op:filteredResponse.operation(),
         data:filteredResponse.data()
-      });
+      };
+      this._output.response(responseMessage);
+      this._editor.response(responseMessage);
     }
   }
 
