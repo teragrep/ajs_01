@@ -1,0 +1,72 @@
+/*
+ * Teragrep User Interface (ajs_01)
+ * Copyright (C) 2019-2026 Suomen Kanuuna Oy
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *
+ * Additional permission under GNU Affero General Public License version 3
+ * section 7
+ *
+ * If you modify this Program, or any covered work, by linking or combining it
+ * with other code, such other code is not for that reason alone subject to any
+ * of the requirements of the GNU Affero GPL version 3 as long as this Program
+ * is the same Program as licensed from Suomen Kanuuna Oy without any additional
+ * modifications.
+ *
+ * Supplemented terms under GNU Affero General Public License version 3
+ * section 7
+ *
+ * Origin of the software must be attributed to Suomen Kanuuna Oy. Any modified
+ * versions must be marked as "Modified version of" The Program.
+ *
+ * Names of the licensors and authors may not be used for publicity purposes.
+ *
+ * No rights are granted for use of trade names, trademarks, or service marks
+ * which are in The Program if any.
+ *
+ * Licensee must indemnify licensors and authors for any liability that these
+ * contractual assumptions impose on licensors and authors.
+ *
+ * To the extent this program is licensed as part of the Commercial versions of
+ * Teragrep, the applicable Commercial License may apply to this file if you as
+ * a licensee so wish it.
+ */
+import {EditorStateRule} from './editorStateRule';
+import {RawEditorState} from '../../rawEditorState';
+import ace from 'ace-builds';
+
+describe('EditorStateRule unit test', () => {
+  const fontSize = 12;
+  const textValue = 'some text value';
+  const rawEditorState:RawEditorState = {
+    fontSize: fontSize,
+    textValue: textValue,
+    disableEditor: true,
+    showLineNumbers: false,
+  };
+  const editorStateRule: EditorStateRule = new EditorStateRule(rawEditorState);
+
+  it('Should apply editor state', () => {
+    const editor = ace.edit(document.createElement('div'));
+    editorStateRule.applyTo(editor);
+    expect(editor.getValue()).toEqual(textValue);
+    expect(editor.getFontSize()).toEqual(fontSize);
+    expect(editor.getReadOnly()).toEqual(true);
+    expect(editor.renderer.getShowGutter()).toEqual(false);
+    expect(editor.getShowFoldWidgets()).toBe(false);
+    expect(editor.getSession().getUseWrapMode()).toBe(true);
+    expect(editor.getOption('maxLines')).toEqual(30);
+  });
+});
