@@ -88,7 +88,6 @@ require('./app/notebook/paragraph/result/jsonTable/jsonTable.controller');
 require('./app/notebook/paragraph/result/jsonTable/jsonTable.html');
 
 
-require('./app/notebook/paragraph/DPL-Log.html');
 require('./app/notebook/paragraph/paragraph-control.html');
 require('./app/notebook/paragraph/paragraph-progress-bar.html');
 require('./app/notebook/paragraph/paragraph.html');
