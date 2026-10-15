@@ -49,7 +49,7 @@ import {DplLogKeyType} from '../../../objects/dplLog/dplLogKeys';
 @Component({
   selector: 'dpl-log',
   template: `
-    <div class="dpl-log">
+    <div class="dpl-log" role="log">
       <p>
         <button
           (click)="toggleLog()"
