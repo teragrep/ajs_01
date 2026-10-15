@@ -49,6 +49,7 @@ import {OutputImpl} from './outputImpl';
 import {Requestable} from '../channel/requestable';
 import {OutputType} from './outputType';
 import {RenderNode} from '../rendering/renderNode/renderNode';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 
 describe('Output unit test', () => {
   let requestable:Requestable;
@@ -111,7 +112,7 @@ describe('Output unit test', () => {
       output.response(outputResponse);
       const printed = output.print()();
       const inputs = printed.inputs()();
-      expect((inputs['output'] as RenderNode).isStub()).toBe(false);
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.TEXT_OUTPUT_VIEW);
     });
 
     it('Should render html output', () => {
@@ -119,7 +120,7 @@ describe('Output unit test', () => {
       output.response(outputResponse);
       const printed = output.print()();
       const inputs = printed.inputs()();
-      expect((inputs['output'] as RenderNode).isStub()).toBe(false);
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.HTML_OUTPUT_VIEW);
     });
 
     it('Should render uPlot output', () => {
@@ -133,7 +134,7 @@ describe('Output unit test', () => {
       output.response(outputResponse);
       const printed = output.print()();
       const inputs = printed.inputs()();
-      expect((inputs['output'] as RenderNode).isStub()).toBe(false);
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.UPLOT_OUTPUT_VIEW);
     });
 
     it('Should render angular output', () => {
@@ -141,7 +142,7 @@ describe('Output unit test', () => {
       output.response(outputResponse);
       const printed = output.print()();
       const inputs = printed.inputs()();
-      expect((inputs['output'] as RenderNode).isStub()).toBe(false);
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.ANGULAR_OUTPUT_VIEW);
     });
 
     it('Should render dataTables output', () => {
@@ -149,7 +150,7 @@ describe('Output unit test', () => {
       output.response(outputResponse);
       const printed = output.print()();
       const inputs = printed.inputs()();
-      expect((inputs['output'] as RenderNode).isStub()).toBe(false);
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.DATATABLES_OUTPUT_VIEW);
     });
 
     it('Should throw if output type is unsupported', () => {
