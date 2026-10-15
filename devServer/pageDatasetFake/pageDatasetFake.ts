@@ -43,6 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface AppDataSeeder {
-  seedFakes(path:string):void;
+export interface PageDatasetFake {
+  saveTo(path:string):void;
 }

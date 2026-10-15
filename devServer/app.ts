@@ -58,8 +58,8 @@ import {NotebookPayloadFactory} from '../src/test/fakes/notebook/notebookPayload
 import {NotebookPayloadFactoryImpl} from '../src/test/fakes/notebook/notebookPayloadFactoryImpl';
 import {ParagraphPayload} from '../src/test/fakes/paragraph/paragraphPayload';
 import {ParagraphPayloadFactory} from '../src/test/fakes/paragraph/paragraphPayloadFactory';
-import {AppDataSeeder} from './appDataSeeder/appDataSeeder';
-import {AppDataSeederImpl} from './appDataSeeder/appDataSeederImpl';
+import {PageDatasetFake} from './pageDatasetFake/pageDatasetFake';
+import {PageDatasetFakeImpl} from './pageDatasetFake/pageDatasetFakeImpl';
 
 const app = express();
 app.use(express.json());
@@ -84,8 +84,8 @@ app.use(express.static(PUBLIC_PATH));
 const basePath = './devServer/temp';
 const fileService = new FileServiceImpl(basePath);
 const noteService = new NoteServiceImpl(fileService);
-const appDataSeeder:AppDataSeeder = new AppDataSeederImpl(noteService);
-appDataSeeder.seedFakes(basePath);
+const appDataSeeder:PageDatasetFake = new PageDatasetFakeImpl(noteService);
+appDataSeeder.saveTo(basePath);
 
 new WebSocketServer(fileService);
 

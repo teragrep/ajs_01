@@ -43,7 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {AppDataSeeder} from './appDataSeeder';
+import {PageDatasetFake} from './pageDatasetFake';
 import {NoteService} from '../services/noteService/noteService';
 import {existsSync, mkdirSync} from 'fs';
 import {NotebookPayload} from '../../src/test/fakes/notebook/notebookPayload';
@@ -54,14 +54,14 @@ import {DataTablesDataFactoryImpl} from '../../src/test/fakes/output/dataTables/
 import {FakeOutputPayloadFactoryImpl} from '../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
 import {NotebookPayloadFactoryImpl} from '../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
 
-export class AppDataSeederImpl implements AppDataSeeder {
+export class PageDatasetFakeImpl implements PageDatasetFake {
   private readonly _noteService: NoteService;
 
   constructor(noteService: NoteService) {
     this._noteService = noteService;
   }
 
-  seedFakes(path: string) {
+  saveTo(path: string) {
     if(!existsSync(path)) {
       mkdirSync(path);
       const fakeNotebooks = this.fakeNotebooks();
