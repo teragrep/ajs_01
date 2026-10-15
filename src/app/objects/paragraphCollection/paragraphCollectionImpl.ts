@@ -76,7 +76,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   }
 
   add(paragraph:Paragraph, index:number): void {
-    if(index < 0 || index > 0 && index > Array.from(this._paragraphs()).length - 1){
+    if(index < 0 || index > 0 && index > this._paragraphs().size){
       throw new Error(`Invalid index "${index}" provided.`);
     }
     const paragraphId = paragraph.id();
