@@ -87,7 +87,7 @@ export class DplLogImpl implements DplLog {
   private handleAngularObjectUpdateResponse(webSocketResponse:WebSocketResponse): void {
     const angularObjectData= webSocketResponse.dataAsWebSocketPayload().objectPropertyAsPayload('angularObject');
     const angularObjectName = angularObjectData.stringProperty('name');
-    if(DplLogKeys.includes(angularObjectName as DplLogKeyType)){
+    if(this.angularObjectNameIsDplLogKey(angularObjectName)){
       this._dplLog.update(dplLog => {
         dplLog[angularObjectName] = angularObjectData.stringProperty('object');
         return dplLog;
@@ -100,7 +100,7 @@ export class DplLogImpl implements DplLog {
 
   private handleAngularObjectRemoveResponse(webSocketResponse:WebSocketResponse): void {
     const angularObjectName = webSocketResponse.dataAsWebSocketPayload().stringProperty('name');
-    if(DplLogKeys.includes(angularObjectName as DplLogKeyType)){
+    if(this.angularObjectNameIsDplLogKey(angularObjectName)){
       this._dplLog.update(dplLog => {
         dplLog[angularObjectName] = '';
         return dplLog;
@@ -112,5 +112,9 @@ export class DplLogImpl implements DplLog {
     this._renderNode.set(new RenderNodeImpl(RegisteredComponents.DPL_LOG_VIEW, computed(() => ({
       dplLog:this._dplLog()
     }))));
+  }
+
+  private angularObjectNameIsDplLogKey(angularObjectName:string): angularObjectName is DplLogKeyType {
+    return DplLogKeys.includes(angularObjectName as DplLogKeyType);
   }
 }
