@@ -45,8 +45,8 @@
  */
 import {Channel} from '../channel/channel';
 import {WebSocketChannel} from '../webSocket/channel/webSocketChannel';
-import {NotebookCollection} from '../notebookCollection/notebookCollection';
-import {NotebookCollectionImpl} from '../notebookCollection/notebookCollectionImpl';
+import {NotebookIndexCollection} from '../notebookIndexCollection/notebookIndexCollection';
+import {NotebookIndexCollectionImpl} from '../notebookIndexCollection/notebookIndexCollectionImpl';
 import {WebAppRoot} from './webAppRoot';
 import {WebSocketService} from '../webSocket/service/webSocketService';
 import {signal, Signal, WritableSignal} from '@angular/core';
@@ -56,13 +56,13 @@ class WebAppRootImpl implements WebAppRoot {
   private _hasInitialized:boolean = false;
   private readonly _printSignal: WritableSignal<RenderNode> = signal(undefined);
 
-  private _notebookCollection: WritableSignal<NotebookCollection>;
-  private set notebookCollection(value: NotebookCollection){
+  private _notebookCollection: WritableSignal<NotebookIndexCollection>;
+  private set notebookCollection(value: NotebookIndexCollection){
     if(this._notebookCollection === undefined){
       this._notebookCollection = signal(value);
     }
   }
-  private get notebookCollection(): Signal<NotebookCollection>{
+  private get notebookCollection(): Signal<NotebookIndexCollection>{
     return this._notebookCollection;
   }
 
@@ -80,7 +80,7 @@ class WebAppRootImpl implements WebAppRoot {
     if(this._hasInitialized){
       return;
     }
-    this.notebookCollection = new NotebookCollectionImpl(this);
+    this.notebookCollection = new NotebookIndexCollectionImpl(this);
     this._printSignal.set(this._notebookCollection().print()());
     this.webSocket = new WebSocketChannel(this, webSocketService);
     this._hasInitialized = true;

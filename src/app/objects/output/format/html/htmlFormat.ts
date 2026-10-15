@@ -44,44 +44,31 @@
  * a licensee so wish it.
  */
 import {OutputFormat} from '../outputFormat';
-import {OutputType} from '../../outputType';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
-import {signal, Signal, WritableSignal} from '@angular/core';
+import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
-import {MessageImpl} from '../../../message/messageImpl';
-import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
-import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
-import {RenderNodeStub} from '../../../rendering/renderNode/renderNodeStub';
 import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
+import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
 
-export class HTMLFormat implements OutputFormat{
+export class HTMLFormat implements OutputFormat {
+  private readonly _htmlTemplate:WritableSignal<string>;
   private readonly _renderNode: WritableSignal<RenderNode>;
-  private readonly _renderNodeStub: RenderNode;
 
   constructor() {
-    this._renderNodeStub = new RenderNodeStub();
-    this._renderNode = signal(this._renderNodeStub);
+    this._htmlTemplate = signal('');
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.HTML_OUTPUT_VIEW, computed(() => ({
+      htmlTemplate: this._htmlTemplate(),
+    }))));
   }
 
-  response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT'){
-      const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
-      if(paragraphOutputMessage.type() !== OutputType.html) {
-        this._renderNode.set(this._renderNodeStub);
-      }
-      else{
-        const htmlTemplate:string = paragraphOutputMessage.outputData('string') as string;
-        this._renderNode.set(new RenderNodeImpl(RegisteredComponents.HTML_OUTPUT_VIEW, signal({htmlTemplate: htmlTemplate})));
-      }
-    }
+  render(htmlTemplate: string): void {
+    this._htmlTemplate.set(htmlTemplate);
   }
 
   print(): Signal<RenderNode> {
     return this._renderNode;
   }
 
-  switcherButtons(): Signal<RenderNode>[] {
+  switcherButtons(): RenderNode[] {
     return [];
   }
 }

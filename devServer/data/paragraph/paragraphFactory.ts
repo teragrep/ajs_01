@@ -68,6 +68,7 @@ export default class ParagraphFactory{
     const output2 = {
       type: OutputType.text,
       data: 'Error: 1291kmfv910yht1 g1rj190+2u90',
+      isAggregated:false,
     };
     const para2 = new ParagraphImpl('FINISHED', output2,'%dpl\n *raw data query fails*', '');
     return [para1, para2, SparkPara];
