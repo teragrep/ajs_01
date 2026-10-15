@@ -67,6 +67,8 @@ import {WebSocketRequest} from '../webSocket/request/webSocketRequest';
 import {WebSocketRequestStub} from '../webSocket/request/webSocketRequestStub';
 import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
 import {Requestable} from '../channel/requestable';
+import {DplLog} from '../dplLog/dplLog';
+import {DplLogImpl} from '../dplLog/dplLogImpl';
 
 export class OutputImpl implements Output {
   private readonly _requestable:Requestable;
@@ -78,6 +80,7 @@ export class OutputImpl implements Output {
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _output:WritableSignal<RenderNode>;
   private readonly _renderNodeStub:RenderNode;
+  private readonly _dplLog: DplLog;
 
   constructor(requestable:Requestable) {
     this._requestable = requestable;
@@ -96,10 +99,12 @@ export class OutputImpl implements Output {
     this._outputSwitcher = new OutputSwitcherImpl(buttons.flat());
     this._previousParagraphOutputRequest = new WebSocketRequestStub();
     this._output = signal(new RenderNodeStub());
+    this._dplLog = new DplLogImpl();
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_VIEW, computed(() => ({
       interpreterErrorListener: this._interpreterErrorListener.print()(),
       outputSwitcher: this._showSwitcher() ? this._outputSwitcher.print()() : this._renderNodeStub,
       output: this._output(),
+      dplLog: this._dplLog.print()(),
     }))));
   }
 
@@ -119,28 +124,10 @@ export class OutputImpl implements Output {
   response(json: object): void {
     const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     if(webSocketResponse.operation() === 'PARAGRAPH_OUTPUT'){
-      const receivedOutputType = webSocketResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').stringProperty('type');
-      if(!this._previousParagraphOutputRequest.isStub() && !this.receivedOutputIsValid(webSocketResponse)){
-        this._requestable.request({
-          op:this._previousParagraphOutputRequest.operation(),
-          data:this._previousParagraphOutputRequest.data(),
-        });
-      }
-      else{
-        if(!this._outputFormats.has(receivedOutputType)){
-          throw new Error(`OutputFormat "${receivedOutputType}" is not supported.`);
-        }
-        const output = webSocketResponse.dataAsWebSocketPayload().objectProperty('output');
-        const outputData = output['data'];
-        if(!('data' in output)){
-          throw new Error(`Output response data is not defined, output: ${JSON.stringify(output)}`);
-        }
-        const outputOptions = output['options'];
-        const outputFormat = this._outputFormats.get(receivedOutputType);
-        outputFormat.render(outputData, outputOptions);
-        this._output.set(outputFormat.print()());
-        this.updateSwitcher(webSocketResponse);
-      }
+      this.handleParagraphOutputResponse(webSocketResponse);
+    }
+    else{
+      this._dplLog.response(json);
     }
   }
 
@@ -159,5 +146,30 @@ export class OutputImpl implements Output {
       this._showSwitcher.set(false);
     }
     this._outputSwitcher.hideLoader();
+  }
+
+  private handleParagraphOutputResponse(webSocketResponse:WebSocketResponse):void{
+    const receivedOutputType = webSocketResponse.dataAsWebSocketPayload().objectPropertyAsPayload('output').stringProperty('type');
+    if(!this._previousParagraphOutputRequest.isStub() && !this.receivedOutputIsValid(webSocketResponse)){
+      this._requestable.request({
+        op:this._previousParagraphOutputRequest.operation(),
+        data:this._previousParagraphOutputRequest.data(),
+      });
+    }
+    else{
+      if(!this._outputFormats.has(receivedOutputType)){
+        throw new Error(`OutputFormat "${receivedOutputType}" is not supported.`);
+      }
+      const output = webSocketResponse.dataAsWebSocketPayload().objectProperty('output');
+      const outputData = output['data'];
+      if(!('data' in output)){
+        throw new Error(`Output response data is not defined, output: ${JSON.stringify(output)}`);
+      }
+      const outputOptions = output['options'];
+      const outputFormat = this._outputFormats.get(receivedOutputType);
+      outputFormat.render(outputData, outputOptions);
+      this._output.set(outputFormat.print()());
+      this.updateSwitcher(webSocketResponse);
+    }
   }
 }

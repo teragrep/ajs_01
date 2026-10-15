@@ -69,6 +69,7 @@ describe('Output unit test', () => {
     expect((inputs['outputSwitcher'] as RenderNode).isStub()).toBe(true);
     expect(inputs['output']).toBeDefined();
     expect((inputs['output'] as RenderNode).isStub()).toBe(true);
+    expect(inputs['dplLog']).toBeDefined();
   });
 
   it('Should request requestable', () => {
@@ -247,5 +248,23 @@ describe('Output unit test', () => {
       const loaderIsVisible = outputSwitcher.inputs()()['showLoader'];
       expect(loaderIsVisible).toBe(false);
     });
+  });
+
+  it('Should respond dplLog', () => {
+    const dplLogResponse = {
+      op:'ANGULAR_OBJECT_UPDATE',
+      data:{
+        angularObject:{
+          name:'batchMsg',
+          object:'test'
+        }
+      }
+    };
+    const printed = output.print()();
+    const dplLogBeforeResponse = printed.inputs()()['dplLog'] as RenderNode;
+    output.response(dplLogResponse);
+    const dplLogAfterResponse = printed.inputs()()['dplLog'] as RenderNode;
+    expect(dplLogBeforeResponse.isStub()).toBe(true);
+    expect(dplLogAfterResponse.isStub()).toBe(false);
   });
 });

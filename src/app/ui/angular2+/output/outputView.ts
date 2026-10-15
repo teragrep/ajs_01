@@ -55,13 +55,13 @@ import {RenderNodeRootView} from '../renderNodeRoot/renderNodeRootView';
   template: `
     <render-node-host [renderNode]="interpreterErrorListener()"></render-node-host>
     <render-node-host [renderNode]="outputSwitcher()"></render-node-host>
-    @if(!output().isStub()){
-      <render-node-host [renderNode]="output()"></render-node-host>
-    }
+    <render-node-host [renderNode]="output()"></render-node-host>
+    <render-node-host [renderNode]="dplLog()"></render-node-host>
   `
 })
 export class OutputView {
   interpreterErrorListener = input.required<RenderNode>();
   outputSwitcher = input.required<RenderNode>();
   output = input.required<RenderNode>();
+  dplLog = input.required<RenderNode>();
 }
