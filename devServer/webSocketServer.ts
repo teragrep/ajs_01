@@ -44,23 +44,26 @@
  * a licensee so wish it.
  */
 import {WebSocketServer as wss} from 'ws';
-import MessageOperator from './message/messageOperator';
-import FileService from './services/fileService';
+import FileServiceImpl from './services/fileService/fileServiceImpl';
+import {FakeServerEventDispatcherImpl} from './fakeServerEventDispatcher/fakeServerEventDispatcherImpl';
 
 export default class WebSocketServer {
   private readonly _server: wss;
 
-  constructor(fileService: FileService) {
+  constructor(fileService: FileServiceImpl) {
     const port = process.env.WEBSOCKET_PORT || 8081;
     this._server = new wss({ port: Number(port) });
+    this.configureWss(fileService);
+  }
 
+  private configureWss(fileService: FileServiceImpl): void {
     this._server.on('connection', (client) => {
-      const operator = new MessageOperator(client, fileService);
+      const fakeServerEventDispatcher = new FakeServerEventDispatcherImpl(client, fileService);
       console.debug('Client connected');
       client.on('message', function message(data) {
-        console.debug('Received message', data.toString());
-        const message = JSON.parse(data.toString());
-        operator.handleMessage(message);
+        const receivedJson = data.toString();
+        console.debug('Received message', receivedJson);
+        fakeServerEventDispatcher.resolveServerEvent(JSON.parse(receivedJson));
       });
     });
   }
