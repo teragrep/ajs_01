@@ -68,7 +68,6 @@ limitations under the License.
          ng-bind-html="getExecutionTime(paragraph)">
     </div>
     <div class="paragraph-footer-elapsed">
-      <div ng-if="!asIframe" ng-show="message" ng-include src="'/app/notebook/paragraph/DPL-Log.html'"></div>
       <div ng-if="paragraph.status === 'RUNNING'">
         <div id="{{paragraph.id}}_elapsedTime"
              class="elapsed-time"

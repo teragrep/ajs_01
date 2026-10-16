@@ -46,9 +46,9 @@
 import {inject, Injectable} from '@angular/core';
 import {WebSocketService} from './webSocketService';
 import {AuthenticationServiceImpl} from '../../../shared/services/authenticationServiceImpl';
-import {MessageWithAuthenticationInfoImpl} from '../../message/messageWithAuthenticationInfo/messageWithAuthenticationInfoImpl';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../message/messageImpl';
+import {WebSocketRequestWithAuthenticationInfoImpl} from '../request/webSocketRequestWithAuthenticationInfo/webSocketRequestWithAuthenticationInfoImpl';
+import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketRequestImpl} from '../request/webSocketRequestImpl';
 
 @Injectable({providedIn: 'root'})
 export class WebSocketServiceImpl implements WebSocketService {
@@ -67,10 +67,14 @@ export class WebSocketServiceImpl implements WebSocketService {
     this._webSocketConnection.addEventListener('open', () => {
       console.info('Websocket created');
       this._sendCallBack = (data:object) => {
-        const messageWithAuthenticationInfo = new MessageWithAuthenticationInfoImpl(new MessageImpl(new WebSocketPayloadImpl(data)), this._authService.authentication(), this.messageId());
-        const message = messageWithAuthenticationInfo.print();
-        console.trace('Send >> %o, %o, %o, %o, %o', message.op, message.principal, message.ticket, message.roles, message);
-        this._webSocketConnection.send(JSON.stringify(message));
+        const webSocketRequestWithAuthenticationInfo = new WebSocketRequestWithAuthenticationInfoImpl(new WebSocketRequestImpl(new WebSocketPayloadImpl(data)), this._authService.authentication(), this.messageId());
+        const webSocketRequest = {
+          op:webSocketRequestWithAuthenticationInfo.operation(),
+          data:webSocketRequestWithAuthenticationInfo.data(),
+          ... webSocketRequestWithAuthenticationInfo.authenticationInfo()
+        };
+        console.trace('Send >> %o, %o, %o, %o, %o', webSocketRequest.op, webSocketRequest.principal, webSocketRequest.ticket, webSocketRequest.roles, webSocketRequest);
+        this._webSocketConnection.send(JSON.stringify(webSocketRequest));
       };
       for (const message of this._messageStack) {
         this.sendNewEvent(message);

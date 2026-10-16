@@ -45,68 +45,70 @@
  */
 import {uPlotSwitcherButton} from './switcherButton/uPlotSwitcherButton';
 import {GraphType} from './graphType';
-import {WebSocketPayloadImpl} from '../../../webSocketPayload/webSocketPayloadImpl';
-import {OutputType} from '../../outputType';
-import {signal, Signal, WritableSignal} from '@angular/core';
+import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import {RenderNode} from '../../../rendering/renderNode/renderNode';
 import {Channel} from '../../../channel/channel';
-import {MessageImpl} from '../../../message/messageImpl';
-import {ParagraphOutputMessageImpl} from '../../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {Printable} from '../../../rendering/printable/printable';
-import {UPlotFormat} from './uPlotFormat';
 import uPlot from 'uplot';
-import {BasicOptionsImpl} from './uPlotPlugin/configuration/options/basicOptionsImpl';
-import {RenderNodeStub} from '../../../rendering/renderNode/renderNodeStub';
 import {RegisteredComponents} from '../../../../ui/angular2+/componentRegistry/registeredComponents';
 import {RenderNodeImpl} from '../../../rendering/renderNode/renderNodeImpl';
+import {uPlotOptions} from './uPlotOptions';
+import {OutputFormat} from '../outputFormat';
+import {BasicOptionsImpl} from './uPlotPlugin/configuration/options/basicOptionsImpl';
+import {BarChartOptionsImpl} from './uPlotPlugin/configuration/options/barChartOptionsImpl';
+import {Requestable} from '../../../channel/requestable';
 
-export class UPlotFormatImpl implements UPlotFormat {
-  private readonly _channel: Channel;
+export class uPlotFormatImpl implements OutputFormat {
   private readonly _switcherButtons: Printable[];
+  private readonly _uPlotData: WritableSignal<uPlot.AlignedData>;
+  private readonly _uPlotOptions: WritableSignal<uPlot.Options>;
   private readonly _renderNode: WritableSignal<RenderNode>;
-  private readonly _renderNodeStub: RenderNode;
 
-  constructor(channel: Channel) {
-    this._channel = channel;
+  constructor(requestable: Requestable) {
     this._switcherButtons = [
-      new uPlotSwitcherButton(this,'Line Chart', 'fas fa-chart-line', GraphType.line),
-      new uPlotSwitcherButton(this,'Area Chart', 'fas fa-chart-area', GraphType.area),
-      new uPlotSwitcherButton(this,'Bar Chart', 'fas fa-chart-bar', GraphType.bar),
-      new uPlotSwitcherButton(this,'Scatter Chart', 'cf cf-scatter-chart', GraphType.scatter),
+      new uPlotSwitcherButton(requestable, 'Line Chart', 'fas fa-chart-line', GraphType.line),
+      new uPlotSwitcherButton(requestable, 'Area Chart', 'fas fa-chart-area', GraphType.area),
+      new uPlotSwitcherButton(requestable, 'Bar Chart', 'fas fa-chart-bar', GraphType.bar),
+      new uPlotSwitcherButton(requestable, 'Scatter Chart', 'cf cf-scatter-chart', GraphType.scatter),
     ];
-    this._renderNodeStub = new RenderNodeStub();
-    this._renderNode = signal(this._renderNodeStub);
+    this._uPlotData = signal([]);
+    this._uPlotOptions = signal({
+      width:0,
+      height:0,
+      series:[]
+    });
+    this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.UPLOT_OUTPUT_VIEW, computed(() => ({
+      uPlotData: this._uPlotData(),
+      uPlotOptions: this._uPlotOptions(),
+    }))));
   }
 
-  request(json: object): void {
-    this._channel.request(json);
+  render(uPlotData:uPlot.AlignedData, uPlotOptions:uPlotOptions): void {
+    this._uPlotData.set(uPlotData);
+    this._uPlotOptions.set(this.parseOptions(uPlotOptions));
   }
 
-  response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT') {
-      const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
-      if(paragraphOutputMessage.type() !== OutputType.uPlot){
-        this._renderNode.set(this._renderNodeStub);
-      }
-      else{
-        const uPlotData:uPlot.AlignedData = paragraphOutputMessage.outputData('object') as uPlot.AlignedData;
-        const safeOutputOptions = new WebSocketPayloadImpl(paragraphOutputMessage.options().value());
-        const labels = safeOutputOptions.arrayProperty<string>('labels');
-        const series = safeOutputOptions.arrayProperty<string>('series');
-        const xAxisLabel = safeOutputOptions.stringProperty('xAxisLabel');
-        const graphType = safeOutputOptions.stringProperty('graphType');
-        const basicOptions = new BasicOptionsImpl(labels, series, xAxisLabel, graphType);
-        this._renderNode.set(new RenderNodeImpl(RegisteredComponents.UPLOT_OUTPUT_VIEW, signal({graphType: graphType, basicOptions: basicOptions, uPlotData: uPlotData})));
-      }
+  private parseOptions(uPlotOptions:uPlotOptions):uPlot.Options {
+    const labels = uPlotOptions.labels;
+    const series = uPlotOptions.series;
+    const xAxisLabel = uPlotOptions.xAxisLabel;
+    const graphType = uPlotOptions.graphType;
+    const basicOptions = new BasicOptionsImpl(labels, series, xAxisLabel, graphType);
+    let options: uPlot.Options;
+    if(graphType === GraphType.bar){
+      options = new BarChartOptionsImpl(basicOptions).options();
     }
+    else{
+      options = basicOptions.options();
+    }
+    return options;
   }
 
   print(): Signal<RenderNode> {
     return this._renderNode;
   }
 
-  switcherButtons(): Signal<RenderNode>[] {
-    return this._switcherButtons.map(switcherButton => switcherButton.print());
+  switcherButtons(): RenderNode[] {
+    return this._switcherButtons.map(switcherButton => switcherButton.print()());
   }
 }

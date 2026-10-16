@@ -45,7 +45,6 @@ require('./app/jobmanager/job/job.html');
 require('./app/jobmanager/jobmanager.html');
 require('./app/notebook/shortcut.html');
 
-require('./app/notebook/paragraph/DPL-Log.html');
 require('./app/notebook/paragraph/paragraph-control.html');
 require('./app/notebook/paragraph/paragraph-progress-bar.html');
 require('./app/notebook/paragraph/paragraph.html');
