@@ -76,7 +76,6 @@ function NavCtrl($scope,
   let revisionSupported = false;
   const lightModeLogoPath = '../../../../assets/images/teragrep-mark.svg';
   const darkModeLogoPath = '../../../../assets/images/teragrep-mark-white-color.svg';
-  $scope.imgPath = lightModeLogoPath;
 
   $scope.query = {q: ''};
   $scope.amIaGod = false;
@@ -108,6 +107,7 @@ function NavCtrl($scope,
       $scope.query.q = '';
     });
     loadNotes();
+    darkInit();
     compileModal();
   }
 
@@ -284,6 +284,7 @@ function NavCtrl($scope,
         // don't use dark-mode
       disableDarkMode();
     }
+    $scope.imgPath = $scope.isDarkMode ? darkModeLogoPath : lightModeLogoPath;
   }
 
   function enableDarkMode() {
@@ -304,6 +305,5 @@ function NavCtrl($scope,
     $scope.imgPath = lightModeLogoPath;
   }
 
-  $scope.isDarkMode = $cookies.get('darkMode') === '1';
 
 }
