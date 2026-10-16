@@ -173,19 +173,24 @@ describe('Controller: NavCtrl', function() {
     expect(classBoolean).toBeTruthy();
   });
 
-  it('should set the darkMode cookie to 1', function() {
-    expect(document.cookie).toEqual('');
+  it('should set the darkMode cookie to darkMode', function() {
+    const documentCookieInitially = document.cookie;
     NavCtrl.enableDarkMode();
-    expect(document.cookie).toEqual('darkMode=1');
+    const documentCookieAfterSet = document.cookie;
     const classBoolean = $( 'body' ).hasClass( 'dark-mode' );
+    expect(documentCookieInitially).toEqual('darkMode=0');
+    expect(documentCookieAfterSet).toEqual('darkMode=1');
     expect(classBoolean).toBeTruthy();
   });
 
-  it('should set the darkMode cookie to 0', function() {
-    expect(document.cookie).toEqual('');
+  it('should set the darkMode cookie light mode', function() {
+    NavCtrl.enableDarkMode();
+    const documentCookieInitially = document.cookie;
     NavCtrl.disableDarkMode();
-    expect(document.cookie).toEqual('darkMode=0');
+    const documentCookieAfterSet = document.cookie;
     const classBoolean = $( 'body' ).hasClass( 'dark-mode' );
+    expect(documentCookieInitially).toEqual('darkMode=1');
+    expect(documentCookieAfterSet).toEqual('darkMode=0');
     expect(classBoolean).toBeFalsy();
   });
 
