@@ -43,75 +43,46 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeChannel} from '../../../channel/fakeChannel';
 import {AngularFormatImpl} from './angularFormatImpl';
-import {OutputType} from '../../outputType';
+import {Requestable} from '../../../channel/requestable';
+import {FakeChannel} from '../../../channel/fakeChannel';
 
 describe('AngularFormat unit test', () => {
-  const channel = new FakeChannel();
+  const requestable:Requestable = new FakeChannel();
   let angularFormat: AngularFormatImpl;
 
   beforeEach(() => {
-    angularFormat = new AngularFormatImpl(channel);
+    angularFormat = new AngularFormatImpl(requestable);
   });
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(angularFormat).toBeInstanceOf(AngularFormatImpl);
-    });
-
-    it('Should not have switcherButtons', () => {
-      expect(angularFormat.switcherButtons()).toEqual([]);
-    });
-
-    it('Should print', () => {
-      const angularFormatPrinted = angularFormat.print()();
-      expect(angularFormatPrinted.isStub()).toBe(true);
-    });
+  it('Should print', () => {
+    const printed = angularFormat.print()();
+    const inputs = printed.inputs()();
+    expect(printed.isStub()).toBe(false);
+    expect(inputs['angularTemplate']).toEqual('');
+    expect(inputs['angularObjects']).toEqual([]);
+    expect(inputs['requestable']).toBeDefined();
   });
 
-  describe('Request', () => {
-    it('Should request channel', () => {
-      const spy = vi.spyOn(channel, 'request');
-      const request = {
-        op:'',
-        data:{}
-      };
-      angularFormat.request(request);
-      expect(spy).toHaveBeenCalledExactlyOnceWith(request);
-    });
+  it('Should not have buttons', () => {
+    expect(angularFormat.switcherButtons()).toEqual([]);
   });
 
-  describe('Output updates', () => {
-    let outputResponse;
-    const template = '<h1>template</h1>';
-    beforeEach(() => {
-      outputResponse = {
-        op:'PARAGRAPH_OUTPUT',
-        data:{
-          output:{
-            type:OutputType.angular,
-            data:template,
-          }
-        }
-      };
-    });
+  it('Should request channel', () => {
+    const requestableSpy = vi.spyOn(requestable, 'request');
+    const request = {
+      op:'test',
+      data:{}
+    };
+    angularFormat.request(request);
+    expect(requestableSpy).toHaveBeenCalledExactlyOnceWith(request);
+  });
 
-    it('Should have RenderNode', () => {
-      angularFormat.response(outputResponse);
-      const angularFormatPrinted = angularFormat.print()();
-      const inputs = angularFormatPrinted.inputs()();
-      expect(angularFormatPrinted.isStub()).toBe(false);
-      expect(inputs['template']).toEqual(template);
-      expect(inputs['angularObjects']).toBeDefined();
-      expect(inputs['requestable']).toBeDefined();
-    });
-
-    it('Should have RenderNode stub', () => {
-      outputResponse.data.output.type = '';
-      angularFormat.response(outputResponse);
-      const angularFormatPrinted = angularFormat.print()();
-      expect(angularFormatPrinted.isStub()).toBe(true);
-    });
+  it('Should render', () => {
+    const angularTemplate = 'angularTemplate';
+    angularFormat.render(angularTemplate);
+    const printed = angularFormat.print()();
+    const inputs = printed.inputs()();
+    expect(inputs['angularTemplate']).toEqual(angularTemplate);
   });
 });

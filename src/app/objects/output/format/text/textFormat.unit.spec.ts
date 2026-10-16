@@ -44,7 +44,6 @@
  * a licensee so wish it.
  */
 import {TextFormat} from './textFormat';
-import {OutputType} from '../../outputType';
 
 describe('TextFormat unit test', () => {
   let textFormat: TextFormat;
@@ -53,48 +52,22 @@ describe('TextFormat unit test', () => {
     textFormat = new TextFormat();
   });
 
-  describe('Birth', () => {
-    it('Should be initialized', () => {
-      expect(textFormat).toBeInstanceOf(TextFormat);
-    });
-
-    it('Should not have switcherButtons', () => {
-      expect(textFormat.switcherButtons()).toEqual([]);
-    });
-
-    it('Should print', () => {
-      const textFormatPrinted = textFormat.print()();
-      expect(textFormatPrinted.isStub()).toBe(true);
-    });
+  it('Should print', () => {
+    const printed = textFormat.print()();
+    const inputs = printed.inputs()();
+    expect(printed.isStub()).toBe(false);
+    expect(inputs['textOutput']).toEqual('');
   });
 
-  describe('Output updates', () => {
-    let outputResponse;
+  it('Should not have buttons', () => {
+    expect(textFormat.switcherButtons()).toEqual([]);
+  });
+
+  it('Should render', () => {
     const textData = 'test';
-    beforeEach(() => {
-      outputResponse = {
-        op:'PARAGRAPH_OUTPUT',
-        data:{
-          output:{
-            type:OutputType.text,
-            data:textData,
-          }
-        }
-      };
-      textFormat.response(outputResponse);
-    });
-
-    it('Should have RenderNode', () => {
-      const textFormatPrinted = textFormat.print()();
-      expect(textFormatPrinted.isStub()).toBe(false);
-      expect(textFormatPrinted.inputs()()['textOutput']).toEqual(textData);
-    });
-
-    it('Should have RenderNodeStub', () => {
-      outputResponse.data.output.type = '';
-      textFormat.response(outputResponse);
-      const textFormatPrinted = textFormat.print()();
-      expect(textFormatPrinted.isStub()).toBe(true);
-    });
+    textFormat.render(textData);
+    const printed = textFormat.print()();
+    const inputs = printed.inputs()();
+    expect(inputs['textOutput']).toEqual(textData);
   });
 });

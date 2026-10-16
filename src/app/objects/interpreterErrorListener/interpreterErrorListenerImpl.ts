@@ -44,8 +44,8 @@
  * a licensee so wish it.
  */
 import {InterpreterErrorListener} from './interpreterErrorListener';
-import {MessageImpl} from '../message/messageImpl';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
@@ -64,7 +64,7 @@ export class InterpreterErrorListenerImpl implements InterpreterErrorListener {
   }
 
   response(data: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(data));
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(data));
     if(message.operation() === 'INTERPRETER_ERROR'){
       const errorMessage = message.dataAsWebSocketPayload().stringProperty('message');
       this._renderNode.set(new RenderNodeImpl(RegisteredComponents.INTERPRETER_ERROR_VIEW, signal({errorMessage: {errorMessage:errorMessage}})));
