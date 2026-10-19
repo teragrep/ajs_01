@@ -168,7 +168,7 @@
 
 .form-control_title-input {
   height: auto;
-  font: 500 20px 'Roboto';
+  font: 500 var(--fs-4) var(--font-heading);
   line-height: normal;
   color: var(--grey-900);
   background: white;
@@ -197,7 +197,7 @@
   direction: rtl;
   unicode-bidi: plaintext;
   text-align: left;
-  font: 600 20px 'Roboto';
+  font: 600 var(--fs-4) var(--font-heading), sans-serif;
   margin: 0;
   padding-top: 4px;
   &:after {
@@ -214,7 +214,7 @@
     background: var(--grey-200);
   }
   .fas {
-    font-size: 50px;
+    font-size: var(--fs-6);
     color: var(--grey-600);
   }
 }
@@ -250,7 +250,7 @@
 }
 
 .revision-date { /* prev. revisionDate */
-  font-size: 12px;
+  font-size: var(--fs-1);
   color: var(--dm-grey-500);
   display: block;
 }
@@ -305,7 +305,7 @@
   text-transform: uppercase;
   letter-spacing: 0.02em;
   text-align: right;
-  font-size: 10px;
+  font-size: var(--fs-1);
   font-weight: 500;
   &:before {
     content: "\f067";
@@ -413,7 +413,7 @@
   width: 450px;
   height: calc(100% - 93px);
   h2 {
-    font-size: 20px;
+    font-size: var(--fs-4);
   }
   .permissions-content {
     margin-left: -35px;
@@ -427,7 +427,7 @@
     content: "\f059";
     font-family: 'Font Awesome 5 Free', fantasy;
     vertical-align: super;
-    font-size: 12px;
+    font-size: var(--fs-1);
     font-weight: 900;
     color: var(--dm-grey-500);
   }
@@ -612,7 +612,7 @@
 /* DPL */
 
 .log-message {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-monospace-text), monospace;
   color: var(--dm-grey-500);
   word-break: break-all;
 }
@@ -622,7 +622,7 @@
 }
 
 .log-message h3 {
-  font-size: 14px;
+  font-size: var(--fs-1);
 }
 
 .add-info p {
@@ -631,7 +631,7 @@
 .short-text span:before {
   content: "...";
   color: var(--grey-900);
-  font-size: 14px;
+  font-size: var(--fs-1);
   font-weight: normal;
   margin-right: 8px;
 }
@@ -642,7 +642,7 @@
 
 .short-text span, .partition span {
   color: var(--dm-grey-500);
-  font-size: 10px;
+  font-size: var(--fs-1);
   font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
@@ -828,7 +828,7 @@ table.dataTable thead td {
 div.dt-button, a.dt-button, button.dt-button, input.dt-button {
   margin: 0 -1px 0 0;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: var(--fs-1);
   font-weight: 500;
   text-transform: uppercase;
   color: var(--grey-900);
@@ -923,7 +923,7 @@ div.dt-button-collection {
 
 .scatter-info {
   color: var(--secondary-600);
-  font-size: 10px;
+  font-size: var(--fs-1);
   &:hover {
     color: var(--secondary-700);
   }
