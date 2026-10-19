@@ -44,38 +44,15 @@
  * a licensee so wish it.
  */
 
-.result-view {
-  margin-bottom: 1.5rem;
-  .btn .fas, .btn .cf {
-    margin-right: 0;
-    color: var(--primary-600);
-  }
-}
-
-.dark-mode .result-view .btn .fas,
-.dark-mode .result-view .btn .cf {
-  color: var(--tertiary-300);
-}
-
-.result-chart {
-  background: var(--grey-100);
-  margin: 0 -40px 1.5rem;
-  padding: 30px 40px;
-}
-
-.dark-mode .result-chart {
-  background: var(--dm-grey-600);
-}
-
-.dark-mode .input-rotate {
-  background: var(--dm-grey-800);
-  border: 1px solid var(--dm-grey-500);
-  border-radius: 4px;
+.paragraph-output {
+  margin: var(--m-6) 0;
 }
 
 .html-result {
-  ol, ul, dl {
-    padding-left: 20px;
+  ol,
+  ul,
+  dl {
+    padding-left: var(--p-6);
   }
   img {
     max-width: 100%;
@@ -95,11 +72,11 @@
     border: none !important;
     font-weight: bold;
     text-align: left !important;
-    padding: 10px 15px !important;
+    padding: var(--p-4) var(--p-5) !important;
   }
   td {
     border: none !important;
-    padding: 10px 15px !important
+    padding: var(--p-4) var(--p-5) !important;
   }
   tbody tr {
     border-bottom: 1px solid var(--grey-300);
@@ -140,67 +117,4 @@
 .plain-text {
   font: 400 14px 'Roboto Mono', monospace;
   white-space: pre-wrap; /** to preserve white-space and newlines of result */
-}
-
-.graph-container {
-  position: relative;
-  overflow: visible;
-  .table {
-    overflow: hidden;
-    margin-bottom: 5px !important;
-  }
-}
-
-.resizable-helper {
-  border: 3px solid var(--grey-400);
-}
-
-/* D3 Graph Configuration */
-
-marker {
-  fill: var(--grey-400);
-}
-
-.dark-mode marker {
-  fill: var(--dm-grey-400);
-}
-
-path.link {
-  fill: none;
-  stroke-width: 2px;
-  stroke: var(--grey-400);
-}
-
-.dark-mode path.link {
-  stroke: var(--dm-grey-400);
-}
-
-path.textpath {
-  fill: none;
-  stroke: none;
-}
-
-text {
-  font-size: 12px;
-  pointer-events: none;
-  &.shadow {
-    stroke: var(--grey-000);
-    stroke-width: 3px;
-    stroke-opacity: .8;
-  }
-  &.nodeLabel {
-    pointer-events: none;
-  }
-}
-
-.dark-mode text.shadow {
-  stroke: var(--dm-grey-400);
-}
-
-.network {
-  background: var(--grey-100);
-}
-
-.dark-mode .network {
-  background: var(--dm-grey-600);
 }
