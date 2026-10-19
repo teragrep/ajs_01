@@ -70,13 +70,12 @@
   .navbar-toggler {
     padding: 0;
     border: 0;
-    &:focus {
-      box-shadow: none;
-    }
+    &:focus { box-shadow: none; }
   }
   .collapse-button {
     z-index: 300;
     margin-top: -2px;
+    transition: all 1s ease-in;
   }
   .btn-collapse {
     background: var(--grey-000);
@@ -108,6 +107,7 @@
     height: var(--note-action-height);
     box-shadow: 0 1px 5px var(--grey-400);
     border-bottom: 1px solid var(--grey-300);
+    transition: all 0.5s ease-in;
     @media only screen and (max-width: 1200px) {
       max-height: none;
     }
