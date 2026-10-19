@@ -15,7 +15,6 @@
 import angular from 'angular';
 import * as JsDiff from 'diff';
 import './revisions-comparator.html';
-import './revisions-comparator.css';
 import moment from 'moment';
 
 /*
