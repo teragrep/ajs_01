@@ -50,14 +50,8 @@ import WebSocketServer from './webSocketServer';
 import RouterFactory from './api/routerFactory';
 import {FakeUsers} from './api/user/fakeUsers';
 import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
-import {existsSync, mkdirSync} from 'fs';
 import FileServiceImpl from './services/fileService/fileServiceImpl';
 import NoteServiceImpl from './services/noteService/noteServiceImpl';
-import {NotebookPayload} from '../src/test/fakes/notebook/notebookPayload';
-import {NotebookPayloadFactory} from '../src/test/fakes/notebook/notebookPayloadFactory';
-import {NotebookPayloadFactoryImpl} from '../src/test/fakes/notebook/notebookPayloadFactoryImpl';
-import {ParagraphPayload} from '../src/test/fakes/paragraph/paragraphPayload';
-import {ParagraphPayloadFactory} from '../src/test/fakes/paragraph/paragraphPayloadFactory';
 import {PageDatasetFake} from './pageDatasetFake/pageDatasetFake';
 import {PageDatasetFakeImpl} from './pageDatasetFake/pageDatasetFakeImpl';
 
@@ -84,8 +78,8 @@ app.use(express.static(PUBLIC_PATH));
 const basePath = './devServer/temp';
 const fileService = new FileServiceImpl(basePath);
 const noteService = new NoteServiceImpl(fileService);
-const appDataSeeder:PageDatasetFake = new PageDatasetFakeImpl(noteService);
-appDataSeeder.saveTo(basePath);
+const pageDatasetFake:PageDatasetFake = new PageDatasetFakeImpl(noteService);
+pageDatasetFake.saveTo(basePath);
 
 new WebSocketServer(fileService);
 
