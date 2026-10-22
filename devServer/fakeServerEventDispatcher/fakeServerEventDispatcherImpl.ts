@@ -47,7 +47,6 @@ import {WebSocket} from 'ws';
 import {FakeServerEventDispatcher} from './fakeServerEventDispatcher';
 import {FakeServerEvent} from '../fakeServerEvents/fakeServerEvent';
 import {MessageImpl} from '../../src/app/objects/message/messageImpl';
-import FileServiceImpl from '../services/fileService/fileServiceImpl';
 import {WebSocketPayloadImpl} from '../../src/app/objects/webSocketPayload/webSocketPayloadImpl';
 import CompletionListEvent from '../fakeServerEvents/events/completionListEvent';
 import EditorSettingsEvent from '../fakeServerEvents/events/editorSettingsEvent';
@@ -59,11 +58,12 @@ import NotesInfoEvent from '../fakeServerEvents/events/notesInfoEvent';
 import ParagraphOutputRequestEvent from '../fakeServerEvents/events/paragraphOutputRequestEvent';
 import PingEvent from '../fakeServerEvents/events/pingEvent';
 import RunParagraphEvent from '../fakeServerEvents/events/runParagraphEvent';
+import {FileService} from '../services/fileService/fileService';
 
 export class FakeServerEventDispatcherImpl implements FakeServerEventDispatcher {
   private readonly _fakeServerEvents: Map<string, FakeServerEvent>;
 
-  constructor(webSocket: WebSocket,fileService: FileServiceImpl) {
+  constructor(webSocket: WebSocket,fileService: FileService) {
     const noteService = new NoteServiceImpl(fileService);
     const fakeServerEventsArray = [
       new CompletionListEvent(webSocket),

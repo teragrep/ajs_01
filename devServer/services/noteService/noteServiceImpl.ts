@@ -43,7 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import FileServiceImpl from '../fileService/fileServiceImpl';
 import {NoteService} from './noteService';
 import {NotebookPayload} from '../../../src/test/fakes/notebook/notebookPayload';
 import {FileService} from '../fileService/fileService';
@@ -52,7 +51,7 @@ export default class NoteServiceImpl implements NoteService{
   private readonly _fileService: FileService;
   private _lastNoteId: string;
 
-  constructor(fileService: FileServiceImpl) {
+  constructor(fileService: FileService) {
     this._fileService = fileService;
   }
 

@@ -46,7 +46,7 @@
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
-import WebSocketServer from './webSocketServer';
+import WebSocketServerWithMessageHandlingImpl from './webSocketServerWithMessageHandling/webSocketServerWithMessageHandlingImpl';
 import RouterFactory from './api/routerFactory';
 import {FakeUsers} from './api/user/fakeUsers';
 import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
@@ -81,6 +81,6 @@ const noteService = new NoteServiceImpl(fileService);
 const pageDatasetFake:PageDatasetFake = new PageDatasetFakeImpl(noteService);
 pageDatasetFake.saveTo(basePath);
 
-new WebSocketServer(fileService);
+new WebSocketServerWithMessageHandlingImpl().init(fileService);
 
 export default app;
