@@ -44,12 +44,12 @@
  * a licensee so wish it.
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
-import {NotebookPayload} from '../../notebook/notebookPayload';
+import {ServerNotebookState} from '../../notebook/serverNotebookState';
 
 export class NewNoteServerResponse implements WebSocketServerResponse{
-  private readonly _notebookPayload:NotebookPayload;
+  private readonly _notebookPayload:ServerNotebookState;
 
-  constructor(notebook:NotebookPayload) {
+  constructor(notebook:ServerNotebookState) {
     this._notebookPayload = notebook;
   }
 

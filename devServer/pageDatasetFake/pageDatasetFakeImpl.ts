@@ -46,7 +46,7 @@
 import {PageDatasetFake} from './pageDatasetFake';
 import {NoteService} from '../services/noteService/noteService';
 import {existsSync, mkdirSync} from 'fs';
-import {NotebookPayload} from '../../src/test/fakes/server/notebook/notebookPayload';
+import {ServerNotebookState} from '../../src/test/fakes/server/notebook/serverNotebookState';
 import {ServerParagraphState} from '../../src/test/fakes/server/paragraph/serverParagraphState';
 import {ParagraphPayloadFactoryImpl} from '../../src/test/fakes/server/paragraph/paragraphPayloadFactoryImpl';
 import {IdFakeImpl} from '../../src/test/fakes/server/id/idFakeImpl';
@@ -71,8 +71,8 @@ export class PageDatasetFakeImpl implements PageDatasetFake {
     }
   }
 
-  private fakeNotebooks(): NotebookPayload[]{
-    const fakeNotebooks: NotebookPayload[] = [];
+  private fakeNotebooks(): ServerNotebookState[]{
+    const fakeNotebooks: ServerNotebookState[] = [];
     const notebookCount = 2;
     const notebookPayloadFactory = new NotebookPayloadFactoryImpl();
     for(let i = 0; i < notebookCount; i++){

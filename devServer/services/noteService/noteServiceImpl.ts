@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {NoteService} from './noteService';
-import {NotebookPayload} from '../../../src/test/fakes/server/notebook/notebookPayload';
+import {ServerNotebookState} from '../../../src/test/fakes/server/notebook/serverNotebookState';
 import {FileService} from '../fileService/fileService';
 
 export default class NoteServiceImpl implements NoteService{
@@ -55,22 +55,22 @@ export default class NoteServiceImpl implements NoteService{
     this._fileService = fileService;
   }
 
-  all(): NotebookPayload[]{
-    return this._fileService.readAll<NotebookPayload>();
+  all(): ServerNotebookState[]{
+    return this._fileService.readAll<ServerNotebookState>();
   }
 
-  find(notebookId:string): NotebookPayload{
-    const notebook = this._fileService.read<NotebookPayload>(notebookId);
+  find(notebookId:string): ServerNotebookState{
+    const notebook = this._fileService.read<ServerNotebookState>(notebookId);
     this._lastNoteId = notebookId;
     return notebook;
   }
 
-  add(notebook:NotebookPayload){
+  add(notebook:ServerNotebookState){
     const fileName = notebook.id;
     this._fileService.write(notebook, fileName, false);
   }
 
-  update(notebook:NotebookPayload){
+  update(notebook:ServerNotebookState){
     const fileName = notebook.id;
     this._fileService.write(notebook, fileName, true);
   }

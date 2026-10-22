@@ -43,12 +43,23 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ServerParagraphState} from '../paragraph/serverParagraphState';
+import {ServerNotebookFake} from '../serverNotebookFake';
+import {ServerNotebookState} from '../serverNotebookState';
+import {ServerParagraphState} from '../../paragraph/serverParagraphState';
 
-export interface NotebookPayload {
-  id: string;
-  name:string;
-  path:string;
-  config: object;
-  paragraphs: ServerParagraphState[];
+export class ServerNotebookFakeWithParagraphs implements ServerNotebookFake {
+  private readonly _serverNotebookFake:ServerNotebookFake;
+  private readonly _paragraphs:ServerParagraphState[];
+
+  constructor(serverNotebookFake:ServerNotebookFake, paragraphs:ServerParagraphState[]) {
+    this._serverNotebookFake = serverNotebookFake;
+    this._paragraphs = paragraphs;
+  }
+
+
+  print():ServerNotebookState{
+    const serverNotebookState = this._serverNotebookFake.print();
+    serverNotebookState.paragraphs = this._paragraphs;
+    return serverNotebookState;
+  }
 }

@@ -43,11 +43,29 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotebookPayload} from './notebookPayload';
-import {ServerParagraphState} from '../paragraph/serverParagraphState';
+import {ServerNotebookState} from './serverNotebookState';
+import {ServerNotebookFake} from './serverNotebookFake';
+import {IdFake} from '../id/idFake';
+import {IdFakeImpl} from '../id/idFakeImpl';
 
-export interface NotebookPayloadFactory {
-  toPayload(): NotebookPayload;
-  withName(name: string): NotebookPayloadFactory;
-  withParagraphs(paragraphPayloads: ServerParagraphState[]): NotebookPayloadFactory;
+export class ServerNotebookFakeImpl implements ServerNotebookFake {
+  private readonly _id:IdFake;
+  private readonly _name:IdFake;
+
+  constructor(notebookId:IdFake = new IdFakeImpl()) {
+    this._id = notebookId;
+    this._name = new IdFakeImpl();
+  }
+
+  print():ServerNotebookState{
+    const path = `/${this._name.id()}`;
+    const config = {isZeppelinNotebookCronEnable: true};
+    return {
+      id: this._id.id(),
+      name: this._name.id(),
+      path: path,
+      config: config,
+      paragraphs: []
+    };
+  }
 }

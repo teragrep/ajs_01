@@ -43,11 +43,11 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {NotebookPayload} from '../../../src/test/fakes/server/notebook/notebookPayload';
+import {ServerNotebookState} from '../../../src/test/fakes/server/notebook/serverNotebookState';
 
 export interface NoteService {
-  all(): NotebookPayload[];
-  find(id:string): NotebookPayload;
-  add(notebook:NotebookPayload): void;
-  update(notebook:NotebookPayload): void;
+  all(): ServerNotebookState[];
+  find(id:string): ServerNotebookState;
+  add(notebook:ServerNotebookState): void;
+  update(notebook:ServerNotebookState): void;
 }
