@@ -48,8 +48,8 @@ import {IdFake} from './idFake';
 export class IdFakeImpl implements IdFake {
   private readonly _id:string;
 
-  constructor() {
-    this._id = Math.random().toString(36).slice(2, 12);
+  constructor(id:string = Math.random().toString(36).slice(2, 12)) {
+    this._id = id;
   }
 
   id(): string {

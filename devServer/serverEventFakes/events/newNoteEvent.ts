@@ -48,20 +48,19 @@ import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {NewNoteServerResponse} from '../../../src/test/fakes/server/webSocketResponses/newNote/newNoteServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
-import {NotebookPayloadFactory} from '../../../src/test/fakes/server/notebook/notebookPayloadFactory';
-import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/server/notebook/notebookPayloadFactoryImpl';
+import {ServerNotebookFakeImpl} from '../../../src/test/fakes/server/notebook/serverNotebookFakeImpl';
+import {ServerNotebookFakeWithName} from '../../../src/test/fakes/server/notebook/withName/serverNotebookFakeWithName';
+import {ServerNotebookState} from '../../../src/test/fakes/server/notebook/serverNotebookState';
 
 export default class NewNoteEvent implements ServerEventFake{
   private readonly  _webSocket: WebSocket;
   private readonly _eventId: string;
   private readonly _noteService: NoteServiceImpl;
-  private readonly _notebookPayloadFactory:NotebookPayloadFactory;
 
   constructor(webSocket:WebSocket, noteService: NoteServiceImpl) {
     this._webSocket = webSocket;
     this._noteService = noteService;
     this._eventId = 'NEW_NOTE';
-    this._notebookPayloadFactory = new NotebookPayloadFactoryImpl();
   }
 
   eventId(): string {
@@ -70,9 +69,10 @@ export default class NewNoteEvent implements ServerEventFake{
 
   handle(requestMessage: Message):void {
     const name = requestMessage.dataAsWebSocketPayload().stringProperty('name');
-    const notebookPayload = this._notebookPayloadFactory.withName(name).toPayload();
-    this._noteService.add(notebookPayload);
-    const newNoteResponse = new NewNoteServerResponse(notebookPayload);
+    const notebook = new ServerNotebookFakeWithName(new ServerNotebookFakeImpl(), name);
+    const notebookState:ServerNotebookState = notebook.print();
+    this._noteService.add(notebookState);
+    const newNoteResponse = new NewNoteServerResponse(notebookState);
     this._webSocket.send(newNoteResponse.toJson());
   }
 }

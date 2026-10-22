@@ -48,7 +48,12 @@ import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {NoteServerResponse} from '../../../src/test/fakes/server/webSocketResponses/note/noteServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
-import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/server/notebook/notebookPayloadFactoryImpl';
+import {ServerNotebookState} from '../../../src/test/fakes/server/notebook/serverNotebookState';
+import {ServerNotebookFakeImpl} from '../../../src/test/fakes/server/notebook/serverNotebookFakeImpl';
+import {IdFakeImpl} from '../../../src/test/fakes/server/id/idFakeImpl';
+import {
+  ServerNotebookFakeWithParagraphs
+} from '../../../src/test/fakes/server/notebook/withParagraphs/serverNotebookFakeWithParagraphs';
 
 export default class NoteEvent implements ServerEventFake {
   private readonly  _webSocket: WebSocket;
@@ -67,8 +72,11 @@ export default class NoteEvent implements ServerEventFake {
 
   handle(requestMessage: Message):void {
     const noteId = requestMessage.dataAsWebSocketPayload().stringProperty('id');
-    const note = this._noteService.find(noteId);
-    const noteResponse = new NoteServerResponse(new NotebookPayloadFactoryImpl(note));
+    const notebookState:ServerNotebookState = this._noteService.find(noteId);
+    const notebookId = notebookState.id;
+    const notebookParagraphs = notebookState.paragraphs;
+    const notebook = new ServerNotebookFakeWithParagraphs(new ServerNotebookFakeImpl(new IdFakeImpl(notebookId)), notebookParagraphs);
+    const noteResponse = new NoteServerResponse(notebook.print());
     this._webSocket.send(noteResponse.toJson());
   }
 }

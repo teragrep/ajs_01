@@ -48,11 +48,20 @@ import {NoteService} from '../services/noteService/noteService';
 import {existsSync, mkdirSync} from 'fs';
 import {ServerNotebookState} from '../../src/test/fakes/server/notebook/serverNotebookState';
 import {ServerParagraphState} from '../../src/test/fakes/server/paragraph/serverParagraphState';
-import {ParagraphPayloadFactoryImpl} from '../../src/test/fakes/server/paragraph/paragraphPayloadFactoryImpl';
-import {IdFakeImpl} from '../../src/test/fakes/server/id/idFakeImpl';
 import {DataTablesDataFactoryImpl} from '../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
 import {OutputPayloadFakeFactoryImpl} from '../../src/test/fakes/server/output/outputPayloadFakeFactoryImpl';
-import {NotebookPayloadFactoryImpl} from '../../src/test/fakes/server/notebook/notebookPayloadFactoryImpl';
+import {ServerNotebookFakeImpl} from '../../src/test/fakes/server/notebook/serverNotebookFakeImpl';
+import {
+  ServerNotebookFakeWithParagraphs
+} from '../../src/test/fakes/server/notebook/withParagraphs/serverNotebookFakeWithParagraphs';
+import {ServerParagraphFakeImpl} from '../../src/test/fakes/server/paragraph/serverParagraphFakeImpl';
+import {
+  ServerParagraphFakeWithOutput
+} from '../../src/test/fakes/server/paragraph/withOutput/serverParagraphFakeWithOutput';
+import {ServerParagraphFakeWithText} from '../../src/test/fakes/server/paragraph/withText/serverParagraphFakeWithText';
+import {
+  ServerParagraphFakeWithTitle
+} from '../../src/test/fakes/server/paragraph/withTitle/serverParagraphFakeWithTitle';
 
 export class PageDatasetFakeImpl implements PageDatasetFake {
   private readonly _noteService: NoteService;
@@ -74,16 +83,15 @@ export class PageDatasetFakeImpl implements PageDatasetFake {
   private fakeNotebooks(): ServerNotebookState[]{
     const fakeNotebooks: ServerNotebookState[] = [];
     const notebookCount = 2;
-    const notebookPayloadFactory = new NotebookPayloadFactoryImpl();
     for(let i = 0; i < notebookCount; i++){
-      fakeNotebooks.push(notebookPayloadFactory.withParagraphs(this.fakeParagraphs()).toPayload());
+      const serverNotebookFake = new ServerNotebookFakeWithParagraphs(new ServerNotebookFakeImpl(), this.fakeParagraphs());
+      fakeNotebooks.push(serverNotebookFake.print());
     }
     return fakeNotebooks;
   }
 
   private fakeParagraphs(): ServerParagraphState[] {
     const fakeParagraphs: ServerParagraphState[] = [];
-    const paragraphPayloadFactory = new ParagraphPayloadFactoryImpl();
     const dataTablesDataFactory = new DataTablesDataFactoryImpl();
     const outputPayloadFactory = new OutputPayloadFakeFactoryImpl();
     const rawData = dataTablesDataFactory.rawData(25);
@@ -91,9 +99,10 @@ export class PageDatasetFakeImpl implements PageDatasetFake {
     const length = rawData.length;
     const draw = 1;
     const output = outputPayloadFactory.dataTablesOutputPayload(dataTablesDataFactory.paginatedData(rawData, start, length, draw));
-    const paragraphWithResult =  paragraphPayloadFactory.withText(new IdFakeImpl().id()).withOutput(output).toPayload();
-    fakeParagraphs.push(paragraphWithResult);
-    fakeParagraphs.push(paragraphPayloadFactory.toSparkParagraphPayload());
+    const paragraphWithOutput = new ServerParagraphFakeWithOutput(new ServerParagraphFakeImpl(), output);
+    const sparkParagraph = new ServerParagraphFakeWithTitle(new ServerParagraphFakeWithText(new ServerParagraphFakeImpl(), '%spark.conf'), 'hideMeSparkPinger');
+    fakeParagraphs.push(paragraphWithOutput.print());
+    fakeParagraphs.push(sparkParagraph.print());
     return fakeParagraphs;
   }
 }

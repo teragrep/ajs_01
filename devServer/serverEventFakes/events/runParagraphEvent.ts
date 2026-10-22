@@ -46,7 +46,6 @@
 import {WebSocket} from 'ws';
 import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
-import {OutputType} from '../../../src/app/objects/output/outputType';
 import {
   ParagraphServerResponse
 } from '../../../src/test/fakes/server/webSocketResponses/paragraph/paragraphServerResponse';
@@ -57,10 +56,23 @@ import {
 import { Message } from '../../../src/app/objects/message/message';
 import {DataTablesDataFactory} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
-import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/server/paragraph/paragraphPayloadFactoryImpl';
-import {ParagraphPayloadFactory} from '../../../src/test/fakes/server/paragraph/paragraphPayloadFactory';
 import {OutputPayloadFakeFactory} from '../../../src/test/fakes/server/output/outputPayloadFakeFactory';
 import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/server/output/outputPayloadFakeFactoryImpl';
+import {ServerParagraphFakeImpl} from '../../../src/test/fakes/server/paragraph/serverParagraphFakeImpl';
+import {IdFakeImpl} from '../../../src/test/fakes/server/id/idFakeImpl';
+import {
+  ServerParagraphFakeWithStatus
+} from '../../../src/test/fakes/server/paragraph/withStatus/serverParagraphFakeWithStatus';
+import {
+  ServerParagraphFakeWithTitle
+} from '../../../src/test/fakes/server/paragraph/withTitle/serverParagraphFakeWithTitle';
+import {
+  ServerParagraphFakeWithText
+} from '../../../src/test/fakes/server/paragraph/withText/serverParagraphFakeWithText';
+import {
+  ServerParagraphFakeWithOutput
+} from '../../../src/test/fakes/server/paragraph/withOutput/serverParagraphFakeWithOutput';
+import {ServerParagraphFake} from '../../../src/test/fakes/server/paragraph/serverParagraphFake';
 
 export default class RunParagraphEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;
@@ -87,14 +99,18 @@ export default class RunParagraphEvent implements ServerEventFake {
     const title = requestMessage.data()['title'];
     const text = requestMessageData.stringProperty('paragraph');
     const messageQueue: string[] = [];
-    const executedParagraph = new ParagraphPayloadFactoryImpl({id:paragraphId}).withStatus('PENDING').withTitle(title).withText(text);
+    const executedParagraph = new ServerParagraphFakeWithText(
+      new ServerParagraphFakeWithTitle(
+        new ServerParagraphFakeWithStatus(
+          new ServerParagraphFakeImpl(new IdFakeImpl(paragraphId)),
+          'PENDING'),
+        title),
+      text);
     messageQueue.push(new ParagraphServerResponse(
-      executedParagraph
+      executedParagraph.print()
     ).toJson());
 
-    messageQueue.push(new ParagraphServerResponse(
-      executedParagraph.withStatus('RUNNING')
-    ).toJson());
+    messageQueue.push(new ParagraphServerResponse(new ServerParagraphFakeWithStatus(executedParagraph, 'RUNNING').print()).toJson());
 
     for (let i = 1; i < 20; i++){
       messageQueue.push(new ProgressServerResponse(i*5, paragraphId).toJson());
@@ -118,8 +134,8 @@ export default class RunParagraphEvent implements ServerEventFake {
     const finalOutput= this._fakeOutputPayloadFactory.dataTablesOutputPayload(finalOutputData);
     const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, finalOutput);
     messageQueue.push(paragraphOutputResponse.toJson());
-    const finalParagraph = executedParagraph.withStatus('FINISHED').withProgress(100).withOutput(finalOutput);
-    messageQueue.push(new ParagraphServerResponse(finalParagraph).toJson());
+    const finalParagraph = new ServerParagraphFakeWithOutput(new ServerParagraphFakeWithStatus(executedParagraph, 'title'), finalOutput);
+    messageQueue.push(new ParagraphServerResponse(finalParagraph.print()).toJson());
     this.updateNotebook(finalParagraph);
     for(let i = 0; i < messageQueue.length; i++) {
       const timeout =  (i + 1) * 1000;
@@ -129,10 +145,10 @@ export default class RunParagraphEvent implements ServerEventFake {
     }
   }
 
-  private updateNotebook(paragraph: ParagraphPayloadFactory){
+  private updateNotebook(paragraph: ServerParagraphFake){
     const noteId = this._noteService.lastNoteId();
     const notebook = this._noteService.find(noteId);
-    const paragraphPayload = paragraph.toPayload();
+    const paragraphPayload = paragraph.print();
     const paragraphIndex = notebook.paragraphs.findIndex(p => p.id === paragraphPayload.id);
     notebook.paragraphs.splice(paragraphIndex,1, paragraphPayload);
     this._noteService.update(notebook);

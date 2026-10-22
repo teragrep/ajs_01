@@ -47,10 +47,10 @@ import {WebSocketServerResponse} from '../webSocketServerResponse';
 import {ServerNotebookState} from '../../notebook/serverNotebookState';
 
 export class NewNoteServerResponse implements WebSocketServerResponse{
-  private readonly _notebookPayload:ServerNotebookState;
+  private readonly _notebook:ServerNotebookState;
 
   constructor(notebook:ServerNotebookState) {
-    this._notebookPayload = notebook;
+    this._notebook = notebook;
   }
 
   toJson(): string {
@@ -60,7 +60,7 @@ export class NewNoteServerResponse implements WebSocketServerResponse{
   toObject(): {op:string, data:object} {
     return {
       op:'NEW_NOTE',
-      data:this._notebookPayload,
+      data:this._notebook,
     };
   }
 }
