@@ -43,14 +43,14 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from './outputPayload';
+import {ServerOutputState} from './serverOutputState';
 import uPlot from 'uplot';
 import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 import {OutputPayloadFakeFactory} from './outputPayloadFakeFactory';
 import {OutputType} from '../../../../app/objects/output/outputType';
 
 export class OutputPayloadFakeFactoryImpl implements OutputPayloadFakeFactory {
-  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData): OutputPayload {
+  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData): ServerOutputState {
     const headers = Object.keys(dataTablesData.data[0]);
     const options = {
       headers:headers,
@@ -63,7 +63,7 @@ export class OutputPayloadFakeFactoryImpl implements OutputPayloadFakeFactory {
     };
   }
 
-  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload {
+  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): ServerOutputState {
     const seriesLength = uPlotData[0].length;
     const seriesCount = uPlotData.length - 1;
     const labels = Array.from(Array(seriesLength).keys()).map((seriesIndex) => `Moment ${seriesIndex + 1}`);
@@ -86,7 +86,7 @@ export class OutputPayloadFakeFactoryImpl implements OutputPayloadFakeFactory {
     };
   }
 
-  textOutputPayload(textData: string): OutputPayload {
+  textOutputPayload(textData: string): ServerOutputState {
     return {
       type: OutputType.text,
       data: textData,

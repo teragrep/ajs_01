@@ -43,17 +43,11 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphPayload} from './paragraphPayload';
-import {OutputPayload} from '../output/outputPayload';
-import {ConfigPayload} from '../paragraphConfig/configPayload';
+import {ServerParagraphState} from './serverParagraphState';
 
-export interface ParagraphPayloadFactory {
-  toPayload():ParagraphPayload;
-  toSparkParagraphPayload():ParagraphPayload;
-  withOutput(output:OutputPayload):ParagraphPayloadFactory;
-  withText(text:string):ParagraphPayloadFactory;
-  withStatus(status:string):ParagraphPayloadFactory;
-  withTitle(title:string):ParagraphPayloadFactory;
-  withConfig(config:ConfigPayload):ParagraphPayloadFactory;
-  withProgress(progress:number):ParagraphPayloadFactory;
+/**
+ * ServerParagraphFake mimics paragraph state in the server.
+ */
+export interface ServerParagraphFake {
+  print():ServerParagraphState;
 }

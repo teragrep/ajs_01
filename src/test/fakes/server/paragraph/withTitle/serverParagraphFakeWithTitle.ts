@@ -43,19 +43,21 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphConfigFake} from './paragraphConfigFake';
-import {ConfigPayload} from './configPayload';
+import {ServerParagraphFake} from '../serverParagraphFake';
+import {ServerParagraphState} from '../serverParagraphState';
 
-export class ParagraphConfigFakeImpl implements ParagraphConfigFake {
-  toConfigPayload(): ConfigPayload {
-    return {
-      colWidth: 12,
-      editorMode: 'ace/mode/dpl',
-      editorSetting: {completionSupport: true, editOnDblClick: false, language: ''},
-      enabled: true,
-      fontSize: 12,
-      lineNumbers: true,
-      title: true
-    };
+export class ServerParagraphFakeWithTitle implements ServerParagraphFake {
+  private readonly _serverParagraphFake:ServerParagraphFake;
+  private readonly _title:string;
+
+  constructor(serverParagraphFake:ServerParagraphFake, title:string) {
+    this._serverParagraphFake = serverParagraphFake;
+    this._title = title;
+  }
+
+  print(): ServerParagraphState {
+    const serverParagraphState = this._serverParagraphFake.print();
+    serverParagraphState.title = this._title;
+    return serverParagraphState;
   }
 }

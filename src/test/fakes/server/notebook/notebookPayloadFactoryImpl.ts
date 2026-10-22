@@ -48,7 +48,7 @@ import {NotebookPayload} from './notebookPayload';
 import {WebSocketPayloadImpl} from '../../../../app/objects/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketPayload} from '../../../../app/objects/webSocketPayload/webSocketPayload';
 import {IdFakeImpl} from '../id/idFakeImpl';
-import {ParagraphPayload} from '../paragraph/paragraphPayload';
+import {ServerParagraphState} from '../paragraph/serverParagraphState';
 import { ParagraphPayloadFactory } from '../paragraph/paragraphPayloadFactory';
 
 export class NotebookPayloadFactoryImpl implements NotebookPayloadFactory {
@@ -62,7 +62,7 @@ export class NotebookPayloadFactoryImpl implements NotebookPayloadFactory {
     this._name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new IdFakeImpl().id();
   }
 
-  withParagraphs(paragraphPayloads: ParagraphPayload[]): NotebookPayloadFactory {
+  withParagraphs(paragraphPayloads: ServerParagraphState[]): NotebookPayloadFactory {
     return new NotebookPayloadFactoryImpl({
       ...this._notebookData,
       paragraphs: paragraphPayloads,
@@ -79,9 +79,9 @@ export class NotebookPayloadFactoryImpl implements NotebookPayloadFactory {
   toPayload(): NotebookPayload {
     const path = this._notebookData.propertyExists('path') ? this._notebookData.stringProperty('path') : `/${this._name}`;
     const config = this._notebookData.propertyExists('config') ? this._notebookData.objectProperty('config') : {isZeppelinNotebookCronEnable: true};
-    let paragraphs:ParagraphPayload[];
+    let paragraphs:ServerParagraphState[];
     if(this._notebookData.propertyExists('paragraphs')){
-      paragraphs = this._notebookData.arrayProperty<ParagraphPayload>('paragraphs');
+      paragraphs = this._notebookData.arrayProperty<ServerParagraphState>('paragraphs');
     }
     else{
       paragraphs = [];

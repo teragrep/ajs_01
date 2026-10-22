@@ -43,8 +43,22 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ConfigPayload} from './configPayload';
+import {ServerParagraphFake} from '../serverParagraphFake';
+import {ServerParagraphState} from '../serverParagraphState';
+import {ServerOutputState} from '../../output/serverOutputState';
 
-export interface ParagraphConfigFake {
-  toConfigPayload():ConfigPayload;
+export class ServerParagraphFakeWithOutput implements ServerParagraphFake {
+  private readonly _serverParagraphFake:ServerParagraphFake;
+  private readonly _serverOutputState:ServerOutputState;
+
+  constructor(serverParagraphFake:ServerParagraphFake, serverOutputState:ServerOutputState) {
+    this._serverParagraphFake = serverParagraphFake;
+    this._serverOutputState = serverOutputState;
+  }
+
+  print(): ServerParagraphState {
+    const serverParagraphState = this._serverParagraphFake.print();
+    serverParagraphState.output = this._serverOutputState;
+    return serverParagraphState;
+  }
 }

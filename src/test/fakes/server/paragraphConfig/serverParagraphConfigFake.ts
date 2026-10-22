@@ -43,16 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface ConfigPayload {
-  lineNumbers: boolean,
-  editorSetting: {
-    language: string,
-    editOnDblClick: boolean,
-    completionSupport: boolean
-  },
-  colWidth: number,
-  editorMode: string,
-  fontSize: number,
-  title: boolean,
-  enabled: boolean
+import {ServerParagraphConfigState} from './serverParagraphConfigState';
+
+
+/**
+ * ServerParagraphConfigFake mimics paragraphConfig state in the server.
+ */
+export interface ServerParagraphConfigFake {
+  print():ServerParagraphConfigState;
 }

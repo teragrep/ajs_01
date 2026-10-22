@@ -43,12 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ParagraphPayload} from '../paragraph/paragraphPayload';
+import {ServerParagraphState} from '../paragraph/serverParagraphState';
 
 export interface NotebookPayload {
   id: string;
   name:string;
   path:string;
   config: object;
-  paragraphs: ParagraphPayload[];
+  paragraphs: ServerParagraphState[];
 }

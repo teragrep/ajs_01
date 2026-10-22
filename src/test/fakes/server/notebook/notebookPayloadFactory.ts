@@ -44,10 +44,10 @@
  * a licensee so wish it.
  */
 import {NotebookPayload} from './notebookPayload';
-import {ParagraphPayload} from '../paragraph/paragraphPayload';
+import {ServerParagraphState} from '../paragraph/serverParagraphState';
 
 export interface NotebookPayloadFactory {
   toPayload(): NotebookPayload;
   withName(name: string): NotebookPayloadFactory;
-  withParagraphs(paragraphPayloads: ParagraphPayload[]): NotebookPayloadFactory;
+  withParagraphs(paragraphPayloads: ServerParagraphState[]): NotebookPayloadFactory;
 }

@@ -43,12 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from './outputPayload';
+import {ServerOutputState} from './serverOutputState';
 import uPlot from 'uplot';
 import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 
 export interface OutputPayloadFakeFactory {
-  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload;
-  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData):OutputPayload;
-  textOutputPayload(textData:string):OutputPayload;
+  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): ServerOutputState;
+  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData):ServerOutputState;
+  textOutputPayload(textData:string):ServerOutputState;
 }

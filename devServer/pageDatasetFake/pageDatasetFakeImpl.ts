@@ -47,7 +47,7 @@ import {PageDatasetFake} from './pageDatasetFake';
 import {NoteService} from '../services/noteService/noteService';
 import {existsSync, mkdirSync} from 'fs';
 import {NotebookPayload} from '../../src/test/fakes/server/notebook/notebookPayload';
-import {ParagraphPayload} from '../../src/test/fakes/server/paragraph/paragraphPayload';
+import {ServerParagraphState} from '../../src/test/fakes/server/paragraph/serverParagraphState';
 import {ParagraphPayloadFactoryImpl} from '../../src/test/fakes/server/paragraph/paragraphPayloadFactoryImpl';
 import {IdFakeImpl} from '../../src/test/fakes/server/id/idFakeImpl';
 import {DataTablesDataFactoryImpl} from '../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
@@ -81,8 +81,8 @@ export class PageDatasetFakeImpl implements PageDatasetFake {
     return fakeNotebooks;
   }
 
-  private fakeParagraphs(): ParagraphPayload[] {
-    const fakeParagraphs: ParagraphPayload[] = [];
+  private fakeParagraphs(): ServerParagraphState[] {
+    const fakeParagraphs: ServerParagraphState[] = [];
     const paragraphPayloadFactory = new ParagraphPayloadFactoryImpl();
     const dataTablesDataFactory = new DataTablesDataFactoryImpl();
     const outputPayloadFactory = new OutputPayloadFakeFactoryImpl();

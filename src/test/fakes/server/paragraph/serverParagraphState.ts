@@ -43,9 +43,24 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface OutputPayload {
-  type: string,
-  isAggregated: boolean,
-  data: string | object,
-  options?:object
-}
+import {ServerOutputState} from '../output/serverOutputState';
+
+export type ServerParagraphState = {
+  dateCreated: number;
+  dateFinished: number;
+  dateStarted: number;
+  dateUpdated: number;
+  id: string;
+  jobName: string;
+  progress:number;
+  output?: ServerOutputState;
+  status: string;
+  text: string;
+  title: string;
+  user: string;
+  settings:{
+    params:object,
+    forms:object
+  }
+  config:object
+};

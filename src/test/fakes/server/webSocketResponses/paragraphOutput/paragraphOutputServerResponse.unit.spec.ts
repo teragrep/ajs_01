@@ -43,13 +43,13 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from '../../output/outputPayload';
+import {ServerOutputState} from '../../output/serverOutputState';
 import {ParagraphOutputServerResponse} from './paragraphOutputServerResponse';
 
 describe('Paragraph output server response', () => {
   const noteId = 'noteId';
   const paragraphId = 'paragraphId';
-  const outputPayload:OutputPayload = {
+  const outputPayload:ServerOutputState = {
     type:'type',
     data:{},
     isAggregated:false

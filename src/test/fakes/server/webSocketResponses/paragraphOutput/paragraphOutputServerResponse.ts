@@ -44,14 +44,14 @@
  * a licensee so wish it.
  */
 import {WebSocketServerResponse} from '../webSocketServerResponse';
-import {OutputPayload} from '../../output/outputPayload';
+import {ServerOutputState} from '../../output/serverOutputState';
 
 export class ParagraphOutputServerResponse implements WebSocketServerResponse{
   private readonly _paragraphId:string;
   private readonly _noteId:string;
-  private readonly _outputPayload:OutputPayload;
+  private readonly _outputPayload:ServerOutputState;
 
-  constructor(paragraphId:string, noteId:string, outputPayload:OutputPayload) {
+  constructor(paragraphId:string, noteId:string, outputPayload:ServerOutputState) {
     this._paragraphId = paragraphId;
     this._noteId = noteId;
     this._outputPayload = outputPayload;
