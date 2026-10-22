@@ -44,7 +44,8 @@
  * a licensee so wish it.
  */
 import {FileService} from '../services/fileService/fileService';
+import {WebSocketServer} from 'ws';
 
 export interface WebSocketServerWithMessageHandling {
-  init(fileService: FileService):void;
+  init(fileService: FileService):WebSocketServer;
 }

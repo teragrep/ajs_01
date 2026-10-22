@@ -43,15 +43,15 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocketServer as wss} from 'ws';
+import {WebSocketServer} from 'ws';
 import {FakeServerEventDispatcherImpl} from '../fakeServerEventDispatcher/fakeServerEventDispatcherImpl';
 import {FileService} from '../services/fileService/fileService';
 import {WebSocketServerWithMessageHandling} from './webSocketServerWithMessageHandling';
 
 export default class WebSocketServerWithMessageHandlingImpl implements WebSocketServerWithMessageHandling {
-  init(fileService: FileService):void {
+  init(fileService: FileService):WebSocketServer {
     const port = process.env.WEBSOCKET_PORT || 8081;
-    const webSocketServer = new wss({ port: Number(port) });
+    const webSocketServer = new WebSocketServer({ port: Number(port) });
     webSocketServer.on('connection', (client) => {
       const fakeServerEventDispatcher = new FakeServerEventDispatcherImpl(client, fileService);
       console.debug('Client connected');
@@ -61,5 +61,6 @@ export default class WebSocketServerWithMessageHandlingImpl implements WebSocket
         fakeServerEventDispatcher.apply(JSON.parse(receivedJson));
       });
     });
+    return webSocketServer;
   }
 };

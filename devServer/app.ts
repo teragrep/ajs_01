@@ -54,6 +54,7 @@ import FileServiceImpl from './services/fileService/fileServiceImpl';
 import NoteServiceImpl from './services/noteService/noteServiceImpl';
 import {PageDatasetFake} from './pageDatasetFake/pageDatasetFake';
 import {PageDatasetFakeImpl} from './pageDatasetFake/pageDatasetFakeImpl';
+import {WebSocketServer} from 'ws';
 
 const app = express();
 app.use(express.json());
@@ -81,6 +82,16 @@ const noteService = new NoteServiceImpl(fileService);
 const pageDatasetFake:PageDatasetFake = new PageDatasetFakeImpl(noteService);
 pageDatasetFake.saveTo(basePath);
 
-new WebSocketServerWithMessageHandlingImpl().init(fileService);
+const webSocketServer:WebSocketServer = new WebSocketServerWithMessageHandlingImpl().init(fileService);
+process.on('SIGINT', () => gracefulShutDown(webSocketServer));
+
+function gracefulShutDown(webSocketServer:WebSocketServer):void{
+  console.debug('Closing active websocket connections...');
+  webSocketServer.clients.forEach((client) => client.close(1001, 'Backend server shutting down'));
+  console.debug('Active websocket connections closed.');
+  console.debug('Closing websocket connection...');
+  webSocketServer.close();
+  console.debug('Websocket connection closed.');
+}
 
 export default app;
