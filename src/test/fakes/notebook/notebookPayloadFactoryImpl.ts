@@ -47,7 +47,7 @@ import {NotebookPayloadFactory} from './notebookPayloadFactory';
 import {NotebookPayload} from './notebookPayload';
 import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSocketPayloadImpl';
 import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketPayload';
-import {FakeIdImpl} from '../id/fakeIdImpl';
+import {IdFakeImpl} from '../id/idFakeImpl';
 import {ParagraphPayload} from '../paragraph/paragraphPayload';
 import { ParagraphPayloadFactory } from '../paragraph/paragraphPayloadFactory';
 
@@ -58,8 +58,8 @@ export class NotebookPayloadFactoryImpl implements NotebookPayloadFactory {
 
   constructor(notebookData: object = {}) {
     this._notebookData = new WebSocketPayloadImpl(notebookData);
-    this._id = this._notebookData.propertyExists('id') ? this._notebookData.stringProperty('id') : new FakeIdImpl().id();
-    this._name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new FakeIdImpl().id();
+    this._id = this._notebookData.propertyExists('id') ? this._notebookData.stringProperty('id') : new IdFakeImpl().id();
+    this._name = this._notebookData.propertyExists('name') ? this._notebookData.stringProperty('name') : new IdFakeImpl().id();
   }
 
   withParagraphs(paragraphPayloads: ParagraphPayload[]): NotebookPayloadFactory {

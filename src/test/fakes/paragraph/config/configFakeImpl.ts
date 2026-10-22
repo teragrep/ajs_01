@@ -43,54 +43,19 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from './outputPayload';
-import uPlot from 'uplot';
-import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
-import {FakeOutputPayloadFactory} from './fakeOutputPayloadFactory';
-import {OutputType} from '../../../app/objects/output/outputType';
+import {ConfigFake} from './configFake';
+import {ConfigPayload} from './configPayload';
 
-export class FakeOutputPayloadFactoryImpl implements FakeOutputPayloadFactory {
-  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData): OutputPayload {
-    const headers = Object.keys(dataTablesData.data[0]);
-    const options = {
-      headers:headers,
-    };
+export class ConfigFakeImpl implements ConfigFake {
+  toConfigPayload(): ConfigPayload {
     return {
-      type: OutputType.dataTables,
-      data: dataTablesData,
-      options: options,
-      isAggregated: true,
-    };
-  }
-
-  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload {
-    const seriesLength = uPlotData[0].length;
-    const seriesCount = uPlotData.length - 1;
-    const labels = Array.from(Array(seriesLength).keys()).map((seriesIndex) => `Moment ${seriesIndex + 1}`);
-    const seriesNames = [];
-    for(let i=0; i< seriesCount; i++) {
-      seriesNames.push(`Series ${i + 1}`);
-    }
-    const xAxisLabel = 'xAxisLabel';
-    const outputOptions = {
-      labels: labels,
-      series: seriesNames,
-      xAxisLabel: xAxisLabel,
-      graphType: graphType,
-    };
-    return {
-      type: OutputType.uPlot,
-      data: uPlotData,
-      isAggregated: true,
-      options: outputOptions
-    };
-  }
-
-  textOutputPayload(textData: string): OutputPayload {
-    return {
-      type: OutputType.text,
-      data: textData,
-      isAggregated: false,
+      colWidth: 12,
+      editorMode: 'ace/mode/dpl',
+      editorSetting: {completionSupport: true, editOnDblClick: false, language: ''},
+      enabled: true,
+      fontSize: 12,
+      lineNumbers: true,
+      title: true
     };
   }
 }

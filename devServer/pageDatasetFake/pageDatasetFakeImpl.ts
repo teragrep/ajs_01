@@ -49,9 +49,9 @@ import {existsSync, mkdirSync} from 'fs';
 import {NotebookPayload} from '../../src/test/fakes/notebook/notebookPayload';
 import {ParagraphPayload} from '../../src/test/fakes/paragraph/paragraphPayload';
 import {ParagraphPayloadFactoryImpl} from '../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
-import {FakeIdImpl} from '../../src/test/fakes/id/fakeIdImpl';
+import {IdFakeImpl} from '../../src/test/fakes/id/idFakeImpl';
 import {DataTablesDataFactoryImpl} from '../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
-import {FakeOutputPayloadFactoryImpl} from '../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
+import {OutputPayloadFakeFactoryImpl} from '../../src/test/fakes/output/outputPayloadFakeFactoryImpl';
 import {NotebookPayloadFactoryImpl} from '../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
 
 export class PageDatasetFakeImpl implements PageDatasetFake {
@@ -85,13 +85,13 @@ export class PageDatasetFakeImpl implements PageDatasetFake {
     const fakeParagraphs: ParagraphPayload[] = [];
     const paragraphPayloadFactory = new ParagraphPayloadFactoryImpl();
     const dataTablesDataFactory = new DataTablesDataFactoryImpl();
-    const outputPayloadFactory = new FakeOutputPayloadFactoryImpl();
+    const outputPayloadFactory = new OutputPayloadFakeFactoryImpl();
     const rawData = dataTablesDataFactory.rawData(25);
     const start = 0;
     const length = rawData.length;
     const draw = 1;
     const output = outputPayloadFactory.dataTablesOutputPayload(dataTablesDataFactory.paginatedData(rawData, start, length, draw));
-    const paragraphWithResult =  paragraphPayloadFactory.withText(new FakeIdImpl().id()).withOutput(output).toPayload();
+    const paragraphWithResult =  paragraphPayloadFactory.withText(new IdFakeImpl().id()).withOutput(output).toPayload();
     fakeParagraphs.push(paragraphWithResult);
     fakeParagraphs.push(paragraphPayloadFactory.toSparkParagraphPayload());
     return fakeParagraphs;

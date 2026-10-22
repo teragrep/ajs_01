@@ -45,7 +45,7 @@
  */
 import {ParagraphPayloadFactory} from './paragraphPayloadFactory';
 import {ParagraphPayloadFactoryImpl} from './paragraphPayloadFactoryImpl';
-import {FakeConfigImpl} from './config/fakeConfigImpl';
+import {ConfigFakeImpl} from './config/configFakeImpl';
 import {OutputPayload} from '../output/outputPayload';
 
 describe('ParagraphPayloadFactory unit test', () => {
@@ -66,7 +66,7 @@ describe('ParagraphPayloadFactory unit test', () => {
 
   it('Should have default payload', () => {
     paragraphPayloadFactory = new ParagraphPayloadFactoryImpl();
-    const expectedConfig = new FakeConfigImpl().toConfigPayload();
+    const expectedConfig = new ConfigFakeImpl().toConfigPayload();
     const payload = paragraphPayloadFactory.toPayload();
     expect(payload.id).toBeDefined();
     expect(payload.text).toEqual('');

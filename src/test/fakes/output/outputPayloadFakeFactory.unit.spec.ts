@@ -43,14 +43,14 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeOutputPayloadFactory} from './fakeOutputPayloadFactory';
-import {FakeOutputPayloadFactoryImpl} from './fakeOutputPayloadFactoryImpl';
+import {OutputPayloadFakeFactory} from './outputPayloadFakeFactory';
+import {OutputPayloadFakeFactoryImpl} from './outputPayloadFakeFactoryImpl';
 import uPlot from 'uplot';
 import {OutputType} from '../../../app/objects/output/outputType';
 import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 
-describe('FakeOutputPayloadFactory unit test', () => {
-  const fakeOutputPayloadFactory: FakeOutputPayloadFactory = new FakeOutputPayloadFactoryImpl();
+describe('OutputPayloadFakeFactory unit test', () => {
+  const fakeOutputPayloadFactory: OutputPayloadFakeFactory = new OutputPayloadFakeFactoryImpl();
 
   it('Should have uPlotOutputPayload', () => {
     const uPlotData: uPlot.AlignedData = [[1,2,3], [1,2,3]];

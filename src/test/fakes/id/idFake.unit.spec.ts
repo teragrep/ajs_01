@@ -43,12 +43,14 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {OutputPayload} from './outputPayload';
-import uPlot from 'uplot';
-import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
+import {IdFake} from './idFake';
+import {IdFakeImpl} from './idFakeImpl';
 
-export interface FakeOutputPayloadFactory {
-  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload;
-  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData):OutputPayload;
-  textOutputPayload(textData:string):OutputPayload;
-}
+describe('IdFake unit test', () => {
+  const fakeId: IdFake = new IdFakeImpl();
+
+  it('Should have Id', () => {
+    expect(fakeId.id()).toBeTypeOf('string');
+    expect(fakeId.id()).toHaveLength(10);
+  });
+});

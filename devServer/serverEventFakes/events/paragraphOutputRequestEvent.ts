@@ -56,22 +56,22 @@ import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTabl
 import {uPlotDataFactory} from '../../../src/test/fakes/output/uPlot/uPlotDataFactory';
 import {uPlotDataFactoryImpl} from '../../../src/test/fakes/output/uPlot/uPlotDataFactoryImpl';
 import {WebSocketPayload} from '../../../src/app/objects/webSocketPayload/webSocketPayload';
-import {FakeOutputPayloadFactory} from '../../../src/test/fakes/output/fakeOutputPayloadFactory';
-import {FakeOutputPayloadFactoryImpl} from '../../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
+import {OutputPayloadFakeFactory} from '../../../src/test/fakes/output/outputPayloadFakeFactory';
+import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/output/outputPayloadFakeFactoryImpl';
 
 export default class ParagraphOutputRequestEvent implements ServerEventFake {
   private readonly  _webSocket: WebSocket;
   private readonly _eventId: string;
   private readonly _dataTablesDataFactory: DataTablesDataFactory;
   private readonly _uPlotDataFactory: uPlotDataFactory;
-  private readonly _fakeOutputPayloadFactory: FakeOutputPayloadFactory;
+  private readonly _fakeOutputPayloadFactory: OutputPayloadFakeFactory;
 
   constructor(webSocket: WebSocket) {
     this._webSocket = webSocket;
     this._eventId = 'PARAGRAPH_OUTPUT_REQUEST';
     this._dataTablesDataFactory = new DataTablesDataFactoryImpl();
     this._uPlotDataFactory = new uPlotDataFactoryImpl();
-    this._fakeOutputPayloadFactory = new FakeOutputPayloadFactoryImpl();
+    this._fakeOutputPayloadFactory = new OutputPayloadFakeFactoryImpl();
   }
 
   eventId(): string {

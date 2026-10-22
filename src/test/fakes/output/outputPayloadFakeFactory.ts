@@ -43,14 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {FakeId} from './fakeId';
-import {FakeIdImpl} from './fakeIdImpl';
+import {OutputPayload} from './outputPayload';
+import uPlot from 'uplot';
+import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 
-describe('FakeId unit test', () => {
-  const fakeId: FakeId = new FakeIdImpl();
-
-  it('Should have Id', () => {
-    expect(fakeId.id()).toBeTypeOf('string');
-    expect(fakeId.id()).toHaveLength(10);
-  });
-});
+export interface OutputPayloadFakeFactory {
+  uPlotOutputPayload(uPlotData: uPlot.AlignedData, graphType:string): OutputPayload;
+  dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData):OutputPayload;
+  textOutputPayload(textData:string):OutputPayload;
+}

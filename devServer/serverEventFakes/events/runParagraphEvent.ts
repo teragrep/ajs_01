@@ -59,22 +59,22 @@ import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/d
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
 import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
 import {ParagraphPayloadFactory} from '../../../src/test/fakes/paragraph/paragraphPayloadFactory';
-import {FakeOutputPayloadFactory} from '../../../src/test/fakes/output/fakeOutputPayloadFactory';
-import {FakeOutputPayloadFactoryImpl} from '../../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
+import {OutputPayloadFakeFactory} from '../../../src/test/fakes/output/outputPayloadFakeFactory';
+import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/output/outputPayloadFakeFactoryImpl';
 
 export default class RunParagraphEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;
   private readonly _noteService: NoteServiceImpl;
   private readonly _eventId:string;
   private readonly _dataTablesDataFactory: DataTablesDataFactory;
-  private readonly _fakeOutputPayloadFactory: FakeOutputPayloadFactory;
+  private readonly _fakeOutputPayloadFactory: OutputPayloadFakeFactory;
 
   constructor(webSocket: WebSocket, noteService: NoteServiceImpl) {
     this._webSocket = webSocket;
     this._noteService = noteService;
     this._eventId = 'RUN_PARAGRAPH';
     this._dataTablesDataFactory = new DataTablesDataFactoryImpl();
-    this._fakeOutputPayloadFactory = new FakeOutputPayloadFactoryImpl();
+    this._fakeOutputPayloadFactory = new OutputPayloadFakeFactoryImpl();
   }
 
   eventId(): string {
