@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
+import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {
   ParagraphAddedServerResponse
@@ -52,7 +52,7 @@ import {
 import {Message} from '../../../src/app/objects/message/message';
 import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
 
-export default class InsertParagraphEvent implements FakeServerEvent{
+export default class InsertParagraphEvent implements ServerEventFake{
   private readonly  _webSocket: WebSocket;
   private readonly _eventId: string;
   private readonly _noteService: NoteServiceImpl;

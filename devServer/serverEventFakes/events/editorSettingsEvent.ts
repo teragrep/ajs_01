@@ -43,9 +43,58 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Message} from '../../src/app/objects/message/message';
+import {ServerEventFake} from '../serverEventFake';
+import {WebSocket} from 'ws';
+import {
+  EditorSettingServerResponse
+} from '../../../src/test/fakes/webSocketServerResponses/editorSetting/editorSettingServerResponse';
+import {Message} from '../../../src/app/objects/message/message';
 
-export interface FakeServerEvent{
-  eventId(): string;
-  handle(requestMessage:Message) :void;
+export default class EditorSettingsEvent implements ServerEventFake {
+  private readonly _webSocket: WebSocket;
+  private readonly _eventId: string;
+  private readonly _supportedLanguages: string[];
+  private readonly _defaultLanguage: string;
+
+  constructor(webSocket: WebSocket) {
+    this._webSocket = webSocket;
+    this._eventId = 'EDITOR_SETTING';
+    this._supportedLanguages = ['text', 'sql', 'scala', 'python'];
+    this._defaultLanguage = this._supportedLanguages[0];
+  }
+
+  eventId(): string {
+    return this._eventId;
+  }
+
+  handle(requestMessage: Message): void {
+    const paragraphText = requestMessage.dataAsWebSocketPayload().stringProperty('paragraphText');
+    const language = this.parseLanguage(paragraphText);
+    const editorSettings = {
+      language:language,
+      editorOnDblClick: false,
+      completionKey: '',
+      completionSupport: true,
+    };
+    const paragraphId = requestMessage.dataAsWebSocketPayload().stringProperty('paragraphId');
+    const editorSettingResponse = new EditorSettingServerResponse(editorSettings, paragraphId);
+    this._webSocket.send(editorSettingResponse.toJson());
+  }
+
+  private parseLanguage(text:string):string{
+    let found = this._defaultLanguage;
+    try{
+      this._supportedLanguages.some(lan => {
+        const searchedText = '%'+lan;
+        if(text.search(searchedText) === 0) {
+          found = lan;
+          return true;
+        }
+      });
+    }
+    catch(err) {
+      console.error(`Parsing language failed: ${err}`);
+    }
+    return found;
+  }
 }

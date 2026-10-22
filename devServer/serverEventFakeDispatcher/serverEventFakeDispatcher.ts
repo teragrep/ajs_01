@@ -43,32 +43,6 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
-import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
-import {NoteServerResponse} from '../../../src/test/fakes/webSocketServerResponses/note/noteServerResponse';
-import {Message} from '../../../src/app/objects/message/message';
-import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
-
-export default class NoteEvent implements FakeServerEvent {
-  private readonly  _webSocket: WebSocket;
-  private readonly _eventId: string;
-  private readonly _noteService: NoteServiceImpl;
-
-  constructor(webSocket:WebSocket, noteService: NoteServiceImpl) {
-    this._webSocket = webSocket;
-    this._noteService = noteService;
-    this._eventId = 'GET_NOTE';
-  }
-
-  eventId(): string {
-    return this._eventId;
-  }
-
-  handle(requestMessage: Message):void {
-    const noteId = requestMessage.dataAsWebSocketPayload().stringProperty('id');
-    const note = this._noteService.find(noteId);
-    const noteResponse = new NoteServerResponse(new NotebookPayloadFactoryImpl(note));
-    this._webSocket.send(noteResponse.toJson());
-  }
+export interface ServerEventFakeDispatcher {
+  apply(requestMessage:object):void;
 }

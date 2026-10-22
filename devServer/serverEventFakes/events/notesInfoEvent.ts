@@ -44,35 +44,33 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
+import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
-import {NewNoteServerResponse} from '../../../src/test/fakes/webSocketServerResponses/newNote/newNoteServerResponse';
-import {Message} from '../../../src/app/objects/message/message';
-import {NotebookPayloadFactory} from '../../../src/test/fakes/notebook/notebookPayloadFactory';
-import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
+import {NotesInfoServerResponse} from '../../../src/test/fakes/webSocketServerResponses/notesInfo/notesInfoServerResponse';
 
-export default class NewNoteEvent implements FakeServerEvent{
+export default class NotesInfoEvent implements ServerEventFake{
   private readonly  _webSocket: WebSocket;
   private readonly _eventId: string;
   private readonly _noteService: NoteServiceImpl;
-  private readonly _notebookPayloadFactory:NotebookPayloadFactory;
 
   constructor(webSocket:WebSocket, noteService: NoteServiceImpl) {
     this._webSocket = webSocket;
     this._noteService = noteService;
-    this._eventId = 'NEW_NOTE';
-    this._notebookPayloadFactory = new NotebookPayloadFactoryImpl();
+    this._eventId = 'LIST_NOTES';
   }
 
   eventId(): string {
     return this._eventId;
   }
 
-  handle(requestMessage: Message):void {
-    const name = requestMessage.dataAsWebSocketPayload().stringProperty('name');
-    const notebookPayload = this._notebookPayloadFactory.withName(name).toPayload();
-    this._noteService.add(notebookPayload);
-    const newNoteResponse = new NewNoteServerResponse(notebookPayload);
-    this._webSocket.send(newNoteResponse.toJson());
+  handle():void {
+    const notes = this._noteService.all();
+    const data:{id:string, isTrash:boolean, name:string, path:string }[] = [];
+    for (const note of notes){
+      const info = {id:note.id, isTrash:false, name:note.name, path:note.path };
+      data.push(info);
+    }
+    const notesInfoResponse = new NotesInfoServerResponse(data);
+    this._webSocket.send(notesInfoResponse.toJson());
   }
 }

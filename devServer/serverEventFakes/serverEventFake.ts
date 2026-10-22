@@ -43,34 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
-import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
-import {NotesInfoServerResponse} from '../../../src/test/fakes/webSocketServerResponses/notesInfo/notesInfoServerResponse';
+import {Message} from '../../src/app/objects/message/message';
 
-export default class NotesInfoEvent implements FakeServerEvent{
-  private readonly  _webSocket: WebSocket;
-  private readonly _eventId: string;
-  private readonly _noteService: NoteServiceImpl;
-
-  constructor(webSocket:WebSocket, noteService: NoteServiceImpl) {
-    this._webSocket = webSocket;
-    this._noteService = noteService;
-    this._eventId = 'LIST_NOTES';
-  }
-
-  eventId(): string {
-    return this._eventId;
-  }
-
-  handle():void {
-    const notes = this._noteService.all();
-    const data:{id:string, isTrash:boolean, name:string, path:string }[] = [];
-    for (const note of notes){
-      const info = {id:note.id, isTrash:false, name:note.name, path:note.path };
-      data.push(info);
-    }
-    const notesInfoResponse = new NotesInfoServerResponse(data);
-    this._webSocket.send(notesInfoResponse.toJson());
-  }
+/**
+ * ServerEventFake emulates actual server response for a corresponding client request via websocket.
+ */
+export interface ServerEventFake {
+  eventId(): string;
+  handle(requestMessage:Message) :void;
 }

@@ -44,10 +44,10 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
+import {ServerEventFake} from '../serverEventFake';
 import {CompletionListServerResponse} from '../../../src/test/fakes/webSocketServerResponses/completionList/completionListServerResponse';
 
-export default class CompletionListEvent implements FakeServerEvent{
+export default class CompletionListEvent implements ServerEventFake{
   private readonly _webSocket:WebSocket;
   private readonly _eventId:string;
 

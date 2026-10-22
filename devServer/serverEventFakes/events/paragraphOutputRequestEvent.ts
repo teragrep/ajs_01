@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
+import {ServerEventFake} from '../serverEventFake';
 import {OutputType} from '../../../src/app/objects/output/outputType';
 import {
   ParagraphOutputServerResponse
@@ -59,7 +59,7 @@ import {WebSocketPayload} from '../../../src/app/objects/webSocketPayload/webSoc
 import {FakeOutputPayloadFactory} from '../../../src/test/fakes/output/fakeOutputPayloadFactory';
 import {FakeOutputPayloadFactoryImpl} from '../../../src/test/fakes/output/fakeOutputPayloadFactoryImpl';
 
-export default class ParagraphOutputRequestEvent implements FakeServerEvent {
+export default class ParagraphOutputRequestEvent implements ServerEventFake {
   private readonly  _webSocket: WebSocket;
   private readonly _eventId: string;
   private readonly _dataTablesDataFactory: DataTablesDataFactory;

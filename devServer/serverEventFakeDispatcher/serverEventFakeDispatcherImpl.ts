@@ -44,24 +44,24 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {FakeServerEventDispatcher} from './fakeServerEventDispatcher';
-import {FakeServerEvent} from '../fakeServerEvents/fakeServerEvent';
+import {ServerEventFakeDispatcher} from './serverEventFakeDispatcher';
+import {ServerEventFake} from '../serverEventFakes/serverEventFake';
 import {MessageImpl} from '../../src/app/objects/message/messageImpl';
 import {WebSocketPayloadImpl} from '../../src/app/objects/webSocketPayload/webSocketPayloadImpl';
-import CompletionListEvent from '../fakeServerEvents/events/completionListEvent';
-import EditorSettingsEvent from '../fakeServerEvents/events/editorSettingsEvent';
-import InsertParagraphEvent from '../fakeServerEvents/events/insertParagraphEvent';
+import CompletionListEvent from '../serverEventFakes/events/completionListEvent';
+import EditorSettingsEvent from '../serverEventFakes/events/editorSettingsEvent';
+import InsertParagraphEvent from '../serverEventFakes/events/insertParagraphEvent';
 import NoteServiceImpl from '../services/noteService/noteServiceImpl';
-import NewNoteEvent from '../fakeServerEvents/events/newNoteEvent';
-import NoteEvent from '../fakeServerEvents/events/noteEvent';
-import NotesInfoEvent from '../fakeServerEvents/events/notesInfoEvent';
-import ParagraphOutputRequestEvent from '../fakeServerEvents/events/paragraphOutputRequestEvent';
-import PingEvent from '../fakeServerEvents/events/pingEvent';
-import RunParagraphEvent from '../fakeServerEvents/events/runParagraphEvent';
+import NewNoteEvent from '../serverEventFakes/events/newNoteEvent';
+import NoteEvent from '../serverEventFakes/events/noteEvent';
+import NotesInfoEvent from '../serverEventFakes/events/notesInfoEvent';
+import ParagraphOutputRequestEvent from '../serverEventFakes/events/paragraphOutputRequestEvent';
+import PingEvent from '../serverEventFakes/events/pingEvent';
+import RunParagraphEvent from '../serverEventFakes/events/runParagraphEvent';
 import {FileService} from '../services/fileService/fileService';
 
-export class FakeServerEventDispatcherImpl implements FakeServerEventDispatcher {
-  private readonly _fakeServerEvents: Map<string, FakeServerEvent>;
+export class ServerEventFakeDispatcherImpl implements ServerEventFakeDispatcher {
+  private readonly _fakeServerEvents: Map<string, ServerEventFake>;
 
   constructor(webSocket: WebSocket,fileService: FileService) {
     const noteService = new NoteServiceImpl(fileService);
@@ -77,7 +77,7 @@ export class FakeServerEventDispatcherImpl implements FakeServerEventDispatcher 
       new RunParagraphEvent(webSocket, noteService),
     ];
     this._fakeServerEvents = new Map(
-      fakeServerEventsArray.map((event: FakeServerEvent) => [event.eventId(), event])
+      fakeServerEventsArray.map((event: ServerEventFake) => [event.eventId(), event])
     );
   }
 

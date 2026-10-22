@@ -46,7 +46,6 @@
 import {User} from './user';
 import {UserImpl} from './userImpl';
 
-
 export const FakeUsers: User[] =[
   new UserImpl('basicUser', 'pass1', ['tg-user']),
   new UserImpl('adminUser', 'pass2', ['tg-user', 'tg-admin'])

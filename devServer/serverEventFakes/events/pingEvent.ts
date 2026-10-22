@@ -44,10 +44,10 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {FakeServerEvent} from '../fakeServerEvent';
+import {ServerEventFake} from '../serverEventFake';
 import { Message } from '../../../src/app/objects/message/message';
 
-export default class PingEvent implements FakeServerEvent {
+export default class PingEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;
   private readonly _eventId: string;
 
