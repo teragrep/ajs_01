@@ -81,7 +81,7 @@ export class FakeServerEventDispatcherImpl implements FakeServerEventDispatcher 
     );
   }
 
-  resolveServerEvent(requestMessage:object):void{
+  apply(requestMessage:object):void{
     const message = new MessageImpl(new WebSocketPayloadImpl(requestMessage));
     const eventId = message.operation();
     if(this._fakeServerEvents.has(eventId)){

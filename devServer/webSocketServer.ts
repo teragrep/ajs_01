@@ -63,7 +63,7 @@ export default class WebSocketServer {
       client.on('message', function message(data) {
         const receivedJson = data.toString();
         console.debug('Received message', receivedJson);
-        fakeServerEventDispatcher.resolveServerEvent(JSON.parse(receivedJson));
+        fakeServerEventDispatcher.apply(JSON.parse(receivedJson));
       });
     });
   }

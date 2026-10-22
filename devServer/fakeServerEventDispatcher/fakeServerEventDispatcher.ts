@@ -44,5 +44,5 @@
  * a licensee so wish it.
  */
 export interface FakeServerEventDispatcher {
-  resolveServerEvent(requestMessage:object):void;
+  apply(requestMessage:object):void;
 }
