@@ -86,12 +86,12 @@ const webSocketServer:WebSocketServer = new WebSocketServerWithMessageHandlingIm
 process.on('SIGINT', () => gracefulShutDown(webSocketServer));
 
 function gracefulShutDown(webSocketServer:WebSocketServer):void{
-  console.debug('Closing active websocket connections...');
+  console.debug('Closing websocket clients...');
   webSocketServer.clients.forEach((client) => client.close(1001, 'Backend server shutting down'));
-  console.debug('Active websocket connections closed.');
-  console.debug('Closing websocket connection...');
+  console.debug('Websocket clients closed.');
+  console.debug('Closing websocket server...');
   webSocketServer.close();
-  console.debug('Websocket connection closed.');
+  console.debug('Websocket server closed.');
 }
 
 export default app;
