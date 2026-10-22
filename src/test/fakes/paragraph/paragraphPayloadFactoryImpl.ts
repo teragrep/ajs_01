@@ -48,9 +48,9 @@ import {ParagraphPayload} from './paragraphPayload';
 import {WebSocketPayload} from '../../../app/objects/webSocketPayload/webSocketPayload';
 import {WebSocketPayloadImpl} from '../../../app/objects/webSocketPayload/webSocketPayloadImpl';
 import {OutputPayload} from '../output/outputPayload';
-import {ConfigPayload} from './config/configPayload';
+import {ConfigPayload} from '../paragraphConfig/configPayload';
 import {IdFakeImpl} from '../id/idFakeImpl';
-import {ConfigFakeImpl} from './config/configFakeImpl';
+import {ParagraphConfigFakeImpl} from '../paragraphConfig/paragraphConfigFakeImpl';
 
 export class ParagraphPayloadFactoryImpl implements ParagraphPayloadFactory {
   private readonly _paragraphData: WebSocketPayload;
@@ -64,7 +64,7 @@ export class ParagraphPayloadFactoryImpl implements ParagraphPayloadFactory {
     this._rawParagraphData = paragraphData;
     this._id = this._paragraphData.propertyExists('id') ? this._paragraphData.stringProperty('id') : new IdFakeImpl().id();
     this._dateNow = Date.now();
-    this._defaultConfig = new ConfigFakeImpl().toConfigPayload();
+    this._defaultConfig = new ParagraphConfigFakeImpl().toConfigPayload();
   }
 
   toSparkParagraphPayload(): ParagraphPayload {

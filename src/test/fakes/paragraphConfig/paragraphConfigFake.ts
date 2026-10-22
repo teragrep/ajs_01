@@ -45,6 +45,6 @@
  */
 import {ConfigPayload} from './configPayload';
 
-export interface ConfigFake {
+export interface ParagraphConfigFake {
   toConfigPayload():ConfigPayload;
 }

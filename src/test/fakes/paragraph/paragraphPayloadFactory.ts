@@ -45,7 +45,7 @@
  */
 import {ParagraphPayload} from './paragraphPayload';
 import {OutputPayload} from '../output/outputPayload';
-import {ConfigPayload} from './config/configPayload';
+import {ConfigPayload} from '../paragraphConfig/configPayload';
 
 export interface ParagraphPayloadFactory {
   toPayload():ParagraphPayload;

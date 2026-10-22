@@ -43,10 +43,10 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ConfigFake} from './configFake';
+import {ParagraphConfigFake} from './paragraphConfigFake';
 import {ConfigPayload} from './configPayload';
 
-export class ConfigFakeImpl implements ConfigFake {
+export class ParagraphConfigFakeImpl implements ParagraphConfigFake {
   toConfigPayload(): ConfigPayload {
     return {
       colWidth: 12,
