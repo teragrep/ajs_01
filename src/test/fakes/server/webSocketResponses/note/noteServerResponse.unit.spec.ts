@@ -44,15 +44,16 @@
  * a licensee so wish it.
  *
  */
-import {NotebookPayloadFactoryImpl} from '../../notebook/notebookPayloadFactoryImpl';
 import {NoteServerResponse} from './noteServerResponse';
+import {ServerNotebookFake} from '../../notebook/serverNotebookFake';
+import {ServerNotebookFakeImpl} from '../../notebook/serverNotebookFakeImpl';
 
 describe('Note server response unit test', () => {
-  const notebook = new NotebookPayloadFactoryImpl();
-  const noteServerResponse = new NoteServerResponse(notebook);
+  const notebook:ServerNotebookFake = new ServerNotebookFakeImpl();
+  const noteServerResponse = new NoteServerResponse(notebook.print());
   const expectedObject = {
     op:'NOTE',
-    data:notebook.toPayload()
+    data:notebook.print()
   };
 
   it('Should have object', () => {
