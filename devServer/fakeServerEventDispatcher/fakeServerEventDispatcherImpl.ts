@@ -51,7 +51,6 @@ import FileServiceImpl from '../services/fileService/fileServiceImpl';
 import {WebSocketPayloadImpl} from '../../src/app/objects/webSocketPayload/webSocketPayloadImpl';
 import CompletionListEvent from '../fakeServerEvents/events/completionListEvent';
 import EditorSettingsEvent from '../fakeServerEvents/events/editorSettingsEvent';
-import HomeNoteEvent from '../fakeServerEvents/events/homeNoteEvent';
 import InsertParagraphEvent from '../fakeServerEvents/events/insertParagraphEvent';
 import NoteServiceImpl from '../services/noteService/noteServiceImpl';
 import NewNoteEvent from '../fakeServerEvents/events/newNoteEvent';
@@ -69,7 +68,6 @@ export class FakeServerEventDispatcherImpl implements FakeServerEventDispatcher 
     const fakeServerEventsArray = [
       new CompletionListEvent(webSocket),
       new EditorSettingsEvent(webSocket),
-      new HomeNoteEvent(webSocket),
       new InsertParagraphEvent(webSocket, noteService),
       new NewNoteEvent(webSocket, noteService),
       new NoteEvent(webSocket, noteService),
