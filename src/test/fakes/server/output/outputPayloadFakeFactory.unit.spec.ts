@@ -46,7 +46,7 @@
 import {OutputPayloadFakeFactory} from './outputPayloadFakeFactory';
 import {OutputPayloadFakeFactoryImpl} from './outputPayloadFakeFactoryImpl';
 import uPlot from 'uplot';
-import {OutputType} from '../../../app/objects/output/outputType';
+import {OutputType} from '../../../../app/objects/output/outputType';
 import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 
 describe('OutputPayloadFakeFactory unit test', () => {

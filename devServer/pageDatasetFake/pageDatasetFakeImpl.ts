@@ -46,13 +46,13 @@
 import {PageDatasetFake} from './pageDatasetFake';
 import {NoteService} from '../services/noteService/noteService';
 import {existsSync, mkdirSync} from 'fs';
-import {NotebookPayload} from '../../src/test/fakes/notebook/notebookPayload';
-import {ParagraphPayload} from '../../src/test/fakes/paragraph/paragraphPayload';
-import {ParagraphPayloadFactoryImpl} from '../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
-import {IdFakeImpl} from '../../src/test/fakes/id/idFakeImpl';
-import {DataTablesDataFactoryImpl} from '../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
-import {OutputPayloadFakeFactoryImpl} from '../../src/test/fakes/output/outputPayloadFakeFactoryImpl';
-import {NotebookPayloadFactoryImpl} from '../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
+import {NotebookPayload} from '../../src/test/fakes/server/notebook/notebookPayload';
+import {ParagraphPayload} from '../../src/test/fakes/server/paragraph/paragraphPayload';
+import {ParagraphPayloadFactoryImpl} from '../../src/test/fakes/server/paragraph/paragraphPayloadFactoryImpl';
+import {IdFakeImpl} from '../../src/test/fakes/server/id/idFakeImpl';
+import {DataTablesDataFactoryImpl} from '../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
+import {OutputPayloadFakeFactoryImpl} from '../../src/test/fakes/server/output/outputPayloadFakeFactoryImpl';
+import {NotebookPayloadFactoryImpl} from '../../src/test/fakes/server/notebook/notebookPayloadFactoryImpl';
 
 export class PageDatasetFakeImpl implements PageDatasetFake {
   private readonly _noteService: NoteService;

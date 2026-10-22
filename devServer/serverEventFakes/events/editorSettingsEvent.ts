@@ -47,7 +47,7 @@ import {ServerEventFake} from '../serverEventFake';
 import {WebSocket} from 'ws';
 import {
   EditorSettingServerResponse
-} from '../../../src/test/fakes/webSocketServerResponses/editorSetting/editorSettingServerResponse';
+} from '../../../src/test/fakes/server/webSocketResponses/editorSetting/editorSettingServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
 
 export default class EditorSettingsEvent implements ServerEventFake {

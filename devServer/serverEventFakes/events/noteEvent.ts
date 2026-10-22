@@ -46,9 +46,9 @@
 import {WebSocket} from 'ws';
 import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
-import {NoteServerResponse} from '../../../src/test/fakes/webSocketServerResponses/note/noteServerResponse';
+import {NoteServerResponse} from '../../../src/test/fakes/server/webSocketResponses/note/noteServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
-import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/notebook/notebookPayloadFactoryImpl';
+import {NotebookPayloadFactoryImpl} from '../../../src/test/fakes/server/notebook/notebookPayloadFactoryImpl';
 
 export default class NoteEvent implements ServerEventFake {
   private readonly  _webSocket: WebSocket;

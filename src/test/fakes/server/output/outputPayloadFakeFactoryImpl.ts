@@ -47,7 +47,7 @@ import {OutputPayload} from './outputPayload';
 import uPlot from 'uplot';
 import {PaginatedDataTablesData} from './dataTables/paginatedDataTablesData';
 import {OutputPayloadFakeFactory} from './outputPayloadFakeFactory';
-import {OutputType} from '../../../app/objects/output/outputType';
+import {OutputType} from '../../../../app/objects/output/outputType';
 
 export class OutputPayloadFakeFactoryImpl implements OutputPayloadFakeFactory {
   dataTablesOutputPayload(dataTablesData: PaginatedDataTablesData): OutputPayload {

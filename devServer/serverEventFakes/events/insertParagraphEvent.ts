@@ -48,9 +48,9 @@ import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {
   ParagraphAddedServerResponse
-} from '../../../src/test/fakes/webSocketServerResponses/paragraphAdded/paragraphAddedServerResponse';
+} from '../../../src/test/fakes/server/webSocketResponses/paragraphAdded/paragraphAddedServerResponse';
 import {Message} from '../../../src/app/objects/message/message';
-import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
+import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/server/paragraph/paragraphPayloadFactoryImpl';
 
 export default class InsertParagraphEvent implements ServerEventFake{
   private readonly  _webSocket: WebSocket;

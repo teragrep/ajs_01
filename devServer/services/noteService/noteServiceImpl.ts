@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {NoteService} from './noteService';
-import {NotebookPayload} from '../../../src/test/fakes/notebook/notebookPayload';
+import {NotebookPayload} from '../../../src/test/fakes/server/notebook/notebookPayload';
 import {FileService} from '../fileService/fileService';
 
 export default class NoteServiceImpl implements NoteService{

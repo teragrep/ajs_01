@@ -49,18 +49,18 @@ import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {OutputType} from '../../../src/app/objects/output/outputType';
 import {
   ParagraphServerResponse
-} from '../../../src/test/fakes/webSocketServerResponses/paragraph/paragraphServerResponse';
-import {ProgressServerResponse} from '../../../src/test/fakes/webSocketServerResponses/progress/progressServerResponse';
+} from '../../../src/test/fakes/server/webSocketResponses/paragraph/paragraphServerResponse';
+import {ProgressServerResponse} from '../../../src/test/fakes/server/webSocketResponses/progress/progressServerResponse';
 import {
   ParagraphOutputServerResponse
-} from '../../../src/test/fakes/webSocketServerResponses/paragraphOutput/paragraphOutputServerResponse';
+} from '../../../src/test/fakes/server/webSocketResponses/paragraphOutput/paragraphOutputServerResponse';
 import { Message } from '../../../src/app/objects/message/message';
-import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactory';
-import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
-import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/paragraph/paragraphPayloadFactoryImpl';
-import {ParagraphPayloadFactory} from '../../../src/test/fakes/paragraph/paragraphPayloadFactory';
-import {OutputPayloadFakeFactory} from '../../../src/test/fakes/output/outputPayloadFakeFactory';
-import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/output/outputPayloadFakeFactoryImpl';
+import {DataTablesDataFactory} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactory';
+import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
+import {ParagraphPayloadFactoryImpl} from '../../../src/test/fakes/server/paragraph/paragraphPayloadFactoryImpl';
+import {ParagraphPayloadFactory} from '../../../src/test/fakes/server/paragraph/paragraphPayloadFactory';
+import {OutputPayloadFakeFactory} from '../../../src/test/fakes/server/output/outputPayloadFakeFactory';
+import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/server/output/outputPayloadFakeFactoryImpl';
 
 export default class RunParagraphEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;

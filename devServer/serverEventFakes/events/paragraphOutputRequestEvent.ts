@@ -48,16 +48,16 @@ import {ServerEventFake} from '../serverEventFake';
 import {OutputType} from '../../../src/app/objects/output/outputType';
 import {
   ParagraphOutputServerResponse
-} from '../../../src/test/fakes/webSocketServerResponses/paragraphOutput/paragraphOutputServerResponse';
-import {WebSocketServerResponse} from '../../../src/test/fakes/webSocketServerResponses/webSocketServerResponse';
+} from '../../../src/test/fakes/server/webSocketResponses/paragraphOutput/paragraphOutputServerResponse';
+import {WebSocketServerResponse} from '../../../src/test/fakes/server/webSocketResponses/webSocketServerResponse';
 import { Message } from '../../../src/app/objects/message/message';
-import {DataTablesDataFactory} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactory';
-import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/output/dataTables/dataTablesDataFactoryImpl';
-import {uPlotDataFactory} from '../../../src/test/fakes/output/uPlot/uPlotDataFactory';
-import {uPlotDataFactoryImpl} from '../../../src/test/fakes/output/uPlot/uPlotDataFactoryImpl';
+import {DataTablesDataFactory} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactory';
+import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
+import {uPlotDataFactory} from '../../../src/test/fakes/server/output/uPlot/uPlotDataFactory';
+import {uPlotDataFactoryImpl} from '../../../src/test/fakes/server/output/uPlot/uPlotDataFactoryImpl';
 import {WebSocketPayload} from '../../../src/app/objects/webSocketPayload/webSocketPayload';
-import {OutputPayloadFakeFactory} from '../../../src/test/fakes/output/outputPayloadFakeFactory';
-import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/output/outputPayloadFakeFactoryImpl';
+import {OutputPayloadFakeFactory} from '../../../src/test/fakes/server/output/outputPayloadFakeFactory';
+import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/server/output/outputPayloadFakeFactoryImpl';
 
 export default class ParagraphOutputRequestEvent implements ServerEventFake {
   private readonly  _webSocket: WebSocket;
