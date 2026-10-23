@@ -46,11 +46,15 @@
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
-import WebSocketServer from './webSocketServer';
-import InitializationService from './services/initializationService';
+import WebSocketServerWithMessageHandlingImpl from './webSocketServerWithMessageHandling/webSocketServerWithMessageHandlingImpl';
 import RouterFactory from './api/routerFactory';
 import {FakeUsers} from './api/user/fakeUsers';
 import SecurityManagerImpl from './api/securityManager/securityManagerImpl';
+import FileServiceImpl from './services/fileService/fileServiceImpl';
+import NoteServiceImpl from './services/noteService/noteServiceImpl';
+import {PageDatasetFake} from './pageDatasetFake/pageDatasetFake';
+import {PageDatasetFakeImpl} from './pageDatasetFake/pageDatasetFakeImpl';
+import {WebSocketServer} from 'ws';
 
 const app = express();
 app.use(express.json());
@@ -61,16 +65,33 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(PUBLIC_PATH, 'index.html'));
 });
 
+//Initialize session
 const sessionConfig = session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }});
 app.use(sessionConfig);
 
+//Initialize router and authentication
 const security = new SecurityManagerImpl(FakeUsers);
 const router = new RouterFactory(security);
 app.use(router.initialized());
-
 app.use(express.static(PUBLIC_PATH));
 
+//Seed fake data
+const basePath = './devServer/temp';
+const fileService = new FileServiceImpl(basePath);
+const noteService = new NoteServiceImpl(fileService);
+const pageDatasetFake:PageDatasetFake = new PageDatasetFakeImpl(noteService);
+pageDatasetFake.saveTo(basePath);
 
-new WebSocketServer(new InitializationService().initialized());
+const webSocketServer:WebSocketServer = new WebSocketServerWithMessageHandlingImpl().init(fileService);
+process.on('SIGINT', () => gracefulShutDown(webSocketServer));
+
+function gracefulShutDown(webSocketServer:WebSocketServer):void{
+  console.debug('Closing websocket clients...');
+  webSocketServer.clients.forEach((client) => client.close(1001, 'Backend server shutting down'));
+  console.debug('Websocket clients closed.');
+  console.debug('Closing websocket server...');
+  webSocketServer.close();
+  console.debug('Websocket server closed.');
+}
 
 export default app;
