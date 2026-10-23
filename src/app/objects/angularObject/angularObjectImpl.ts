@@ -44,25 +44,25 @@
  * a licensee so wish it.
  */
 import {AngularObject} from './angularObject';
-import {Channel} from '../channel/channel';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
-import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
+import {Requestable} from '../channel/requestable';
 
 export class AngularObjectImpl implements AngularObject{
-  private readonly _channel:Channel;
+  private readonly _requestable:Requestable;
   private readonly _angularObjectData:object;
   private readonly _safeAngularObjectData:WebSocketPayload;
   private readonly _interpreterGroupId:string;
 
-  constructor(channel:Channel, angularObjectData:object, interpreterGroupId:string) {
-    this._channel = channel;
+  constructor(requestable:Requestable, angularObjectData:object, interpreterGroupId:string) {
+    this._requestable = requestable;
     this._safeAngularObjectData = new WebSocketPayloadImpl(angularObjectData);
     this._angularObjectData = angularObjectData;
     this._interpreterGroupId = interpreterGroupId;
   }
 
   request(data: object): void {
-    this._channel.request(data);
+    this._requestable.request(data);
   }
 
   update(value: unknown): void {

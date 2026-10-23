@@ -44,48 +44,34 @@
  * a licensee so wish it.
  */
 import {OutputSwitcher} from './outputSwitcher';
-import {WebSocketPayloadImpl} from '../../webSocketPayload/webSocketPayloadImpl';
-import {MessageImpl} from '../../message/messageImpl';
 import {computed, signal, Signal, WritableSignal} from '@angular/core';
 import { RenderNode } from '../../rendering/renderNode/renderNode';
-import {ParagraphOutputMessageImpl} from '../../message/paragraphOutputMessage/paragraphOutputMessageImpl';
 import {RenderNodeImpl} from '../../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../../ui/angular2+/componentRegistry/registeredComponents';
 
 export class OutputSwitcherImpl implements OutputSwitcher {
-  private readonly _outputIsSwitchable:WritableSignal<boolean>;
-  private readonly _switchIsPending:WritableSignal<boolean>;
-  private readonly _switcherButtons: Signal<RenderNode>[];
-  private readonly _renderNode:Signal<RenderNode>;
+  private readonly _showLoader:WritableSignal<boolean>;
+  private readonly _switcherButtons: RenderNode[];
+  private readonly _renderNode:WritableSignal<RenderNode>;
 
-  constructor(switcherButtons: Signal<RenderNode>[]) {
+  constructor(switcherButtons: RenderNode[]) {
     this._switcherButtons = switcherButtons;
-    this._outputIsSwitchable = signal(false);
-    this._switchIsPending = signal(false);
+    this._showLoader = signal(false);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.OUTPUT_SWITCHER_VIEW, computed(() => ({
       switcherButtons: this._switcherButtons,
-      switchIsPending: this._switchIsPending(),
-      outputIsSwitchable: this._outputIsSwitchable(),
+      showLoader: this._showLoader(),
     }))));
+  }
+
+  showLoader(): void {
+    this._showLoader.set(true);
+  }
+
+  hideLoader(): void {
+    this._showLoader.set(false);
   }
 
   print(): Signal<RenderNode> {
     return this._renderNode;
-  }
-
-  request(json: object) {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT_REQUEST'){
-      this._switchIsPending.set(true);
-    }
-  }
-
-  response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    if(message.operation() === 'PARAGRAPH_OUTPUT'){
-      const paragraphOutputMessage = new ParagraphOutputMessageImpl(message);
-      this._outputIsSwitchable.set(paragraphOutputMessage.isAggregated());
-      this._switchIsPending.set(false);
-    }
   }
 }
