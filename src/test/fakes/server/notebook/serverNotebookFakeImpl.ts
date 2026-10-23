@@ -43,34 +43,29 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import ParagraphImpl from './paragraphImpl';
-import {SparkPara} from './sparkPara';
-import {DataTablesService} from '../../services/dataService/dataTablesService';
-import DataTablesServiceImpl from '../../services/dataService/dataTablesServiceImpl';
-import {OutputType} from '../../../src/app/objects/output/outputType';
+import {ServerNotebookState} from './serverNotebookState';
+import {ServerNotebookFake} from './serverNotebookFake';
+import {IdFake} from '../id/idFake';
+import {IdFakeImpl} from '../id/idFakeImpl';
 
-export default class ParagraphFactory{
-  private readonly _dataTablesService : DataTablesService;
+export class ServerNotebookFakeImpl implements ServerNotebookFake {
+  private readonly _id:IdFake;
+  private readonly _name:IdFake;
 
-  constructor() {
-    this._dataTablesService = new DataTablesServiceImpl();
+  constructor(notebookId:IdFake = new IdFakeImpl()) {
+    this._id = notebookId;
+    this._name = new IdFakeImpl();
   }
 
-  paragraphCollection() {
-    const baseData = this._dataTablesService.rawData(50);
-    const output1 = {
-      type: OutputType.dataTables,
-      data: this._dataTablesService.paginated(baseData, 0, 50,1),
-      options: this._dataTablesService.options(baseData),
-      isAggregated: true,
+  notebookState():ServerNotebookState{
+    const path = `/${this._name.id()}`;
+    const config = {isZeppelinNotebookCronEnable: true};
+    return {
+      id: this._id.id(),
+      name: this._name.id(),
+      path: path,
+      config: config,
+      paragraphs: []
     };
-    const para1 = new ParagraphImpl('FINISHED', output1,'%dpl\n *raw data query*', '');
-    const output2 = {
-      type: OutputType.text,
-      data: 'Error: 1291kmfv910yht1 g1rj190+2u90',
-      isAggregated:false,
-    };
-    const para2 = new ParagraphImpl('FINISHED', output2,'%dpl\n *raw data query fails*', '');
-    return [para1, para2, SparkPara];
   }
 }

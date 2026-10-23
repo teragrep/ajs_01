@@ -46,8 +46,6 @@
 import {WebSocket} from 'ws';
 import {FakeServerEvents} from './fakeServerEvents';
 import {ServerEventFake} from '../serverEventFakes/serverEventFake';
-import {MessageImpl} from '../../src/app/objects/message/messageImpl';
-import {WebSocketPayloadImpl} from '../../src/app/objects/webSocketPayload/webSocketPayloadImpl';
 import CompletionListEvent from '../serverEventFakes/events/completionListEvent';
 import EditorSettingsEvent from '../serverEventFakes/events/editorSettingsEvent';
 import InsertParagraphEvent from '../serverEventFakes/events/insertParagraphEvent';
@@ -59,6 +57,7 @@ import ParagraphOutputRequestEvent from '../serverEventFakes/events/paragraphOut
 import PingEvent from '../serverEventFakes/events/pingEvent';
 import RunParagraphEvent from '../serverEventFakes/events/runParagraphEvent';
 import {FileService} from '../services/fileService/fileService';
+import {WebSocketResponse} from '../../src/app/objects/webSocket/response/webSocketResponse';
 
 export class FakeServerEventsImpl implements FakeServerEvents {
   private readonly _fakeServerEvents: Map<string, ServerEventFake>;
@@ -81,11 +80,10 @@ export class FakeServerEventsImpl implements FakeServerEvents {
     );
   }
 
-  apply(requestMessage:object):void{
-    const message = new MessageImpl(new WebSocketPayloadImpl(requestMessage));
-    const eventId = message.operation();
+  apply(webSocketResponseFromClient:WebSocketResponse):void{
+    const eventId = webSocketResponseFromClient.operation();
     if(this._fakeServerEvents.has(eventId)){
-      this._fakeServerEvents.get(eventId).handle(message);
+      this._fakeServerEvents.get(eventId).handle(webSocketResponseFromClient);
     }
     else{
       console.debug(`Event ${eventId} not implemented in development server.`);
