@@ -49,5 +49,5 @@ import {ServerParagraphState} from './serverParagraphState';
  * ServerParagraphFake mimics paragraph state in the server.
  */
 export interface ServerParagraphFake {
-  print():ServerParagraphState;
+  paragraphState():ServerParagraphState;
 }

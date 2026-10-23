@@ -85,7 +85,7 @@ export class PageDatasetFakeImpl implements PageDatasetFake {
     const notebookCount = 2;
     for(let i = 0; i < notebookCount; i++){
       const serverNotebookFake = new ServerNotebookFakeWithParagraphs(new ServerNotebookFakeImpl(), this.fakeParagraphs());
-      fakeNotebooks.push(serverNotebookFake.print());
+      fakeNotebooks.push(serverNotebookFake.notebookState());
     }
     return fakeNotebooks;
   }
@@ -101,8 +101,8 @@ export class PageDatasetFakeImpl implements PageDatasetFake {
     const output = outputPayloadFactory.dataTablesOutputPayload(dataTablesDataFactory.paginatedData(rawData, start, length, draw));
     const paragraphWithOutput = new ServerParagraphFakeWithOutput(new ServerParagraphFakeImpl(), output);
     const sparkParagraph = new ServerParagraphFakeWithTitle(new ServerParagraphFakeWithText(new ServerParagraphFakeImpl(), '%spark.conf'), 'hideMeSparkPinger');
-    fakeParagraphs.push(paragraphWithOutput.print());
-    fakeParagraphs.push(sparkParagraph.print());
+    fakeParagraphs.push(paragraphWithOutput.paragraphState());
+    fakeParagraphs.push(sparkParagraph.paragraphState());
     return fakeParagraphs;
   }
 }

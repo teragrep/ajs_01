@@ -49,11 +49,11 @@ import {ServerParagraphFakeImpl} from '../../paragraph/serverParagraphFakeImpl';
 
 describe('Paragraph server response unit test', () => {
   const paragraph:ServerParagraphFake = new ServerParagraphFakeImpl();
-  const paragraphServerResponse = new ParagraphServerResponse(paragraph.print());
+  const paragraphServerResponse = new ParagraphServerResponse(paragraph.paragraphState());
 
   const expectedObject = {
     op:'PARAGRAPH',
-    data:paragraph.print()
+    data:paragraph.paragraphState()
   };
 
   it('Should have object', () => {

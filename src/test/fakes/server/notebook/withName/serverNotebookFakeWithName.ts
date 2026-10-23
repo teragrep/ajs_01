@@ -55,8 +55,8 @@ export class ServerNotebookFakeWithName implements ServerNotebookFake {
     this._name = name;
   }
 
-  print():ServerNotebookState{
-    const serverNotebookState = this._serverNotebookFake.print();
+  notebookState():ServerNotebookState{
+    const serverNotebookState = this._serverNotebookFake.notebookState();
     serverNotebookState.name = this._name;
     return serverNotebookState;
   }

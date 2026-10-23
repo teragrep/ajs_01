@@ -55,8 +55,8 @@ export class ServerParagraphFakeWithTitle implements ServerParagraphFake {
     this._title = title;
   }
 
-  print(): ServerParagraphState {
-    const serverParagraphState = this._serverParagraphFake.print();
+  paragraphState(): ServerParagraphState {
+    const serverParagraphState = this._serverParagraphFake.paragraphState();
     serverParagraphState.title = this._title;
     return serverParagraphState;
   }

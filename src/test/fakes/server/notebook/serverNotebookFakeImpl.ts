@@ -57,7 +57,7 @@ export class ServerNotebookFakeImpl implements ServerNotebookFake {
     this._name = new IdFakeImpl();
   }
 
-  print():ServerNotebookState{
+  notebookState():ServerNotebookState{
     const path = `/${this._name.id()}`;
     const config = {isZeppelinNotebookCronEnable: true};
     return {

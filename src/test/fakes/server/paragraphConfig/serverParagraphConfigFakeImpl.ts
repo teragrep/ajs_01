@@ -47,7 +47,7 @@ import {ServerParagraphConfigFake} from './serverParagraphConfigFake';
 import {ServerParagraphConfigState} from './serverParagraphConfigState';
 
 export class ServerParagraphConfigFakeImpl implements ServerParagraphConfigFake {
-  print(): ServerParagraphConfigState {
+  configState(): ServerParagraphConfigState {
     return {
       colWidth: 12,
       editorMode: 'ace/mode/dpl',

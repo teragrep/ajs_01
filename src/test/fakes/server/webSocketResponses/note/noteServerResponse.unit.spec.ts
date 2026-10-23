@@ -50,10 +50,10 @@ import {ServerNotebookFakeImpl} from '../../notebook/serverNotebookFakeImpl';
 
 describe('Note server response unit test', () => {
   const notebook:ServerNotebookFake = new ServerNotebookFakeImpl();
-  const noteServerResponse = new NoteServerResponse(notebook.print());
+  const noteServerResponse = new NoteServerResponse(notebook.notebookState());
   const expectedObject = {
     op:'NOTE',
-    data:notebook.print()
+    data:notebook.notebookState()
   };
 
   it('Should have object', () => {

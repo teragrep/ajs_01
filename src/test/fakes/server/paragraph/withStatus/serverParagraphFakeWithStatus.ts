@@ -55,8 +55,8 @@ export class ServerParagraphFakeWithStatus implements ServerParagraphFake {
     this._status = status;
   }
 
-  print(): ServerParagraphState {
-    const serverParagraphState = this._serverParagraphFake.print();
+  paragraphState(): ServerParagraphState {
+    const serverParagraphState = this._serverParagraphFake.paragraphState();
     serverParagraphState.status = this._status;
     return serverParagraphState;
   }

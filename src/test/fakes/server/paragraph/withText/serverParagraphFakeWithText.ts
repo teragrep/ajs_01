@@ -55,8 +55,8 @@ export class ServerParagraphFakeWithText implements ServerParagraphFake {
     this._text = text;
   }
 
-  print(): ServerParagraphState {
-    const serverParagraphState = this._serverParagraphFake.print();
+  paragraphState(): ServerParagraphState {
+    const serverParagraphState = this._serverParagraphFake.paragraphState();
     serverParagraphState.text = this._text;
     return serverParagraphState;
   }

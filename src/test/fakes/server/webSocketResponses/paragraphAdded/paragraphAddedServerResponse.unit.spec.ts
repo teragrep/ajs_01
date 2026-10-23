@@ -50,12 +50,12 @@ import {ServerParagraphFake} from '../../paragraph/serverParagraphFake';
 describe('ParagraphAdded server response unit test', () => {
   const paragraph:ServerParagraphFake = new ServerParagraphFakeImpl();
   const index = 1;
-  const paragraphAddedServerResponse = new ParagraphAddedServerResponse(paragraph.print(), index);
+  const paragraphAddedServerResponse = new ParagraphAddedServerResponse(paragraph.paragraphState(), index);
 
   const expectedObject = {
     op:'PARAGRAPH_ADDED',
     data: {
-      paragraph:paragraph.print(),
+      paragraph:paragraph.paragraphState(),
       index:index
     }
   };

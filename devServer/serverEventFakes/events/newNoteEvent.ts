@@ -70,7 +70,7 @@ export default class NewNoteEvent implements ServerEventFake{
   handle(requestMessage: Message):void {
     const name = requestMessage.dataAsWebSocketPayload().stringProperty('name');
     const notebook = new ServerNotebookFakeWithName(new ServerNotebookFakeImpl(), name);
-    const notebookState:ServerNotebookState = notebook.print();
+    const notebookState:ServerNotebookState = notebook.notebookState();
     this._noteService.add(notebookState);
     const newNoteResponse = new NewNoteServerResponse(notebookState);
     this._webSocket.send(newNoteResponse.toJson());

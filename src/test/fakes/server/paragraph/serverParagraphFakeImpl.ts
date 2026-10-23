@@ -61,7 +61,7 @@ export class ServerParagraphFakeImpl implements ServerParagraphFake {
     this._defaultConfig = new ServerParagraphConfigFakeImpl();
   }
 
-  print(): ServerParagraphState {
+  paragraphState(): ServerParagraphState {
     const status = '';
     const text = '';
     const title = '';
@@ -79,7 +79,7 @@ export class ServerParagraphFakeImpl implements ServerParagraphFake {
       text: text,
       title: title,
       user: 'user',
-      config: this._defaultConfig.print()
+      config: this._defaultConfig.configState()
     };
   }
 }

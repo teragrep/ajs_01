@@ -50,5 +50,5 @@ import {ServerParagraphConfigState} from './serverParagraphConfigState';
  * ServerParagraphConfigFake mimics paragraphConfig state in the server.
  */
 export interface ServerParagraphConfigFake {
-  print():ServerParagraphConfigState;
+  configState():ServerParagraphConfigState;
 }

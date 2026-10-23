@@ -57,8 +57,8 @@ export class ServerNotebookFakeWithParagraphs implements ServerNotebookFake {
   }
 
 
-  print():ServerNotebookState{
-    const serverNotebookState = this._serverNotebookFake.print();
+  notebookState():ServerNotebookState{
+    const serverNotebookState = this._serverNotebookFake.notebookState();
     serverNotebookState.paragraphs = this._paragraphs;
     return serverNotebookState;
   }

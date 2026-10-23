@@ -107,10 +107,10 @@ export default class RunParagraphEvent implements ServerEventFake {
         title),
       text);
     messageQueue.push(new ParagraphServerResponse(
-      executedParagraph.print()
+      executedParagraph.paragraphState()
     ).toJson());
 
-    messageQueue.push(new ParagraphServerResponse(new ServerParagraphFakeWithStatus(executedParagraph, 'RUNNING').print()).toJson());
+    messageQueue.push(new ParagraphServerResponse(new ServerParagraphFakeWithStatus(executedParagraph, 'RUNNING').paragraphState()).toJson());
 
     for (let i = 1; i < 20; i++){
       messageQueue.push(new ProgressServerResponse(i*5, paragraphId).toJson());
@@ -135,7 +135,7 @@ export default class RunParagraphEvent implements ServerEventFake {
     const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, finalOutput);
     messageQueue.push(paragraphOutputResponse.toJson());
     const finalParagraph = new ServerParagraphFakeWithOutput(new ServerParagraphFakeWithStatus(executedParagraph, 'title'), finalOutput);
-    messageQueue.push(new ParagraphServerResponse(finalParagraph.print()).toJson());
+    messageQueue.push(new ParagraphServerResponse(finalParagraph.paragraphState()).toJson());
     this.updateNotebook(finalParagraph);
     for(let i = 0; i < messageQueue.length; i++) {
       const timeout =  (i + 1) * 1000;
@@ -148,7 +148,7 @@ export default class RunParagraphEvent implements ServerEventFake {
   private updateNotebook(paragraph: ServerParagraphFake){
     const noteId = this._noteService.lastNoteId();
     const notebook = this._noteService.find(noteId);
-    const paragraphPayload = paragraph.print();
+    const paragraphPayload = paragraph.paragraphState();
     const paragraphIndex = notebook.paragraphs.findIndex(p => p.id === paragraphPayload.id);
     notebook.paragraphs.splice(paragraphIndex,1, paragraphPayload);
     this._noteService.update(notebook);

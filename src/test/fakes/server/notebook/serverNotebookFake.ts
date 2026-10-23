@@ -50,5 +50,5 @@ import {ServerNotebookState} from './serverNotebookState';
  * ServerNotebookFake mimics notebook state in the server.
  */
 export interface ServerNotebookFake {
-  print():ServerNotebookState;
+  notebookState():ServerNotebookState;
 }

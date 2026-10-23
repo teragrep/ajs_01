@@ -76,7 +76,7 @@ export default class NoteEvent implements ServerEventFake {
     const notebookId = notebookState.id;
     const notebookParagraphs = notebookState.paragraphs;
     const notebook = new ServerNotebookFakeWithParagraphs(new ServerNotebookFakeImpl(new IdFakeImpl(notebookId)), notebookParagraphs);
-    const noteResponse = new NoteServerResponse(notebook.print());
+    const noteResponse = new NoteServerResponse(notebook.notebookState());
     this._webSocket.send(noteResponse.toJson());
   }
 }
