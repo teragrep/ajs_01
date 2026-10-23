@@ -44,7 +44,7 @@
  * a licensee so wish it.
  */
 import {WebSocket} from 'ws';
-import {ServerEventFakeDispatcher} from './serverEventFakeDispatcher';
+import {FakeServerEvents} from './fakeServerEvents';
 import {ServerEventFake} from '../serverEventFakes/serverEventFake';
 import {MessageImpl} from '../../src/app/objects/message/messageImpl';
 import {WebSocketPayloadImpl} from '../../src/app/objects/webSocketPayload/webSocketPayloadImpl';
@@ -60,7 +60,7 @@ import PingEvent from '../serverEventFakes/events/pingEvent';
 import RunParagraphEvent from '../serverEventFakes/events/runParagraphEvent';
 import {FileService} from '../services/fileService/fileService';
 
-export class ServerEventFakeDispatcherImpl implements ServerEventFakeDispatcher {
+export class FakeServerEventsImpl implements FakeServerEvents {
   private readonly _fakeServerEvents: Map<string, ServerEventFake>;
 
   constructor(webSocket: WebSocket,fileService: FileService) {
