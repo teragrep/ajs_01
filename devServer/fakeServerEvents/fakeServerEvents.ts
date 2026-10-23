@@ -43,6 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
+import {WebSocketResponse} from '../../src/app/objects/webSocket/response/webSocketResponse';
+
 export interface FakeServerEvents {
-  apply(requestMessage:object):void;
+  apply(webSocketResponseFromClient:WebSocketResponse):void;
 }
