@@ -27,6 +27,7 @@ angular.module('zeppelinWebApp.comNavbar', [
     '$routeParams',
     '$location',
     '$cookies',
+    '$compile',
     'noteListFactory',
     'baseUrlSrv',
     'websocketMsgSrv',
@@ -45,6 +46,7 @@ function NavCtrl($scope,
                  $routeParams,
                  $location,
                  $cookies,
+                 $compile,
                  noteListFactory,
                  baseUrlSrv,
                  websocketMsgSrv,
@@ -72,6 +74,8 @@ function NavCtrl($scope,
   vm.disableDarkMode = disableDarkMode;
   vm.checkValue = false;
   let revisionSupported = false;
+  const lightModeLogoPath = '../../../../assets/images/teragrep-mark.svg';
+  const darkModeLogoPath = '../../../../assets/images/teragrep-mark-white-color.svg';
 
   $scope.query = {q: ''};
   $scope.amIaGod = false;
@@ -103,6 +107,15 @@ function NavCtrl($scope,
       $scope.query.q = '';
     });
     loadNotes();
+    darkInit();
+    compileModal();
+  }
+
+  function compileModal():void{
+    const modal = $('#aboutModal');
+    // Re-compile the modal against this controller's scope
+    // Because bootstrap manipulates dom structure and causes variables side effects
+    $compile(modal)($scope);
   }
 
   function isFilterNote(note) {
@@ -271,20 +284,26 @@ function NavCtrl($scope,
         // don't use dark-mode
       disableDarkMode();
     }
+    $scope.imgPath = $scope.isDarkMode ? darkModeLogoPath : lightModeLogoPath;
   }
 
   function enableDarkMode() {
+    $scope.isDarkMode = true;
 
     $( 'body' ).addClass( 'dark-mode' );
     vm.checkValue = true;
     $cookies.put('darkMode', '1', {samesite : 'strict'});
+    $scope.imgPath = darkModeLogoPath;
   }
 
   function disableDarkMode() {
+    $scope.isDarkMode = false;
 
     $( 'body' ).removeClass( 'dark-mode' );
     vm.checkValue = false;
     $cookies.put('darkMode', '0', {samesite : 'strict'});
+    $scope.imgPath = lightModeLogoPath;
   }
+
 
 }
