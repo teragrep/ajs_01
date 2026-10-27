@@ -47,10 +47,10 @@ import {WebSocket} from 'ws';
 import {ServerEventFake} from '../serverEventFake';
 import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {NewNoteServerResponse} from '../../../src/test/fakes/server/webSocketResponses/newNote/newNoteServerResponse';
-import {Message} from '../../../src/app/objects/message/message';
 import {ServerNotebookFakeImpl} from '../../../src/test/fakes/server/notebook/serverNotebookFakeImpl';
 import {ServerNotebookFakeWithName} from '../../../src/test/fakes/server/notebook/withName/serverNotebookFakeWithName';
 import {ServerNotebookState} from '../../../src/test/fakes/server/notebook/serverNotebookState';
+import {WebSocketResponse} from '../../../src/app/objects/webSocket/response/webSocketResponse';
 
 export default class NewNoteEvent implements ServerEventFake{
   private readonly  _webSocket: WebSocket;
@@ -67,8 +67,8 @@ export default class NewNoteEvent implements ServerEventFake{
     return this._eventId;
   }
 
-  handle(requestMessage: Message):void {
-    const name = requestMessage.dataAsWebSocketPayload().stringProperty('name');
+  handle(webSocketResponseFromClient:WebSocketResponse):void {
+    const name = webSocketResponseFromClient.dataAsWebSocketPayload().stringProperty('name');
     const notebook = new ServerNotebookFakeWithName(new ServerNotebookFakeImpl(), name);
     const notebookState:ServerNotebookState = notebook.notebookState();
     this._noteService.add(notebookState);

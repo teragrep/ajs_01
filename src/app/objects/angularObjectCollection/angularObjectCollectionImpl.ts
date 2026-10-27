@@ -44,35 +44,70 @@
  * a licensee so wish it.
  */
 import {AngularObjectCollection} from './angularObjectCollection';
-import {Channel} from '../channel/channel';
-import {Respondable} from '../channel/respondable';
 import {AngularObject} from '../angularObject/angularObject';
-import {AngularObjectRemoveResponse} from './responses/angularObjectRemove/angularObjectRemoveResponse';
-import {AngularObjectUpdateResponse} from './responses/angularObjectUpdate/angularObjectUpdateResponse';
+import {WebSocketResponse} from '../webSocket/response/webSocketResponse';
+import {computed, Signal, signal, WritableSignal} from '@angular/core';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {AngularObjectImpl} from '../angularObject/angularObjectImpl';
+import {Requestable} from '../channel/requestable';
 
 export class AngularObjectCollectionImpl implements AngularObjectCollection {
-  private readonly _channel: Channel;
-  private readonly _angularObjects: AngularObject[];
-  private readonly _responses: Respondable[];
+  private readonly _requestable: Requestable;
+  private readonly _angularObjects: WritableSignal<Map<string, AngularObject>>;
+  private readonly _responseEvents:Readonly<Record<string, (webSocketResponse:WebSocketResponse) => void>>;
 
-  constructor(channel: Channel) {
-    this._channel = channel;
-    this._angularObjects = [];
-    this._responses = [
-      new AngularObjectRemoveResponse(this._angularObjects),
-      new AngularObjectUpdateResponse(this, this._angularObjects)
-    ];
+  constructor(requestable: Requestable) {
+    this._requestable = requestable;
+    this._angularObjects = signal(new Map(), {equal: () => false});
+    this._responseEvents = {
+      'ANGULAR_OBJECT_UPDATE': (webSocketResponse:WebSocketResponse) => this.handleAngularObjectUpdateEvent(webSocketResponse),
+      'ANGULAR_OBJECT_REMOVE': (webSocketResponse:WebSocketResponse) => this.handleAngularObjectRemoveEvent(webSocketResponse)
+    };
+  }
+
+  addOrUpdate(angularObject: AngularObject): void {
+    this._angularObjects.update(angularObjects => {
+      angularObjects.set(angularObject.name(), angularObject);
+      return angularObjects;
+    });
+  }
+
+  remove(name: string): void {
+    if(!this._angularObjects().has(name)) {
+      throw new Error(`AngularObject with name "${name}" does not exist.`);
+    }
+    this._angularObjects.update(angularObjects => {
+      angularObjects.delete(name);
+      return angularObjects;
+    });
   }
 
   request(data: object): void {
-    this._channel.request(data);
+    this._requestable.request(data);
   }
 
-  response(data: object): void {
-    this._responses.forEach(response => response.response(data));
+  response(json: object): void {
+    const webSocketResponse = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    const eventName = webSocketResponse.operation();
+    if(eventName in this._responseEvents){
+      this._responseEvents[eventName](webSocketResponse);
+    }
   }
 
-  angularObjects(): AngularObject[] {
-    return this._angularObjects;
+  values(): Signal<AngularObject[]> {
+    return computed(() => Array.from(this._angularObjects().values()));
+  }
+
+  private handleAngularObjectUpdateEvent(webSocketResponse: WebSocketResponse):void {
+    const angularObjectData = webSocketResponse.dataAsWebSocketPayload().objectProperty('angularObject');
+    const interpreterGroupId = webSocketResponse.dataAsWebSocketPayload().stringProperty('interpreterGroupId');
+    const angularObject = new AngularObjectImpl(this, angularObjectData, interpreterGroupId);
+    this.addOrUpdate(angularObject);
+  }
+
+  private handleAngularObjectRemoveEvent(webSocketResponse:WebSocketResponse):void {
+    const angularObjectToRemoveName = webSocketResponse.dataAsWebSocketPayload().stringProperty('name');
+    this.remove(angularObjectToRemoveName);
   }
 }

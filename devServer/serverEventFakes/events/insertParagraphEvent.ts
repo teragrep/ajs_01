@@ -49,8 +49,8 @@ import NoteServiceImpl from '../../services/noteService/noteServiceImpl';
 import {
   ParagraphAddedServerResponse
 } from '../../../src/test/fakes/server/webSocketResponses/paragraphAdded/paragraphAddedServerResponse';
-import {Message} from '../../../src/app/objects/message/message';
 import {ServerParagraphFakeImpl} from '../../../src/test/fakes/server/paragraph/serverParagraphFakeImpl';
+import {WebSocketResponse} from '../../../src/app/objects/webSocket/response/webSocketResponse';
 
 export default class InsertParagraphEvent implements ServerEventFake{
   private readonly  _webSocket: WebSocket;
@@ -67,11 +67,11 @@ export default class InsertParagraphEvent implements ServerEventFake{
     return this._eventId;
   }
 
-  handle(requestMessage: Message):void {
+  handle(webSocketResponseFromClient:WebSocketResponse):void {
     const noteId = this._noteService.lastNoteId();
     const notebook = this._noteService.find(noteId);
     const paragraph = new ServerParagraphFakeImpl();
-    const index = requestMessage.dataAsWebSocketPayload().numberProperty('index');
+    const index = webSocketResponseFromClient.dataAsWebSocketPayload().numberProperty('index');
     notebook.paragraphs.splice(index, 0, paragraph.paragraphState());
     this._noteService.update(notebook);
     const paragraphAddedResponse = new ParagraphAddedServerResponse(paragraph.paragraphState(), index);
