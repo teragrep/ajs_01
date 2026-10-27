@@ -87,9 +87,7 @@
   font-size: 16px;
 }
 
-select {
-  padding: 1px 12px;
-}
+select { padding: var(--p-2) var(--p-4); }
 
 .form-check-input {
   position: relative;
@@ -160,10 +158,11 @@ select {
   }
 }
 
-input, form input {
+input,
+form input {
   border: 1px solid var(--grey-400);
   border-radius: 5px;
-  padding: 5px 10px 4px;
+  padding: var(--p-2) var(--p-4);
   &[type="file"]:focus, &[type="radio"]:focus, &[type="checkbox"]:focus {
     outline: none;
     outline-offset: unset;
@@ -252,7 +251,7 @@ form button {
   background: var(--grey-300);
   border: 1px solid var(--grey-400);
   border-radius: 5px;
-  padding: 5px 10px 4px;
+  padding: var(--p-3) var(--p-5);
   &:hover {
     background: var(--grey-400);
   }
