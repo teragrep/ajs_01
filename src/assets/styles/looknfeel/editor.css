@@ -16,11 +16,7 @@
 
 .paragraph-editor {
   border: 2px solid var(--grey-400);
-  border-radius: 5px;
-  pre {
-    margin-bottom: 0;
-    border-radius: 2px; /* fills the gap between bg and border */
-  }
+  pre { margin-bottom: 0; }
 }
 
 .dark-mode .paragraph-editor {
