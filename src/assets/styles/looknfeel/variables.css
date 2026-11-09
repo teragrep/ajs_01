@@ -118,4 +118,10 @@
   /* UI dimensions */
   --navbar-height: 3.5rem;
   --note-action-height: 3rem;
+  /* Border radius */
+  --input-radius: 0.375rem;
+  --input-radius-lg: 0.5rem;
+  --input-radius-sm: 0.25rem;
+  --button-radius: var(--input-radius);
+  --pill-badge-radius: 50rem;
 }

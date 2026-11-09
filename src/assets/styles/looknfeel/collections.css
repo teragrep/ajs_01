@@ -47,14 +47,12 @@
 
 .settings-header {
   background: var(--grey-000);
-  border-radius: 20px;
   box-shadow: 0 2px 4px var(--grey-400);
   .header-top {
     padding: 30px 35px;
   }
   .header-bottom {
     background: var(--grey-100);
-    border-radius: 0 0 20px 20px;
     padding: 30px 35px;
   }
 }
@@ -71,7 +69,6 @@
 
 .job {
   background: var(--grey-000);
-  border-radius: 20px;
   padding: 20px 35px;
   box-shadow: 0 2px 4px var(--grey-400);
   .run-control {
@@ -217,13 +214,13 @@
     min-width: 215px;
     > input {
       font-family: 'FontAwesome', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      border-radius: 4px;
+      border-radius: var(--input-radius);
       font-size: 14px;
       padding-left: 10px;
     }
   }
   .dropdown-toggle {
-    border-radius: 3px;
+    border-radius: var(--input-radius);
     float: none;
     min-width: 150px;
     text-align: left;

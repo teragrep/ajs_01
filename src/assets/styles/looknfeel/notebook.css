@@ -80,7 +80,7 @@
   }
   .btn-collapse {
     background: var(--grey-000);
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 var(--button-radius) var(--button-radius);
     box-shadow: 0 5px 5px -2px var(--grey-400);
     &:after {
       background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' fill='%237F9CF5'%3e%3cpath d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z'/%3e%3c/svg%3e");
@@ -173,7 +173,7 @@
   color: var(--grey-900);
   background: white;
   border: 1px solid var(--grey-400);
-  border-radius: 5px;
+  border-radius: var(--input-radius);
   -webkit-box-shadow: none;
   box-shadow: none;
   margin: 0;
@@ -207,7 +207,6 @@
 
 .note-export {
   border: 1px solid var(--grey-300);
-  border-radius: 20px;
   padding: 30px 0;
   text-align: center;
   &:hover {
@@ -288,7 +287,7 @@
   input {
     padding: 3px 5px;
     border: 1px solid var(--grey-400);
-    border-radius: 4px;
+    border-radius: var(--input-radius);
   }
 }
 
@@ -674,7 +673,7 @@
   padding: 0 20px;
   margin-bottom: 20px;
   border: 1px solid #CBD5E0;
-  border-radius: 10px;
+  border-radius: var(--input-radius);
 }
 
 .dark-mode .dpl-time-block {
@@ -737,184 +736,6 @@
 .dpl form input:last-child,
 .dpl form input {
   margin: 0;
-}
-
-.dark-mode table.dataTable tbody tr {
-  background-color: var(--dm-grey-700);
-}
-
-table.dataTable.table-striped > tbody > tr.odd > * {
-  box-shadow: none;
-  background: var(--grey-100);
-}
-
-.dark-mode table.dataTable.table-striped > tbody > tr.odd > * {
-  background: var(--dm-grey-600);
-}
-
-.dataTables_wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  .dataTables_length {
-    float: left;
-    label {
-      font-weight: normal;
-      color: var(--grey-700);
-      margin-bottom: 0;
-    }
-    select {
-      margin: 0 5px;
-      width: 70px !important;
-      font-weight: normal;
-      padding: 2px 10px;
-      border-radius: 4px;
-      -moz-padding-start: calc(0.75rem - 3px)
-    }
-  }
-  .dataTables_filter {
-    text-align: right;
-    float: none;
-    label {
-      font-weight: normal;
-      color: var(--grey-700);
-      margin-bottom: 0;
-    }
-    input {
-      border: 1px solid #CBD5E0;
-      border-radius: 4px;
-      background: white;
-      color: var(--grey-900);
-      padding: 2px 10px;
-      margin-left: 10px;
-    }
-  }
-  .dataTables_info {
-    float: left;
-    color: var(--grey-700);
-    padding-top: 3px;
-  }
-  .dataTables_paginate {
-    text-align: right;
-    padding-top: 0;
-    float: none;
-    margin-top: 1rem !important;
-    margin-bottom: 1rem !important;
-  }
-}
-
-.dark-mode .dataTables_wrapper {
-  .dataTables_length label {
-    color: var(--dm-grey-200);
-  }
-  .dataTables_filter label {
-    color: var(--dm-grey-200);
-  }
-  .dataTables_filter input {
-    border: 1px solid var(--dm-grey-500);
-    background: var(--dm-grey-800);
-    color: white;
-  }
-  .dataTables_info {
-    color: var(--dm-grey-200);
-  }
-}
-
-table.dataTable thead th,
-table.dataTable thead td {
-  width: min-content !important;
-  min-width: 50px !important;
-}
-
-div.dt-button, a.dt-button, button.dt-button, input.dt-button {
-  margin: 0 -1px 0 0;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: var(--grey-900);
-  background: var(--grey-100);
-  border: 1px solid var(--grey-100);
-}
-
-.dark-mode div.dt-button,
-.dark-mode a.dt-button,
-.dark-mode button.dt-button,
-.dark-mode input.dt-button {
-  background: var(--dm-grey-800);
-  border-color: var(--dm-grey-800);
-  color: var(--dm-grey-100);
-}
-
-a.dt-button:hover:not(.disabled),
-button.dt-button:hover:not(.disabled),
-div.dt-button:hover:not(.disabled),
-input.dt-button:hover:not(.disabled),
-div.dt-button-collection button.dt-button:active:not(.disabled),
-div.dt-button-collection button.dt-button.active:not(.disabled),
-div.dt-button-collection div.dt-button:active:not(.disabled),
-div.dt-button-collection div.dt-button.active:not(.disabled),
-div.dt-button-collection a.dt-button:active:not(.disabled),
-div.dt-button-collection a.dt-button.active:not(.disabled),
-button.dt-button:active:not(.disabled):hover:not(.disabled),
-button.dt-button.active:not(.disabled):hover:not(.disabled),
-div.dt-button:active:not(.disabled):hover:not(.disabled),
-div.dt-button.active:not(.disabled):hover:not(.disabled),
-a.dt-button:active:not(.disabled):hover:not(.disabled),
-a.dt-button.active:not(.disabled):hover:not(.disabled),
-input.dt-button:active:not(.disabled):hover:not(.disabled),
-input.dt-button.active:not(.disabled):hover:not(.disabled) {
-  background: var(--grey-300);
-  border-color: var(--grey-300);
-  transition: all 0.1s;
-  text-shadow: none;
-  box-shadow: none;
-}
-
-.dark-mode a.dt-button:hover:not(.disabled),
-.dark-mode button.dt-button:hover:not(.disabled),
-.dark-mode div.dt-button:hover:not(.disabled),
-.dark-mode input.dt-button:hover:not(.disabled),
-.dark-mode button.dt-button:focus:not(.disabled),
-.dark-mode div.dt-button:focus:not(.disabled),
-.dark-mode a.dt-button:focus:not(.disabled),
-.dark-mode input.dt-button:focus:not(.disabled),
-.dark-mode div.dt-button-collection button.dt-button:active:not(.disabled),
-.dark-mode div.dt-button-collection button.dt-button.active:not(.disabled),
-.dark-mode div.dt-button-collection div.dt-button:active:not(.disabled),
-.dark-mode div.dt-button-collection div.dt-button.active:not(.disabled),
-.dark-mode div.dt-button-collection a.dt-button:active:not(.disabled),
-.dark-mode div.dt-button-collection a.dt-button.active:not(.disabled),
-.dark-mode button.dt-button:active:not(.disabled):hover:not(.disabled),
-.dark-mode button.dt-button.active:not(.disabled):hover:not(.disabled),
-.dark-mode div.dt-button:active:not(.disabled):hover:not(.disabled),
-.dark-mode div.dt-button.active:not(.disabled):hover:not(.disabled),
-.dark-mode a.dt-button:active:not(.disabled):hover:not(.disabled),
-.dark-mode a.dt-button.active:not(.disabled):hover:not(.disabled),
-.dark-mode input.dt-button:active:not(.disabled):hover:not(.disabled),
-.dark-mode input.dt-button.active:not(.disabled):hover:not(.disabled) {
-  background: var(--dm-grey-900);
-  border-color: var(--dm-grey-900);
-}
-
-.dt-buttons {
-  &.btn-group .btn, .btn-group .btn {
-    padding: 4px 10px;
-  }
-  .show-hide {
-    border-radius: 0 5px 5px 0;
-  }
-  .dt-down-arrow {
-    display: none;
-  }
-}
-
-div.dt-button-collection {
-  border: 0;
-  box-shadow: none;
-}
-
-.dark-mode div.dt-button-collection {
-  background: var(--dm-grey-700);
 }
 
 .scatter-size {

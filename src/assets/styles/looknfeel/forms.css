@@ -160,9 +160,10 @@ select {
   }
 }
 
-input, form input {
+input,
+form input {
   border: 1px solid var(--grey-400);
-  border-radius: 5px;
+  border-radius: var(--input-radius);
   padding: 5px 10px 4px;
   &[type="file"]:focus, &[type="radio"]:focus, &[type="checkbox"]:focus {
     outline: none;
@@ -251,7 +252,7 @@ input, form input {
 form button {
   background: var(--grey-300);
   border: 1px solid var(--grey-400);
-  border-radius: 5px;
+  border-radius: var(--button-radius);
   padding: 5px 10px 4px;
   &:hover {
     background: var(--grey-400);
@@ -299,95 +300,4 @@ form button {
   background: var(--dm-grey-600);
   color: var(--dm-grey-100);
   border: 1px solid var(--dm-grey-500);
-}
-
-/* searchpane */
-
-table.dataTable > tbody > tr.selected > * {
-  box-shadow: none;
-  background: var(--primary-100);
-  color: var(--primary-500);
-}
-
-table.dataTable > tbody > tr.selected > td > div > .bg-secondary {
-  background: var(--primary-500) !important;
-}
-
-.dark-mode table.dataTable > tbody > tr.selected > * {
-  background: var(--tertiary-400);
-  color: var(--tertiary-900);
-}
-
-.dark-mode table.dataTable > tbody > tr.selected > td > div > .bg-secondary {
-  background: var(--tertiary-700) !important;
-}
-
-.dtsp-nameColumn:hover {
-  background: var(--grey-100);
-}
-
-.dark-mode .dtsp-nameColumn:hover {
-  background: var(--dm-grey-500);
-}
-
-div.dtsp-panesContainer div.dtsp-searchPane div.dataTables_wrapper {
-  border: 1px solid var(--grey-400);
-  border-radius: 5px;
-  &:hover {
-    border: 1px solid var(--grey-400) !important;
-  }
-}
-
-.dark-mode div.dtsp-panesContainer div.dtsp-searchPane div.dataTables_wrapper {
-  border: 1px solid var(--dm-grey-500);
-  &:hover {
-    border: 1px solid var(--dm-grey-500) !important;
-  }
-}
-
-.dark-mode div.dtsp-searchPane div.dataTables_wrapper div.dataTables_scrollBody {
-  background: var(--dm-grey-700) !important;
-}
-
-div.dtsp-topRow {
-  button.dtsp-nameButton span,
-  button.dtsp-countButton span {
-    background-image: none !important;
-    background-repeat: unset;
-    background-position: unset;
-    background-size: unset;
-    vertical-align: unset;
-    &:before {
-      display: inline-block;
-      text-rendering: auto;
-      font: var(--fa-font-solid);
-    }
-  }
-  .dtsp-nameButton span:before {
-    content: "\f15d";
-  }
-  .dtsp-countButton span:before {
-    content: "\f162";
-  }
-  div.dtsp-subRow1 button.dtsp-searchIcon span {
-    background-image: none !important;
-    background-repeat: unset;
-    background-position: unset;
-    background-size: unset;
-    vertical-align: unset;
-    &:before {
-      display: inline-block;
-      text-rendering: auto;
-      font: var(--fa-font-solid);
-      content: "\f002";
-    }
-  }
-  button > span {
-    height: unset;
-    width: unset;
-  }
-}
-
-div.dtsp-panesContainer div.dtsp-searchPane div.dtsp-topRow button {
-  line-height: normal;
 }
