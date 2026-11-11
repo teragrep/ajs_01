@@ -44,10 +44,9 @@
  * a licensee so wish it.
  */
 import {Printable} from '../../rendering/printable/printable';
-import {Respondable} from '../../channel/respondable';
 import {RenderNode} from '../../rendering/renderNode/renderNode';
-import {Signal} from '@angular/core';
 
-export interface OutputFormat extends Respondable, Printable {
-  switcherButtons(): Signal<RenderNode>[];
+export interface OutputFormat extends Printable {
+  switcherButtons(): RenderNode[];
+  render(data:object|string, options?:object):void;
 }

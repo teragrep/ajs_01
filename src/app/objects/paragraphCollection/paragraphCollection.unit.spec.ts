@@ -46,38 +46,29 @@
 import {ParagraphCollection} from './paragraphCollection';
 import {ParagraphCollectionImpl} from './paragraphCollectionImpl';
 import {FakeChannel} from '../channel/fakeChannel';
-import {Channel} from '../channel/channel';
+import {Requestable} from '../channel/requestable';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 
 describe('ParagraphCollection unit test', () => {
-  let channel: Channel;
-  const initialparagraphData: object[] = [
-    {id:'para1'},
-    {id:'para2'},
-  ];
+  let requestable: Requestable;
   let paragraphCollection: ParagraphCollection;
   beforeEach(() => {
-    channel = new FakeChannel();
-    paragraphCollection = new ParagraphCollectionImpl(channel, initialparagraphData);
+    requestable = new FakeChannel();
+    paragraphCollection = new ParagraphCollectionImpl(requestable, new WebSocketPayloadImpl({paragraphs:[]}));
   });
 
-  describe('Birth', () => {
-    it('Should be initialized', ()=>{
-      expect(paragraphCollection).toBeInstanceOf(ParagraphCollectionImpl);
-    });
-
-    it('Should print', () => {
-      const paragraphCollectionPrinted = paragraphCollection.print()();
-      expect(paragraphCollectionPrinted.isStub()).toBe(false);
-      expect(paragraphCollectionPrinted.inputs()()['paragraphs']).toHaveLength(2);
-    });
+  it('Should print', () => {
+    const paragraphCollectionPrinted = paragraphCollection.print()();
+    expect(paragraphCollectionPrinted.isStub()).toBe(false);
+    expect(paragraphCollectionPrinted.inputs()()['paragraphs']).toEqual([]);
   });
 
-  describe('Request', ()=> {
+  describe('Channel events', () => {
     it('Should request channel', () => {
-      const requestSpy = vi.spyOn(channel, 'request');
+      const requestSpy = vi.spyOn(requestable, 'request');
       const request =  {
         op:'test',
-        data:'testdata'
+        data: {}
       };
       paragraphCollection.request(request);
       expect(requestSpy).toHaveBeenCalledExactlyOnceWith(request);
@@ -88,19 +79,22 @@ describe('ParagraphCollection unit test', () => {
       const paragraphText = 'paragraph text';
       const paragraphConfig = {test1:'test1'};
       const paragraphSettings = {params:{test2:'test2'}};
-      paragraphCollection = new ParagraphCollectionImpl(channel, [{
-        id:paragraphId,
-        text:paragraphText,
-        config:paragraphConfig,
-        settings:paragraphSettings,
-      }]);
+      const notebookState = new WebSocketPayloadImpl({
+        paragraphs: [{
+          id:paragraphId,
+          text:paragraphText,
+          config:paragraphConfig,
+          settings:paragraphSettings,
+        }]
+      });
+      paragraphCollection = new ParagraphCollectionImpl(requestable, notebookState);
       const executeParagraphRequest = {
         op:'EXECUTE_PARAGRAPH',
         data:{
           paragraphId:paragraphId,
         }
       };
-      const spy = vi.spyOn(channel, 'request');
+      const spy = vi.spyOn(requestable, 'request');
       paragraphCollection.request(executeParagraphRequest);
       const expectedRequest = {
         op:'RUN_PARAGRAPH',
@@ -113,9 +107,7 @@ describe('ParagraphCollection unit test', () => {
       };
       expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
     });
-  });
 
-  describe('Collection updates', () => {
     it('Should add paragraph', () => {
       const paragraphAddedResponse = {
         op:'PARAGRAPH_ADDED',
@@ -127,10 +119,36 @@ describe('ParagraphCollection unit test', () => {
         }
       };
       paragraphCollection.response(paragraphAddedResponse);
-      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(3);
+      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(1);
     });
 
-    it('Should set paragraph', () => {
+    it('Should not add paragraph if index is negative', () => {
+      const paragraphAddedResponse = {
+        op:'PARAGRAPH_ADDED',
+        data:{
+          paragraph:{
+            id:'para3',
+          },
+          index:-1
+        }
+      };
+      expect(() => paragraphCollection.response(paragraphAddedResponse)).toThrow();
+    });
+
+    it('Should not add paragraph if index is invalid', () => {
+      const paragraphAddedResponse = {
+        op:'PARAGRAPH_ADDED',
+        data:{
+          paragraph:{
+            id:'para3',
+          },
+          index:1
+        }
+      };
+      expect(() => paragraphCollection.response(paragraphAddedResponse)).toThrow();
+    });
+
+    it('Should add paragraph', () => {
       const paragraphResponse = {
         op:'PARAGRAPH',
         data:{
@@ -138,18 +156,46 @@ describe('ParagraphCollection unit test', () => {
         }
       };
       paragraphCollection.response(paragraphResponse);
-      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(3);
+      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(1);
     });
 
     it('Should remove paragraph', () => {
+      const paragraphId = 'paragraphId';
+      const notebookState = new WebSocketPayloadImpl({
+        paragraphs:[{
+          id:paragraphId,
+        }]
+      });
+      paragraphCollection = new ParagraphCollectionImpl(requestable, notebookState);
       const paragraphRemovedResponse = {
         op:'PARAGRAPH_REMOVED',
         data:{
-          id:'para1',
+          id:paragraphId,
         }
       };
+      const paragraphsBeforeRemove = paragraphCollection.print()().inputs()()['paragraphs'];
       paragraphCollection.response(paragraphRemovedResponse);
-      expect(paragraphCollection.print()().inputs()()['paragraphs']).toHaveLength(1);
+      const paragraphsAfterRemove = paragraphCollection.print()().inputs()()['paragraphs'];
+      expect(paragraphsBeforeRemove).toHaveLength(1);
+      expect(paragraphsAfterRemove).toHaveLength(0);
+    });
+
+    it('Should not remove paragraph', () => {
+      const paragraphId = 'paragraphId';
+      const notebookState = new WebSocketPayloadImpl({
+        paragraphs:[{
+          id:paragraphId,
+        }]
+      });
+      paragraphCollection = new ParagraphCollectionImpl(requestable, notebookState);
+      const wrongParagraphId = 'wrongParagraphId';
+      const paragraphRemovedResponse = {
+        op:'PARAGRAPH_REMOVED',
+        data:{
+          id:wrongParagraphId,
+        }
+      };
+      expect(() => paragraphCollection.response(paragraphRemovedResponse)).toThrow();
     });
   });
 });

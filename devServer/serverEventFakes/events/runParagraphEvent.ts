@@ -53,7 +53,6 @@ import {ProgressServerResponse} from '../../../src/test/fakes/server/webSocketRe
 import {
   ParagraphOutputServerResponse
 } from '../../../src/test/fakes/server/webSocketResponses/paragraphOutput/paragraphOutputServerResponse';
-import { Message } from '../../../src/app/objects/message/message';
 import {DataTablesDataFactory} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
 import {OutputPayloadFakeFactory} from '../../../src/test/fakes/server/output/outputPayloadFakeFactory';
@@ -73,6 +72,11 @@ import {
   ServerParagraphFakeWithOutput
 } from '../../../src/test/fakes/server/paragraph/withOutput/serverParagraphFakeWithOutput';
 import {ServerParagraphFake} from '../../../src/test/fakes/server/paragraph/serverParagraphFake';
+import {WebSocketRequest} from '../../../src/app/objects/webSocket/request/webSocketRequest';
+import {WebSocketResponse} from '../../../src/app/objects/webSocket/response/webSocketResponse';
+import {
+  AngularObjectUpdateServerResponse
+} from '../../../src/test/fakes/server/webSocketResponses/angularObjectUpdate/angularObjectUpdateServerResponse';
 
 export default class RunParagraphEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;
@@ -93,10 +97,10 @@ export default class RunParagraphEvent implements ServerEventFake {
     return this._eventId;
   }
 
-  handle(requestMessage: Message): void {
-    const requestMessageData = requestMessage.dataAsWebSocketPayload();
+  handle(webSocketResponseFromClient:WebSocketResponse): void {
+    const requestMessageData = webSocketResponseFromClient.dataAsWebSocketPayload();
     const paragraphId = requestMessageData.stringProperty('id');
-    const title = requestMessage.data()['title'];
+    const title = webSocketResponseFromClient.data()['title'];
     const text = requestMessageData.stringProperty('paragraph');
     const messageQueue: string[] = [];
     const executedParagraph = new ServerParagraphFakeWithText(
@@ -127,6 +131,8 @@ export default class RunParagraphEvent implements ServerEventFake {
       const interimOutput = this._fakeOutputPayloadFactory.dataTablesOutputPayload(interimOutputData);
       const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, interimOutput);
       const messageIndex = draw*index;
+      const dplLogUpdate = new AngularObjectUpdateServerResponse('batchMsg', `Batch message value ${messageIndex}.`, paragraphId, noteId);
+      messageQueue.splice(messageIndex, 0, dplLogUpdate.toJson());
       messageQueue.splice(messageIndex,0, paragraphOutputResponse.toJson());
     }
     const endIndex = 50;

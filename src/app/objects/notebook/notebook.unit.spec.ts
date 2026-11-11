@@ -47,6 +47,8 @@ import {FakeChannel} from '../channel/fakeChannel';
 import {Channel} from '../channel/channel';
 import {Notebook} from './notebook';
 import {NotebookImpl} from './notebookImpl';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {ParagraphCollectionFake} from '../../../test/fakes/app/paragraphCollection/paragraphCollectionFake';
 
 describe('Notebook unit test', () => {
   const notebookId = 'noteId';
@@ -66,18 +68,13 @@ describe('Notebook unit test', () => {
   });
 
   describe('Birth', () => {
-    it('Should have been initialized', () =>{
-      notebook = new NotebookImpl(channel, notebookData);
-      expect(notebook).toBeInstanceOf(NotebookImpl);
-    });
-
     it('Should have id', () => {
-      notebook = new NotebookImpl(channel, notebookData);
+      notebook = new NotebookImpl(channel, new WebSocketPayloadImpl(notebookData));
       expect(notebook.id()).toEqual(notebookId);
     });
 
     it('Should print', () => {
-      notebook = new NotebookImpl(channel, notebookData);
+      notebook = new NotebookImpl(channel, new WebSocketPayloadImpl(notebookData));
       const notebookPrinted = notebook.print()();
       expect(notebookPrinted.isStub()).toBe(false);
     });
@@ -87,7 +84,7 @@ describe('Notebook unit test', () => {
     let channelSpy;
     beforeEach(() => {
       channelSpy = vi.spyOn(channel, 'request');
-      notebook = new NotebookImpl(channel, notebookData);
+      notebook = new NotebookImpl(channel, new WebSocketPayloadImpl(notebookData));
     });
 
     it('Should decorate with noteId', () => {
@@ -115,5 +112,34 @@ describe('Notebook unit test', () => {
       notebook.request(request);
       expect(channelSpy).toHaveBeenCalledExactlyOnceWith(request);
     });
+  });
+
+  it('Should filter message with different note Id', () => {
+    const paragraphCollection = new ParagraphCollectionFake();
+    notebook = new NotebookImpl(channel, new WebSocketPayloadImpl(notebookData), paragraphCollection);
+    const wrongId  = 'wrongId';
+    const message = {
+      op:'',
+      data:{
+        noteId: wrongId
+      }
+    };
+    const responseSpy = vi.spyOn(paragraphCollection, 'response');
+    notebook.response(message);
+    expect(responseSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('Should respond ParagraphCollection message with matching noteId', () => {
+    const paragraphCollection = new ParagraphCollectionFake();
+    notebook = new NotebookImpl(channel, new WebSocketPayloadImpl(notebookData), paragraphCollection);
+    const message = {
+      op:'',
+      data:{
+        noteId: notebookId
+      }
+    };
+    const responseSpy = vi.spyOn(paragraphCollection, 'response');
+    notebook.response(message);
+    expect(responseSpy).toHaveBeenCalledExactlyOnceWith(message);
   });
 });
