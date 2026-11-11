@@ -43,82 +43,53 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {UPlotFormatImpl} from './uPlotFormatImpl';
-import {Channel} from '../../../channel/channel';
+import {uPlotFormatImpl} from './uPlotFormatImpl';
+import {OutputFormat} from '../outputFormat';
+import uPlot from 'uplot';
+import {Requestable} from '../../../channel/requestable';
 import {FakeChannel} from '../../../channel/fakeChannel';
-import {OutputType} from '../../outputType';
 
 describe('uPlotFormat unit test', () => {
-  let channel:Channel;
-  let uPlotFormat: UPlotFormatImpl;
+  let requestable:Requestable;
+  let uPlotFormat: OutputFormat;
   beforeEach(() => {
-    channel = new FakeChannel();
-    uPlotFormat = new UPlotFormatImpl(channel);
+    requestable = new FakeChannel();
+    uPlotFormat = new uPlotFormatImpl(requestable);
   });
 
-  describe('Birth', ()=> {
-    it('Should be initialized', () => {
-      expect(uPlotFormat).toBeDefined();
-    });
-
-    it('Should have switcher buttons', () => {
-      const switcherButtons = uPlotFormat.switcherButtons();
-      expect(switcherButtons).toHaveLength(4);
-    });
-
-    it('Should print', () => {
-      const uPlotFormatPrinted = uPlotFormat.print()();
-      expect(uPlotFormatPrinted.isStub()).toBe(true);
-    });
+  it('Should print', () => {
+    const printed = uPlotFormat.print()();
+    const inputs = printed.inputs()();
+    const initialUplotData=[];
+    expect(printed.isStub()).toBe(false);
+    expect(inputs['uPlotData']).toEqual(initialUplotData);
+    expect(inputs['uPlotOptions']).toBeDefined();
   });
 
-  describe('Request', () => {
-    it('Should request channel', () =>{
-      const requestData= {test:'test'};
-      const channelSpy = vi.spyOn(channel, 'request');
-      uPlotFormat.request(requestData);
-      expect(channelSpy).toHaveBeenCalledTimes(1);
-      expect(channelSpy).toHaveBeenCalledWith(requestData);
-    });
+  it('Should have buttons', () => {
+    const buttons = uPlotFormat.switcherButtons();
+    expect(buttons).toHaveLength(4);
+    expect(buttons[0].isStub()).toBe(false);
+    expect(buttons[1].isStub()).toBe(false);
+    expect(buttons[2].isStub()).toBe(false);
+    expect(buttons[3].isStub()).toBe(false);
   });
 
-  describe('Output updates', () => {
-    let outputResponse;
-    const graphType = 'graphType';
-    const uPlotData = [[1,2,3],[1,2,3]];
-    beforeEach(() => {
-      outputResponse = {
-        op:'PARAGRAPH_OUTPUT',
-        data:{
-          output:{
-            type:OutputType.uPlot,
-            data:uPlotData,
-            options:{
-              labels:[],
-              series:[],
-              xAxisLabel:'',
-              graphType:graphType,
-            }
-          }
-        }
-      };
-      uPlotFormat.response(outputResponse);
-    });
-
-    it('Should have RenderNode', () => {
-      const uPlotFormatPrinted = uPlotFormat.print()();
-      const inputs = uPlotFormatPrinted.inputs()();
-      expect(uPlotFormatPrinted.isStub()).toBe(false);
-      expect(inputs['graphType']).toEqual(graphType);
-      expect(inputs['basicOptions']).toBeDefined();
-      expect(inputs['uPlotData']).toEqual(uPlotData);
-    });
-
-    it('Should have RenderNode stub', () => {
-      outputResponse.data.output.type = '';
-      uPlotFormat.response(outputResponse);
-      const uPlotFormatPrinted = uPlotFormat.print()();
-      expect(uPlotFormatPrinted.isStub()).toBe(true);
-    });
+  it('Should render', () => {
+    const uPlotData:uPlot.AlignedData = [
+      [1,2,3],
+      [1,2,3]
+    ];
+    const uPlotOptions = {
+      labels: ['label1','label2', 'label3'],
+      series: ['series1','series2','series3'],
+      xAxisLabel: 'xAxis',
+      graphType: 'graphType'
+    };
+    uPlotFormat.render(uPlotData, uPlotOptions);
+    const printed = uPlotFormat.print()();
+    const inputs = printed.inputs()();
+    expect(inputs['uPlotData']).toEqual(uPlotData);
+    expect(inputs['uPlotOptions']).toBeDefined();
   });
 });

@@ -43,8 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Component, input, Signal} from '@angular/core';
-import {NgComponentOutlet} from '@angular/common';
+import {Component, input} from '@angular/core';
 import {RenderNode} from '../../../../objects/rendering/renderNode/renderNode';
 import {RenderNodeRootView} from '../../renderNodeRoot/renderNodeRootView';
 
@@ -54,20 +53,17 @@ import {RenderNodeRootView} from '../../renderNodeRoot/renderNodeRootView';
     RenderNodeRootView
   ],
   template: `
-    @if (outputIsSwitchable()) {
-      <div class="btn-group" role="group">
-        @for (button of switcherButtons(); track $index) {
-          <render-node-host [renderNode]="button()"></render-node-host>
-        }
-      </div>
-      @if (switchIsPending()) {
-        <div class="spinner-border mx-2 text-primary" role="status"></div>
+    <div class="btn-group" role="group">
+      @for (button of switcherButtons(); track $index) {
+        <render-node-host [renderNode]="button"></render-node-host>
       }
+    </div>
+    @if(showLoader()) {
+      <div class="spinner-border mx-2 text-primary" role="status"></div>
     }
   `
 })
 export class OutputSwitcherView {
-  switcherButtons = input.required<Signal<RenderNode>[]>();
-  switchIsPending= input.required<boolean>();
-  outputIsSwitchable= input.required<boolean>();
+  switcherButtons = input.required<RenderNode[]>();
+  showLoader= input.required<boolean>();
 }

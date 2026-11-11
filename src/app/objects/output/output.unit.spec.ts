@@ -44,92 +44,208 @@
  * a licensee so wish it.
  */
 import {Output} from './output';
-import {Channel} from '../channel/channel';
 import {FakeChannel} from '../channel/fakeChannel';
 import {OutputImpl} from './outputImpl';
+import {Requestable} from '../channel/requestable';
 import {OutputType} from './outputType';
 import {RenderNode} from '../rendering/renderNode/renderNode';
+import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
 
 describe('Output unit test', () => {
-  let channel:Channel;
+  let requestable:Requestable;
   let output:Output;
 
   beforeEach(() => {
-    channel = new FakeChannel();
-    output = new OutputImpl(channel);
+    requestable = new FakeChannel();
+    output = new OutputImpl(requestable);
   });
 
   it('Should print', () => {
     const printed = output.print()();
     const inputs = printed.inputs()();
-    const nonStubFormats = (inputs['outputFormats'] as RenderNode[]).filter(format => !format.isStub());
     expect(printed.isStub()).toBe(false);
     expect(inputs['interpreterErrorListener']).toBeDefined();
-    expect((inputs['outputSwitcher'] as RenderNode).inputs()()['switchIsPending']).toBe(false);
-    expect(nonStubFormats).toHaveLength(0);
+    expect(inputs['outputSwitcher']).toBeDefined();
+    expect((inputs['outputSwitcher'] as RenderNode).isStub()).toBe(true);
+    expect(inputs['output']).toBeDefined();
+    expect((inputs['output'] as RenderNode).isStub()).toBe(true);
   });
 
-  it('Should request channel', () => {
+  it('Should request requestable', () => {
     const request = {
       op:'test',
       data:{}
     };
-    const channelSpy = vi.spyOn(channel, 'request');
+    const requestSpy = vi.spyOn(requestable, 'request');
     output.request(request);
-    expect(channelSpy).toHaveBeenCalledExactlyOnceWith(request);
+    expect(requestSpy).toHaveBeenCalledExactlyOnceWith(request);
   });
 
-  describe('Output format switching', () => {
-    const requestedOutputType = OutputType.text;
-    const paragraphOutputRequest = {
-      op:'PARAGRAPH_OUTPUT_REQUEST',
+  describe('Output rendering', () => {
+    let outputResponse:{
+      op:'PARAGRAPH_OUTPUT',
       data:{
-        type:requestedOutputType,
+        output:{
+          type:string,
+          data:unknown,
+          isAggregated:boolean,
+          options?:object
+        }
       }
     };
 
     beforeEach(() => {
-      output.request(paragraphOutputRequest);
-    });
-
-    it('OutputSwitcher should be pending', () => {
-      const printed = output.print()();
-      const inputs = printed.inputs()();
-      expect((inputs['outputSwitcher'] as RenderNode).inputs()()['switchIsPending']).toBe(true);
-    });
-
-    it('Should update output and switcher', () => {
-      output.response({
+      outputResponse = {
         op:'PARAGRAPH_OUTPUT',
         data:{
           output:{
-            type:requestedOutputType,
-            data:''
+            type:'',
+            data:'',
+            isAggregated:false
           }
         }
-      });
-      const printed = output.print()();
-      const inputs = printed.inputs()();
-      const nonStubFormats = (inputs['outputFormats'] as RenderNode[]).filter(format => !format.isStub());
-      expect((inputs['outputSwitcher'] as RenderNode).inputs()()['switchIsPending']).toBe(false);
-      expect(nonStubFormats).toHaveLength(1);
+      };
     });
 
-    it('Should create new request if received wrong output type', () => {
-      const channelSpy = vi.spyOn(channel, 'request');
-      output.response({
+    it('Should render text output', () => {
+      outputResponse.data.output.type = OutputType.text;
+      output.response(outputResponse);
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.TEXT_OUTPUT_VIEW);
+    });
+
+    it('Should render html output', () => {
+      outputResponse.data.output.type = OutputType.html;
+      output.response(outputResponse);
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.HTML_OUTPUT_VIEW);
+    });
+
+    it('Should render uPlot output', () => {
+      outputResponse.data.output.type = OutputType.uPlot;
+      outputResponse.data.output.options = {
+        labels:[],
+        series:[],
+        xAxisLabel:'',
+        graphType:''
+      };
+      output.response(outputResponse);
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.UPLOT_OUTPUT_VIEW);
+    });
+
+    it('Should render angular output', () => {
+      outputResponse.data.output.type = OutputType.angular;
+      output.response(outputResponse);
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.ANGULAR_OUTPUT_VIEW);
+    });
+
+    it('Should render dataTables output', () => {
+      outputResponse.data.output.type = OutputType.dataTables;
+      output.response(outputResponse);
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      expect((inputs['output'] as RenderNode).componentView()).toEqual(RegisteredComponents.DATATABLES_OUTPUT_VIEW);
+    });
+
+    it('Should throw if output type is unsupported', () => {
+      expect(() => output.response(outputResponse)).toThrow();
+    });
+  });
+
+  describe('Output switching', () => {
+    beforeEach(() => {
+      const outputResponse = {
         op:'PARAGRAPH_OUTPUT',
         data:{
           output:{
-            type:OutputType.dataTables,
-            data:''
+            type:OutputType.text,
+            data:'',
+            isAggregated:true
           }
         }
-      });
+      };
+      output.response(outputResponse);
+    });
+
+    it('Should have rendered OutputSwitcher', () => {
       const printed = output.print()();
       const inputs = printed.inputs()();
-      expect((inputs['outputSwitcher'] as RenderNode).inputs()()['switchIsPending']).toBe(true);
-      expect(channelSpy).toHaveBeenCalledExactlyOnceWith(paragraphOutputRequest);
+      const outputSwitcher = inputs['outputSwitcher'] as RenderNode;
+      expect(outputSwitcher.isStub()).toBe(false);
+    });
+
+    it('Should show loader after output request', () => {
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      const outputSwitcher = inputs['outputSwitcher'] as RenderNode;
+      const outputRequest = {
+        op:'PARAGRAPH_OUTPUT_REQUEST',
+        data:{}
+      };
+      const loaderIsVisibleBeforeRequest = outputSwitcher.inputs()()['showLoader'];
+      output.request(outputRequest);
+      const loaderIsVisibleAfterRequest = outputSwitcher.inputs()()['showLoader'];
+      expect(loaderIsVisibleBeforeRequest).toBe(false);
+      expect(loaderIsVisibleAfterRequest).toBe(true);
+    });
+
+    it('Should create new request and show output switch loader if received output type is not requested', () => {
+      const textOutputRequest = {
+        op:'PARAGRAPH_OUTPUT_REQUEST',
+        data:{
+          type:OutputType.text,
+        }
+      };
+      output.request(textOutputRequest);
+
+      const requestSpy = vi.spyOn(requestable, 'request');
+      const outputResponse = {
+        op:'PARAGRAPH_OUTPUT',
+        data:{
+          output:{
+            type: OutputType.dataTables,
+          }
+        }
+      };
+      output.response(outputResponse);
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      const outputSwitcher = inputs['outputSwitcher'] as RenderNode;
+      const loaderIsVisible = outputSwitcher.inputs()()['showLoader'];
+      expect(loaderIsVisible).toBe(true);
+      expect(requestSpy).toHaveBeenCalledExactlyOnceWith(textOutputRequest);
+    });
+
+    it('Should hide loader after valid output response', () => {
+      const textOutputRequest = {
+        op:'PARAGRAPH_OUTPUT_REQUEST',
+        data:{
+          type:OutputType.text,
+        }
+      };
+      output.request(textOutputRequest);
+      const outputResponse = {
+        op:'PARAGRAPH_OUTPUT',
+        data:{
+          output:{
+            type: OutputType.text,
+            data:'',
+            isAggregated:true
+          }
+        }
+      };
+      output.response(outputResponse);
+      const printed = output.print()();
+      const inputs = printed.inputs()();
+      const outputSwitcher = inputs['outputSwitcher'] as RenderNode;
+      const loaderIsVisible = outputSwitcher.inputs()()['showLoader'];
+      expect(loaderIsVisible).toBe(false);
     });
   });
 });

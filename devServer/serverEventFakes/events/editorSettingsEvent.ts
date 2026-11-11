@@ -48,7 +48,7 @@ import {WebSocket} from 'ws';
 import {
   EditorSettingServerResponse
 } from '../../../src/test/fakes/server/webSocketResponses/editorSetting/editorSettingServerResponse';
-import {Message} from '../../../src/app/objects/message/message';
+import {WebSocketResponse} from '../../../src/app/objects/webSocket/response/webSocketResponse';
 
 export default class EditorSettingsEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;
@@ -67,8 +67,8 @@ export default class EditorSettingsEvent implements ServerEventFake {
     return this._eventId;
   }
 
-  handle(requestMessage: Message): void {
-    const paragraphText = requestMessage.dataAsWebSocketPayload().stringProperty('paragraphText');
+  handle(webSocketResponseFromClient:WebSocketResponse): void {
+    const paragraphText = webSocketResponseFromClient.dataAsWebSocketPayload().stringProperty('paragraphText');
     const language = this.parseLanguage(paragraphText);
     const editorSettings = {
       language:language,
@@ -76,7 +76,7 @@ export default class EditorSettingsEvent implements ServerEventFake {
       completionKey: '',
       completionSupport: true,
     };
-    const paragraphId = requestMessage.dataAsWebSocketPayload().stringProperty('paragraphId');
+    const paragraphId = webSocketResponseFromClient.dataAsWebSocketPayload().stringProperty('paragraphId');
     const editorSettingResponse = new EditorSettingServerResponse(editorSettings, paragraphId);
     this._webSocket.send(editorSettingResponse.toJson());
   }

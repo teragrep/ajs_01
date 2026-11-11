@@ -47,18 +47,20 @@ import {WebSocketServer} from 'ws';
 import {FakeServerEventsImpl} from '../fakeServerEvents/fakeServerEventsImpl';
 import {FileService} from '../services/fileService/fileService';
 import {WebSocketServerWithMessageHandling} from './webSocketServerWithMessageHandling';
+import {WebSocketResponseImpl} from '../../src/app/objects/webSocket/response/webSocketResponseImpl';
+import {WebSocketPayloadImpl} from '../../src/app/objects/webSocket/webSocketPayload/webSocketPayloadImpl';
 
 export default class WebSocketServerWithMessageHandlingImpl implements WebSocketServerWithMessageHandling {
   init(fileService: FileService):WebSocketServer {
     const port = process.env.WEBSOCKET_PORT || 8081;
     const webSocketServer = new WebSocketServer({ port: Number(port) });
     webSocketServer.on('connection', (client) => {
-      const serverEventFakeDispatcher = new FakeServerEventsImpl(client, fileService);
+      const fakeServerEvents = new FakeServerEventsImpl(client, fileService);
       console.debug('Client connected');
       client.on('message', function message(data) {
         const receivedJson = data.toString();
         console.debug('Received message', receivedJson);
-        serverEventFakeDispatcher.apply(JSON.parse(receivedJson));
+        fakeServerEvents.apply(new WebSocketResponseImpl(new WebSocketPayloadImpl(JSON.parse(receivedJson))));
       });
     });
     return webSocketServer;

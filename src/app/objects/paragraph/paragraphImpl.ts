@@ -44,36 +44,35 @@
  * a licensee so wish it.
  */
 import {Paragraph} from './paragraph';
-import {Channel} from '../channel/channel';
 import {Output} from '../output/output';
 import {OutputImpl} from '../output/outputImpl';
-import {WebSocketPayload} from '../webSocketPayload/webSocketPayload';
-import {WebSocketPayloadImpl} from '../webSocketPayload/webSocketPayloadImpl';
+import {WebSocketPayload} from '../webSocket/webSocketPayload/webSocketPayload';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
 import {signal, Signal} from '@angular/core';
 import { RenderNode } from '../rendering/renderNode/renderNode';
-import {ParagraphOutputMessageFactoryImpl} from './paragraphOutputMessageFactory/paragraphOutputMessageFactoryImpl';
 import {RenderNodeImpl} from '../rendering/renderNode/renderNodeImpl';
 import {RegisteredComponents} from '../../ui/angular2+/componentRegistry/registeredComponents';
-import {MessagePropertyEqualsFilter} from '../message/messageFilter/messagePropertyEqualsFilter';
-import {MessageImpl} from '../message/messageImpl';
-import {MessageWithField} from '../message/messageWithField/messageWithField';
+import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSocketResponseFilter/webSocketResponsePropertyEqualsFilter';
+import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
+import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
+import {Requestable} from '../channel/requestable';
 
 export class ParagraphImpl implements Paragraph {
-  private readonly _channel: Channel;
+  private readonly _requestable: Requestable;
   private readonly _output: Output;
-  private readonly _paragraph: WebSocketPayload;
+  private readonly _paragraphData: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
-  private readonly _paragraphIdFilter: MessagePropertyEqualsFilter;
+  private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
 
-  constructor(channel: Channel, paragraph: object) {
-    this._channel = channel;
-    this._paragraph = new WebSocketPayloadImpl(paragraph);
-    this._output = this.initializedOutput(paragraph);
+  constructor(requestable: Requestable, paragraphData: object) {
+    this._requestable = requestable;
+    this._paragraphData = new WebSocketPayloadImpl(paragraphData);
+    this._output = this.initializedOutput(this._paragraphData);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, signal({
       output:this._output.print()(),
       paragraphId:this.id()
     })));
-    this._paragraphIdFilter = new MessagePropertyEqualsFilter('paragraphId', this.id());
+    this._paragraphIdFilter = new WebSocketResponsePropertyEqualsFilter('paragraphId', this.id());
   }
 
   run(): void {
@@ -81,22 +80,12 @@ export class ParagraphImpl implements Paragraph {
       op:'RUN_PARAGRAPH',
       data: {
         id: this.id(),
-        paragraph: this._paragraph.stringProperty('text'),
-        config: this._paragraph.objectProperty('config'),
-        params: this._paragraph.objectPropertyAsPayload('settings').objectProperty('params'),
+        paragraph: this._paragraphData.stringProperty('text'),
+        config: this._paragraphData.objectProperty('config'),
+        params: this._paragraphData.objectPropertyAsPayload('settings').objectProperty('params'),
       },
     };
-    this._channel.request(runParagraphRequest);
-  }
-
-  private initializedOutput(paragraph: object): Output {
-    const outputContainer = new OutputImpl(this);
-    const paragraphOutputMessageFactory = new ParagraphOutputMessageFactoryImpl(paragraph);
-    const paragraphOutputMessage = paragraphOutputMessageFactory.paragraphOutputMessage();
-    if(!paragraphOutputMessage.isStub()){
-      outputContainer.response(paragraphOutputMessage.print());
-    }
-    return outputContainer;
+    this._requestable.request(runParagraphRequest);
   }
 
   print(): Signal<RenderNode> {
@@ -104,26 +93,51 @@ export class ParagraphImpl implements Paragraph {
   }
 
   id(): string {
-    return this._paragraph.stringProperty('id');
+    return this._paragraphData.stringProperty('id');
   }
 
   request(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const paragraphIdDecoratedMessage = new MessageWithField(message, 'paragraphId', this.id());
-    this._channel.request({
-      op:paragraphIdDecoratedMessage.operation(),
-      data:paragraphIdDecoratedMessage.data()
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    const paragraphIdDecoratedWebSocketRequest = new WebSocketRequestWithField(message, 'paragraphId', this.id());
+    this._requestable.request({
+      op:paragraphIdDecoratedWebSocketRequest.operation(),
+      data:paragraphIdDecoratedWebSocketRequest.data()
     });
   }
 
   response(json: object): void {
-    const message = new MessageImpl(new WebSocketPayloadImpl(json));
-    const filteredMessage = this._paragraphIdFilter.filterMessage(message);
-    if(!filteredMessage.isStub()) {
+    const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
+    const filteredResponse = this._paragraphIdFilter.filterResponse(message);
+    if(!filteredResponse.isStub()) {
       this._output.response({
-        op:filteredMessage.operation(),
-        data:filteredMessage.data()
+        op:filteredResponse.operation(),
+        data:filteredResponse.data()
       });
+    }
+  }
+
+  private initializedOutput(paragraphData: WebSocketPayload): Output {
+    const output = new OutputImpl(this);
+    this.createOutputResponseIfOutputExists(paragraphData, output);
+    return output;
+  }
+
+  private createOutputResponseIfOutputExists(paragraphData: WebSocketPayload, output:Output):void{
+    if (paragraphData.propertyExists('output')) {
+      const paragraphOutput = paragraphData.objectProperty('output');
+      if (paragraphOutput['data'] === undefined || paragraphOutput['type'] === undefined) {
+        console.error(`Output data not processed, format invalid: ${JSON.stringify(paragraphOutput)}`);
+      } else {
+        const paragraphOutputResponse = {
+          op: 'PARAGRAPH_OUTPUT',
+          data: {
+            noteId: '',
+            paragraphId: this.id(),
+            output: paragraphOutput,
+          }
+        };
+        output.response(paragraphOutputResponse);
+      }
     }
   }
 }

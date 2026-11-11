@@ -55,10 +55,11 @@ import {UPlotOutputView} from '../output/outputViews/uPlotOutputView/uPlotOutput
 import {OutputSwitcherView} from '../output/switcher/outputSwitcherView';
 import {OutputSwitcherButtonView} from '../output/switcher/switcherButton/outputSwitcherButtonView';
 import {OutputView} from '../output/outputView';
-import {NotebookCollectionView} from '../notebookCollection/notebookCollectionView';
+import {NotebookIndexCollectionView} from '../notebookIndexCollection/notebookIndexCollectionView';
 import {NotebookView} from '../notebook/notebookView';
 import {ParagraphCollectionView} from '../paragraphCollection/paragraphCollectionView';
 import {ParagraphView} from '../paragraph/paragraphView';
+import {NotebookIndexView} from '../notebookIndex/notebookIndexView';
 
 export const ComponentRegistryProvider: Provider = {
   provide: COMPONENT_REGISTRY,
@@ -71,10 +72,11 @@ export const ComponentRegistryProvider: Provider = {
     [RegisteredComponents.UPLOT_OUTPUT_VIEW, UPlotOutputView],
     [RegisteredComponents.OUTPUT_SWITCHER_VIEW, OutputSwitcherView],
     [RegisteredComponents.OUTPUT_SWITCHER_BUTTON_VIEW, OutputSwitcherButtonView],
-    [RegisteredComponents.NOTEBOOK_COLLECTION_VIEW, NotebookCollectionView],
+    [RegisteredComponents.NOTEBOOK_INDEX_COLLECTION_VIEW, NotebookIndexCollectionView],
     [RegisteredComponents.NOTEBOOK_VIEW, NotebookView],
     [RegisteredComponents.PARAGRAPH_COLLECTION_VIEW, ParagraphCollectionView],
     [RegisteredComponents.PARAGRAPH_VIEW, ParagraphView],
     [RegisteredComponents.OUTPUT_VIEW, OutputView],
+    [RegisteredComponents.NOTEBOOK_INDEX_VIEW, NotebookIndexView],
   ])
 };
