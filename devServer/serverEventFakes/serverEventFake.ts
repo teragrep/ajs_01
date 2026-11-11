@@ -43,12 +43,12 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {Message} from '../../src/app/objects/message/message';
+import {WebSocketResponse} from '../../src/app/objects/webSocket/response/webSocketResponse';
 
 /**
  * ServerEventFake emulates actual server response for a corresponding client request via websocket.
  */
 export interface ServerEventFake {
   eventId(): string;
-  handle(requestMessage:Message) :void;
+  handle(webSocketResponseFromClient:WebSocketResponse) :void;
 }

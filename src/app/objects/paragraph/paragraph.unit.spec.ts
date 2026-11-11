@@ -47,6 +47,8 @@ import {FakeChannel} from '../channel/fakeChannel';
 import {Channel} from '../channel/channel';
 import {ParagraphImpl} from './paragraphImpl';
 import {Paragraph} from './paragraph';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {OutputFake} from '../../../test/fakes/app/output/outputFake';
 
 describe('Paragraph', () => {
   const paragraphId = 'paragraphId';
@@ -75,7 +77,7 @@ describe('Paragraph', () => {
       id:paragraphId
     };
     channel = new FakeChannel();
-    paragraph = new ParagraphImpl(channel, paragraphData);
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData));
   });
 
   describe('Birth', () => {
@@ -124,5 +126,35 @@ describe('Paragraph', () => {
     const spy = vi.spyOn(channel, 'request');
     paragraph.request(request);
     expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
+  });
+
+  it('Should filter response if paragraphId is different', () => {
+    const output = new OutputFake();
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData), output);
+    const wrongId = 'wrongId';
+    const response = {
+      op:'',
+      data:{
+        paragraphId:wrongId,
+      }
+    };
+    const responseSpy = vi.spyOn(output, 'response');
+    paragraph.response(response);
+    expect(responseSpy).toHaveBeenCalledTimes(0);
+  });
+
+
+  it('Should filter respond output if paragraphId matches', () => {
+    const output = new OutputFake();
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData), output);
+    const response = {
+      op:'',
+      data:{
+        paragraphId:paragraphId,
+      }
+    };
+    const responseSpy = vi.spyOn(output, 'response');
+    paragraph.response(response);
+    expect(responseSpy).toHaveBeenCalledExactlyOnceWith(response);
   });
 });

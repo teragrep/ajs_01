@@ -52,20 +52,15 @@ import {AreaSeries} from '../series/areaSeries';
 import {ScatterSeries} from '../series/scatterSeries';
 import {BarSeries} from '../series/barSeries';
 import {BasicOptions} from './basicOptions';
+import {uPlotOptions} from '../../../uPlotOptions';
 
 export class BasicOptionsImpl implements BasicOptions {
-  private readonly _labels: string[];
-  private readonly _series: string[];
-  private readonly _xAxisLabel: string;
-  private readonly _graphType: string;
+  private readonly _uPlotOptions:uPlotOptions;
   private readonly _supportedSeries: GraphSeries[];
   private readonly _seriesColor: SeriesColor;
 
-  constructor(labels: string[], series: string[], xAxisLabel: string, graphType: string) {
-    this._labels = labels;
-    this._series = series;
-    this._xAxisLabel = xAxisLabel;
-    this._graphType = graphType;
+  constructor(uPlotOptions:uPlotOptions) {
+    this._uPlotOptions = uPlotOptions;
     this._seriesColor = new SeriesColorImpl();
     this._supportedSeries  = [
       new LineSeries(),
@@ -101,12 +96,11 @@ export class BasicOptionsImpl implements BasicOptions {
   }
 
   private series(): uPlot.Series[]{
-    const xAxisLabel = this._xAxisLabel;
-    const dataLabels = this._labels;
-    const seriesNames = this._series;
-    const seriesCount = this._series.length;
-    const graphType = this._graphType;
-
+    const xAxisLabel = this._uPlotOptions.xAxisLabel;
+    const dataLabels = this._uPlotOptions.labels;
+    const seriesNames = this._uPlotOptions.series;
+    const seriesCount = seriesNames.length;
+    const graphType = this._uPlotOptions.graphType;
     const series: uPlot.Series[] = [
       {
         label: xAxisLabel,
@@ -130,7 +124,7 @@ export class BasicOptionsImpl implements BasicOptions {
   }
 
   private axes(): uPlot.Axis[] {
-    const xAxisLabel = this._labels;
+    const xAxisLabel = this._uPlotOptions.labels;
     return [
       {
         rotate:45,
