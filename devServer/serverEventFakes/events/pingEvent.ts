@@ -45,7 +45,6 @@
  */
 import {WebSocket} from 'ws';
 import {ServerEventFake} from '../serverEventFake';
-import { Message } from '../../../src/app/objects/message/message';
 
 export default class PingEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;
@@ -60,7 +59,7 @@ export default class PingEvent implements ServerEventFake {
     return this._eventId;
   }
 
-  handle(requestMessage: Message): void {
+  handle(): void {
     const pongMessage = {
       op:'PONG',
       data: {},

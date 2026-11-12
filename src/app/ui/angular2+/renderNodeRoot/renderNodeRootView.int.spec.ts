@@ -49,16 +49,16 @@ import {RenderNodeRootView} from './renderNodeRootView';
 import {render} from '@testing-library/angular';
 import {By} from '@angular/platform-browser';
 import {RenderNodeStub} from '../../../objects/rendering/renderNode/renderNodeStub';
-import {FakeRenderNode} from '../../../../test/fakes/fakeRenderNode';
-import {FakeComponentRegistryProvider} from '../../../../test/fakes/fakeComponentRegistryProvider';
-import {FakeComponent} from '../../../../test/fakes/fakeComponent';
+import {RenderNodeFake} from '../../../../test/fakes/app/renderNode/renderNodeFake';
+import {FakeComponentRegistryProvider} from '../../../../test/fakes/app/componentRegistry/fakeComponentRegistryProvider';
+import {FakeComponent} from '../../../../test/fakes/app/componentRegistry/fakeComponent';
 
 describe('RenderNodeRootView integration test', () => {
   let renderNode:RenderNode;
   let fixture: ComponentFixture<RenderNodeRootView>;
 
   beforeEach(async () => {
-    renderNode = new FakeRenderNode();
+    renderNode = new RenderNodeFake();
     const renderResult = await render(RenderNodeRootView, {
       inputs:{
         renderNode: renderNode

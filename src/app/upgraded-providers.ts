@@ -43,20 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WsMessageListenerImpl} from './shared/components/websocket/wsMessageListenerImpl';
 import {WebsocketMessageService} from './shared/components/websocket/websocket-message.service';
 import {ToasterService} from './shared/components/Toaster/notifications.service';
-
-export function wsMessageListenerFactory(i) {
-  return i.get('wsMessageListener');
-}
-
-export const wsMessageListenerProvider = {
-  provide: WsMessageListenerImpl,
-  useFactory: wsMessageListenerFactory,
-  deps: ['$injector']
-};
-
 
 export function WebsocketMessageFactory(i) {
   return i.get('websocketMsgSrv');

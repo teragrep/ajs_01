@@ -45,9 +45,9 @@
  */
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {AngularOutputView} from './angularOutputView';
-import {FakeChannel} from '../../../../../objects/channel/fakeChannel';
 import {AngularViewUpgradeModule} from './angularViewUpgradeModule';
 import {Component} from '@angular/core';
+import {FakeChannel} from '../../../../../objects/channel/fakeChannel';
 
 describe('AngularOutputView integration test', () => {
   let fixture: ComponentFixture<AngularOutputView>;

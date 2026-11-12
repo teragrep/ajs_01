@@ -47,6 +47,9 @@ import {FakeChannel} from '../channel/fakeChannel';
 import {Channel} from '../channel/channel';
 import {ParagraphImpl} from './paragraphImpl';
 import {Paragraph} from './paragraph';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {OutputFake} from '../../../test/fakes/app/output/outputFake';
+import {EditorFake} from '../../../test/fakes/app/editor/editorFake';
 
 describe('Paragraph', () => {
   const paragraphId = 'paragraphId';
@@ -75,22 +78,40 @@ describe('Paragraph', () => {
       id:paragraphId
     };
     channel = new FakeChannel();
-    paragraph = new ParagraphImpl(channel, paragraphData);
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData));
   });
 
-  describe('Birth', () => {
-    it('Should initialize', () => {
-      expect(paragraph).toBeInstanceOf(ParagraphImpl);
-    });
+  it('Should have id', () => {
+    expect(paragraph.id()).toEqual(paragraphId);
+  });
 
-    it('Should have id', () => {
-      expect(paragraph.id()).toEqual(paragraphId);
-    });
+  it('Should print RenderNode', () => {
+    const paragraphPrinted = paragraph.print()();
+    expect(paragraphPrinted.isStub()).toBe(false);
+  });
 
-    it('Should print', () => {
-      const paragraphPrinted = paragraph.print()();
-      expect(paragraphPrinted.isStub()).toBe(false);
-    });
+  it('Should print Editor', () => {
+    expect(paragraph.print()().inputs()()['editor']).toBeDefined();
+  });
+
+  it('Should respond Editor', () => {
+    const editor = new EditorFake();
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData), editor);
+    const response = {
+      op:'',
+      data:{}
+    };
+    const responseSpy = vi.spyOn(editor, 'response');
+    paragraph.response(response);
+    expect(responseSpy).toHaveBeenCalledExactlyOnceWith(response);
+  });
+
+  it('Should print Output', () => {
+    expect(paragraph.print()().inputs()()['output']).toBeDefined();
+  });
+
+  it('Should print paragraphId', () => {
+    expect(paragraph.print()().inputs()()['paragraphId']).toEqual(paragraphId);
   });
 
   it('RunParagraph should create expected request', () => {
@@ -124,5 +145,35 @@ describe('Paragraph', () => {
     const spy = vi.spyOn(channel, 'request');
     paragraph.request(request);
     expect(spy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
+  });
+
+  it('Should filter response if paragraphId is different', () => {
+    const output = new OutputFake();
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData), output);
+    const wrongId = 'wrongId';
+    const response = {
+      op:'',
+      data:{
+        paragraphId:wrongId,
+      }
+    };
+    const responseSpy = vi.spyOn(output, 'response');
+    paragraph.response(response);
+    expect(responseSpy).toHaveBeenCalledTimes(0);
+  });
+
+
+  it('Should filter respond output if paragraphId matches', () => {
+    const output = new OutputFake();
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData), output);
+    const response = {
+      op:'',
+      data:{
+        paragraphId:paragraphId,
+      }
+    };
+    const responseSpy = vi.spyOn(output, 'response');
+    paragraph.response(response);
+    expect(responseSpy).toHaveBeenCalledExactlyOnceWith(response);
   });
 });

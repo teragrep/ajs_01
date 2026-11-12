@@ -50,14 +50,14 @@ import {
   ParagraphOutputServerResponse
 } from '../../../src/test/fakes/server/webSocketResponses/paragraphOutput/paragraphOutputServerResponse';
 import {WebSocketServerResponse} from '../../../src/test/fakes/server/webSocketResponses/webSocketServerResponse';
-import { Message } from '../../../src/app/objects/message/message';
 import {DataTablesDataFactory} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactory';
 import {DataTablesDataFactoryImpl} from '../../../src/test/fakes/server/output/dataTables/dataTablesDataFactoryImpl';
 import {uPlotDataFactory} from '../../../src/test/fakes/server/output/uPlot/uPlotDataFactory';
 import {uPlotDataFactoryImpl} from '../../../src/test/fakes/server/output/uPlot/uPlotDataFactoryImpl';
-import {WebSocketPayload} from '../../../src/app/objects/webSocketPayload/webSocketPayload';
 import {OutputPayloadFakeFactory} from '../../../src/test/fakes/server/output/outputPayloadFakeFactory';
 import {OutputPayloadFakeFactoryImpl} from '../../../src/test/fakes/server/output/outputPayloadFakeFactoryImpl';
+import {WebSocketResponse} from '../../../src/app/objects/webSocket/response/webSocketResponse';
+import {WebSocketPayload} from '../../../src/app/objects/webSocket/webSocketPayload/webSocketPayload';
 
 export default class ParagraphOutputRequestEvent implements ServerEventFake {
   private readonly  _webSocket: WebSocket;
@@ -78,8 +78,8 @@ export default class ParagraphOutputRequestEvent implements ServerEventFake {
     return this._eventId;
   }
 
-  handle(requestMessage: Message): void {
-    const messageData = requestMessage.dataAsWebSocketPayload();
+  handle(webSocketResponseFromClient:WebSocketResponse): void {
+    const messageData = webSocketResponseFromClient.dataAsWebSocketPayload();
     const outputType = messageData.stringProperty('type');
     let paragraphOutputResponse:WebSocketServerResponse;
     const noteId = messageData.stringProperty('noteId');
