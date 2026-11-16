@@ -56,20 +56,28 @@ import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSo
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
 import {Requestable} from '../channel/requestable';
+import {DplLog} from './dplLog/dplLog';
+import {DplLogImpl} from './dplLog/dplLogImpl';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _requestable: Requestable;
   private readonly _output: Output;
+  private readonly _dplLog: DplLog;
   private readonly _paragraphData: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
 
-  constructor(requestable: Requestable, paragraphData: object) {
+  constructor(requestable: Requestable,
+              paragraphData: object,
+              dplLog: DplLog = new DplLogImpl(),
+  ) {
     this._requestable = requestable;
     this._paragraphData = new WebSocketPayloadImpl(paragraphData);
     this._output = this.initializedOutput(this._paragraphData);
+    this._dplLog = dplLog;
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, signal({
       output:this._output.print()(),
+      dplLog:this._dplLog.print()(),
       paragraphId:this.id()
     })));
     this._paragraphIdFilter = new WebSocketResponsePropertyEqualsFilter('paragraphId', this.id());
@@ -109,10 +117,13 @@ export class ParagraphImpl implements Paragraph {
     const message = new WebSocketResponseImpl(new WebSocketPayloadImpl(json));
     const filteredResponse = this._paragraphIdFilter.filterResponse(message);
     if(!filteredResponse.isStub()) {
-      this._output.response({
+      const response = {
         op:filteredResponse.operation(),
         data:filteredResponse.data()
-      });
+      };
+      this._output.response(response);
+      this._dplLog.response(response);
+
     }
   }
 

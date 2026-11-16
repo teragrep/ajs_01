@@ -78,19 +78,25 @@ describe('Paragraph', () => {
     paragraph = new ParagraphImpl(channel, paragraphData);
   });
 
-  describe('Birth', () => {
-    it('Should initialize', () => {
-      expect(paragraph).toBeInstanceOf(ParagraphImpl);
-    });
+  it('Should have id', () => {
+    expect(paragraph.id()).toEqual(paragraphId);
+  });
 
-    it('Should have id', () => {
-      expect(paragraph.id()).toEqual(paragraphId);
-    });
+  it('Should print renderNode', () => {
+    const paragraphPrinted = paragraph.print()();
+    expect(paragraphPrinted.isStub()).toBe(false);
+  });
 
-    it('Should print', () => {
-      const paragraphPrinted = paragraph.print()();
-      expect(paragraphPrinted.isStub()).toBe(false);
-    });
+  it('Should print DplLog', () => {
+    expect(paragraph.print()().inputs()()['dplLog']).toBeDefined();
+  });
+
+  it('Should print output', () => {
+    expect(paragraph.print()().inputs()()['output']).toBeDefined();
+  });
+
+  it('Should print paragraphId', () => {
+    expect(paragraph.print()().inputs()()['paragraphId']).toEqual(paragraphId);
   });
 
   it('RunParagraph should create expected request', () => {
