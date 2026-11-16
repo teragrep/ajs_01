@@ -74,6 +74,9 @@ import {
 import {ServerParagraphFake} from '../../../src/test/fakes/server/paragraph/serverParagraphFake';
 import {WebSocketRequest} from '../../../src/app/objects/webSocket/request/webSocketRequest';
 import {WebSocketResponse} from '../../../src/app/objects/webSocket/response/webSocketResponse';
+import {
+  AngularObjectUpdateServerResponse
+} from '../../../src/test/fakes/server/webSocketResponses/angularObjectUpdate/angularObjectUpdateServerResponse';
 
 export default class RunParagraphEvent implements ServerEventFake {
   private readonly _webSocket: WebSocket;
@@ -128,6 +131,8 @@ export default class RunParagraphEvent implements ServerEventFake {
       const interimOutput = this._fakeOutputPayloadFactory.dataTablesOutputPayload(interimOutputData);
       const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, interimOutput);
       const messageIndex = draw*index;
+      const dplLogUpdate = new AngularObjectUpdateServerResponse('batchMsg', `Batch message value ${messageIndex}.`, paragraphId, noteId);
+      messageQueue.splice(messageIndex, 0, dplLogUpdate.toJson());
       messageQueue.splice(messageIndex,0, paragraphOutputResponse.toJson());
     }
     const endIndex = 50;
