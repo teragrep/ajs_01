@@ -43,8 +43,27 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface ConfiguredEditor {
-  readonly(value:boolean):void;
-  setFontSize(value:number):void;
-  lineNumbers(value:boolean):void;
+import ace from 'ace-builds';
+import {LanguageCompleter} from './languageCompleter/languageCompleter';
+import {AutoCompletionsRule} from './autoCompletionsRule';
+
+export class AutoCompletionsRuleImpl implements AutoCompletionsRule {
+  private readonly _languageCompleter:LanguageCompleter;
+
+  constructor(languageCompleter:LanguageCompleter) {
+    this._languageCompleter = languageCompleter;
+  }
+
+  response(json: object): void {
+    this._languageCompleter.response(json);
+  }
+
+  applyTo(editor: ace.Ace.Editor): void {
+    editor.setOption('enableBasicAutocompletion', true);
+    const langTools = ace.require('ace/ext/language_tools');
+    const keyWordCompleter = langTools.keyWordCompleter;
+    const snippetCompleter = langTools.snippetCompleter;
+    const textCompleter = langTools.textCompleter;
+    editor.completers = [this._languageCompleter, keyWordCompleter, snippetCompleter, textCompleter];
+  }
 }

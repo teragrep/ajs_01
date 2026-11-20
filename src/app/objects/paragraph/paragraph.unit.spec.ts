@@ -47,6 +47,9 @@ import {FakeChannel} from '../channel/fakeChannel';
 import {Channel} from '../channel/channel';
 import {ParagraphImpl} from './paragraphImpl';
 import {Paragraph} from './paragraph';
+import {WebSocketPayloadImpl} from '../webSocket/webSocketPayload/webSocketPayloadImpl';
+import {EditorFake} from '../../../test/fakes/app/editor/editorFake';
+import {DplLogFake} from '../../../test/fakes/app/dplLog/dplLogFake';
 
 describe('Paragraph', () => {
   const paragraphId = 'paragraphId';
@@ -75,28 +78,57 @@ describe('Paragraph', () => {
       id:paragraphId
     };
     channel = new FakeChannel();
-    paragraph = new ParagraphImpl(channel, paragraphData);
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData));
   });
 
   it('Should have id', () => {
     expect(paragraph.id()).toEqual(paragraphId);
   });
 
-  it('Should print renderNode', () => {
+  it('Should print RenderNode', () => {
     const paragraphPrinted = paragraph.print()();
     expect(paragraphPrinted.isStub()).toBe(false);
   });
 
-  it('Should print DplLog', () => {
-    expect(paragraph.print()().inputs()()['dplLog']).toBeDefined();
+  it('Should print paragraphId', () => {
+    expect(paragraph.print()().inputs()()['paragraphId']).toEqual(paragraphId);
   });
 
   it('Should print output', () => {
     expect(paragraph.print()().inputs()()['output']).toBeDefined();
   });
 
-  it('Should print paragraphId', () => {
-    expect(paragraph.print()().inputs()()['paragraphId']).toEqual(paragraphId);
+  it('Should print Editor', () => {
+    expect(paragraph.print()().inputs()()['editor']).toBeDefined();
+  });
+
+  it('Should respond Editor', () => {
+    const editor = new EditorFake();
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData), editor);
+    const response = {
+      op:'',
+      data:{}
+    };
+    const responseSpy = vi.spyOn(editor, 'response');
+    paragraph.response(response);
+    expect(responseSpy).toHaveBeenCalledExactlyOnceWith(response);
+  });
+
+  it('Should print DplLog', () => {
+    expect(paragraph.print()().inputs()()['dplLog']).toBeDefined();
+  });
+
+  it('Should respond DplLog', () => {
+    const editor = new EditorFake();
+    const dplLog = new DplLogFake();
+    paragraph = new ParagraphImpl(channel, new WebSocketPayloadImpl(paragraphData), editor, dplLog);
+    const response = {
+      op:'',
+      data:{}
+    };
+    const responseSpy = vi.spyOn(dplLog, 'response');
+    paragraph.response(response);
+    expect(responseSpy).toHaveBeenCalledExactlyOnceWith(response);
   });
 
   it('RunParagraph should create expected request', () => {

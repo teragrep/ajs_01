@@ -56,27 +56,33 @@ import {WebSocketResponsePropertyEqualsFilter} from '../webSocket/response/webSo
 import {WebSocketResponseImpl} from '../webSocket/response/webSocketResponseImpl';
 import {WebSocketRequestWithField} from '../webSocket/request/webSocketRequestWithField/webSocketRequestWithField';
 import {Requestable} from '../channel/requestable';
+import {EditorImpl} from './editor/editorImpl';
+import {Editor} from './editor/editor';
 import {DplLog} from './dplLog/dplLog';
 import {DplLogImpl} from './dplLog/dplLogImpl';
 
 export class ParagraphImpl implements Paragraph {
   private readonly _requestable: Requestable;
   private readonly _output: Output;
+  private readonly _editor: Editor;
   private readonly _dplLog: DplLog;
-  private readonly _paragraphData: WebSocketPayload;
+  private readonly _paragraphState: WebSocketPayload;
   private readonly _renderNode: Signal<RenderNode>;
   private readonly _paragraphIdFilter: WebSocketResponsePropertyEqualsFilter;
 
   constructor(requestable: Requestable,
-              paragraphData: object,
+              paragraphState: WebSocketPayload,
+              editor:Editor = new EditorImpl(this, paragraphState),
               dplLog: DplLog = new DplLogImpl(),
   ) {
     this._requestable = requestable;
-    this._paragraphData = new WebSocketPayloadImpl(paragraphData);
-    this._output = this.initializedOutput(this._paragraphData);
+    this._paragraphState = paragraphState;
+    this._editor = editor;
     this._dplLog = dplLog;
+    this._output = this.initializedOutput(this._paragraphState);
     this._renderNode = signal(new RenderNodeImpl(RegisteredComponents.PARAGRAPH_VIEW, computed(() => ({
       output:this._output.print()(),
+      editor:this._editor.print()(),
       dplLog:this._dplLog.print()(),
       paragraphId:this.id()
     }))));
@@ -88,9 +94,9 @@ export class ParagraphImpl implements Paragraph {
       op:'RUN_PARAGRAPH',
       data: {
         id: this.id(),
-        paragraph: this._paragraphData.stringProperty('text'),
-        config: this._paragraphData.objectProperty('config'),
-        params: this._paragraphData.objectPropertyAsPayload('settings').objectProperty('params'),
+        paragraph: this._paragraphState.stringProperty('text'),
+        config: this._paragraphState.objectProperty('config'),
+        params: this._paragraphState.objectPropertyAsPayload('settings').objectProperty('params'),
       },
     };
     this._requestable.request(runParagraphRequest);
@@ -101,7 +107,7 @@ export class ParagraphImpl implements Paragraph {
   }
 
   id(): string {
-    return this._paragraphData.stringProperty('id');
+    return this._paragraphState.stringProperty('id');
   }
 
   request(json: object): void {
@@ -122,8 +128,8 @@ export class ParagraphImpl implements Paragraph {
         data:filteredResponse.data()
       };
       this._output.response(response);
+      this._editor.response(response);
       this._dplLog.response(response);
-
     }
   }
 

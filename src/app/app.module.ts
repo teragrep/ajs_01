@@ -48,7 +48,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import './ajs-imports';
 import './downgraded-components';
-import {wsMessageListenerProvider, WebsocketMessageProvider, ToasterProvider} from './upgraded-providers';
+import {WebsocketMessageProvider, ToasterProvider} from './upgraded-providers';
 import {AuthenticationServiceImpl} from './shared/services/authenticationServiceImpl';
 import { provideHttpClient } from '@angular/common/http';
 import {WebSocketServiceImpl} from './objects/webSocket/service/webSocketServiceImpl';
@@ -70,7 +70,6 @@ import {ComponentRegistryProvider} from './ui/angular2+/componentRegistry/compon
       const authService = inject(AuthenticationServiceImpl);
       return authService.requestTicket();
     }),
-    wsMessageListenerProvider,
     WebsocketMessageProvider,
     ToasterProvider,
     ComponentRegistryProvider

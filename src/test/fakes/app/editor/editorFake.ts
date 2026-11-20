@@ -43,46 +43,23 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import angular from 'angular';
-import {WsMessageListener} from './wsMessageListener';
+import {Editor} from '../../../../app/objects/paragraph/editor/editor';
+import {signal, Signal} from '@angular/core';
+import {RenderNode} from '../../../../app/objects/rendering/renderNode/renderNode';
+import {RenderNodeFake} from '../renderNode/renderNodeFake';
 
-export class WsMessageListenerImpl implements WsMessageListener {
-  private readonly $rootScope: angular.IScope;
-  private readonly $timeout: angular.ITimeoutService;
-  private readonly _messages = [
-    {op:'EDITOR_SETTINGS', eventName: 'editorSetting'},
-    {op:'COMPLETION_LIST', eventName: 'completionList'},
-  ];
+export class EditorFake implements Editor {
+  private readonly _printSignal:Signal<RenderNode>;
 
-  constructor($rootScope: angular.IScope, $timeout: angular.ITimeoutService){
-    this.$rootScope = $rootScope;
-    this.$timeout = $timeout;
+  constructor() {
+    this._printSignal = signal(new RenderNodeFake());
   }
 
-  private filter(name:string): string {
-    const message =  this._messages.find(msg => msg.op === name);
-    if(!message){
-      throw new Error(`Operation not defined: ${name}`);
-    }
-    return message.eventName;
-  };
-
-  expectMessage(operation:string){
-    const expectedEvent = this.filter(operation);
-    const timeout = 1000;
-    return new Promise<object>((resolve, reject) => {
-      const delay = this.$timeout(function () {
-        const errorMessage = `Message for ${operation} rejected after timeout ${timeout}ms.`;
-        console.error(errorMessage);
-        reject(errorMessage);
-      }, timeout);
-
-      this.$rootScope.$on(expectedEvent, (event, data) => {
-        this.$timeout.cancel(delay);
-        resolve(data);
-      });
-    });
+  print(): Signal<RenderNode> {
+    return this._printSignal;
   }
+
+  request(json: object): void {}
+
+  response(json: object): void {}
 }
-
-angular.module('zeppelinWebApp').service('wsMessageListener', ['$rootScope', '$timeout',  WsMessageListenerImpl]);

@@ -47,9 +47,11 @@ import {WebSocketServerResponse} from '../webSocketServerResponse';
 
 export class CompletionListServerResponse implements WebSocketServerResponse {
   private readonly _completions: {name:string, value:unknown}[];
+  private readonly _paragraphId:string;
 
-  constructor(completions: {name:string, value:unknown}[]) {
+  constructor(completions: {name:string, value:unknown}[], paragraphId:string) {
     this._completions = completions;
+    this._paragraphId = paragraphId;
   }
 
   toJson(): string {
@@ -60,7 +62,8 @@ export class CompletionListServerResponse implements WebSocketServerResponse {
     return {
       op: 'COMPLETION_LIST',
       data: {
-        completions: this._completions
+        completions: this._completions,
+        paragraphId:this._paragraphId
       }
     };
   }

@@ -43,44 +43,41 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {WsMessageListenerImpl} from './wsMessageListenerImpl';
+import ace from 'ace-builds';
+import {KeyBindingsRule} from './keyBindingsRule';
+import {Requestable} from '../../../../channel/requestable';
+import {FakeChannel} from '../../../../channel/fakeChannel';
 
-describe('wsMessageListener service test', () => {
-  let listenerService;
-  let rootscope;
-  let $timeout;
-  const fakeData = 'foo bar';
+describe('KeyBindingsRule unit test', () => {
+  const requestable:Requestable = new FakeChannel();
+  const keyBindingsRule = new KeyBindingsRule(requestable);
+  const editor = ace.edit(document.createElement('div'));
+  keyBindingsRule.applyTo(editor);
 
-  beforeEach(angular.mock.inject(function(_wsMessageListener_, _$rootScope_, _$timeout_){
-    listenerService = _wsMessageListener_;
-    rootscope = _$rootScope_;
-    $timeout = _$timeout_;
-  }));
-
-  it('Should initialize', function() {
-    expect(listenerService).toBeInstanceOf(WsMessageListenerImpl);
+  it('Should have key bindings', () => {
+    expect(editor.commands.commandKeyBinding['tab'][1]).toBe('startAutocomplete');
+    expect(editor.commands.commandKeyBinding['ctrl-space']).toBeUndefined();
   });
 
-  it('Expect message EDITOR_SETTINGS', async function() {
-    const result = listenerService.expectMessage('EDITOR_SETTINGS');
-    rootscope.$broadcast('editorSetting', fakeData);
-    await expectAsync(result).toBeResolvedTo(fakeData);
+  it('Should have custom key binding for running paragraph', () => {
+    const aceTextArea = editor.textInput.getElement();
+    const requestSpy = vi.spyOn(requestable, 'request');
+    aceTextArea.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13, // Ace editor seems to rely on keyCode
+      shiftKey: true,
+      bubbles: true
+    }));
+    const expectedRequest = {
+      op:'RUN_PARAGRAPH',
+      data: {
+        paragraph: '',
+        config: {},
+        params: {},
+      },
+    };
+    expect(requestSpy).toHaveBeenCalledExactlyOnceWith(expectedRequest);
   });
 
-  it('Expect message COMPLETION_LIST', async function() {
-    const result = listenerService.expectMessage('COMPLETION_LIST');
-    rootscope.$broadcast('completionList', fakeData);
-    await expectAsync(result).toBeResolvedTo(fakeData);
-  });
-
-  it('Should throw error when not using hard-coded variables', function() {
-    expect(() => listenerService.expectMessage('NOT_HARD_CODED'))
-      .toThrow(new Error('Operation not defined: NOT_HARD_CODED'));
-  });
-
-  it('Should reject after timeout', async function() {
-    const result = listenerService.expectMessage('COMPLETION_LIST');
-    $timeout.flush();
-    await expectAsync(result).toBeRejectedWith('Message for COMPLETION_LIST rejected after timeout 1000ms.');
-  });
 });

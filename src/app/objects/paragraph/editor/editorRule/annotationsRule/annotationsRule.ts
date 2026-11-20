@@ -43,6 +43,26 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface WsMessageListener {
-  expectMessage(operation:string): Promise<object>;
+import {EditorRule} from '../editorRule';
+import {Ace} from 'ace-builds';
+
+export class AnnotationsRule implements EditorRule {
+  applyTo(editor: Ace.Editor): void {
+    editor.on('change', ()=> {
+      const timeConsumingQuery = editor.find(/index\s*=\s*("\*"|\*)(\s|\||$)/);
+      if(timeConsumingQuery){
+        editor.getSession().setAnnotations([
+          {
+            row:timeConsumingQuery.start.row,
+            column:timeConsumingQuery.start.column,
+            text: 'The search query "index=*" can be time-consuming. Please consider using date-range filters to narrow down your search.',
+            type: 'error'
+          }
+        ]);
+      }
+      else{
+        editor.getSession().setAnnotations([]);
+      }
+    });
+  }
 }

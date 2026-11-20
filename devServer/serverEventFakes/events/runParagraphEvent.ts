@@ -99,7 +99,7 @@ export default class RunParagraphEvent implements ServerEventFake {
 
   handle(webSocketResponseFromClient:WebSocketResponse): void {
     const requestMessageData = webSocketResponseFromClient.dataAsWebSocketPayload();
-    const paragraphId = requestMessageData.stringProperty('id');
+    const paragraphId = requestMessageData.stringProperty('paragraphId');
     const title = webSocketResponseFromClient.data()['title'];
     const text = requestMessageData.stringProperty('paragraph');
     const messageQueue: string[] = [];
@@ -114,7 +114,7 @@ export default class RunParagraphEvent implements ServerEventFake {
       executedParagraph.paragraphState()
     ).toJson());
 
-    messageQueue.push(new ParagraphServerResponse(new ServerParagraphFakeWithStatus(executedParagraph, 'RUNNING').paragraphState()).toJson());
+    messageQueue.push(new ParagraphServerResponse(new ServerParagraphFakeWithText(new ServerParagraphFakeWithStatus(executedParagraph, 'RUNNING'), text).paragraphState()).toJson());
 
     for (let i = 1; i < 20; i++){
       messageQueue.push(new ProgressServerResponse(i*5, paragraphId).toJson());
@@ -140,7 +140,7 @@ export default class RunParagraphEvent implements ServerEventFake {
     const finalOutput= this._fakeOutputPayloadFactory.dataTablesOutputPayload(finalOutputData);
     const paragraphOutputResponse = new ParagraphOutputServerResponse(paragraphId, noteId, finalOutput);
     messageQueue.push(paragraphOutputResponse.toJson());
-    const finalParagraph = new ServerParagraphFakeWithOutput(new ServerParagraphFakeWithStatus(executedParagraph, 'title'), finalOutput);
+    const finalParagraph = new ServerParagraphFakeWithOutput(new ServerParagraphFakeWithText(new ServerParagraphFakeWithStatus(executedParagraph, 'FINISHED'), text), finalOutput);
     messageQueue.push(new ParagraphServerResponse(finalParagraph.paragraphState()).toJson());
     this.updateNotebook(finalParagraph);
     for(let i = 0; i < messageQueue.length; i++) {

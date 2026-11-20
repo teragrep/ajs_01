@@ -43,33 +43,49 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {ConfiguredEditor} from './configuredEditor';
+import {AfterViewInit, Component, ElementRef, input, OnChanges, OnDestroy, ViewChild} from '@angular/core';
 import ace from 'ace-builds';
+import {EditorRule} from '../../../../objects/paragraph/editor/editorRule/editorRule';
 
-export class ConfiguredEditorImpl implements ConfiguredEditor {
-  private readonly _editor: ace.Ace.Editor;
+@Component({
+  selector: 'editor',
+  template: `
+    <div class="paragraph-editor my-2">
+      <pre #editorAnchor class="editor-container"></pre>
+    </div>
+  `
+})
+export class EditorView implements AfterViewInit, OnChanges, OnDestroy {
+  @ViewChild('editorAnchor') editorAnchor: ElementRef;
+  editorRules = input.required<EditorRule[]>();
+  private _aceEditor: ace.Ace.Editor;
 
-  constructor(editor: ace.Ace.Editor) {
-    this._editor = editor;
+  ngAfterViewInit() {
+    ace.config.set('basePath', '/');
+    ace.config.set('modePath', '/');
+    ace.config.set('themePath', '/');
+    ace.config.set('workerPath', '/');
+    this.initializeEditor();
   }
 
-  lineNumbers(value: boolean): void {
-    this._editor.renderer.setShowGutter(value);
-  }
-
-  readonly(value: boolean): void {
-    this._editor.setReadOnly(value);
-    if(value){
-      this._editor.setStyle('paragraph-disable');
+  ngOnChanges() {
+    if(this._aceEditor){
+      this.editorAnchor.nativeElement.className = '';
+      this.editorAnchor.nativeElement.classList.add('editor-container');
+      this._aceEditor.destroy();
+      this.initializeEditor();
     }
-    else{
-      this._editor.setStyle('paragraph-disable', false);
-    }
   }
 
-  setFontSize(value: number): void {
-    this._editor.setOptions({
-      fontSize: value,
+  ngOnDestroy() {
+    this._aceEditor.destroy();
+    this._aceEditor.container.remove();
+  }
+
+  private initializeEditor():void{
+    this._aceEditor = ace.edit(this.editorAnchor.nativeElement);
+    this.editorRules().forEach(rule => {
+      rule.applyTo(this._aceEditor);
     });
   }
 }

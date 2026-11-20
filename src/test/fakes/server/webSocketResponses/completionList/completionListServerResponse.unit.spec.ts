@@ -51,12 +51,13 @@ describe('Completion list websocket server response unit test', () => {
     {name:'name2', value:'value2'},
     {name:'name3', value:'value3'},
   ];
-  const completionListResponse = new CompletionListServerResponse(completions);
+  const completionListResponse = new CompletionListServerResponse(completions, '');
 
   const expectedObject = {
     op:'COMPLETION_LIST',
     data:{
-      completions:completions
+      completions:completions,
+      paragraphId:''
     }
   };
 

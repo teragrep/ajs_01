@@ -43,9 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import ace from 'ace-builds';
+import {Ace} from 'ace-builds';
+import Stubable from '../../../../../../shared/interfaces/stubable';
 
-export interface EditorCompletions {
-  language(editorLanguage: string): Promise<string>;
-  remoteCompleter(queryText:string): Promise<ace.Ace.Completer>;
-}
+export interface StubableAceEditor extends Stubable, Pick<Ace.Editor, 'getSession'>{}

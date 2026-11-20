@@ -166,7 +166,7 @@ export function WebsocketMessageService($rootScope, websocketEvents) {
       websocketEvents.sendNewEvent({
         op: 'RUN_PARAGRAPH',
         data: {
-          id: paragraphId,
+          paragraphId: paragraphId,
           title: paragraphTitle,
           paragraph: paragraphData,
           config: paragraphConfig,
@@ -221,7 +221,7 @@ export function WebsocketMessageService($rootScope, websocketEvents) {
       return websocketEvents.sendNewEvent({
         op: 'COMMIT_PARAGRAPH',
         data: {
-          id: paragraphId,
+          paragraphId: paragraphId,
           noteId: noteId,
           title: paragraphTitle,
           paragraph: paragraphData,

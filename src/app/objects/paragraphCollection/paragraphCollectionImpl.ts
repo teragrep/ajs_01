@@ -102,7 +102,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   private initializedParagraphs(paragraphs: object[]): WritableSignal<Map<string,  Paragraph>> {
     const paragraphMap = new Map<string, Paragraph>();
     paragraphs.forEach(paragraphData => {
-      const paragraph = new ParagraphImpl(this, paragraphData);
+      const paragraph = new ParagraphImpl(this, new WebSocketPayloadImpl(paragraphData));
       paragraphMap.set(paragraph.id(), paragraph);
     });
     return signal(paragraphMap, {
@@ -117,7 +117,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
   }
 
   private handleParagraphResponse(webSocketResponse:WebSocketResponse):void{
-    const paragraph = new ParagraphImpl(this, webSocketResponse.data());
+    const paragraph = new ParagraphImpl(this, webSocketResponse.dataAsWebSocketPayload());
     this._paragraphs.update(paragraphs => paragraphs.set(paragraph.id(), paragraph));
   }
 
@@ -127,7 +127,7 @@ export class ParagraphCollectionImpl implements ParagraphCollection {
     if(index < 0 || index > this._paragraphs().size){
       throw new Error(`Invalid index "${index}" provided.`);
     }
-    const paragraph = new ParagraphImpl(this, responseData.objectProperty('paragraph'));
+    const paragraph = new ParagraphImpl(this, responseData.objectPropertyAsPayload('paragraph'));
     const paragraphsAsArray = Array.from(this._paragraphs().values());
     paragraphsAsArray.splice(index, 0, paragraph);
     this._paragraphs.set(new Map(paragraphsAsArray.map(paragraph => [paragraph.id(), paragraph])));

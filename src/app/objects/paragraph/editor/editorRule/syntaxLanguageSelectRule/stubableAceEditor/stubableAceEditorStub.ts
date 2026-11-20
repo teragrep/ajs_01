@@ -43,44 +43,15 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {EditorCompletionsImpl} from './editorCompletionsImpl';
-import {EditorCompletions} from './editorCompletions';
-import {WsMessageListener} from '../../shared/components/websocket/wsMessageListener';
+import {StubableAceEditor} from './stubableAceEditor';
+import ace from 'ace-builds';
 
-describe('EditorCompletionsImpl', () => {
-  let editorCompletions: EditorCompletions;
+export class StubableAceEditorStub implements StubableAceEditor {
+  isStub(): boolean {
+    return true;
+  }
 
-  const fakeWsMessageListener: WsMessageListener = {
-    expectMessage(operation: string): Promise<object> {
-      let promise: Promise<object>;
-      if(operation === 'EDITOR_SETTINGS'){
-        promise = Promise.resolve({editor:{completionKey:'fake', completionSupport:true, editorOnDblClick:true, language:'fake'}});
-      }
-      if(operation === 'COMPLETION_LIST'){
-        promise = Promise.resolve({completions:[]});
-      }
-      return promise;
-    }
-  };
-  const fakeWsMessageService = {
-    getEditorSetting: () => {},
-    completion: () => {}
-  };
-
-  beforeEach(() => {
-    editorCompletions = new EditorCompletionsImpl('paragraphId', fakeWsMessageListener, fakeWsMessageService);
-  });
-
-  test('It should initialize', () => {
-    expect(editorCompletions).toBeInstanceOf(EditorCompletionsImpl);
-  });
-
-  test('Test language method',async () => {
-    expect(await editorCompletions.language('')).toEqual('ace/mode/fake');
-  });
-
-  test('Test remoteCompleter method',async () => {
-    const completer = await editorCompletions.remoteCompleter('');
-    expect(completer.getCompletions).toBeDefined();
-  });
-});
+  getSession(): ace.Ace.EditSession {
+    throw new Error('StubableAceEditorStub: Method not implemented.');
+  }
+}

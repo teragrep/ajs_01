@@ -43,30 +43,8 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-import {render, screen} from '@testing-library/angular';
-import { EditorComponent } from './editor.component';
-import {createAngularTestingModule} from '@angular/upgrade/static/testing';
-import {WebsocketMessageService} from '../shared/components/websocket/websocket-message.service';
-import {WsMessageListenerImpl} from '../shared/components/websocket/wsMessageListenerImpl';
+import {Ace} from 'ace-builds';
 
-describe('EditorImpl', () => {
-  beforeEach(async () => {
-    await render(EditorComponent, {
-      imports: [
-        createAngularTestingModule(['zeppelinWebApp']),
-      ],
-      providers: [
-        { provide: WebsocketMessageService, useValue: {} },
-        { provide: WsMessageListenerImpl, useValue: {} }
-      ],
-      inputs:{
-        editorId:'editorId',
-      }
-    });
-  });
-
-  test('It should render', async () => {
-    const element = screen.getByRole('textbox');
-    expect(element).toBeTruthy();
-  });
-});
+export interface EditorRule {
+  applyTo(editor:Ace.Editor):void;
+}

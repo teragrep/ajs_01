@@ -43,8 +43,7 @@
  * Teragrep, the applicable Commercial License may apply to this file if you as
  * a licensee so wish it.
  */
-export interface Editor {
-  set fontSize(value: number);
-  set showGutter(value:boolean);
-  set disableEdit(value:boolean);
-}
+import {Ace} from 'ace-builds';
+import {Respondable} from '../../../../../channel/respondable';
+
+export interface LanguageCompleter extends Ace.Completer, Respondable {}
