@@ -166,6 +166,6 @@ body {
 /* badges */
 
 .rounded-pill {
-  border-radius: 50rem !important;
+  border-radius: var(--pill-badge-radius) !important;
   border: none !important;
 }
