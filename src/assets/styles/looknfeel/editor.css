@@ -46,14 +46,14 @@
 }
 
 .ace_layer.ace_text-layer {
-  padding: 0 10px;
+  padding: 0 var(--p-4);
 }
 
 .ace-tm {
   background-color: var(--grey-200) !important;
   color: var(--grey-700) !important;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: var(--m-2);
   .ace_gutter {
     background: var(--grey-400) !important;
     color: var(--grey-700) !important;
