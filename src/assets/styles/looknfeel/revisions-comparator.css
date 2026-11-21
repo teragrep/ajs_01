@@ -66,7 +66,7 @@
 
 .panel-id {
   word-break: break-all;
-  font-size: 10px;
+  font-size: var(--fs-1);
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 0;
@@ -102,7 +102,7 @@
 }
 
 .empty-paragraph-message {
-  font-size: 28px;
+  font-size: var(--fs-6);
   color: var(--grey-600);
   margin: 0 auto;
   text-align: center;
@@ -133,7 +133,7 @@
 
 .revisions-comparator-code-panel.empty-code-panel {
   text-align: center;
-  font-size: 28px;
+  font-size: var(--fs-6);
   color: var(--grey-600);
   height: 317px;
   background: var(--grey-100);
@@ -159,7 +159,7 @@
   word-break: break-word;
   margin-bottom: 0;
   color: var(--primary-900);
-  font-size: 14px;
+  font-size: var(--fs-1);
 }
 
 .dark-mode .revisions-comparator-paragraph-title {
@@ -201,7 +201,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 12px;
+  font-size: var(--fs-1);
   color: var(--grey-700);
 }
 
@@ -211,7 +211,7 @@
 
 .revisions-comparator-dropdown {
   padding: 5px;
-  font-size: 12px;
+  font-size: var(--fs-1);
   border-radius: 3px;
 }
 

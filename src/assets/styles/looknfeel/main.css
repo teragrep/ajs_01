@@ -44,15 +44,10 @@
  * a licensee so wish it.
  */
 
-:root {
-  --bs-font-sans-serif: sans-serif;
-  --bs-font-monospace: monospace;
-}
-
 body {
   background: var(--grey-200);
   color: var(--grey-800);
-  font: 400 16px var(--font-body-text);
+  font: 400 var(--fs-2) var(--font-body-text), sans-serif;
   &.dark-mode {
     color: var(--dm-grey-200);
     background: var(--dm-grey-800);

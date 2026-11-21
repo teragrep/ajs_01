@@ -86,7 +86,7 @@
   }
   .control {
     color: var(--grey-700);
-    font-size: 12px;
+    font-size: var(--fs-1);
   }
 }
 
@@ -100,7 +100,7 @@
 
 .job-types {
   .fas {
-    font-size: 15px;
+    font-size: var(--fs-2);
     color: var(--primary-400);
   }
   a {
@@ -218,7 +218,7 @@
     > input {
       font-family: 'FontAwesome', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       border-radius: 4px;
-      font-size: 14px;
+      font-size: var(--fs-1);
       padding-left: 10px;
     }
   }
@@ -262,7 +262,7 @@
     color: gray;
   }
   .cluster-counter-value {
-    font-size: 15px;
+    font-size: var(--fs-2);
     font-weight: bold;
   }
 }
@@ -284,7 +284,7 @@
 
 .node-types i {
   font-weight: bold;
-  font-size: 10px;
+  font-size: var(--fs-1);
 }
 
 /*
@@ -292,7 +292,6 @@
 */
 
 .node .runControl {
-  font-size: 1px;
   color: #AAAAAA;
   height:4px;
   margin: 0;
@@ -315,7 +314,7 @@
   clear: both;
   right: 15px;
   text-align: right;
-  font-size: 12px;
+  font-size: var(--fs-1);
   padding: 4px;
   span {
     margin-left: 4px;
@@ -348,7 +347,7 @@
   margin-right: 0;
   p {
     margin: 10px 0 0;
-    font-size: 11px;
+    font-size: var(--fs-1);
     font-style: italic;
     color: var(--grey-700);
     text-align: right;

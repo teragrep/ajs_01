@@ -188,7 +188,7 @@
 }
 
 .ace_editor {
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: var(--font-monospace-text), monospace !important;
 }
 
 /** hide not focused cursors */

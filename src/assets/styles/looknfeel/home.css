@@ -106,7 +106,7 @@
     position: relative;
     top: 2rem;
     left: 1rem;
-    font-size: 14px;
+    font-size: var(--fs-1);
     color: var(--grey-500);
   }
   .filter-names input {
@@ -219,7 +219,7 @@
 .note-folder-item-actions {
   .fas {
     color: var(--secondary-700);
-    font-size: 15px;
+    font-size: var(--fs-2);
   }
   a:hover .fas {
     color: var(--secondary-500);
