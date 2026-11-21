@@ -49,6 +49,7 @@
   text-transform: uppercase;
   letter-spacing: 0.02rem;
   font: 500 16px 'Roboto', sans-serif;
+  line-height: 1.5;
   &.btn-small,
   &.btn-sm {
     padding: 3px 10px;

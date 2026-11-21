@@ -48,7 +48,7 @@
   padding-top: calc(var(--navbar-height) + var(--note-action-height) + 2.75rem);
   transition: all 0.5s;
   &.collapsed {
-    padding-top: 2.75rem;
+    padding-top: calc(var(--navbar-height) + 2.75rem);
     transition: all 0.5s;
   }
 }
@@ -407,11 +407,11 @@
   border-top: 1px solid var(--grey-300);
   border-left: 1px solid var(--grey-400);
   position: fixed;
-  top: 93px;
+  top: calc(var(--navbar-height) + var(--note-action-height));
   right: 0;
   z-index: 141;
   width: 450px;
-  height: calc(100% - 93px);
+  height: calc(100vh - var(--navbar-height) - var(--note-action-height));
   h2 {
     font-size: 20px;
   }
